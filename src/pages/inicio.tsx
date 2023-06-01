@@ -9,7 +9,7 @@ export default function Inicio() {
                 <title>Inicio</title>
                 <link rel="icon" href="/logo.ico" />
             </Head>
-            <main className="flex flex-col p-5 min-h-screen bg-[#EDECE7]">
+            <main className="flex flex-col p-5 min-h-screen">
                 <div className="flex justify-end">
                     <Image alt="Logo" src="/logo.png" width={75} height={58}></Image>
                 </div>
