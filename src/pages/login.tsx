@@ -17,7 +17,7 @@ export default function Login() {
                     </Link>
                 </div>
                 <div className="flex flex-col items-center py-28">
-                    <Image alt="Logo" src="/logo.png" width={75} height={58}></Image>
+                    <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
                     <h1 className="mt-10 mb-4 text-2xl font-semibold">Crear cuenta de MindFuel</h1>
                     <div className="bg-white rounded-2xl flex flex-col gap-5 py-5 px-5 shadow-md">
                         <Link href="" className="border-2 border-[#008080] rounded-full py-1 text-lg flex items-center justify-center space-x-2 px-7">
