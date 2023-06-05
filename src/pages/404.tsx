@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Custom404() {
     return (
-        <div className="flex flex-col px-5 py-36 items-center gap-5">
+        <div className="flex flex-col px-4 py-36 items-center gap-5">
             <span className="text-gray-500 text-9xl mb-10">404</span>
             <span className="text-3xl font-bold">Página no encontrada</span>
             <p className="text-center text-lg">

@@ -10,10 +10,10 @@ export default function Login() {
             <Head>
                 <title>Login</title>
             </Head>    
-            <main className="flex flex-col py-10 px-7 min-h-screen">
+            <main className="flex flex-col py-10 min-h-screen">
                 <div className="flex justify-end">
                     <Link href="/landing">
-                        <CgClose className="text-2xl"/>
+                        <CgClose className="text-2xl mr-7"/>
                     </Link>
                 </div>
                 <div className="flex flex-col items-center py-28">
