@@ -22,15 +22,11 @@ export default function Login() {
                     <h1 className="mt-10 mb-4 text-2xl font-semibold">Crear cuenta de MindFuel</h1>
                     <div className="bg-white rounded-2xl flex flex-col gap-5 py-5 px-5 shadow-md">
                         <Link href="" 
-                            className="border-2 border-[#008080] rounded-full py-1 text-lg flex items-center justify-center space-x-2 px-7" 
+                            className=" rounded-full py-1 text-lg flex items-center justify-center space-x-2 px-7" 
                             onClick={() => 
                                 void signIn('google', {callbackUrl: '/tareas'})}>
                             <FcGoogle className="text-2xl"/>
-                            <span>Sign up with Google</span>
-                        </Link>
-                        <Link href="" className="border-2 border-[#008080] rounded-full py-1 text-lg flex items-center justify-center space-x-3 px-7">
-                            <Image alt="Icono" src="/login/microsoft.png" width={24} height={24}></Image>
-                            <span>Sign up with Microsoft</span>
+                            <span>Sign up con Google</span>
                         </Link>
                     </div>
                 </div>
