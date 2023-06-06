@@ -1,6 +1,7 @@
 import Link from "next/link";
-import Footer from "./footer";
+import Navigation from "./navigation";
 import { signOut, useSession } from "next-auth/react";
+import { useState } from "react";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const {data: sessionData} = useSession()
@@ -12,7 +13,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 {sessionData && <Link className="border-2 border-black rounded-xl px-2 py-1" href="" onClick={() => void signOut({callbackUrl: '/login'})}>Cerrar sesión</Link>}
             </div>
             {children}
-            <Footer/>
+            <Navigation />
         </>
     )
 }
