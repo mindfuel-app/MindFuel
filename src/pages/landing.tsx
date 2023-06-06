@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -9,7 +10,7 @@ export default function Landing() {
             </Head>
             <div className="flex flex-col py-2">
                 <div className="flex px-5 py-3 justify-end">
-                    <Link href="/login">
+                    <Link href="" onClick={() => void signIn('google', {callbackUrl: '/tareas'})}>
                         <span className="text-lg">Login</span>
                     </Link>
                 </div>

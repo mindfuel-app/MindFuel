@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,16 +12,19 @@ export default function Login() {
                 <title>Login</title>
             </Head>    
             <main className="flex flex-col py-10 min-h-screen">
-                <div className="flex justify-end">
+                <div className="flex justify-end pr-7">
                     <Link href="/landing">
-                        <CgClose className="text-2xl mr-7"/>
+                        <CgClose className="text-2xl "/>
                     </Link>
                 </div>
                 <div className="flex flex-col items-center py-28">
                     <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
                     <h1 className="mt-10 mb-4 text-2xl font-semibold">Crear cuenta de MindFuel</h1>
                     <div className="bg-white rounded-2xl flex flex-col gap-5 py-5 px-5 shadow-md">
-                        <Link href="" className="border-2 border-[#008080] rounded-full py-1 text-lg flex items-center justify-center space-x-2 px-7">
+                        <Link href="" 
+                            className="border-2 border-[#008080] rounded-full py-1 text-lg flex items-center justify-center space-x-2 px-7" 
+                            onClick={() => 
+                                void signIn('google', {callbackUrl: '/tareas'})}>
                             <FcGoogle className="text-2xl"/>
                             <span>Sign up with Google</span>
                         </Link>
@@ -31,7 +35,7 @@ export default function Login() {
                     </div>
                 </div>
             </main>
-        </>
-        
+        </>   
     )
 }
+  
