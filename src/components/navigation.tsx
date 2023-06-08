@@ -41,7 +41,7 @@ export default function Navigation() {
                   href={item.href}
                   className={`${
                     activeMenu == item.name ? "text-[#5C7AFF]" : ""
-                  } flex flex-col items-center gap-1 text-center hover:bg-transparent focus:bg-transparent`}
+                  } flex flex-col items-center gap-1 text-center`}
                   onClick={() => setActiveMenu(item.name)}
                 >
                   {item.icon}
