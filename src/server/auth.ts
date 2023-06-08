@@ -40,14 +40,6 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   debug: true,
   adapter: PrismaAdapter(prisma),
-  callbacks: {
-    async jwt({ token, account }) {
-      if (account?.accessToken) {
-        token.accessToken = account.accessToken;
-      }
-      return token;
-    },
-  },
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
