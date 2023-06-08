@@ -13,7 +13,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link
             className="rounded-xl border-2 border-black px-2 py-1"
             href=""
-            onClick={() => void signOut({ callbackUrl: "/login" })}
+            onClick={() => void signOut({ callbackUrl: "/signin" })}
           >
             Cerrar sesión
           </Link>
