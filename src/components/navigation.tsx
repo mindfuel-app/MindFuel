@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FaTasks, FaUserFriends } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { RxCalendar } from "react-icons/rx";
-import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Navigation() {
   const menus = [
@@ -22,17 +22,17 @@ export default function Navigation() {
       icon: <CiStar className="text-3xl" />,
     },
     {
-      name: "Comunidad",
-      href: "/comunidad",
+      name: "Amigos",
+      href: "/amigos",
       icon: <FaUserFriends className="text-3xl" />,
     },
   ];
 
-  const [activeMenu, setActiveMenu] = useState("Tareas");
+  const router = useRouter();
 
   return (
     <>
-      <div className="fixed bottom-0 w-full bg-white px-4 py-5 ">
+      <div className="no-highlight fixed bottom-0 w-full bg-white px-4 py-5">
         <ul className="flex justify-around gap-5">
           {menus.map((item) => {
             return (
@@ -40,9 +40,11 @@ export default function Navigation() {
                 <Link
                   href={item.href}
                   className={`${
-                    activeMenu == item.name ? "text-[#5C7AFF]" : ""
-                  } flex flex-col items-center gap-1 text-center`}
-                  onClick={() => setActiveMenu(item.name)}
+                    router.pathname == item.href ? "text-[#5C7AFF]" : ""
+                  } flex flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100`}
+                  onClick={() => {
+                    void router.push(item.href);
+                  }}
                 >
                   {item.icon}
                   <span className="text-sm">{item.name}</span>
