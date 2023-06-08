@@ -32,7 +32,7 @@ export default function SignInForm() {
           />
           <div className="input-group flex w-full items-center justify-between rounded-xl border-2 border-gray-300 px-3 py-1 focus-within:border-sky-500">
             <input
-              type={PasswordInputType}
+              type={PasswordInputType == "text" ? "text" : "password"}
               placeholder="Password"
               className="outline-none"
             />
