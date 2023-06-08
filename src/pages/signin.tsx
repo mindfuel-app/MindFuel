@@ -1,9 +1,7 @@
-import { signIn } from "next-auth/react";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { CgClose } from "react-icons/cg";
-import { FcGoogle } from "react-icons/fc";
+import SignInForm from "~/components/auth/signInForm";
 
 export default function SignIn() {
   return (
@@ -17,22 +15,7 @@ export default function SignIn() {
             <CgClose className="text-2xl" />
           </Link>
         </div>
-        <div className="flex flex-col items-center py-28">
-          <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
-          <h1 className="mb-4 mt-10 text-2xl font-semibold">
-            Inicie sesión en MindFuel
-          </h1>
-          <div className="flex flex-col gap-5 rounded-2xl bg-white px-5 py-5 shadow-md">
-            <Link
-              href=""
-              className=" flex items-center justify-center space-x-2 rounded-full px-7 py-1 text-lg"
-              onClick={() => void signIn("google", { callbackUrl: "/tareas" })}
-            >
-              <FcGoogle className="text-2xl" />
-              <span>Sign up con Google</span>
-            </Link>
-          </div>
-        </div>
+        <SignInForm />
       </main>
     </>
   );
