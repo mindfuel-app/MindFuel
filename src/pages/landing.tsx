@@ -14,7 +14,7 @@ export default function Landing() {
             href=""
             onClick={() => void signIn("google", { callbackUrl: "/tareas" })}
           >
-            <span className="text-lg">Login</span>
+            <span className="text-lg">Sign in</span>
           </Link>
         </div>
         <div className="flex flex-col justify-between">
@@ -29,7 +29,7 @@ export default function Landing() {
           </div>
           <div className="flex justify-center ">
             <Link
-              href="/login"
+              href="/signin"
               className="mt-12 rounded-full bg-white px-28 py-3 shadow-md"
             >
               <span className="text-lg font-bold text-black ">EMPEZAR</span>
