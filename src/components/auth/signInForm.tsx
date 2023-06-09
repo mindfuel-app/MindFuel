@@ -23,7 +23,7 @@ export default function SignInForm() {
           <FcGoogle className="text-2xl" />
           <span className="text-">Sign in con Google</span>
         </Link>
-        <Divider variant="middle">or</Divider>
+        <Divider variant="middle">o</Divider>
         <div className="flex flex-col justify-center space-y-5">
           <input
             type="text"
