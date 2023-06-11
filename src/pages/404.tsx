@@ -11,7 +11,7 @@ export default function Custom404() {
       </p>
       <Link
         href="/tareas"
-        className="mt-16 rounded-xl bg-[#5C7AFF] px-5 py-3 text-xl text-white"
+        className="no-highlight mt-16 rounded-xl bg-[#5C7AFF] px-5 py-3 text-xl text-white active:bg-[#7992ff]"
       >
         Volver a la home
       </Link>
