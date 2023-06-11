@@ -4,9 +4,13 @@ import Image from "next/image";
 import { Divider } from "@mui/material";
 import usePasswordToggle from "~/hooks/usePasswordToggle";
 import GoogleAuthShowcase from "./googleAuthShowcase";
+import { useState } from "react";
 
 export default function SignInForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <div className="flex flex-col items-center py-20">
@@ -20,24 +24,22 @@ export default function SignInForm() {
         <div className="flex flex-col justify-center space-y-5">
           <input
             type="text"
-            placeholder="Nombre completo"
-            className="w-full rounded-xl border-2 border-gray-300 px-3 py-1 focus:outline-sky-500"
-          />
-          <input
-            type="text"
             placeholder="Nombre de usuario"
             className="w-full rounded-xl border-2 border-gray-300 px-3 py-1 focus:outline-sky-500"
+            onChange={(e) => setName(e.target.value)}
           />
           <input
             type="email"
             placeholder="Email"
             className="w-full rounded-xl border-2 border-gray-300 px-3 py-1 focus:outline-sky-500"
+            onChange={(e) => setEmail(e.target.value)}
           />
           <div className="input-group flex w-full items-center justify-between rounded-xl border-2 border-gray-300 px-3 py-1 focus-within:border-sky-500">
             <input
               type={PasswordInputType == "text" ? "text" : "password"}
               placeholder="Contraseña"
               className="outline-none"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <span className="text-gray-500">{ToggleIcon}</span>
           </div>
@@ -45,7 +47,15 @@ export default function SignInForm() {
           <Link
             href=""
             className="no-highlight rounded-2xl bg-sky-500 px-5 py-2 text-center text-lg text-white active:bg-sky-300"
-            onClick={() => void signIn("credentials")}
+            onClick={() =>
+              void signIn("credentials", {
+                name,
+                email,
+                password,
+                method: "signUp",
+                callbackUrl: "/tareas",
+              })
+            }
           >
             Sign up
           </Link>
