@@ -1,15 +1,15 @@
 import Head from "next/head";
 import AuthLayout from "~/components/auth/authLayout";
-import SignInForm from "~/components/auth/signInForm";
+import SignUpForm from "~/components/auth/signUpForm";
 
 export default function SignIn() {
   return (
     <>
       <Head>
-        <title>Sign in</title>
+        <title>Sign up</title>
       </Head>
       <AuthLayout>
-        <SignInForm />
+        <SignUpForm />
       </AuthLayout>
     </>
   );
