@@ -1,5 +1,5 @@
 import Head from "next/head";
-import AuthLayout from "~/components/auth/authLayout";
+import AuthPageLayout from "~/components/auth/authPageLayout";
 import SignUpForm from "~/components/auth/signUpForm";
 
 export default function SignIn() {
@@ -8,9 +8,9 @@ export default function SignIn() {
       <Head>
         <title>Sign up</title>
       </Head>
-      <AuthLayout>
+      <AuthPageLayout>
         <SignUpForm />
-      </AuthLayout>
+      </AuthPageLayout>
     </>
   );
 }

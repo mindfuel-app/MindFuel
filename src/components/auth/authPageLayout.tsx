@@ -1,4 +1,4 @@
-export default function authLayout({
+export default function authPageLayout({
   children,
 }: {
   children: React.ReactNode;
