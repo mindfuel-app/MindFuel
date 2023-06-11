@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -11,8 +10,8 @@ export default function Landing() {
       <div className="flex flex-col py-2">
         <div className="flex justify-end px-5 py-3">
           <Link
-            href=""
-            onClick={() => void signIn("google", { callbackUrl: "/tareas" })}
+            href="/signin"
+            className="no-highlight rounded-sm active:bg-gray-300"
           >
             <span className="text-lg">Sign in</span>
           </Link>
@@ -29,8 +28,8 @@ export default function Landing() {
           </div>
           <div className="flex justify-center ">
             <Link
-              href="/signin"
-              className="mt-12 rounded-full bg-white px-28 py-3 shadow-md"
+              href="/signup"
+              className="no-highlight mt-12 rounded-full bg-white px-28 py-3 shadow-md active:bg-gray-100"
             >
               <span className="text-lg font-bold text-black ">EMPEZAR</span>
             </Link>
