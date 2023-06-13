@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Layout from "~/components/layout";
-import React, { useState, type SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent } from "react";
+
+interface Recommendation {
+  Tareas: string;
+  // Add other properties if available
+}
 
 export default function Recommend({ children }: { children: React.ReactNode }) {
-  const [recomendacion, setRecomendacion] = useState<any[]>([]);
+  const [recomendacion, setRecomendacion] = useState<Recommendation[]>([]);
 
-  const handleSubmit = async (event: SyntheticEvent) => {
+  const handleSubmit = async (event: SyntheticEvent): Promise<void> => {
     event.preventDefault();
     const target = event.target as typeof event.target & {
       tareas: { value: string };
@@ -17,15 +21,15 @@ export default function Recommend({ children }: { children: React.ReactNode }) {
       const formData = new FormData();
       formData.append("tareas", target.tareas.value);
 
-      const response = await fetch("http://127.0.0.1:5000/recomendar", {
+      const response: Response = await fetch("http://127.0.0.1:5000/recomendar", {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        const data = await response.json();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const data: Recommendation[] = await response.json();
         console.log(data);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         setRecomendacion(data);
       } else {
         console.log("Error:", response.status);
@@ -46,8 +50,7 @@ export default function Recommend({ children }: { children: React.ReactNode }) {
           </button>
         </form>
         <ul>
-          {recomendacion.map((item, index) => (
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          {recomendacion.map((item: Recommendation, index: number) => (
             <li key={index}>{item.Tareas}</li>
           ))}
         </ul>
