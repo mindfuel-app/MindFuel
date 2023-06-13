@@ -8,29 +8,29 @@ export default function AlternativeMethodLink({
   if (method == "Sign up") {
     return (
       <div className="flex justify-center">
-        <p className="text-extrabold ml-2 text-xs">
-          No tienes una cuenta?,{" "}
+        <span className="text-sm font-medium">
+          ¿No tienes una cuenta?,{" "}
           <Link
             href="/signup"
             className="no-highlight text-sky-600 underline-offset-2 active:underline"
           >
             Regístrate
           </Link>
-        </p>
+        </span>
       </div>
     );
   }
   return (
     <div className="flex justify-center">
-      <p className="text-xs">
-        Ya tienes una cuenta?,{" "}
+      <span className="text-sm font-medium">
+        ¿Ya tienes una cuenta?,{" "}
         <Link
           href="/signin"
           className="no-highlight text-sky-600 underline-offset-2 active:underline"
         >
           Inicia sesión
         </Link>
-      </p>
+      </span>
     </div>
   );
 }

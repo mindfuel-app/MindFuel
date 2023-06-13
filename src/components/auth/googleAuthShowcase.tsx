@@ -10,7 +10,7 @@ export default function GoogleAuthShowcase() {
       onClick={() => void signIn("google", { callbackUrl: "/tareas" })}
     >
       <FcGoogle className="text-2xl" />
-      <span className="text-">Sign in con Google</span>
+      <span>Sign in con Google</span>
     </Link>
   );
 }
