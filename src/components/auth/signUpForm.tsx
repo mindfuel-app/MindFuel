@@ -8,6 +8,7 @@ import GoogleAuthShowcase from "./googleAuthShowcase";
 import AuthButton from "./authButton";
 import { signIn } from "next-auth/react";
 import AlternativeMethodLink from "./alternativeMethodLink";
+import router from "next/router";
 
 export default function SignUpForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -32,13 +33,17 @@ export default function SignUpForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const submitData = (data: FormData) => {
-    void signIn("credentials", {
-      name: data.name,
+  const submitData = async (data: FormData) => {
+    await signIn("credentials", {
       email: data.email,
       password: data.password,
-      method: "signUp",
-      callbackUrl: "/tareas",
+      method: "SignUp",
+      redirect: false,
+    }).then((response) => {
+      if (response?.error) {
+        return alert(response.error);
+      }
+      void router.push("/tareas");
     });
   };
 

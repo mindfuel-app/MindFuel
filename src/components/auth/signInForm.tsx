@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react";
 import AuthButton from "./authButton";
 import AlternativeMethodLink from "./alternativeMethodLink";
 import ForgotPasswordButton from "./forgotPasswordButton";
+import router from "next/router";
 
 export default function SignInForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -31,11 +32,16 @@ export default function SignInForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const submitData = (data: FormData) => {
-    void signIn("credentials", {
+  const submitData = async (data: FormData) => {
+    await signIn("credentials", {
       email: data.email,
       password: data.password,
-      callbackUrl: "/tareas",
+      redirect: false,
+    }).then((response) => {
+      if (response?.error) {
+        return alert(response.error);
+      }
+      void router.push("/tareas");
     });
   };
 
