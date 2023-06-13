@@ -31,16 +31,11 @@ export default function SignInForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const submitData = async (data: FormData) => {
-    await signIn("credentials", {
+  const submitData = (data: FormData) => {
+    void signIn("credentials", {
       email: data.email,
       password: data.password,
       callbackUrl: "/tareas",
-    }).then((response) => {
-      console.log(response);
-      if (response?.error) {
-        alert("Credenciales incorrectas");
-      }
     });
   };
 
@@ -49,35 +44,36 @@ export default function SignInForm() {
       <div className="flex w-screen justify-end pr-5">
         <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
       </div>
-      <h1 className="mb-4 mt-5 text-2xl font-semibold text-[#008080]">
-        Inicio sesión
-      </h1>
-      <div className="flex flex-col gap-2 p-4">
+      <div className="py- flex select-none flex-col items-center gap-2 px-5 py-3">
+        <h1 className="mb-4 mt-5 text-2xl font-semibold text-[#008080]">
+          Inicio sesión
+        </h1>
         <form
-          className="flex flex-col justify-center space-y-5"
+          className="flex flex-col justify-center space-y-5 py-3"
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={handleSubmit(submitData)}
         >
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
-              <span className="ml-1">Email</span>
-              <input
-                type="email"
-                className="w-full rounded-xl border-2 border-gray-300 px-3 py-1 focus:outline-sky-500"
-                {...register("email")}
-              />
+              <span className="ml-1 font-medium">Email</span>
+              <div className="flex flex-col gap-2">
+                <input
+                  type="text"
+                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:ring-[#008080]"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <span className="text-xs text-red-500">
+                    Ingrese un email valido
+                  </span>
+                )}
+              </div>
             </label>
-
-            {errors.email?.type == "invalid_string" && (
-              <span className="text-xs text-red-500">
-                Ingrese un email valido
-              </span>
-            )}
           </div>
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
-              <span>Contraseña</span>
-              <div className="flex w-full items-center justify-between rounded-xl border-2 border-gray-300 bg-white px-3 py-1 focus-within:border-sky-500">
+              <span className="ml-1 font-medium">Contraseña</span>
+              <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 ">
                 <input
                   type={PasswordInputType == "text" ? "text" : "password"}
                   className="outline-none"
