@@ -7,7 +7,6 @@ import usePasswordToggle from "~/hooks/usePasswordToggle";
 import GoogleAuthShowcase from "./googleAuthShowcase";
 import AuthButton from "./authButton";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import AlternativeMethodLink from "./alternativeMethodLink";
 
 export default function SignUpForm() {
