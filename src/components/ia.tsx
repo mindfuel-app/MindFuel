@@ -36,22 +36,19 @@ export default function Recommend({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <Layout>
-      <div>Tareas</div>
-      <div className="recomendar">
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="tareas" placeholder="Tarea" required />
-          <button type="submit" className="btn btn-primary btn-block btn-large">
-            Recomendar
-          </button>
-        </form>
-        <ul>
-          {recomendacion.map((item, index) => (
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            <li key={index}>{item.Tareas}</li>
-          ))}
-        </ul>
-      </div>
-    </Layout>
+    <div className="recomendar">
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="tareas" placeholder="Tarea" required />
+        <button type="submit" className="btn btn-primary btn-block btn-large">
+          Recomendar
+        </button>
+      </form>
+      <ul>
+        {recomendacion.map((item, index) => (
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          <li key={index}>{item.Tareas}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
