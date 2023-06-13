@@ -45,6 +45,9 @@ export default function SignInForm() {
       if(response?.ok){
         window.location.href = "/tareas";
       }
+      else  {
+        alert("Algo salio mal");
+      }
     });
   };
 
