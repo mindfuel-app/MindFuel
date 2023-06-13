@@ -7,6 +7,7 @@ import usePasswordToggle from "~/hooks/usePasswordToggle";
 import GoogleAuthShowcase from "./googleAuthShowcase";
 import AuthButton from "./authButton";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function SignUpForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -98,6 +99,12 @@ export default function SignUpForm() {
             )}
           </div>
           <AuthButton method="Sign up" />
+          <p className="ml-2 text-xs">
+            Ya tienes una cuenta?,{" "}
+            <Link href="/signin" className="text-sky-600 active:underline">
+              Inicia sesión
+            </Link>
+          </p>
         </form>
       </div>
     </div>
