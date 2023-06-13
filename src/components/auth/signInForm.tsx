@@ -7,6 +7,7 @@ import usePasswordToggle from "~/hooks/usePasswordToggle";
 import GoogleAuthShowcase from "./googleAuthShowcase";
 import { signIn } from "next-auth/react";
 import AuthButton from "./authButton";
+import Link from "next/link";
 
 export default function SignInForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -29,11 +30,16 @@ export default function SignInForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const submitData = (data: FormData) => {
-    void signIn("credentials", {
+  const submitData = async (data: FormData) => {
+    await signIn("credentials", {
       email: data.email,
       password: data.password,
       callbackUrl: "/tareas",
+    }).then((response) => {
+      console.log(response);
+      if (response?.error) {
+        alert("Credenciales incorrectas");
+      }
     });
   };
 
@@ -82,6 +88,12 @@ export default function SignInForm() {
               ))}
           </div>
           <AuthButton method="Sign in" />
+          <p className="ml-2 text-xs">
+            No tienes una cuenta?,{" "}
+            <Link href="/signup" className="text-sky-600 active:underline">
+              Regístrate
+            </Link>
+          </p>
         </form>
       </div>
     </div>
