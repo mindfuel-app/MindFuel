@@ -36,10 +36,14 @@ export default function SignInForm() {
       email: data.email,
       password: data.password,
       callbackUrl: "/tareas",
+      redirect: false,
     }).then((response) => {
       console.log(response);
       if (response?.error) {
-        alert("Credenciales incorrectas");
+        alert(response.error);
+      }
+      if(response?.ok){
+        window.location.href = "/tareas";
       }
     });
   };

@@ -38,7 +38,15 @@ export default function SignUpForm() {
       email: data.email,
       password: data.password,
       method: "signUp",
-      callbackUrl: "/tareas",
+      redirect: false,
+    }).then((response) => {
+      console.log(response);
+      if (response?.error) {
+        alert(response.error);
+      }
+      if (response?.ok) {
+        window.location.href = "/tareas";
+      }
     });
   };
 
