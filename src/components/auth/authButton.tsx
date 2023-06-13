@@ -8,9 +8,9 @@ export default function AuthButton({
   return (
     <Button
       type="submit"
-      className="no-highlight rounded-2xl bg-sky-500 px-5 py-2 text-center text-lg text-white active:bg-sky-300"
+      className="no-highlight w-full rounded-xl bg-[#008080] px-5 py-2 text-center text-lg text-white active:bg-sky-300"
     >
-      {method}
+      {method == "Sign up" ? "Registrarse" : "Inicia sesión"}
     </Button>
   );
 }
