@@ -70,3 +70,50 @@ model Example {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
+
+model friend{
+    id String @id @default(cuid())
+    id_first String
+    id_second String
+    accepted Boolean
+}
+
+model task{
+    id        String   @id @default(cuid())
+    name    String
+    description String?
+    category String
+    createdAt DateTime @default(now())
+    routine_id String
+    routine routine? @relation(fields: [routine_id], references: [id])
+    event_id String
+    event event? @relation(fields: [event_id], references: [id])
+    estimated_time Int
+    done Boolean
+    real_time Int?
+    user_id String
+    required_energy Int?
+
+    @@index([event_id])
+    @@index([routine_id])
+}
+
+model routine{
+    id        String   @id @default(cuid())
+    name    String
+    description String?
+    user_id String
+    createdAt DateTime @default(now())
+    task task[]
+}
+
+model event{
+    id        String   @id @default(cuid())
+    name    String
+    description String?
+    category String
+    date DateTime
+    user_id String
+    createdAt DateTime @default(now())
+    task task[]
+}
