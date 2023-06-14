@@ -92,7 +92,7 @@ export default function SignInForm() {
             {errors.password?.type == "min" ||
               (errors.password?.type && (
                 <span className="text-xs text-red-500">
-                  La contraseña debe tener entre 6 y 30 caracteres
+                  Contraseña: 6-30 caracteres
                 </span>
               ))}
           </div>
