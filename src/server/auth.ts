@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        if (method === "signUp") {
+        if (method === "signup") {
           if (existingUser) {
             throw new Error("Este email ya esta registrado");
           }

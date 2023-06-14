@@ -37,7 +37,7 @@ export default function SignUpForm() {
     await signIn("credentials", {
       email: data.email,
       password: data.password,
-      method: "SignUp",
+      method: "signup",
       redirect: false,
     }).then((response) => {
       if (response?.error) {
@@ -116,7 +116,7 @@ export default function SignUpForm() {
               ))}
           </div>
           <div className="flex w-full flex-col items-center gap-5 pt-3">
-            <AuthButton method="Sign in" />
+            <AuthButton method="Sign up" />
           </div>
           <Divider variant="middle">o</Divider>
           <GoogleAuthShowcase />
