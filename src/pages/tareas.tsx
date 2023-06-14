@@ -1,12 +1,10 @@
 import Layout from "~/components/layout";
-import Recommend from "~/components/ia"
+import Recommend from "~/components/ia";
 
-export default function ViewTasks() {
+export default function Tareas() {
   return (
     <Layout>
-      <Recommend>
-        
-      </Recommend>
+      <Recommend />
     </Layout>
   );
 }
