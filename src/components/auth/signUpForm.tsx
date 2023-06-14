@@ -67,7 +67,7 @@ export default function SignUpForm() {
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
-                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:ring-[#008080]"
+                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px]"
                   {...register("name")}
                 />
                 {errors.name && (
@@ -84,7 +84,7 @@ export default function SignUpForm() {
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
-                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:ring-[#008080]"
+                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px]"
                   {...register("email")}
                 />
                 {errors.email && (
@@ -98,7 +98,7 @@ export default function SignUpForm() {
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
               <span className="ml-1 font-medium">Contraseña</span>
-              <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 ">
+              <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px]">
                 <input
                   type={PasswordInputType == "text" ? "text" : "password"}
                   className="outline-none"
