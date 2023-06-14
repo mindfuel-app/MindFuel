@@ -9,7 +9,7 @@ export default function AlternativeMethodLink({
     return (
       <div className="flex justify-center">
         <span className="text-sm font-medium">
-          ¿No tienes una cuenta?,{" "}
+          ¿No tienes una cuenta?{" "}
           <Link
             href="/signup"
             className="no-highlight text-sky-600 underline-offset-2 active:underline"
@@ -23,7 +23,7 @@ export default function AlternativeMethodLink({
   return (
     <div className="flex justify-center">
       <span className="text-sm font-medium">
-        ¿Ya tienes una cuenta?,{" "}
+        ¿Ya tienes una cuenta?{" "}
         <Link
           href="/signin"
           className="no-highlight text-sky-600 underline-offset-2 active:underline"
