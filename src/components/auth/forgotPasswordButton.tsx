@@ -6,7 +6,7 @@ export default function ForgotPasswordButton() {
     <Button
       variant="outline"
       onClick={() => void router.push("/reestablecer-contraseña")}
-      className="no-highlight w-48 rounded-lg border-2 border-[#008080] bg-transparent font-medium text-[#008080] hover:bg-transparent active:bg-black/5"
+      className="no-highlight w-48 rounded-lg border-2 border-[#008080] bg-transparent font-medium text-[#008080] hover:bg-transparent active:bg-white/50 active:text-[#008080]"
     >
       Olvidé la contraseña
     </Button>
