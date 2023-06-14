@@ -21,10 +21,13 @@ export default function Recommend({ children }: { children: React.ReactNode }) {
       const formData = new FormData();
       formData.append("tareas", target.tareas.value);
 
-      const response: Response = await fetch("http://127.0.0.1:5000/recomendar", {
-        method: "POST",
-        body: formData,
-      });
+      const response: Response = await fetch(
+        "http://127.0.0.1:5000/recomendar",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -40,21 +43,18 @@ export default function Recommend({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <Layout>
-      <div>Tareas</div>
-      <div className="recomendar">
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="tareas" placeholder="Tarea" required />
-          <button type="submit" className="btn btn-primary btn-block btn-large">
-            Recomendar
-          </button>
-        </form>
-        <ul>
-          {recomendacion.map((item: Recommendation, index: number) => (
-            <li key={index}>{item.Tareas}</li>
-          ))}
-        </ul>
-      </div>
-    </Layout>
+    <div className="recomendar">
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="tareas" placeholder="Tarea" required />
+        <button type="submit" className="btn btn-primary btn-block btn-large">
+          Recomendar
+        </button>
+      </form>
+      <ul>
+        {recomendacion.map((item: Recommendation, index: number) => (
+          <li key={index}>{item.Tareas}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
