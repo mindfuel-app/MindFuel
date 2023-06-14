@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import Layout from "~/components/layout";
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, type SyntheticEvent } from "react";
 
 interface Recommendation {
   Tareas: string;
   // Add other properties if available
 }
 
-export default function Recommend({ children }: { children: React.ReactNode }) {
+export default function Recommend() {
   const [recomendacion, setRecomendacion] = useState<Recommendation[]>([]);
 
   const handleSubmit = async (event: SyntheticEvent): Promise<void> => {
