@@ -65,7 +65,7 @@ export default function SignInForm() {
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
-                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:ring-[#008080]"
+                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none"
                   {...register("email")}
                 />
                 {errors.email && (
