@@ -10,9 +10,11 @@ import AuthButton from "./authButton";
 import AlternativeMethodLink from "./alternativeMethodLink";
 import ForgotPasswordButton from "./forgotPasswordButton";
 import router from "next/router";
+import { useState } from "react";
 
 export default function SignInForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   type FormData = {
     email: string;
@@ -33,14 +35,17 @@ export default function SignInForm() {
   });
 
   const submitData = async (data: FormData) => {
+    setIsButtonDisabled(true);
     await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     }).then((response) => {
       if (response?.error) {
+        setIsButtonDisabled(false);
         return alert(response.error);
       }
+
       void router.push("/tareas");
     });
   };
@@ -97,7 +102,7 @@ export default function SignInForm() {
               ))}
           </div>
           <div className="flex w-full flex-col items-center gap-5 pt-3">
-            <AuthButton method="Sign in" />
+            <AuthButton method="Sign in" isDisabled={isButtonDisabled} />
             <ForgotPasswordButton />
           </div>
 
