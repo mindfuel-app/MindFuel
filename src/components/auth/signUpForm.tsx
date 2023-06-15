@@ -51,6 +51,32 @@ export default function SignUpForm() {
       void router.push("/tareas");
     });
   };
+  const [imageUploaded, setImageUploaded] = useState();
+
+  const handleChange = (event: any) => {
+    setImageUploaded(event.target.files[0]);
+  };
+
+  const submitImage = async (e: any) => {
+    e.preventDefault();
+
+    if (!imageUploaded) {
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("image", imageUploaded);
+
+      const res = await fetch("/api/uploadImage", {
+        method: "POST",
+        body: formData
+      });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -121,6 +147,17 @@ export default function SignUpForm() {
                   Contraseña: 6-30 caracteres
                 </span>
               ))}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="flex flex-col">
+              <span className="ml-1 font-medium">Foto de perfil</span>
+              <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px]">
+                <input
+                  type={"file"}
+                  className="outline-none" onChange={handleChange}
+                />
+              </div>
+            </label>
           </div>
           <div className="flex w-full flex-col items-center gap-5 pt-3">
             <AuthButton method="Sign up" isDisabled={isButtonDisabled} />
