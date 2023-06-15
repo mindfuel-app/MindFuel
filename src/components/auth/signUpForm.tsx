@@ -9,9 +9,11 @@ import AuthButton from "./authButton";
 import { signIn } from "next-auth/react";
 import AlternativeMethodLink from "./alternativeMethodLink";
 import router from "next/router";
+import { useState } from "react";
 
 export default function SignUpForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   type FormData = {
     name: string;
@@ -34,6 +36,7 @@ export default function SignUpForm() {
   });
 
   const submitData = async (data: FormData) => {
+    setIsButtonDisabled(true);
     await signIn("credentials", {
       email: data.email,
       password: data.password,
@@ -41,6 +44,7 @@ export default function SignUpForm() {
       redirect: false,
     }).then((response) => {
       if (response?.error) {
+        setIsButtonDisabled(false);
         return alert(response.error);
       }
       void router.push("/tareas");
@@ -116,7 +120,7 @@ export default function SignUpForm() {
               ))}
           </div>
           <div className="flex w-full flex-col items-center gap-5 pt-3">
-            <AuthButton method="Sign up" />
+            <AuthButton method="Sign up" isDisabled={isButtonDisabled} />
           </div>
           <Divider variant="middle">o</Divider>
           <GoogleAuthShowcase />
