@@ -5,7 +5,6 @@ import Router from "next/router";
 
 export default function Landing() {
   const { status } = useSession();
-  console.log(status);
   if (status === "authenticated") {
     void Router.push("/tareas")
   }
