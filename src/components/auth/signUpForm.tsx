@@ -68,7 +68,10 @@ export default function SignUpForm() {
         >
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
-              <span className="ml-1 flex items-center gap-1 font-medium">
+              <span
+                className="ml-1 flex items-center gap-1 font-medium"
+                onClick={(e) => e.preventDefault()}
+              >
                 Nombre de usuario <Tooltip />
               </span>
               <div className="flex flex-col gap-2">
@@ -87,7 +90,12 @@ export default function SignUpForm() {
           </div>
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
-              <span className="ml-1 font-medium">Email</span>
+              <span
+                className="ml-1 font-medium"
+                onClick={(e) => e.preventDefault()}
+              >
+                Email
+              </span>
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
@@ -104,7 +112,12 @@ export default function SignUpForm() {
           </div>
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
-              <span className="ml-1 font-medium">Contraseña</span>
+              <span
+                className="ml-1 font-medium"
+                onClick={(e) => e.preventDefault()}
+              >
+                Contraseña
+              </span>
               <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px]">
                 <input
                   type={PasswordInputType == "text" ? "text" : "password"}
