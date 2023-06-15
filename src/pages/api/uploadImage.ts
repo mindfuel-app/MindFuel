@@ -1,6 +1,6 @@
+// @ts-nocheck
 import { getImage } from "../../utils/formidable";
 import { uploadImage } from "../../utils/cloudinary";
-import prisma from "../../utils/prisma";
 
 export const config = {
     api: {
@@ -13,13 +13,7 @@ export default async function handle(req, res) {
 
     const imageData = await uploadImage(imageUploaded.path);
 
-    const result = await prisma.image.create({
-        data: {
-            publicId: imageData.public_id,
-            format: imageData.format,
-            version: imageData.version.toString(),
-        },
-    });
+    const imageURL = "https://res.cloudinary.com/dx3a3nnee/v" + imageData.version + "/" + imageData.public_id + "." + imageData.format;
 
-    res.json(result);
+    res.json(imageURL);
 }
