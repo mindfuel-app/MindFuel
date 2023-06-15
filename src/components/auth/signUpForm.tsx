@@ -10,6 +10,7 @@ import { signIn } from "next-auth/react";
 import AlternativeMethodLink from "./alternativeMethodLink";
 import router from "next/router";
 import { useState } from "react";
+import Tooltip from "./tooltip";
 
 export default function SignUpForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -67,7 +68,9 @@ export default function SignUpForm() {
         >
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
-              <span className="ml-1 font-medium">Nombre de usuario</span>
+              <span className="ml-1 flex items-center gap-1 font-medium">
+                Nombre de usuario <Tooltip />
+              </span>
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
