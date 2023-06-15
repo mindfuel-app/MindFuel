@@ -55,16 +55,17 @@ export default function SignUpForm() {
 
   const handleChange = (event: any) => {
     setImageUploaded(event.target.files[0]);
+    submitImage();
   };
 
-  const submitImage = async (e: any) => {
-    e.preventDefault();
+  const submitImage = async () => {
 
     if (!imageUploaded) {
       return;
     }
 
     try {
+      console.log(imageUploaded);
       const formData = new FormData();
       formData.append("image", imageUploaded);
 
