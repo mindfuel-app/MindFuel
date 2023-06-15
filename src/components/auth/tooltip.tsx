@@ -1,22 +1,37 @@
-import { Tooltip } from "@mui/material";
+import { ClickAwayListener, Tooltip, Grow } from "@mui/material";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import { useState } from "react";
 
 export default function HoverTooltip() {
-  const [showTooltip, setShowTooltip] = useState(false);
-  return (
-    <div>
-      <BsQuestionCircleFill
-        onClick={() => setShowTooltip(!showTooltip)}
-        className="relative"
-      />
+  const [open, setOpen] = useState(false);
 
-      {showTooltip && (
-        <div className="absolute z-10 mt-1 rounded bg-gray-700 p-2 font-normal text-white">
-          Tu nombre de usuario te identifica y es el que veran tus amigos en la
-          app
-        </div>
-      )}
-    </div>
+  return (
+    <ClickAwayListener onClickAway={() => setOpen(false)}>
+      <div>
+        <Tooltip
+          PopperProps={{
+            disablePortal: true,
+          }}
+          onClose={() => setOpen(false)}
+          open={open}
+          disableFocusListener
+          disableHoverListener
+          disableTouchListener
+          TransitionComponent={Grow}
+          TransitionProps={{ timeout: 200 }}
+          title="Tu nombre de usuario te identifica y es el que veran tus amigos en la
+          app"
+          arrow
+          placement="top"
+        >
+          <button
+            className="no-highlight flex items-center"
+            onClick={() => setOpen(true)}
+          >
+            <BsQuestionCircleFill />
+          </button>
+        </Tooltip>
+      </div>
+    </ClickAwayListener>
   );
 }
