@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useState, type SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent } from "react";
 
 interface Recommendation {
   Tareas: string;
@@ -8,6 +8,7 @@ interface Recommendation {
 
 export default function Recommend() {
   const [recomendacion, setRecomendacion] = useState<Recommendation[]>([]);
+  const [warning, setWarning] = useState<string>("");
 
   const handleSubmit = async (event: SyntheticEvent): Promise<void> => {
     event.preventDefault();
@@ -30,9 +31,15 @@ export default function Recommend() {
 
       if (response.ok) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const data: Recommendation[] = await response.json();
+        const data: Recommendation[] | { warning: string } = await response.json();
         console.log(data);
-        setRecomendacion(data);
+        if ("warning" in data) {
+          setWarning(data.warning);
+          setRecomendacion([]);
+        } else {
+          setWarning("");
+          setRecomendacion(data);
+        }
       } else {
         console.log("Error:", response.status);
       }
@@ -44,15 +51,22 @@ export default function Recommend() {
   return (
     <div className="recomendar">
       <form onSubmit={handleSubmit}>
-        <input type="text" name="tareas" placeholder="Tarea" required />
+        <input
+          type="text"
+          name="tareas"
+          placeholder={warning ? `Error: ${warning}` : "Tarea"}
+          required
+        />
         <button type="submit" className="btn btn-primary btn-block btn-large">
           Recomendar
         </button>
       </form>
       <ul>
-        {recomendacion.map((item: Recommendation, index: number) => (
-          <li key={index}>{item.Tareas}</li>
-        ))}
+        {recomendacion.length > 0 ? (
+          recomendacion.map((item: Recommendation, index: number) => (
+            <li key={index}>{item.Tareas}</li>
+          ))
+        ) : null}
       </ul>
     </div>
   );
