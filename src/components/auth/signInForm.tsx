@@ -13,8 +13,10 @@ import router from "next/router";
 import { useState } from "react";
 
 export default function SignInForm() {
-  const [PasswordInputType, ToggleIcon] = usePasswordToggle();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isPasswordWrong, setIsPasswordWrong] = useState(false);
+  const [isEmailWrong, setIsEmailWrong] = useState(false);
+  const [PasswordInputType, ToggleIcon] = usePasswordToggle(isPasswordWrong);
 
   type FormData = {
     email: string;
@@ -43,6 +45,12 @@ export default function SignInForm() {
     }).then((response) => {
       if (response?.error) {
         setIsButtonDisabled(false);
+        if (response.error == "Contraseña Incorrecta") {
+          return setIsPasswordWrong(true);
+        }
+        if (response.error == "Este email no esta registrado") {
+          return setIsEmailWrong(true);
+        }
         return alert(response.error);
       }
 
@@ -67,7 +75,9 @@ export default function SignInForm() {
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
               <span
-                className="ml-1 font-medium"
+                className={`ml-1 font-medium ${
+                  isEmailWrong ? "text-red-500" : ""
+                }`}
                 onClick={(e) => e.preventDefault()}
               >
                 Email
@@ -75,9 +85,16 @@ export default function SignInForm() {
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
-                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px]"
+                  className={`w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px] ${
+                    isEmailWrong ? "border-red-500" : ""
+                  }`}
                   {...register("email")}
                 />
+                {isEmailWrong && (
+                  <span className="text-xs text-red-500">
+                    No existe una cuenta con este email
+                  </span>
+                )}
                 {errors.email && (
                   <span className="text-xs text-red-500">
                     Ingrese un email valido
@@ -89,12 +106,18 @@ export default function SignInForm() {
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
               <span
-                className="ml-1 font-medium"
+                className={`ml-1 font-medium ${
+                  isPasswordWrong ? "text-red-500" : ""
+                }`}
                 onClick={(e) => e.preventDefault()}
               >
                 Contraseña
               </span>
-              <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px] ">
+              <div
+                className={`flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px] ${
+                  isPasswordWrong ? "border-red-500" : ""
+                }`}
+              >
                 <input
                   type={PasswordInputType == "text" ? "text" : "password"}
                   className="outline-none"
@@ -102,14 +125,19 @@ export default function SignInForm() {
                 />
                 <span className="text-gray-500">{ToggleIcon}</span>
               </div>
+              {isPasswordWrong && (
+                <span className="mt-2 text-xs text-red-500">
+                  Contraseña incorrecta
+                </span>
+              )}
             </label>
 
-            {errors.password?.type == "min" ||
-              (errors.password?.type && (
+            {!isPasswordWrong &&
+              (errors?.password?.type === "min" || errors.password?.type) && (
                 <span className="text-xs text-red-500">
                   Contraseña: 6-30 caracteres
                 </span>
-              ))}
+              )}
           </div>
           <div className="flex w-full flex-col items-center gap-5 pt-3">
             <AuthButton method="Sign in" isDisabled={isButtonDisabled} />
