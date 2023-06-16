@@ -15,6 +15,8 @@ import Tooltip from "./tooltip";
 export default function SignUpForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isEmailWrong, setIsEmailWrong] = useState(false);
+  const [isUsernameWrong, setIsUsernameWrong] = useState(false);
 
   type FormData = {
     name: string;
@@ -46,6 +48,12 @@ export default function SignUpForm() {
     }).then((response) => {
       if (response?.error) {
         setIsButtonDisabled(false);
+        if (response.error == "Este email ya esta registrado") {
+          return setIsEmailWrong(true);
+        }
+        if (response.error == "Este nombre de usuario ya esta registrado") {
+          return setIsUsernameWrong(true);
+        }
         return alert(response.error);
       }
       void router.push("/tareas");
@@ -77,9 +85,16 @@ export default function SignUpForm() {
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
-                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px]"
+                  className={`w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px] ${
+                    isUsernameWrong ? "border-red-500" : ""
+                  }`}
                   {...register("name")}
                 />
+                {isUsernameWrong && (
+                  <span className="text-xs text-red-500">
+                    Ya existe una cuenta con este nombre de usuario
+                  </span>
+                )}
                 {errors.name && (
                   <span className="text-xs text-red-500">
                     Nombre de usuario: 3-30 caracteres
@@ -99,9 +114,16 @@ export default function SignUpForm() {
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
-                  className="w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px]"
+                  className={`w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px] ${
+                    isEmailWrong ? "border-red-500" : ""
+                  }`}
                   {...register("email")}
                 />
+                {isEmailWrong && (
+                  <span className="text-xs text-red-500">
+                    Ya existe una cuenta con este email
+                  </span>
+                )}
                 {errors.email && (
                   <span className="text-xs text-red-500">
                     Ingrese un email valido
