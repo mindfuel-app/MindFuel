@@ -68,9 +68,18 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
+        const existingName = await prisma.user.findUnique({
+          where: {
+            name,
+          },
+        });
+
         if (method === "signup") {
           if (existingUser) {
             throw new Error("Este email ya esta registrado");
+          }
+          if(existingName){
+            throw new Error("Este nombre ya esta registrado");
           }
 
           const salt = await bcrypt.genSalt();
