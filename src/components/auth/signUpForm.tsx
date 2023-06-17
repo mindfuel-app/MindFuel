@@ -41,6 +41,7 @@ export default function SignUpForm() {
   const submitData = async (data: FormData) => {
     setIsButtonDisabled(true);
     await signIn("credentials", {
+      name: data.name,
       email: data.email,
       password: data.password,
       method: "signup",
