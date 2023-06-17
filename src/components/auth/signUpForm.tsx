@@ -77,7 +77,7 @@ export default function SignUpForm() {
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
               <span
-                className="ml-1 flex items-center gap-1 font-medium"
+                className={`ml-1 flex items-center gap-1 font-medium ${isUsernameWrong ? "text-red-500" : ""}`}
                 onClick={(e) => e.preventDefault()}
               >
                 Nombre de usuario <Tooltip />
@@ -106,7 +106,7 @@ export default function SignUpForm() {
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
               <span
-                className="ml-1 font-medium"
+                className={`ml-1 font-medium ${isEmailWrong ? "text-red-500" : ""}`}
                 onClick={(e) => e.preventDefault()}
               >
                 Email
