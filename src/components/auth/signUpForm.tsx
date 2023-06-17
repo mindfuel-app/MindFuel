@@ -77,7 +77,9 @@ export default function SignUpForm() {
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
               <span
-                className={`ml-1 flex items-center gap-1 font-medium ${isUsernameWrong ? "text-red-500" : ""}`}
+                className={`ml-1 flex items-center gap-1 font-medium ${
+                  isUsernameWrong ? "text-red-500" : ""
+                }`}
                 onClick={(e) => e.preventDefault()}
               >
                 Nombre de usuario <Tooltip />
@@ -95,7 +97,7 @@ export default function SignUpForm() {
                     Ya existe una cuenta con este nombre de usuario
                   </span>
                 )}
-                {errors.name && (
+                {!isUsernameWrong && errors.name && (
                   <span className="text-xs text-red-500">
                     Nombre de usuario: 3-30 caracteres
                   </span>
@@ -106,7 +108,9 @@ export default function SignUpForm() {
           <div className="flex flex-col gap-2">
             <label className="flex flex-col">
               <span
-                className={`ml-1 font-medium ${isEmailWrong ? "text-red-500" : ""}`}
+                className={`ml-1 font-medium ${
+                  isEmailWrong ? "text-red-500" : ""
+                }`}
                 onClick={(e) => e.preventDefault()}
               >
                 Email
@@ -124,7 +128,7 @@ export default function SignUpForm() {
                     Ya existe una cuenta con este email
                   </span>
                 )}
-                {errors.email && (
+                {!isEmailWrong && errors.email && (
                   <span className="text-xs text-red-500">
                     Ingrese un email valido
                   </span>
@@ -146,19 +150,24 @@ export default function SignUpForm() {
                   className="outline-none"
                   {...register("password")}
                 />
-                <span className="text-gray-500">{ToggleIcon}</span>
+                <span>{ToggleIcon}</span>
               </div>
             </label>
-
-            {errors.password?.type == "min" ||
-              (errors.password?.type && (
-                <span className="text-xs text-red-500">
-                  Contraseña: 6-30 caracteres
-                </span>
-              ))}
+            {errors.password && (
+              <span className="text-xs text-red-500">
+                Contraseña: 6-30 caracteres
+              </span>
+            )}
           </div>
           <div className="flex w-full flex-col items-center gap-5 pt-3">
-            <AuthButton method="Sign up" isDisabled={isButtonDisabled} />
+            <AuthButton
+              method="Sign up"
+              isDisabled={isButtonDisabled}
+              onClick={() => {
+                setIsEmailWrong(false);
+                setIsUsernameWrong(false);
+              }}
+            />
           </div>
           <Divider variant="middle">o</Divider>
           <GoogleAuthShowcase />

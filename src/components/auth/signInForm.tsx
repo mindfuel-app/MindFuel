@@ -95,7 +95,7 @@ export default function SignInForm() {
                     No existe una cuenta con este email
                   </span>
                 )}
-                {errors.email && (
+                {!isEmailWrong && errors.email && (
                   <span className="text-xs text-red-500">
                     Ingrese un email valido
                   </span>
@@ -123,27 +123,31 @@ export default function SignInForm() {
                   className="outline-none"
                   {...register("password")}
                 />
-                <span className="text-gray-500">{ToggleIcon}</span>
+                <span>{ToggleIcon}</span>
               </div>
-              {isPasswordWrong && (
-                <span className="mt-2 text-xs text-red-500">
-                  Contraseña incorrecta
-                </span>
-              )}
             </label>
-
-            {!isPasswordWrong &&
-              (errors?.password?.type === "min" || errors.password?.type) && (
-                <span className="text-xs text-red-500">
-                  Contraseña: 6-30 caracteres
-                </span>
-              )}
+            {isPasswordWrong && (
+              <span className="text-xs text-red-500">
+                Contraseña incorrecta
+              </span>
+            )}
+            {!isPasswordWrong && errors.password && (
+              <span className="text-xs text-red-500">
+                Contraseña: 6-30 caracteres
+              </span>
+            )}
           </div>
           <div className="flex w-full flex-col items-center gap-5 pt-3">
-            <AuthButton method="Sign in" isDisabled={isButtonDisabled} />
+            <AuthButton
+              method="Sign in"
+              isDisabled={isButtonDisabled}
+              onClick={() => {
+                setIsEmailWrong(false);
+                setIsPasswordWrong(false);
+              }}
+            />
             <ForgotPasswordButton />
           </div>
-
           <Divider variant="middle">o</Divider>
           <GoogleAuthShowcase />
           <AlternativeMethodLink method="Sign up" />
