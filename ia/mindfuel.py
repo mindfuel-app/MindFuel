@@ -13,7 +13,7 @@ cors = CORS(app)
 def home():
     return "hello world"
 
-@app.route("/recomendar", methods = ['POST'])
+@app.route("/recomendar", methods = ['GET','POST'])
 
 def recomendar():
      tareas = pd.read_csv("./input/tareas.csv")
