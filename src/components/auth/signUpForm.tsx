@@ -66,7 +66,7 @@ export default function SignUpForm() {
       <div className="flex w-screen justify-end pr-5">
         <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
       </div>
-      <div className="py- flex select-none flex-col items-center gap-2 px-5 py-3">
+      <div className="flex select-none flex-col items-center gap-2 px-5 py-3">
         <h1 className="mb-4 mt-5 text-2xl font-semibold text-[#008080]">
           Registrarse
         </h1>
