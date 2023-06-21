@@ -6,7 +6,7 @@ export default function AuthButton({
   isDisabled,
   onClick,
 }: {
-  method: "Sign up" | "Sign in";
+  method: "Sign up" | "Sign in" | "Reset password";
   isDisabled: boolean;
   onClick: () => void;
 }) {
@@ -17,7 +17,9 @@ export default function AuthButton({
       disabled={isDisabled}
       onClick={onClick}
     >
-      {!isDisabled && (method === "Sign up" ? "Registrarse" : "Inicia sesión")}
+      {!isDisabled && (method === "Sign up" ? "Registrarse" : "")}
+      {!isDisabled && (method === "Sign in" ? "Iniciar sesión" : "")}
+      {!isDisabled && (method === "Reset password" ? "Confirmar" : "")}
       {isDisabled && <CircularProgress color="inherit" size={20} />}
     </Button>
   );
