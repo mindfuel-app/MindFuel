@@ -16,6 +16,7 @@ export default function SignInForm() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isPasswordWrong, setIsPasswordWrong] = useState(false);
   const [isEmailWrong, setIsEmailWrong] = useState(false);
+  const [isGoogleAccount, setIsGoogleAccount] = useState(false);
   const [PasswordInputType, ToggleIcon] = usePasswordToggle(isPasswordWrong);
 
   type FormData = {
@@ -51,6 +52,9 @@ export default function SignInForm() {
         if (response.error == "Este email no esta registrado") {
           return setIsEmailWrong(true);
         }
+        if (response.error == "data and hash arguments required") {
+          return setIsGoogleAccount(true);
+        }
         return alert(response.error);
       }
 
@@ -63,7 +67,7 @@ export default function SignInForm() {
       <div className="flex w-screen justify-end pr-5">
         <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
       </div>
-      <div className="py- flex select-none flex-col items-center gap-2 px-5 py-3">
+      <div className="flex select-none flex-col items-center gap-2 px-5 py-3">
         <h1 className="mb-4 mt-5 text-2xl font-semibold text-[#008080]">
           Inicio sesión
         </h1>
@@ -93,6 +97,11 @@ export default function SignInForm() {
                 {isEmailWrong && (
                   <span className="text-xs text-red-500">
                     No existe una cuenta con este email
+                  </span>
+                )}
+                {isGoogleAccount && (
+                  <span className="text-xs text-red-500">
+                    Esta cuenta esta registrada con Google
                   </span>
                 )}
                 {!isEmailWrong && errors.email && (
