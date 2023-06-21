@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import AuthButton from "~/components/auth/authButton";
+import { MdArrowBackIosNew } from "react-icons/md";
+import Link from "next/link";
 
 export default function ReestablecerContraseña() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -45,10 +47,16 @@ export default function ReestablecerContraseña() {
   return (
     <AuthPageLayout>
       <div className="flex flex-col items-center">
-        <div className="flex w-screen justify-end pr-5">
+        <div className="flex w-screen items-center justify-between px-5">
+          <Link
+            href="/signin"
+            className="no-highlight ml-3 rounded-lg p-1 text-2xl active:bg-gray-300"
+          >
+            <MdArrowBackIosNew />
+          </Link>
           <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
         </div>
-        <div className="flex select-none flex-col items-center gap-2 px-5 py-3">
+        <div className="flex select-none flex-col items-center gap-2 p-5">
           <h1 className="mb-4 mt-5 text-xl font-semibold text-[#008080]">
             Reestablecer contraseña
           </h1>
