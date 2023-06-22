@@ -8,7 +8,7 @@ export default function SignIn() {
       <Head>
         <title>Sign in</title>
       </Head>
-      <AuthPageLayout>
+      <AuthPageLayout authMethod="Inicio sesión">
         <SignInForm />
       </AuthPageLayout>
     </>

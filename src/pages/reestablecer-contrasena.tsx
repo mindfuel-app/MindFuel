@@ -1,4 +1,3 @@
-import AuthPageLayout from "~/components/auth/authPageLayout";
 import Image from "next/image";
 import { type ZodType, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,7 +44,7 @@ export default function ReestablecerContraseña() {
   };
 
   return (
-    <AuthPageLayout>
+    <main className="flex min-h-screen flex-col py-10">
       <div className="flex flex-col items-center">
         <div className="flex w-screen items-center justify-between px-5">
           <Link
@@ -112,6 +111,6 @@ export default function ReestablecerContraseña() {
           </form>
         </div>
       </div>
-    </AuthPageLayout>
+    </main>
   );
 }

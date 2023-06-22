@@ -8,7 +8,7 @@ export default function SignIn() {
       <Head>
         <title>Sign up</title>
       </Head>
-      <AuthPageLayout>
+      <AuthPageLayout authMethod="Registrarse">
         <SignUpForm />
       </AuthPageLayout>
     </>
