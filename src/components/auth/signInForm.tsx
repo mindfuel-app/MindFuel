@@ -63,7 +63,7 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex w-full flex-col items-center">
       <Logo />
       <div className="flex select-none flex-col items-center gap-2 px-5 py-3">
         <h1 className="mb-4 mt-5 text-2xl font-semibold text-[#008080] sm:text-3xl">
