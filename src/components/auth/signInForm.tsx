@@ -1,7 +1,6 @@
 import { type ZodType, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { Divider } from "@mui/material";
 import usePasswordToggle from "~/hooks/usePasswordToggle";
 import GoogleAuthShowcase from "./googleAuthShowcase";
@@ -11,6 +10,7 @@ import AlternativeMethodLink from "./alternativeMethodLink";
 import ForgotPasswordButton from "./forgotPasswordButton";
 import router from "next/router";
 import { useState } from "react";
+import Logo from "./logo";
 
 export default function SignInForm() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -63,16 +63,14 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex w-screen justify-end pr-5">
-        <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
-      </div>
+    <div className="flex w-full flex-col items-center">
+      <Logo />
       <div className="flex select-none flex-col items-center gap-2 px-5 py-3">
-        <h1 className="mb-4 mt-5 text-2xl font-semibold text-[#008080]">
+        <h1 className="mb-4 mt-5 text-2xl font-semibold text-[#008080] sm:text-3xl">
           Inicio sesión
         </h1>
         <form
-          className="flex flex-col justify-center space-y-5 py-3"
+          className="flex flex-col justify-center space-y-5 py-3 sm:py-10 xl:scale-110 xl:py-20"
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={handleSubmit(submitData)}
         >
