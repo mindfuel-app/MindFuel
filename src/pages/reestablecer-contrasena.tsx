@@ -56,7 +56,7 @@ export default function ReestablecerContraseña() {
           </Link>
           <Image alt="Logo" src="/favicon.ico" width={75} height={58}></Image>
         </div>
-        <div className="flex select-none flex-col items-center gap-2 p-5">
+        <div className="my-3 flex select-none flex-col items-center gap-2 p-5">
           <h1 className="mb-4 mt-5 text-xl font-semibold text-[#008080]">
             Reestablecer contraseña
           </h1>
