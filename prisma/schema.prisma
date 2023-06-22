@@ -117,3 +117,10 @@ model event{
     createdAt DateTime @default(now())
     task task[]
 }
+
+model passwordResetToken {
+  id        Int      @id @default(autoincrement())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+}
