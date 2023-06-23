@@ -8,7 +8,7 @@ export default function authPageLayout({
   authMethod: "Inicio sesión" | "Registrarse";
 }) {
   return (
-    <div className="flex overflow-hidden bg-[#008080]">
+    <div className="flex bg-[#008080]">
       <div className="h-screen w-0 xl:w-1/6"></div>
       <main className="flex min-h-screen w-full flex-col bg-[#edece7] py-10 xl:shadow-2xl">
         <div className="flex flex-col items-center">
