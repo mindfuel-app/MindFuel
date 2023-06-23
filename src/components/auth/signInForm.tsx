@@ -63,7 +63,7 @@ export default function SignInForm() {
 
   return (
     <form
-      className="flex flex-col justify-center space-y-5 py-3 sm:py-10 xl:scale-110 xl:py-20"
+      className="flex flex-col justify-center space-y-5 py-3 sm:py-10"
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onSubmit={handleSubmit(submitData)}
     >
