@@ -7,7 +7,7 @@ export default function Custom404() {
       <span className="text-3xl font-bold max-[360px]:text-2xl xl:text-4xl">
         Página no encontrada
       </span>
-      <p className="mt-3 text-center text-lg lg:text-xl">
+      <p className="mt-3 max-w-[650px] text-center text-lg lg:text-xl">
         La página que intenta abrir no existe. Es posible que haya escrito mal
         la dirección o que la página se haya movido a otra URL.
       </p>
