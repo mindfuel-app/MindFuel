@@ -9,9 +9,15 @@ export default function usePasswordToggle(isPasswordWrong?: boolean) {
   const className = isPasswordWrong ? "text-red-500" : "text-gray-500";
 
   const Icon = visible ? (
-    <FaEyeSlash className={className} onClick={() => setVisibility(false)} />
+    <FaEyeSlash
+      className={`${className} ml-3 cursor-pointer`}
+      onClick={() => setVisibility(false)}
+    />
   ) : (
-    <FaEye className={className} onClick={() => setVisibility(true)} />
+    <FaEye
+      className={`${className} ml-3 cursor-pointer`}
+      onClick={() => setVisibility(true)}
+    />
   );
 
   return [inputType, Icon];

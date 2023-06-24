@@ -134,10 +134,10 @@ export default function SignUpForm() {
           >
             Contraseña
           </span>
-          <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px]">
+          <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px] active:border-[3px]">
             <input
               type={PasswordInputType == "text" ? "text" : "password"}
-              className="outline-none"
+              className="w-full outline-none"
               {...register("password")}
             />
             <span>{ToggleIcon}</span>
