@@ -6,14 +6,12 @@ import Router from "next/router";
 export default function Landing() {
   const { status } = useSession();
   if (status === "authenticated") {
-    void Router.push("/tareas")
-  }
-  else if(status==="unauthenticated"){
-
+    void Router.push("/tareas");
+  } else if (status === "unauthenticated") {
     return (
       <>
         <Head>
-          <title>Landing</title>
+          <title>MindFuel</title>
         </Head>
         <div className="flex flex-col py-2">
           <div className="flex justify-end px-5 py-3">
@@ -30,8 +28,8 @@ export default function Landing() {
               <p className="text-lg">
                 MindFuel es una solución diseñada para ayudar a las personas
                 diagnosticadas con trastorno por déficit de atención e
-                hiperactividad (TDAH) en la generación de hábitos sustentables en
-                el tiempo y mantención de la atención.{" "}
+                hiperactividad (TDAH) en la generación de hábitos sustentables
+                en el tiempo y mantención de la atención.{" "}
               </p>
             </div>
             <div className="flex justify-center ">
