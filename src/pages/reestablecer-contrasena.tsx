@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { type ZodType, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -7,6 +6,7 @@ import AuthButton from "~/components/auth/authButton";
 import { MdArrowBackIosNew } from "react-icons/md";
 import Link from "next/link";
 import Head from "next/head";
+import Logo from "~/components/auth/logo";
 
 export default function ReestablecerContraseña() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -28,7 +28,7 @@ export default function ReestablecerContraseña() {
     resolver: zodResolver(formSchema),
   });
 
-  const submitData = (data: FormData) => {
+  const submitData = () => {
     setIsButtonDisabled(true);
     // await signIn("credentials", {
     //   email: data.email,
@@ -53,25 +53,20 @@ export default function ReestablecerContraseña() {
         <div className="h-screen w-0 xl:w-1/6"></div>
         <main className="flex min-h-screen w-full flex-col bg-[#edece7] py-10 xl:shadow-2xl">
           <div className="flex flex-col items-center">
-            <div className="flex w-full items-center justify-between px-5 lg:justify-end">
+            <div className="flex w-full items-center justify-between pl-5 lg:justify-end">
               <Link
                 href="/signin"
                 className="no-highlight ml-3 rounded-lg p-1 text-2xl active:bg-gray-300 lg:hidden"
               >
                 <MdArrowBackIosNew />
               </Link>
-              <Image
-                alt="Logo"
-                src="/favicon.ico"
-                width={75}
-                height={58}
-              ></Image>
+              <Logo />
             </div>
-            <div className="my-3 flex select-none flex-col items-center gap-2 p-5">
-              <h1 className="my-5 text-xl font-semibold text-[#008080] sm:text-2xl ">
+            <div className="flex select-none flex-col items-center p-5">
+              <h1 className="my-5 text-xl font-semibold text-[#008080] min-[360px]:text-2xl sm:text-3xl lg:-my-1">
                 Reestablecer contraseña
               </h1>
-              <p className="max-w-[250px] text-center font-medium sm:mt-5">
+              <p className="max-w-[250px] text-center text-sm font-medium min-[360px]:text-base sm:my-5 lg:mb-0 lg:mt-10">
                 Se enviará un enlace para reestablecer la contraseña a tu correo
                 electrónico
               </p>
@@ -119,6 +114,15 @@ export default function ReestablecerContraseña() {
                       setIsEmailWrong(false);
                     }}
                   />
+                  <span className="mt-3 font-medium sm:text-lg">
+                    Volver a{" "}
+                    <Link
+                      href="/signin"
+                      className="no-highlight text-sky-600 underline-offset-2 active:underline"
+                    >
+                      Inicio sesión
+                    </Link>
+                  </span>
                 </div>
               </form>
             </div>
