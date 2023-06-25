@@ -14,7 +14,7 @@ export default function authPageLayout({
         <div className="flex flex-col items-center">
           <Logo />
           <div className="flex select-none flex-col items-center p-5">
-            <h1 className="my-5 text-2xl font-semibold text-[#008080] sm:text-3xl lg:my-1">
+            <h1 className="my-5 text-2xl font-semibold text-[#008080] sm:text-3xl lg:-my-1">
               {authMethod}
             </h1>
             {children}
