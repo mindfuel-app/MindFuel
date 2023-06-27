@@ -10,7 +10,7 @@ import {
 } from "~/server/api/trpc";
 //import path from "path";
 //import { BsCartX } from "react-icons/bs";
-//import recoverPasswordTemplate from "~/utils/emailTemplates";
+import recoverPasswordTemplate from "~/utils/recoverpwdtemplate";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -27,12 +27,14 @@ export const resetPwdRouter = createTRPCRouter({
         .input(z.object({email: z.string()}))
         .mutation(async ({input, ctx}) => {
             const { email } = input;
+            console.log(email);
             const user = await ctx.prisma.user.findUnique({
                 where: { email },
             });
             if (!user) {
                 throw new Error ("Este Correo no esta registrado a ninguna cuenta. Tal vez iniciaste sesion con google?")
             }
+            const name = email.slice(0, email.indexOf('@'));
             const token = uuidv4();
             await ctx.prisma.passwordResetToken.create({
                 data: {
@@ -47,11 +49,7 @@ export const resetPwdRouter = createTRPCRouter({
                 from: env.NODEMAILER_USER,
                 to: email,
                 subject: "Recupere su contraseña de MindFuel",
-                html: `
-                <h1>Recupere su contraseña de MindFuel</h1>
-                <p>Para recuperar su contraseña, haga click en el siguiente enlace: <a href="${redirectURL}">${redirectURL}</a></p>
-                <p>Si no ha solicitado recuperar su contraseña, ignore este correo.</p>
-                `
+                html: recoverPasswordTemplate(name, redirectURL)
             }
 
             try{
