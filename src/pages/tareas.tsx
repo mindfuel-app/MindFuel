@@ -9,7 +9,7 @@ import {
 export default function Tareas() {
   return (
     <Layout>
-      <div className="flex h-full flex-col items-center bg-[#E9E9E9] px-6 py-12">
+      <div className="flex h-full flex-col items-center bg-[#E9E9E9] p-5">
         <Tabs defaultValue="tareas" className="w-full">
           <div className="flex justify-center">
             <TabsList>
