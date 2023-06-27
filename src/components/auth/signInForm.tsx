@@ -63,7 +63,7 @@ export default function SignInForm() {
 
   return (
     <form
-      className="flex flex-col justify-center space-y-5 py-3 sm:py-10"
+      className="flex flex-col justify-center space-y-7 py-3 sm:py-10"
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onSubmit={handleSubmit(submitData)}
     >
@@ -78,23 +78,23 @@ export default function SignInForm() {
           <div className="flex flex-col gap-2">
             <input
               type="text"
-              className={`w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px] ${
+              className={`w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none ${
                 isEmailWrong ? "border-red-500" : ""
               }`}
               {...register("email")}
             />
             {isEmailWrong && (
-              <span className="text-xs text-red-500">
+              <span className="absolute mt-10 text-xs text-red-500">
                 No existe una cuenta con este email
               </span>
             )}
             {isGoogleAccount && (
-              <span className="text-xs text-red-500">
+              <span className="absolute mt-10 text-xs text-red-500">
                 Esta cuenta esta registrada con Google
               </span>
             )}
             {!isEmailWrong && errors.email && (
-              <span className="text-xs text-red-500">
+              <span className="absolute mt-10 text-xs text-red-500">
                 Ingrese un email valido
               </span>
             )}
@@ -112,7 +112,7 @@ export default function SignInForm() {
             Contraseña
           </span>
           <div
-            className={`flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 focus-within:border-[3px] active:border-[3px] ${
+            className={`flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1 ${
               isPasswordWrong ? "border-red-500" : ""
             }`}
           >
@@ -123,15 +123,17 @@ export default function SignInForm() {
             />
             <span>{ToggleIcon}</span>
           </div>
+          {isPasswordWrong && (
+            <span className="absolute mt-16 text-xs text-red-500">
+              Contraseña incorrecta
+            </span>
+          )}
+          {!isPasswordWrong && errors.password && (
+            <span className="absolute mt-16 text-xs text-red-500">
+              Contraseña: 6-30 caracteres
+            </span>
+          )}
         </label>
-        {isPasswordWrong && (
-          <span className="text-xs text-red-500">Contraseña incorrecta</span>
-        )}
-        {!isPasswordWrong && errors.password && (
-          <span className="text-xs text-red-500">
-            Contraseña: 6-30 caracteres
-          </span>
-        )}
       </div>
       <div className="flex w-full flex-col items-center gap-5 pt-3">
         <AuthButton
