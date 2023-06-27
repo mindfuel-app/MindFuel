@@ -3,16 +3,35 @@ import Head from "next/head";
 import Router from "next/router";
 import Logo from "~/components/auth/logo";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Progress } from "../components/ui/progressBar";
 
 export default function Landing() {
   const { status } = useSession();
   const [screenTouches, setScreenTouches] = useState(0);
+  const [isWidthGreaterThan768px, setIsWidthGreaterThan768px] = useState(false);
 
-  if (status === "authenticated") {
-    void Router.push("/tareas");
-  } else if (status === "unauthenticated") {
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWidthGreaterThan768px(window.innerWidth > 768);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  if (status == "authenticated") {
+    return void Router.push("/tareas");
+  } else if (status == "unauthenticated") {
+    if (isWidthGreaterThan768px) {
+      return void Router.push("/signup");
+    }
+
     return (
       <>
         <Head>
