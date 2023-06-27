@@ -7,13 +7,13 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import Link from "next/link";
 import Head from "next/head";
 import Logo from "~/components/auth/logo";
-
 import { api } from "~/utils/api";
 
 export default function ReestablecerContraseña() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isEmailWrong, setIsEmailWrong] = useState(false);
-  const { mutate: sendPasswordEmail } = api.resetPwd.sendResetPwdEmail.useMutation();
+  const { mutate: sendPasswordEmail } =
+    api.resetPwd.sendResetPwdEmail.useMutation();
 
   type FormData = {
     email: string;
@@ -31,29 +31,26 @@ export default function ReestablecerContraseña() {
     resolver: zodResolver(formSchema),
   });
 
-  const submitData = () => {
+  const submitData = (data: FormData) => {
     setIsButtonDisabled(true);
-    // await signIn("credentials", {
-    //   email: data.email,
-    //   redirect: false,
-    // }).then((response) => {
-    //   if (response?.error) {
-    //     setIsButtonDisabled(false);
-    //     if (response.error == "Este email no esta registrado") {
-    //       return setIsEmailWrong(true);
-    //     }
-    //     return alert(response.error);
-    //   }
-    // });
-    sendPasswordEmail({ email: "" },
-        {onSuccess:()=>{
-        alert("Se ha enviado un correo para reestablecer la contraseña")
-        window.location.href="/signin"
+    sendPasswordEmail(
+      { email: data.email },
+      {
+        onSuccess: () => {
+          setIsButtonDisabled(false);
+          return alert(
+            "Se ha enviado un correo para reestablecer la contraseña"
+          );
         },
-        onError:(error)=>{
-          alert(error)
-        }
-      })
+        onError: (error) => {
+          setIsButtonDisabled(false);
+          if (error.message == "Este email no esta registrado") {
+            return setIsEmailWrong(true);
+          }
+          return alert(error);
+        },
+      }
+    );
   };
 
   return (
@@ -100,25 +97,25 @@ export default function ReestablecerContraseña() {
                     <div className="flex flex-col gap-2">
                       <input
                         type="text"
-                        className={`w-full min-w-[280px] rounded-xl border-2 border-[#008080] px-3 py-1 outline-none focus:border-[3px] ${
+                        className={`w-full min-w-[280px] rounded-xl border-2 border-[#008080] px-3 py-1 outline-none ${
                           isEmailWrong ? "border-red-500" : ""
                         }`}
                         {...register("email")}
                       />
                       {isEmailWrong && (
-                        <span className="text-xs text-red-500">
+                        <span className="absolute mt-10 text-xs text-red-500">
                           No existe una cuenta con este email
                         </span>
                       )}
                       {!isEmailWrong && errors.email && (
-                        <span className="text-xs text-red-500">
+                        <span className="absolute mt-10 text-xs text-red-500">
                           Ingrese un email valido
                         </span>
                       )}
                     </div>
                   </label>
                 </div>
-                <div className="flex w-full flex-col items-center gap-5 pt-3">
+                <div className="flex w-full flex-col items-center gap-5 pt-4">
                   <AuthButton
                     method="Reset password"
                     isDisabled={isButtonDisabled}

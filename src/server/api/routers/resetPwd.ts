@@ -4,133 +4,137 @@ import nodemailer from "nodemailer";
 import { env } from "process";
 import bcrypt from "bcrypt";
 
-import {
-    createTRPCRouter,
-    publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 //import path from "path";
 //import { BsCartX } from "react-icons/bs";
 import recoverPasswordTemplate from "~/utils/recoverpwdtemplate";
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    auth: {
-        user: env.NODEMAILER_USER,
-        pass: env.NODEMAILER_PWD,
-    }
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  auth: {
+    user: env.NODEMAILER_USER,
+    pass: env.NODEMAILER_PWD,
+  },
 });
 
 export const resetPwdRouter = createTRPCRouter({
-    sendResetPwdEmail: publicProcedure
-        .input(z.object({email: z.string()}))
-        .mutation(async ({input, ctx}) => {
-            const { email } = input;
-            console.log(email);
-            const user = await ctx.prisma.user.findUnique({
-                where: { email },
-            });
-            if (!user) {
-                throw new Error ("Este Correo no esta registrado a ninguna cuenta. Tal vez iniciaste sesion con google?")
-            }
-            const name = email.slice(0, email.indexOf('@'));
-            const token = uuidv4();
-            await ctx.prisma.passwordResetToken.create({
-                data: {
-                    token,
-                    email,
-                    expiresAt: new Date(Date.now() + 3600000),
-                }
-            })
-            const redirectURL = env.NODE_ENV === "production" ? `https://mindfuel.vercel.app/reestablecer-contrasena/${token}` : `http://localhost:3000/reestablecer-contrasena/${token}`
+  sendResetPwdEmail: publicProcedure
+    .input(z.object({ email: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { email } = input;
 
-            const mailOptions={
-                from: env.NODEMAILER_USER,
-                to: email,
-                subject: "Recupere su contraseña de MindFuel",
-                html: recoverPasswordTemplate(name, redirectURL)
-            }
+      const user = await ctx.prisma.user.findUnique({
+        where: { email },
+      });
+      if (!user) {
+        throw new Error("Este email no esta registrado");
+      }
+      const name = email.slice(0, email.indexOf("@"));
+      const token = uuidv4();
+      await ctx.prisma.passwordResetToken.create({
+        data: {
+          token,
+          email,
+          expiresAt: new Date(Date.now() + 3600000),
+        },
+      });
+      const redirectURL =
+        env.NODE_ENV === "production"
+          ? `https://mindfuel.vercel.app/reestablecer-contrasena/${token}`
+          : `http://localhost:3000/reestablecer-contrasena/${token}`;
 
-            try{
-                await transporter.sendMail(mailOptions);
-                return {success: true}
-            }catch(err){
-                console.error(err);
-                return {success: false}
-            }
-        }),
+      const mailOptions = {
+        from: env.NODEMAILER_USER,
+        to: email,
+        subject: "Recupere su contraseña de MindFuel",
+        html: recoverPasswordTemplate(name, redirectURL),
+      };
 
-        getEmailByToken: publicProcedure
-        .input(z.object({ token: z.string() }))
-        .query(async ({ input, ctx }) => {
-            const { token } = input;
+      try {
+        await transporter.sendMail(mailOptions);
+        return { success: true };
+      } catch (err) {
+        return { success: false };
+      }
+    }),
 
-            const passwordResetToken = await ctx.prisma.passwordResetToken.findUnique({
-                where: {
-                    token,
-                },
-                select: {
-                    email: true,
-                }
-            });
+  getEmailByToken: publicProcedure
+    .input(z.object({ token: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const { token } = input;
 
-            if (!passwordResetToken) {
-                return null;
-            }
+      const passwordResetToken = await ctx.prisma.passwordResetToken.findUnique(
+        {
+          where: {
+            token,
+          },
+          select: {
+            email: true,
+          },
+        }
+      );
 
-            return passwordResetToken.email;
-        }),
+      if (!passwordResetToken) {
+        return null;
+      }
 
-    resetPwd: publicProcedure
-        .input(z.object({email: z.string(), password: z.string()}))
-        .mutation(async ({input, ctx}) => {
-            const { email, password } = input;
-            const user = await ctx.prisma.user.findUnique({where: {email}});
-            if (!user) {
-                throw new Error ("User Not Found")
-            }
-            const salt = await bcrypt.genSalt();
-            const hashedPassword = await bcrypt.hash(password, salt);
+      return passwordResetToken.email;
+    }),
 
-            await ctx.prisma.user.update({
-                where: {email},
-                data: {password: hashedPassword}
-            })
-            return user;
-        }),
+  resetPwd: publicProcedure
+    .input(z.object({ email: z.string(), password: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { email, password } = input;
+      const user = await ctx.prisma.user.findUnique({ where: { email } });
+      if (!user) {
+        throw new Error("User Not Found");
+      }
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-    deletePwdResetToken: publicProcedure
-        .input(z.object({token: z.string()}))
-        .mutation(async({input, ctx})=>{
-            const {token} = input
-            
-            const resetToken = await ctx.prisma.passwordResetToken.findUnique({where:{token}})
+      await ctx.prisma.user.update({
+        where: { email },
+        data: { password: hashedPassword },
+      });
+      return user;
+    }),
 
-            if (!resetToken){
-                throw new Error ("Token not found")
-            }else{
-                await ctx.prisma.passwordResetToken.delete({where:{token}})
-            }
-            return true;
-        }),
+  deletePwdResetToken: publicProcedure
+    .input(z.object({ token: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { token } = input;
 
-    checkValidToken: publicProcedure
-        .input(z.object({token: z.string()}))
-        .query(async({input, ctx})=>{
-            const {token} = input
-            const pwdResetToken = await ctx.prisma.passwordResetToken.findUnique({where:{token}})
+      const resetToken = await ctx.prisma.passwordResetToken.findUnique({
+        where: { token },
+      });
 
-            if(!pwdResetToken){
-                return false;
-            }
+      if (!resetToken) {
+        throw new Error("Token not found");
+      } else {
+        await ctx.prisma.passwordResetToken.delete({ where: { token } });
+      }
+      return true;
+    }),
 
-            if(pwdResetToken.expiresAt < new Date()){
-                await ctx.prisma.passwordResetToken.delete({where: {token}})
-                return false;
-            }
+  checkValidToken: publicProcedure
+    .input(z.object({ token: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const { token } = input;
+      const pwdResetToken = await ctx.prisma.passwordResetToken.findUnique({
+        where: { token },
+      });
 
-            return true;
-        })
+      if (!pwdResetToken) {
+        return false;
+      }
 
-})
+      if (pwdResetToken.expiresAt < new Date()) {
+        await ctx.prisma.passwordResetToken.delete({ where: { token } });
+        return false;
+      }
+
+      return true;
+    }),
+});
