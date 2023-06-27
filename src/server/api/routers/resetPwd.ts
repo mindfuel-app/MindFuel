@@ -31,7 +31,7 @@ export const resetPwdRouter = createTRPCRouter({
       if (!user) {
         throw new Error("Este email no esta registrado");
       }
-      const name = email.slice(0, email.indexOf("@"));
+      const name = user.name as string;
       const token = uuidv4();
       await ctx.prisma.passwordResetToken.create({
         data: {
