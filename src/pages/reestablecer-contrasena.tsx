@@ -59,8 +59,8 @@ export default function ReestablecerContraseña() {
         <title>Reestablecer contraseña</title>
       </Head>
       <div className="flex bg-[#008080]">
-        <div className="h-screen w-0 xl:w-1/6"></div>
-        <main className="flex min-h-screen w-full flex-col bg-[#edece7] py-10 xl:shadow-2xl">
+        <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
+        <main className="flex min-h-screen w-full flex-col bg-[#edece7] py-10 min-[1440px]:shadow-2xl">
           <div className="flex flex-col items-center">
             <div className="flex w-full items-center justify-between pl-5 lg:justify-end">
               <Link
@@ -137,7 +137,7 @@ export default function ReestablecerContraseña() {
             </div>
           </div>
         </main>
-        <div className="h-screen w-0 xl:w-1/6"></div>
+        <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
       </div>
     </>
   );
