@@ -8,9 +8,12 @@ import Link from "next/link";
 import Head from "next/head";
 import Logo from "~/components/auth/logo";
 
+import { api } from "~/utils/api";
+
 export default function ReestablecerContraseña() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isEmailWrong, setIsEmailWrong] = useState(false);
+  const { mutate: sendPasswordEmail } = api.resetPwd.sendResetPwdEmail.useMutation();
 
   type FormData = {
     email: string;
@@ -42,6 +45,15 @@ export default function ReestablecerContraseña() {
     //     return alert(response.error);
     //   }
     // });
+    sendPasswordEmail({ email: "" },
+        {onSuccess:()=>{
+        alert("Se ha enviado un correo para reestablecer la contraseña")
+        window.location.href="/signin"
+        },
+        onError:(error)=>{
+          alert(error)
+        }
+      })
   };
 
   return (
