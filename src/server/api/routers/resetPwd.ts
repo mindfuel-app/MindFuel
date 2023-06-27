@@ -8,7 +8,8 @@ import {
     createTRPCRouter,
     publicProcedure,
 } from "~/server/api/trpc";
-import path from "path";
+//import path from "path";
+//import { BsCartX } from "react-icons/bs";
 //import recoverPasswordTemplate from "~/utils/emailTemplates";
 
 const transporter = nodemailer.createTransport({
@@ -33,7 +34,7 @@ export const resetPwdRouter = createTRPCRouter({
                 throw new Error ("Este Correo no esta registrado a ninguna cuenta. Tal vez iniciaste sesion con google?")
             }
             const token = uuidv4();
-            const resetPasswordToken = await ctx.prisma.passwordResetToken.create({
+            await ctx.prisma.passwordResetToken.create({
                 data: {
                     token,
                     email,
@@ -99,6 +100,39 @@ export const resetPwdRouter = createTRPCRouter({
                 data: {password: hashedPassword}
             })
             return user;
+        }),
+
+    deletePwdResetToken: publicProcedure
+        .input(z.object({token: z.string()}))
+        .mutation(async({input, ctx})=>{
+            const {token} = input
+            
+            const resetToken = await ctx.prisma.passwordResetToken.findUnique({where:{token}})
+
+            if (!resetToken){
+                throw new Error ("Token not found")
+            }else{
+                await ctx.prisma.passwordResetToken.delete({where:{token}})
+            }
+            return true;
+        }),
+
+    checkValidToken: publicProcedure
+        .input(z.object({token: z.string()}))
+        .query(async({input, ctx})=>{
+            const {token} = input
+            const pwdResetToken = await ctx.prisma.passwordResetToken.findUnique({where:{token}})
+
+            if(!pwdResetToken){
+                return false;
+            }
+
+            if(pwdResetToken.expiresAt < new Date()){
+                await ctx.prisma.passwordResetToken.delete({where: {token}})
+                return false;
+            }
+
+            return true;
         })
 
 })
