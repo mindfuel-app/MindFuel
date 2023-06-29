@@ -32,7 +32,7 @@ export default function Navigation() {
 
   return (
     <>
-      <div className="no-highlight relative bottom-0 w-full bg-white p-3">
+      <div className="no-highlight sticky bottom-0 w-full bg-white p-3">
         <ul className="flex justify-around gap-5">
           {menus.map((item) => {
             return (
