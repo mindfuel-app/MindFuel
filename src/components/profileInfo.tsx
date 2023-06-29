@@ -6,7 +6,7 @@ export default function ProfileInfo() {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="flex items-center justify-between bg-[#E9E9E9] px-3 py-5">
+    <div className="flex items-center justify-between bg-[#E9E9E9] p-3">
       {sessionData && <span>Buenos días, {sessionData.user.name}</span>}
       {sessionData && (
         <Button
