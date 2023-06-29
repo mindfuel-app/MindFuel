@@ -1,4 +1,5 @@
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { Button } from "./ui/button";
 
 export default function ProfileInfo() {
@@ -6,7 +7,7 @@ export default function ProfileInfo() {
 
   return (
     <div className="flex items-center justify-between bg-[#E9E9E9] px-3 py-5">
-      <span>{sessionData && <p>Buenos días, {sessionData.user.name}</p>}</span>
+      {sessionData && <span>Buenos días, {sessionData.user.name}</span>}
       {sessionData && (
         <Button
           variant="outline"
@@ -16,6 +17,8 @@ export default function ProfileInfo() {
           Cerrar sesión
         </Button>
       )}
+      {!sessionData && <span>No ha iniciado sesión</span>}
+      {!sessionData && <Link href="/signin">Ir a inicio sesión</Link>}
     </div>
   );
 }
