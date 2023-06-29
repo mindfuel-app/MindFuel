@@ -36,6 +36,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.3",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^4.9.0",
     "superjson": "1.12.2",
     "tailwind-merge": "^1.13.1",

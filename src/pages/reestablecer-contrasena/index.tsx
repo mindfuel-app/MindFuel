@@ -8,6 +8,7 @@ import Link from "next/link";
 import Head from "next/head";
 import Logo from "~/components/auth/logo";
 import { api } from "~/utils/api";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ReestablecerContraseña() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -31,6 +32,9 @@ export default function ReestablecerContraseña() {
     resolver: zodResolver(formSchema),
   });
 
+  const notify = () =>
+    toast.success("Se envió un correo para cambiar la contraseña");
+
   const submitData = (data: FormData) => {
     setIsButtonDisabled(true);
     sendPasswordEmail(
@@ -38,9 +42,7 @@ export default function ReestablecerContraseña() {
       {
         onSuccess: () => {
           setIsButtonDisabled(false);
-          return alert(
-            "Se ha enviado un correo para reestablecer la contraseña"
-          );
+          return void notify();
         },
         onError: (error) => {
           setIsButtonDisabled(false);
@@ -135,6 +137,7 @@ export default function ReestablecerContraseña() {
                 </div>
               </form>
             </div>
+            <Toaster />
           </div>
         </main>
         <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
