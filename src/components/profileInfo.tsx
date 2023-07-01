@@ -5,20 +5,29 @@ import { Button } from "./ui/button";
 export default function ProfileInfo() {
   const { data: sessionData } = useSession();
 
+  if (!sessionData)
+    return (
+      <div className="flex items-center justify-between bg-[#E9E9E9] p-3">
+        <span>No ha iniciado sesión</span>
+        <Link href="/signin">Ir a inicio sesión</Link>
+      </div>
+    );
+
   return (
-    <div className="flex items-center justify-between bg-[#E9E9E9] p-3">
-      {sessionData && <span>Buenos días, {sessionData.user.name}</span>}
-      {sessionData && (
-        <Button
-          variant="outline"
-          className="no-highlight rounded-xl border-2 border-black px-2 py-1"
-          onClick={() => void signOut({ callbackUrl: "/signin" })}
-        >
-          Cerrar sesión
-        </Button>
-      )}
-      {!sessionData && <span>No ha iniciado sesión</span>}
-      {!sessionData && <Link href="/signin">Ir a inicio sesión</Link>}
+    <div className="flex items-center justify-between bg-[#E9E9E9] p-3 font-medium">
+      <span>
+        Buenos días,{" "}
+        <span className="font-semibold text-[#008080]">
+          {sessionData.user.name}
+        </span>
+      </span>
+      <Button
+        variant="outline"
+        className="no-highlight rounded-xl border-2 border-black px-2 py-1"
+        onClick={() => void signOut({ callbackUrl: "/signin" })}
+      >
+        Cerrar sesión
+      </Button>
     </div>
   );
 }
