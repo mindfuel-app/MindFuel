@@ -8,22 +8,35 @@ import {
 import TaskCard from "~/components/taskCard";
 import RoutineCard from "~/components/routineCard";
 
+type Task = {
+  id: number;
+  numeroTarea: number;
+  nombreTarea: string;
+};
+
 //const UserTasks = getTasks();
-const userTasks = [
+const userTasks: Task[] = [
   { id: 1, numeroTarea: 1, nombreTarea: "Terminar tarea" },
   { id: 2, numeroTarea: 2, nombreTarea: "Cocinar" },
 ];
 
+type Routine = {
+  id: number;
+  nombre: string;
+  descripcion: string;
+};
+
 // const userRoutines = getRoutines();
-const userRoutines = [
+const userRoutines: Routine[] = [
   { id: 1, nombre: "Rutina mañana", descripcion: "Todos los dias hábiles" },
+  { id: 2, nombre: "Rutina tarde", descripcion: "Todos los dias" },
 ];
 
 export default function Tareas() {
   return (
     <Layout>
       <Tabs defaultValue="tareas" className="h-full w-full">
-        <div className="flex justify-center">
+        <div className="mt-5 flex justify-center">
           <TabsList>
             <TabsTrigger value="tareas" className="w-1/2">
               Tareas
@@ -34,10 +47,13 @@ export default function Tareas() {
           </TabsList>
         </div>
         <TabsContent value="tareas" className="h-full">
-          <div className="flex h-full flex-col">
-            <h2 className="my-5 font-medium">Tareas pendientes de hoy</h2>
-            <div className="mb-14 h-full rounded-md bg-[#D9D9D9]">
-              <div className="flex flex-col items-center p-5">
+          <div className="flex h-full flex-col items-center pb-16 text-lg font-medium">
+            {userTasks.length == 0 && (
+              <h1 className="my-5">No hay tareas cargadas</h1>
+            )}
+            {userTasks.length > 0 && (
+              <>
+                <h2 className="my-5">Tareas pendientes de hoy</h2>
                 <ul className="flex flex-col gap-3">
                   {userTasks.map((task) => (
                     <TaskCard
@@ -47,16 +63,19 @@ export default function Tareas() {
                     />
                   ))}
                 </ul>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </TabsContent>
-        <TabsContent value="rutinas">
-          <div className="flex flex-col">
-            <h2 className="my-5 font-medium">Tus rutinas</h2>
-            <div className="mb-14 h-full rounded-md bg-[#D9D9D9]">
-              <div className="flex flex-col items-center p-5">
-                <ul className="flex flex-col gap-3">
+        <TabsContent value="rutinas" className="h-full">
+          <div className="flex h-full flex-col items-center pb-16 text-lg font-medium">
+            {userRoutines.length == 0 && (
+              <h1 className="my-5">No hay rutinas cargadas</h1>
+            )}
+            {userRoutines.length > 0 && (
+              <>
+                <h2 className="my-5">Tus rutinas</h2>
+                <ul className="flex flex-col gap-5">
                   {userRoutines.map((routine) => (
                     <RoutineCard
                       nombre={routine.nombre}
@@ -65,8 +84,8 @@ export default function Tareas() {
                     />
                   ))}
                 </ul>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </TabsContent>
       </Tabs>
