@@ -6,7 +6,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <div className="flex h-screen flex-col">
         <ProfileInfo />
-        <div className="mb-[86px] flex h-full flex-col items-center bg-[#E9E9E9] p-3">
+        <div className="mb-[86px] flex h-full flex-col items-center bg-[#EDECE7] p-3">
           {children}
         </div>
         <Navigation />

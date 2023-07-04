@@ -7,17 +7,17 @@ export default function ProfileInfo() {
 
   if (!sessionData)
     return (
-      <div className="flex items-center justify-between bg-[#E9E9E9] p-3">
+      <div className="flex items-center justify-between bg-[#EDECE7] p-3">
         <span>No ha iniciado sesión</span>
         <Link href="/signin">Ir a inicio sesión</Link>
       </div>
     );
 
   return (
-    <div className="flex items-center justify-between bg-[#E9E9E9] p-3 font-medium">
+    <div className="flex items-center justify-between bg-[#EDECE7] p-3 font-medium">
       <span>
         Buenos días,{" "}
-        <span className="font-semibold text-[#008080]">
+        <span className="font-semibold text-[#FF7F11]">
           {sessionData.user.name}
         </span>
       </span>

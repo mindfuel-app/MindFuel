@@ -10,7 +10,7 @@ export default function authPageLayout({
   return (
     <div className="flex h-screen overflow-y-hidden bg-[#008080]">
       <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
-      <main className="flex min-h-screen w-full flex-col bg-[#edece7] py-10 min-[1440px]:shadow-2xl">
+      <main className="flex min-h-screen w-full flex-col bg-[#EDECE7] py-10 min-[1440px]:shadow-2xl">
         <div className="flex flex-col items-center">
           <Logo />
           <div className="flex select-none flex-col items-center p-5">
