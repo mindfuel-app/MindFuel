@@ -32,7 +32,7 @@ const userRoutines: Routine[] = [
   { id: 2, nombre: "Rutina tarde", descripcion: "Todos los dias" },
 ];
 
-export default function Tareas() {
+export default function Home() {
   return (
     <Layout>
       <Tabs defaultValue="tareas" className="h-full w-full">
