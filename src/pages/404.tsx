@@ -17,7 +17,7 @@ export default function Custom404() {
           la dirección o que la página se haya movido a otra URL.
         </p>
         <Link
-          href="/tareas"
+          href="/home"
           className="no-highlight mt-10 rounded-xl bg-[#5C7AFF] px-5 py-3 text-xl text-white active:bg-[#7992ff]"
         >
           Volver a la home

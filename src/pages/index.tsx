@@ -26,7 +26,7 @@ export default function Landing() {
   }, []);
 
   if (status == "authenticated") {
-    return void Router.push("/tareas");
+    return void Router.push("/home");
   } else if (status == "unauthenticated") {
     if (isWidthGreaterThan768px) {
       return void Router.push("/signup");

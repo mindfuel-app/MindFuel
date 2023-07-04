@@ -56,7 +56,7 @@ export default function SignUpForm() {
         }
         return alert(response.error);
       }
-      void router.push("/tareas");
+      void router.push("/home");
     });
   };
 
