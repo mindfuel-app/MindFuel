@@ -135,7 +135,7 @@ export default function SignInForm() {
           )}
         </label>
       </div>
-      <div className="flex w-full flex-col items-center gap-5 pt-3">
+      <div className="flex w-full flex-col items-center gap-5">
         <AuthButton
           method="Sign in"
           isDisabled={isButtonDisabled}
