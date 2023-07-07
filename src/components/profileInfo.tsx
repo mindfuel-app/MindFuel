@@ -16,7 +16,7 @@ export default function ProfileInfo() {
   return (
     <div className="flex items-center justify-between bg-[#EDECE7] p-3 font-medium">
       <span>
-        Buenos días,{" "}
+        Bienvenido,{" "}
         <span className="font-semibold text-[#FF7F11]">
           {sessionData.user.name}
         </span>
