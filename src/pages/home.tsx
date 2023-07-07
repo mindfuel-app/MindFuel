@@ -5,15 +5,9 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs";
-import TaskCard from "~/components/taskCard";
-import RoutineCard from "~/components/routineCard";
+import { type Task, TaskCard } from "~/components/taskCard";
+import { type Routine, RoutineCard } from "~/components/routineCard";
 import Head from "next/head";
-
-type Task = {
-  id: number;
-  numeroTarea: number;
-  nombreTarea: string;
-};
 
 //const UserTasks = getTasks();
 const userTasks: Task[] = [
@@ -21,16 +15,20 @@ const userTasks: Task[] = [
   { id: 2, numeroTarea: 2, nombreTarea: "Cocinar" },
 ];
 
-type Routine = {
-  id: number;
-  nombre: string;
-  descripcion: string;
-};
-
 // const userRoutines = getRoutines();
 const userRoutines: Routine[] = [
-  { id: 1, nombre: "Rutina mañana", descripcion: "Todos los dias hábiles" },
-  { id: 2, nombre: "Rutina tarde", descripcion: "Todos los dias" },
+  {
+    id: 1,
+    nombre: "Rutina mañana",
+    descripcion: "Todos los dias hábiles",
+    tareas: userTasks,
+  },
+  {
+    id: 2,
+    nombre: "Rutina tarde",
+    descripcion: "Todos los dias",
+    tareas: userTasks,
+  },
 ];
 
 export default function Home() {
@@ -59,7 +57,7 @@ export default function Home() {
               {userTasks.length > 0 && (
                 <>
                   <h2 className="my-5">Tareas pendientes de hoy</h2>
-                  <ul className="flex flex-col gap-3">
+                  <ul className="flex w-72 flex-col gap-3">
                     {userTasks.map((task) => (
                       <TaskCard
                         numeroTarea={task.numeroTarea}
@@ -85,6 +83,7 @@ export default function Home() {
                       <RoutineCard
                         nombre={routine.nombre}
                         descripcion={routine.descripcion}
+                        tareas={routine.tareas}
                         key={routine.id}
                       />
                     ))}
