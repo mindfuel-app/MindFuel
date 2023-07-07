@@ -9,7 +9,9 @@ export default function ProfileInfo() {
     return (
       <div className="flex items-center justify-between bg-[#EDECE7] p-3">
         <span>No ha iniciado sesión</span>
-        <Link href="/signin">Ir a inicio sesión</Link>
+        <Link href="/signin" className="hidden min-[360px]:flex">
+          Ir a inicio sesión
+        </Link>
       </div>
     );
 
@@ -23,7 +25,7 @@ export default function ProfileInfo() {
       </span>
       <Button
         variant="outline"
-        className="no-highlight rounded-xl border-2 border-black px-2 py-1"
+        className="no-highlight hidden rounded-xl border-2 border-black px-2 py-1 min-[360px]:flex"
         onClick={() => void signOut({ callbackUrl: "/signin" })}
       >
         Cerrar sesión

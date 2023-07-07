@@ -5,6 +5,33 @@ import { BsPersonCircle } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { Button } from "./ui/button";
 
+function NavigationItem({
+  href,
+  icon,
+  name,
+}: {
+  href: string;
+  icon: JSX.Element;
+  name: string;
+}) {
+  const router = useRouter();
+
+  return (
+    <Link
+      href={href}
+      className={`${
+        router.pathname == href ? "text-[#008080]" : ""
+      } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
+      onClick={() => {
+        void router.push({ href });
+      }}
+    >
+      {icon}
+      <span className="text-xs font-medium min-[375px]:text-sm">{name}</span>
+    </Link>
+  );
+}
+
 export default function Navigation() {
   const menus = [
     {
@@ -51,57 +78,29 @@ export default function Navigation() {
             router.pathname == "/home" ? "flex justify-between" : "hidden"
           }`}
         >
-          <div className="flex w-[160px] justify-evenly">
-            <Link
+          <div className="flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px]">
+            <NavigationItem
               href="/home"
-              className={`${
-                router.pathname == "/home" ? "text-[#008080]" : ""
-              } flex w-[71px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100`}
-              onClick={() => {
-                void router.push("/home");
-              }}
-            >
-              <AiFillHome className="text-3xl" />
-              <span className="text-sm font-medium">Home</span>
-            </Link>
-            <Link
+              icon={<AiFillHome className="text-3xl" />}
+              name="Home"
+            />
+            <NavigationItem
               href="/self-care"
-              className={`${
-                router.pathname == "/self-care" ? "text-[#008080]" : ""
-              } flex w-[71px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100`}
-              onClick={() => {
-                void router.push("/self-care");
-              }}
-            >
-              <FaHandHoldingHeart className="text-3xl" />
-              <span className="text-sm font-medium">Self-care</span>
-            </Link>
+              icon={<FaHandHoldingHeart className="text-3xl" />}
+              name="Self-care"
+            />
           </div>
-          <div className="flex w-[160px] justify-evenly">
-            <Link
+          <div className="flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px]">
+            <NavigationItem
               href="/amigos"
-              className={`${
-                router.pathname == "/amigos" ? "text-[#008080]" : ""
-              } flex w-[71px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100`}
-              onClick={() => {
-                void router.push("/amigos");
-              }}
-            >
-              <FaUserFriends className="text-3xl" />
-              <span className="text-sm font-medium">Amigos</span>
-            </Link>
-            <Link
+              icon={<FaUserFriends className="text-3xl" />}
+              name="Amigos"
+            />
+            <NavigationItem
               href="/perfil"
-              className={`${
-                router.pathname == "/perfil" ? "text-[#008080]" : ""
-              } flex w-[71px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100`}
-              onClick={() => {
-                void router.push("/perfil");
-              }}
-            >
-              <BsPersonCircle className="text-3xl" />
-              <span className="text-sm font-medium">Perfil</span>
-            </Link>
+              icon={<BsPersonCircle className="text-3xl" />}
+              name="Perfil"
+            />
           </div>
         </div>
         <ul
