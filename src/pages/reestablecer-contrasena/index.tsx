@@ -60,9 +60,9 @@ export default function ReestablecerContraseña() {
       <Head>
         <title>Reestablecer contraseña</title>
       </Head>
-      <div className="flex bg-[#008080]">
+      <div className="flex bg-teal">
         <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
-        <main className="flex min-h-screen w-full flex-col bg-[#edece7] py-10 min-[1440px]:shadow-2xl">
+        <main className="flex min-h-screen w-full flex-col bg-alabaster py-10 min-[1440px]:shadow-2xl">
           <div className="flex flex-col items-center">
             <div className="flex w-full items-center justify-between pl-5 lg:justify-end">
               <Link
@@ -74,7 +74,7 @@ export default function ReestablecerContraseña() {
               <Logo />
             </div>
             <div className="flex select-none flex-col items-center p-5">
-              <h1 className="my-5 text-xl font-semibold text-[#008080] min-[360px]:text-2xl sm:text-3xl lg:-my-1">
+              <h1 className="my-5 text-xl font-semibold text-teal min-[360px]:text-2xl sm:text-3xl lg:-my-1">
                 Reestablecer contraseña
               </h1>
               <p className="max-w-[250px] text-center text-sm font-medium min-[360px]:text-base sm:my-5 lg:mb-0 lg:mt-10">
@@ -99,7 +99,7 @@ export default function ReestablecerContraseña() {
                     <div className="flex flex-col gap-2">
                       <input
                         type="text"
-                        className={`w-full min-w-[280px] rounded-xl border-2 border-[#008080] px-3 py-1 outline-none ${
+                        className={`w-full min-w-[280px] rounded-xl border-2 border-teal px-3 py-1 outline-none ${
                           isEmailWrong ? "border-red-500" : ""
                         }`}
                         {...register("email")}

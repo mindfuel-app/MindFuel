@@ -44,7 +44,7 @@ export default function Landing() {
           <Logo />
           {screenTouches == 0 && (
             <div className="flex flex-col items-center gap-12 py-24 text-center font-semibold">
-              <h1 className="max-w-[300px] text-3xl text-[#008080] min-[360px]:text-4xl">
+              <h1 className="max-w-[300px] text-3xl text-teal min-[360px]:text-4xl">
                 Bienvenido a MindFuel
               </h1>
               <p className="max-w-[280px] text-lg min-[360px]:text-xl">
@@ -55,7 +55,7 @@ export default function Landing() {
           )}
           {screenTouches > 0 && (
             <div className="flex flex-col px-6 py-3">
-              <h1 className="text-2xl font-semibold italic text-[#F57F11] sm:text-3xl">
+              <h1 className="text-2xl font-semibold italic text-orange sm:text-3xl">
                 Fuel your mind, fuel your life
               </h1>
               <div className="flex max-w-[500px] flex-col gap-7 py-8 text-left font-semibold sm:py-12 sm:text-lg">
@@ -89,10 +89,8 @@ export default function Landing() {
                 {screenTouches > 4 && (
                   <p>
                     Es un{" "}
-                    <span className="font-extrabold text-[#F57F11]">
-                      proceso
-                    </span>
-                    , las pequeñas acciones diarias son la llave secreta para el
+                    <span className="font-extrabold text-orange">proceso</span>,
+                    las pequeñas acciones diarias son la llave secreta para el
                     éxito.
                   </p>
                 )}

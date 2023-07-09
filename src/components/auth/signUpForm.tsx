@@ -79,7 +79,7 @@ export default function SignUpForm() {
           <div className="flex flex-col gap-2">
             <input
               type="text"
-              className={`w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none ${
+              className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none ${
                 isUsernameWrong ? "border-red-500" : ""
               }`}
               {...register("name")}
@@ -108,7 +108,7 @@ export default function SignUpForm() {
           <div className="flex flex-col gap-2">
             <input
               type="text"
-              className={`w-full rounded-xl border-2 border-[#008080] px-3 py-1 outline-none ${
+              className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none ${
                 isEmailWrong ? "border-red-500" : ""
               }`}
               {...register("email")}
@@ -134,7 +134,7 @@ export default function SignUpForm() {
           >
             Contraseña
           </span>
-          <div className="flex w-full items-center justify-between rounded-xl border-2 border-[#008080] bg-white px-3 py-1">
+          <div className="flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1">
             <input
               type={PasswordInputType == "text" ? "text" : "password"}
               className="w-full outline-none"

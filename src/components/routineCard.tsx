@@ -22,7 +22,7 @@ export function RoutineCard({
 
   return (
     <div
-      className="no-highlight flex w-[300px] cursor-pointer flex-col rounded-md bg-[#008080] p-1 text-white"
+      className="no-highlight flex w-[300px] cursor-pointer flex-col rounded-md bg-teal p-1 text-white"
       onClick={() => setIsCardOpened(!isCardOpened)}
     >
       <div className="z-10 flex items-center justify-between p-1 shadow-lg">

@@ -18,7 +18,7 @@ export default function Custom404() {
         </p>
         <Link
           href="/home"
-          className="no-highlight mt-10 rounded-xl bg-[#5C7AFF] px-5 py-3 text-xl text-white active:bg-[#7992ff]"
+          className="no-highlight mt-10 rounded-xl bg-cornflower-blue px-5 py-3 text-xl text-white active:bg-cornflower-blue/80"
         >
           Volver a la home
         </Link>
