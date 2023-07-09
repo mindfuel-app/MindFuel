@@ -12,6 +12,11 @@ module.exports = {
     },
     extend: {
       colors: {
+        teal: "#008080",
+        orange: "#FF7F11",
+        "cornflower-blue": "#5C7AFF",
+        "eerie-black": "#1B2021",
+        alabaster: "#EDECE7",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
