@@ -46,136 +46,134 @@ export default function Navigation() {
   }, []);
 
   return (
-    <>
-      <div className="no-highlight fixed bottom-0 w-full bg-white py-3">
-        <div className="group relative flex justify-center">
-          {(router.pathname == "/home" || previousRoute == "/home") && (
-            <motion.div
-              className="flex justify-center"
-              layout
-              initial={{
-                y: router.pathname == "/home" ? 10 : 0,
-                opacity: router.pathname == "/home" ? 0.5 : 1,
-              }}
-              animate={{
-                y: router.pathname == "/home" ? 0 : -20,
-                opacity: router.pathname == "/home" ? 1 : 0,
-              }}
+    <div className="no-highlight fixed bottom-0 w-full bg-white py-3">
+      <div className="group relative flex justify-center">
+        {(router.pathname == "/home" || previousRoute == "/home") && (
+          <motion.div
+            className="flex justify-center"
+            layout
+            initial={{
+              y: router.pathname == "/home" ? 10 : 0,
+              opacity: router.pathname == "/home" ? 0.5 : 1,
+            }}
+            animate={{
+              y: router.pathname == "/home" ? 0 : -20,
+              opacity: router.pathname == "/home" ? 1 : 0,
+            }}
+          >
+            <span className="absolute -top-10 h-16 w-16  rounded-full bg-alabaster min-[425px]:h-[72px] min-[425px]:w-[72px]"></span>
+            <Button
+              disabled={router.pathname != "/home"}
+              className="absolute -top-9 h-14 w-14 rounded-full border-[3px] border-teal bg-white group-active:bg-teal min-[425px]:h-16 min-[425px]:w-16"
             >
-              <span className="absolute -top-10 h-16 w-16  rounded-full bg-alabaster min-[425px]:h-[72px] min-[425px]:w-[72px]"></span>
-              <Button
-                disabled={router.pathname != "/home"}
-                className="absolute -top-9 h-14 w-14 rounded-full border-[3px] border-teal bg-white group-active:bg-teal min-[425px]:h-16 min-[425px]:w-16"
-              >
-                <span className="text-2xl font-extrabold text-teal group-active:text-white">
-                  +
-                </span>
-              </Button>
-            </motion.div>
-          )}
-        </div>
-        <motion.div
-          layout
-          className={`flex ${
-            isLoading && router.pathname == "/home"
-              ? "justify-stretch"
-              : !isLoading && router.pathname == "/home"
-              ? "justify-between"
+              <span className="text-2xl font-extrabold text-teal group-active:text-white">
+                +
+              </span>
+            </Button>
+          </motion.div>
+        )}
+      </div>
+      <motion.div
+        layout
+        className={`flex ${
+          isLoading && router.pathname == "/home"
+            ? "justify-stretch"
+            : !isLoading && router.pathname == "/home"
+            ? "justify-between"
+            : isLoading && router.pathname != "/home"
+            ? "justify-between"
+            : "justify-stretch"
+        }`}
+      >
+        <div
+          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
+            previousRoute != "/home" && router.pathname != "/home"
+              ? "-mr-2 flex-1"
+              : isLoading && router.pathname == "/home"
+              ? "-mr-2 flex-1"
               : isLoading && router.pathname != "/home"
-              ? "justify-between"
-              : "justify-stretch"
+              ? ""
+              : router.pathname != "/home"
+              ? "-mr-2 flex-1"
+              : ""
           }`}
         >
-          <div
-            className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
-              previousRoute != "/home" && router.pathname != "/home"
-                ? "-mr-2 flex-1"
-                : isLoading && router.pathname == "/home"
-                ? "-mr-2 flex-1"
-                : isLoading && router.pathname != "/home"
-                ? ""
-                : router.pathname != "/home"
-                ? "-mr-2 flex-1"
-                : ""
-            }`}
+          <motion.div
+            layout
+            transition={{
+              duration: animationDuration,
+            }}
           >
-            <motion.div
-              layout
-              transition={{
-                duration: animationDuration,
+            <NavigationItem
+              href="/home"
+              icon={<AiFillHome className="text-3xl" />}
+              name="Home"
+              handleClick={() => {
+                previousRoute = router.pathname;
               }}
-            >
-              <NavigationItem
-                href="/home"
-                icon={<AiFillHome className="text-3xl" />}
-                name="Home"
-                handleClick={() => {
-                  previousRoute = router.pathname;
-                }}
-              />
-            </motion.div>
-            <motion.div
-              layout
-              transition={{
-                duration: animationDuration,
-              }}
-            >
-              <NavigationItem
-                href="/self-care"
-                icon={<FaHandHoldingHeart className="text-3xl" />}
-                name="Self-care"
-                handleClick={() => {
-                  previousRoute = router.pathname;
-                }}
-              />
-            </motion.div>
-          </div>
-          <div
-            className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
-              previousRoute != "/home" && router.pathname != "/home"
-                ? "-ml-2 flex-1"
-                : isLoading && router.pathname == "/home"
-                ? "-ml-2 flex-1"
-                : isLoading && router.pathname != "/home"
-                ? ""
-                : router.pathname != "/home"
-                ? "-ml-2 flex-1"
-                : ""
-            }`}
+            />
+          </motion.div>
+          <motion.div
+            layout
+            transition={{
+              duration: animationDuration,
+            }}
           >
-            <motion.div
-              layout
-              transition={{
-                duration: animationDuration,
+            <NavigationItem
+              href="/self-care"
+              icon={<FaHandHoldingHeart className="text-3xl" />}
+              name="Self-care"
+              handleClick={() => {
+                previousRoute = router.pathname;
               }}
-            >
-              <NavigationItem
-                href="/amigos"
-                icon={<FaUserFriends className="text-3xl" />}
-                name="Amigos"
-                handleClick={() => {
-                  previousRoute = router.pathname;
-                }}
-              />
-            </motion.div>
-            <motion.div
-              layout
-              transition={{
-                duration: animationDuration,
+            />
+          </motion.div>
+        </div>
+        <div
+          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
+            previousRoute != "/home" && router.pathname != "/home"
+              ? "-ml-2 flex-1"
+              : isLoading && router.pathname == "/home"
+              ? "-ml-2 flex-1"
+              : isLoading && router.pathname != "/home"
+              ? ""
+              : router.pathname != "/home"
+              ? "-ml-2 flex-1"
+              : ""
+          }`}
+        >
+          <motion.div
+            layout
+            transition={{
+              duration: animationDuration,
+            }}
+          >
+            <NavigationItem
+              href="/amigos"
+              icon={<FaUserFriends className="text-3xl" />}
+              name="Amigos"
+              handleClick={() => {
+                previousRoute = router.pathname;
               }}
-            >
-              <NavigationItem
-                href="/perfil"
-                icon={<BsPersonCircle className="text-3xl" />}
-                name="Perfil"
-                handleClick={() => {
-                  previousRoute = router.pathname;
-                }}
-              />
-            </motion.div>
-          </div>
-        </motion.div>
-      </div>
-    </>
+            />
+          </motion.div>
+          <motion.div
+            layout
+            transition={{
+              duration: animationDuration,
+            }}
+          >
+            <NavigationItem
+              href="/perfil"
+              icon={<BsPersonCircle className="text-3xl" />}
+              name="Perfil"
+              handleClick={() => {
+                previousRoute = router.pathname;
+              }}
+            />
+          </motion.div>
+        </div>
+      </motion.div>
+    </div>
   );
 }
