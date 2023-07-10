@@ -8,6 +8,8 @@ import {
 import { type Task, TaskCard } from "~/components/taskCard";
 import { type Routine, RoutineCard } from "~/components/routineCard";
 import Head from "next/head";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 //const UserTasks = getTasks();
 const userTasks: Task[] = [
@@ -31,7 +33,15 @@ const userRoutines: Routine[] = [
   },
 ];
 
+const tabOptions = [
+  { value: "tareas", label: "Tareas" },
+  { value: "rutinas", label: "Rutinas" },
+];
+
 export default function Home() {
+  const [selectedTab, setSelectedTab] = useState("tareas");
+  const xTranslation = 10;
+
   return (
     <>
       <Head>
@@ -41,16 +51,36 @@ export default function Home() {
         <Tabs defaultValue="tareas" className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
-              <TabsTrigger value="tareas" className="w-1/2">
-                Tareas
-              </TabsTrigger>
-              <TabsTrigger value="rutinas" className="w-1/2">
-                Rutinas
-              </TabsTrigger>
+              {tabOptions.map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="relative w-1/2"
+                  onClick={() => setSelectedTab(tab.value)}
+                >
+                  <div className="z-20">{tab.label}</div>
+
+                  {tab.value == selectedTab && (
+                    <motion.div
+                      layoutId="bg"
+                      transition={{
+                        type: "spring",
+                        bounce: 0,
+                        duration: 0.3,
+                      }}
+                      className="absolute left-0 top-0 z-10 h-full w-full rounded-sm bg-teal"
+                    ></motion.div>
+                  )}
+                </TabsTrigger>
+              ))}
             </TabsList>
           </div>
           <TabsContent value="tareas" className="h-full">
-            <div className="flex h-full flex-col items-center pb-16 text-lg font-medium">
+            <motion.div
+              initial={{ x: xTranslation, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="flex h-full flex-col items-center pb-16 text-lg font-medium"
+            >
               {userTasks.length == 0 && (
                 <h1 className="my-5">No hay tareas cargadas</h1>
               )}
@@ -68,10 +98,14 @@ export default function Home() {
                   </ul>
                 </>
               )}
-            </div>
+            </motion.div>
           </TabsContent>
           <TabsContent value="rutinas" className="h-full">
-            <div className="flex h-full flex-col items-center pb-16 text-lg font-medium">
+            <motion.div
+              initial={{ x: -xTranslation, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="flex h-full flex-col items-center pb-16 text-lg font-medium"
+            >
               {userRoutines.length == 0 && (
                 <h1 className="my-5">No hay rutinas cargadas</h1>
               )}
@@ -90,7 +124,7 @@ export default function Home() {
                   </ul>
                 </>
               )}
-            </div>
+            </motion.div>
           </TabsContent>
         </Tabs>
       </Layout>
