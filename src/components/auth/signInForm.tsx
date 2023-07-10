@@ -79,7 +79,7 @@ export default function SignInForm() {
             <input
               type="text"
               className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none ${
-                isEmailWrong ? "border-red-500" : ""
+                isEmailWrong ? "border-[#ef4443]" : ""
               }`}
               {...register("email")}
             />
@@ -113,7 +113,7 @@ export default function SignInForm() {
           </span>
           <div
             className={`flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1 ${
-              isPasswordWrong ? "border-red-500" : ""
+              isPasswordWrong ? "border-[#ef4443]" : ""
             }`}
           >
             <input
