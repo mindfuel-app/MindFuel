@@ -80,7 +80,7 @@ export default function SignUpForm() {
             <input
               type="text"
               className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none ${
-                isUsernameWrong ? "border-red-500" : ""
+                isUsernameWrong ? "border-Red-500" : ""
               }`}
               {...register("name")}
             />
@@ -109,7 +109,7 @@ export default function SignUpForm() {
             <input
               type="text"
               className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none ${
-                isEmailWrong ? "border-red-500" : ""
+                isEmailWrong ? "border-Red-500" : ""
               }`}
               {...register("email")}
             />
