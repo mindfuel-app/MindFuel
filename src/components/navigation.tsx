@@ -5,7 +5,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function NavigationItem({
   href,
@@ -33,14 +33,17 @@ function NavigationItem({
     </Link>
   );
 }
+
 let previousRoute = "/";
 
 export default function Navigation() {
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const [isClicked, setIsClicked] = useState(false);
   const animationDuration = 0.3;
-  const xTranslation = 10;
-  const largerXTranslation = 20;
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   return (
     <>
@@ -59,10 +62,10 @@ export default function Navigation() {
                 opacity: router.pathname == "/home" ? 1 : 0,
               }}
             >
-              <span className="absolute -top-10 h-16 w-16 rounded-full bg-alabaster"></span>
+              <span className="absolute -top-10 h-16 w-16  rounded-full bg-alabaster min-[425px]:h-[72px] min-[425px]:w-[72px]"></span>
               <Button
                 disabled={router.pathname != "/home"}
-                className="absolute -top-9 h-14 w-14 rounded-full border-[3px] border-teal bg-white group-active:bg-teal"
+                className="absolute -top-9 h-14 w-14 rounded-full border-[3px] border-teal bg-white group-active:bg-teal min-[425px]:h-16 min-[425px]:w-16"
               >
                 <span className="text-2xl font-extrabold text-teal group-active:text-white">
                   +
@@ -74,30 +77,33 @@ export default function Navigation() {
         <motion.div
           layout
           className={`flex ${
-            router.pathname == "/home" ? "justify-between" : "justify-stretch"
+            isLoading && router.pathname == "/home"
+              ? "justify-stretch"
+              : !isLoading && router.pathname == "/home"
+              ? "justify-between"
+              : isLoading && router.pathname != "/home"
+              ? "justify-between"
+              : "justify-stretch"
           }`}
         >
-          {/* First set of navigation items */}
           <div
-            className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] ${
-              router.pathname != "/home" ? "-mr-2 flex-1" : ""
+            className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
+              previousRoute != "/home" && router.pathname != "/home"
+                ? "-mr-2 flex-1"
+                : isLoading && router.pathname == "/home"
+                ? "-mr-2 flex-1"
+                : isLoading && router.pathname != "/home"
+                ? ""
+                : router.pathname != "/home"
+                ? "-mr-2 flex-1"
+                : ""
             }`}
           >
             <motion.div
               layout
-              initial={{
-                x:
-                  router.pathname == "/home"
-                    ? xTranslation
-                    : previousRoute == "/home"
-                    ? -xTranslation
-                    : 0,
-              }}
-              animate={{ x: 0 }}
               transition={{
                 duration: animationDuration,
               }}
-              onClick={() => setIsClicked(!isClicked)}
             >
               <NavigationItem
                 href="/home"
@@ -110,19 +116,9 @@ export default function Navigation() {
             </motion.div>
             <motion.div
               layout
-              initial={{
-                x:
-                  router.pathname == "/home"
-                    ? largerXTranslation
-                    : previousRoute == "/home"
-                    ? -largerXTranslation
-                    : 0,
-              }}
-              animate={{ x: 0 }}
               transition={{
                 duration: animationDuration,
               }}
-              onClick={() => setIsClicked(!isClicked)}
             >
               <NavigationItem
                 href="/self-care"
@@ -134,24 +130,21 @@ export default function Navigation() {
               />
             </motion.div>
           </div>
-
-          {/* Second set of navigation items */}
           <div
-            className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] ${
-              router.pathname != "/home" ? "-ml-2 flex-1" : ""
+            className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
+              previousRoute != "/home" && router.pathname != "/home"
+                ? "-ml-2 flex-1"
+                : isLoading && router.pathname == "/home"
+                ? "-ml-2 flex-1"
+                : isLoading && router.pathname != "/home"
+                ? ""
+                : router.pathname != "/home"
+                ? "-ml-2 flex-1"
+                : ""
             }`}
           >
             <motion.div
               layout
-              initial={{
-                x:
-                  router.pathname == "/home"
-                    ? -largerXTranslation
-                    : previousRoute == "/home"
-                    ? largerXTranslation
-                    : 0,
-              }}
-              animate={{ x: 0 }}
               transition={{
                 duration: animationDuration,
               }}
@@ -167,15 +160,6 @@ export default function Navigation() {
             </motion.div>
             <motion.div
               layout
-              initial={{
-                x:
-                  router.pathname == "/home"
-                    ? -xTranslation
-                    : previousRoute == "/home"
-                    ? xTranslation
-                    : 0,
-              }}
-              animate={{ x: 0 }}
               transition={{
                 duration: animationDuration,
               }}
