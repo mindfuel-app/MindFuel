@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { type Task, TaskCard } from "./taskCard";
+import { motion } from "framer-motion";
 
 export type Routine = {
   id: number;
@@ -33,10 +34,11 @@ export function RoutineCard({
         </div>
         <PencilSquareIcon className="h-8 w-8" />
       </div>
-      <div
-        className={`transition-max-height duration-200 ease-in-out ${
-          isCardOpened ? "max-h-[200px]" : "max-h-0"
-        } overflow-hidden`}
+      <motion.div
+        initial={{ height: 0 }}
+        animate={{ height: isCardOpened ? "auto" : 0 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        className="overflow-hidden"
       >
         <div className="flex w-full flex-col gap-3 rounded-b-md bg-white px-3 py-5">
           {tareas.map((tarea) => (
@@ -47,7 +49,7 @@ export function RoutineCard({
             />
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
