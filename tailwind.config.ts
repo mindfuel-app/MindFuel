@@ -17,7 +17,6 @@ module.exports = {
         "cornflower-blue": "#5C7AFF",
         "eerie-black": "#1B2021",
         alabaster: "#EDECE7",
-        "Red-500": "#ef4444",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
