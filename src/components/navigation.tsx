@@ -86,16 +86,16 @@ export default function Navigation() {
         }`}
       >
         <div
-          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
+          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] min-[500px]:w-full ${
             previousRoute != "/home" && router.pathname != "/home"
               ? "-mr-2 flex-1"
               : isLoading && router.pathname == "/home"
               ? "-mr-2 flex-1"
               : isLoading && router.pathname != "/home"
-              ? ""
+              ? "min-[500px]:max-md:mr-5"
               : router.pathname != "/home"
               ? "-mr-2 flex-1"
-              : ""
+              : "min-[500px]:max-md:mr-5"
           }`}
         >
           <motion.div
@@ -130,16 +130,16 @@ export default function Navigation() {
           </motion.div>
         </div>
         <div
-          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] ${
+          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] min-[500px]:w-full ${
             previousRoute != "/home" && router.pathname != "/home"
               ? "-ml-2 flex-1"
               : isLoading && router.pathname == "/home"
               ? "-ml-2 flex-1"
               : isLoading && router.pathname != "/home"
-              ? ""
+              ? "min-[500px]:max-md:ml-5"
               : router.pathname != "/home"
               ? "-ml-2 flex-1"
-              : ""
+              : "min-[500px]:max-md:ml-5"
           }`}
         >
           <motion.div
