@@ -10,6 +10,7 @@ import { type Routine, RoutineCard } from "~/components/routineCard";
 import Head from "next/head";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import useSwipe from "~/hooks/useSwipe";
 
 //const UserTasks = getTasks();
 const userTasks: Task[] = [
@@ -41,6 +42,18 @@ const tabOptions = [
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState("tareas");
   const xTranslation = 10;
+
+  const swipeLeftHandler = useSwipe({
+    onSwipedLeft: () => {
+      alert("Deslizando a rutinas");
+    },
+  });
+
+  const swipeRightHandler = useSwipe({
+    onSwipedRight: () => {
+      alert("Deslizando a tareas");
+    },
+  });
 
   return (
     <>
@@ -77,6 +90,7 @@ export default function Home() {
           </div>
           <TabsContent value="tareas" className="h-full">
             <motion.div
+              {...swipeLeftHandler}
               initial={{ x: xTranslation, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               className="flex h-full flex-col items-center pb-16 text-lg font-medium"
@@ -102,6 +116,7 @@ export default function Home() {
           </TabsContent>
           <TabsContent value="rutinas" className="h-full">
             <motion.div
+              {...swipeRightHandler}
               initial={{ x: -xTranslation, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               className="flex h-full flex-col items-center pb-16 text-lg font-medium"
