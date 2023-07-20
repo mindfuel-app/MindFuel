@@ -24,7 +24,7 @@ export function RoutineCard({
   return (
     <div className="no-highlight flex w-[300px] cursor-pointer flex-col rounded-md bg-teal p-1 text-white">
       <div
-        className="z-10 flex items-center justify-between p-1 shadow-lg"
+        className="z-0 flex items-center justify-between p-1 shadow-lg"
         onClick={() => setIsCardOpened(!isCardOpened)}
       >
         <div className="flex flex-col">
@@ -40,7 +40,7 @@ export function RoutineCard({
         transition={{ duration: 0.2, ease: "easeInOut" }}
         className="overflow-hidden"
       >
-        <div className="flex w-full flex-col gap-3 rounded-b-md bg-white px-3 py-5">
+        <div className="-z-10 flex w-full flex-col gap-3 rounded-b-md bg-white py-5 pl-3 pr-4">
           {tareas.map((tarea) => (
             <TaskCard
               numeroTarea={tarea.numeroTarea}
