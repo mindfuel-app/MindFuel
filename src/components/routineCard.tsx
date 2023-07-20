@@ -22,11 +22,11 @@ export function RoutineCard({
   const [isCardOpened, setIsCardOpened] = useState(false);
 
   return (
-    <div
-      className="no-highlight flex w-[300px] cursor-pointer flex-col rounded-md bg-teal p-1 text-white"
-      onClick={() => setIsCardOpened(!isCardOpened)}
-    >
-      <div className="z-10 flex items-center justify-between p-1 shadow-lg">
+    <div className="no-highlight flex w-[300px] cursor-pointer flex-col rounded-md bg-teal p-1 text-white">
+      <div
+        className="z-10 flex items-center justify-between p-1 shadow-lg"
+        onClick={() => setIsCardOpened(!isCardOpened)}
+      >
         <div className="flex flex-col">
           <h1 className="text-lg">{nombre}</h1>
           <span className="text-sm text-black">5 habitos - 2 horas</span>
