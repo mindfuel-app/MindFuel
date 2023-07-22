@@ -2,6 +2,7 @@
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { cn } from "~/lib/utils";
 
@@ -19,10 +20,20 @@ const Checkbox = React.forwardRef<
   >
     <CheckboxPrimitive.Indicator
       className={cn(
-        `flex items-center justify-center bg-white group-active:bg-gray-200`
+        `flex items-center justify-center bg-white group-active:bg-gray-200 lg:group-hover:bg-gray-200`
       )}
     >
-      <Check className="h-5 w-5 text-teal" />
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+        }}
+      >
+        <Check className="h-5 w-5 text-teal" />
+      </motion.div>
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ));
