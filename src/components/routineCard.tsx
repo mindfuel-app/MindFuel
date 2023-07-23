@@ -2,37 +2,53 @@ import { useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { type Task, TaskCard } from "./taskCard";
 import { motion } from "framer-motion";
+import Modal from "./ui/modal";
+import RoutineForm from "./routineForm";
 
 export type Routine = {
   id: number;
-  nombre: string;
-  descripcion: string;
-  tareas: Task[];
+  name: string;
+  description: string;
+  tasks: Task[];
 };
 
 export function RoutineCard({
-  nombre,
-  descripcion,
-  tareas,
+  name,
+  description,
+  tasks,
 }: {
-  nombre: string;
-  descripcion: string;
-  tareas: Task[];
+  name: string;
+  description: string;
+  tasks: Task[];
 }) {
   const [isCardOpened, setIsCardOpened] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="no-highlight flex w-[300px] cursor-pointer flex-col rounded-md bg-teal p-1 text-white">
-      <div
-        className="z-0 flex items-center justify-between p-1 shadow-lg"
-        onClick={() => setIsCardOpened(!isCardOpened)}
-      >
-        <div className="flex flex-col">
-          <h1 className="text-lg">{nombre}</h1>
+      <div className="z-0 flex w-full items-center justify-between p-1 shadow-lg">
+        <div
+          className="flex w-full flex-col"
+          onClick={() => setIsCardOpened(!isCardOpened)}
+        >
+          <h1 className="text-lg">{name}</h1>
           <span className="text-sm text-black">5 habitos - 2 horas</span>
-          <span className="text-sm font-normal">{descripcion}</span>
+          <span className="text-sm font-normal">{description}</span>
         </div>
-        <PencilSquareIcon className="h-8 w-8" />
+        <div className="flex items-center py-2">
+          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <Modal.Button>
+              <PencilSquareIcon className="h-8 w-8" />
+            </Modal.Button>
+            <Modal.Content title="Editar rutina">
+              <RoutineForm
+                afterSave={() => setIsModalOpen(false)}
+                initialName={name}
+                initialTasks={tasks}
+              />
+            </Modal.Content>
+          </Modal>
+        </div>
       </div>
       <motion.div
         initial={{ height: 0 }}
@@ -41,12 +57,8 @@ export function RoutineCard({
         className="overflow-hidden"
       >
         <div className="-z-10 flex w-full flex-col gap-3 rounded-b-md bg-white py-5 pl-3 pr-4">
-          {tareas.map((tarea) => (
-            <TaskCard
-              numeroTarea={tarea.numeroTarea}
-              nombreTarea={tarea.nombreTarea}
-              key={tarea.id}
-            />
+          {tasks.map((task) => (
+            <TaskCard number={task.number} name={task.name} key={task.id} />
           ))}
         </div>
       </motion.div>

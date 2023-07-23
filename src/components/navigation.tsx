@@ -3,9 +3,9 @@ import { FaUserFriends, FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { useRouter } from "next/router";
-import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import AddButton from "./addButton";
 
 function NavigationItem({
   href,
@@ -47,32 +47,23 @@ export default function Navigation() {
 
   return (
     <div className="no-highlight fixed bottom-0 w-full bg-white py-3">
-      <div className="group relative flex justify-center">
-        {(router.pathname == "/home" || previousRoute == "/home") && (
-          <motion.div
-            className="flex justify-center"
-            layout
-            initial={{
-              y: router.pathname == "/home" ? 10 : 0,
-              opacity: router.pathname == "/home" ? 0.5 : 1,
-            }}
-            animate={{
-              y: router.pathname == "/home" ? 0 : -20,
-              opacity: router.pathname == "/home" ? 1 : 0,
-            }}
-          >
-            <span className="absolute -top-10 h-16 w-16  rounded-full bg-alabaster min-[425px]:h-[72px] min-[425px]:w-[72px]"></span>
-            <Button
-              disabled={router.pathname != "/home"}
-              className="absolute -top-9 h-14 w-14 rounded-full border-[3px] border-teal bg-white group-active:bg-teal min-[425px]:h-16 min-[425px]:w-16"
-            >
-              <span className="text-2xl font-extrabold text-teal group-active:text-white">
-                +
-              </span>
-            </Button>
-          </motion.div>
-        )}
-      </div>
+      {(router.pathname == "/home" || previousRoute == "/home") && (
+        <motion.div
+          className="group relative flex justify-center"
+          layout
+          initial={{
+            y: router.pathname == "/home" ? 15 : 0,
+            opacity: router.pathname == "/home" ? 0.5 : 1,
+          }}
+          animate={{
+            y: router.pathname == "/home" ? 0 : -20,
+            opacity: router.pathname == "/home" ? 1 : 0,
+          }}
+        >
+          <span className="absolute -top-10 h-16 w-16 rounded-full bg-alabaster min-[425px]:h-[72px] min-[425px]:w-[72px]"></span>
+          <AddButton />
+        </motion.div>
+      )}
       <motion.div
         layout
         className={`flex ${
