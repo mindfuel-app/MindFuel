@@ -14,23 +14,23 @@ import useSwipe from "~/hooks/useSwipe";
 
 //const UserTasks = getTasks();
 const userTasks: Task[] = [
-  { id: 1, numeroTarea: 1, nombreTarea: "Terminar tarea" },
-  { id: 2, numeroTarea: 2, nombreTarea: "Cocinar" },
+  { id: 1, number: 1, name: "Terminar tarea" },
+  { id: 2, number: 2, name: "Cocinar" },
 ];
 
 // const userRoutines = getRoutines();
 const userRoutines: Routine[] = [
   {
     id: 1,
-    nombre: "Rutina mañana",
-    descripcion: "Todos los dias hábiles",
-    tareas: userTasks,
+    name: "Rutina mañana",
+    description: "Todos los dias hábiles",
+    tasks: userTasks,
   },
   {
     id: 2,
-    nombre: "Rutina tarde",
-    descripcion: "Todos los dias",
-    tareas: userTasks,
+    name: "Rutina tarde",
+    description: "Todos los dias",
+    tasks: userTasks,
   },
 ];
 
@@ -104,8 +104,8 @@ export default function Home() {
                   <ul className="flex w-72 flex-col gap-3">
                     {userTasks.map((task) => (
                       <TaskCard
-                        numeroTarea={task.numeroTarea}
-                        nombreTarea={task.nombreTarea}
+                        number={task.number}
+                        name={task.name}
                         key={task.id}
                       />
                     ))}
@@ -130,9 +130,9 @@ export default function Home() {
                   <ul className="flex flex-col gap-5">
                     {userRoutines.map((routine) => (
                       <RoutineCard
-                        nombre={routine.nombre}
-                        descripcion={routine.descripcion}
-                        tareas={routine.tareas}
+                        name={routine.name}
+                        description={routine.description}
+                        tasks={routine.tasks}
                         key={routine.id}
                       />
                     ))}
