@@ -46,7 +46,7 @@ export default function Navigation() {
   }, []);
 
   return (
-    <div className="no-highlight fixed bottom-0 w-full bg-white py-3">
+    <div className="no-highlight fixed bottom-0 w-full bg-white py-3 lg:hidden">
       {(router.pathname == "/home" || previousRoute == "/home") && (
         <motion.div
           className="group relative flex justify-center"
