@@ -59,7 +59,7 @@ export default function ReestablecerContraseña() {
   return (
     <>
       <Head>
-        <title>Reestablecer contraseña</title>
+        <title>Olvidé mi contraseña</title>
       </Head>
       <div className="flex bg-teal">
         <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
@@ -75,69 +75,68 @@ export default function ReestablecerContraseña() {
               <Logo />
             </div>
             <div className="flex select-none flex-col items-center p-5">
-              <Title title="Reestablecer contraseña" />
+              <Title title="Olvidé mi contraseña" />
               <p className="max-w-[250px] text-center text-sm font-medium min-[360px]:text-base sm:my-5 lg:mb-0 lg:mt-10">
                 Se enviará un enlace para reestablecer la contraseña a tu correo
                 electrónico
               </p>
               <form
-                className="flex min-w-full flex-col justify-center space-y-5 py-5"
+                className="w-full"
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onSubmit={handleSubmit(submitData)}
               >
-                <div
-                  className={`flex flex-col gap-2 ${
-                    isFormDisabled ? "opacity-50" : ""
-                  }`}
+                <fieldset
+                  disabled={isFormDisabled}
+                  className="group space-y-7 py-5"
                 >
-                  <label className="flex flex-col">
-                    <span
-                      className={`ml-1 font-medium ${
-                        isEmailWrong ? "text-red-500" : ""
-                      }`}
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      Email
-                    </span>
-                    <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 group-disabled:opacity-50">
+                    <label className="flex flex-col group-disabled:cursor-not-allowed">
+                      <span
+                        className={`ml-1 font-medium ${
+                          isEmailWrong ? "text-red-500" : ""
+                        }`}
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        Email
+                      </span>
                       <input
                         type="text"
-                        className={`w-full min-w-[280px] rounded-xl border-2 border-teal px-3 py-1 outline-none ${
+                        className={`w-full min-w-[280px] rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed ${
                           isEmailWrong ? "border-red-500" : ""
                         }`}
                         {...register("email")}
                       />
                       {isEmailWrong && (
-                        <span className="absolute mt-10 text-xs text-red-500">
+                        <span className="absolute mt-16 text-xs text-red-500">
                           No existe una cuenta con este email
                         </span>
                       )}
                       {!isEmailWrong && errors.email && (
-                        <span className="absolute mt-10 text-xs text-red-500">
+                        <span className="absolute mt-16 text-xs text-red-500">
                           Ingrese un email valido
                         </span>
                       )}
-                    </div>
-                  </label>
-                </div>
-                <div className="flex w-full flex-col items-center gap-5 pt-4">
-                  <AuthButton
-                    method="Forgot password"
-                    isDisabled={isFormDisabled}
-                    onClick={() => {
-                      setIsEmailWrong(false);
-                    }}
-                  />
-                  <span className="mt-3 font-medium sm:text-lg">
-                    Volver a{" "}
-                    <Link
-                      href="/signin"
-                      className="no-highlight text-sky-600 underline-offset-2 active:underline"
-                    >
-                      Inicio sesión
-                    </Link>
-                  </span>
-                </div>
+                    </label>
+                  </div>
+                  <div className="flex w-full flex-col items-center gap-5">
+                    <AuthButton
+                      method="Forgot password"
+                      isDisabled={isFormDisabled}
+                      onClick={() => {
+                        setIsEmailWrong(false);
+                      }}
+                    />
+                    <span className="mt-3 font-medium sm:text-lg">
+                      Volver a{" "}
+                      <Link
+                        href="/signin"
+                        className="no-highlight text-sky-600 underline-offset-2 active:underline"
+                      >
+                        Inicio sesión
+                      </Link>
+                    </span>
+                  </div>
+                </fieldset>
               </form>
             </div>
             <Toaster />
