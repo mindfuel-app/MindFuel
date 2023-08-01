@@ -9,9 +9,10 @@ import Head from "next/head";
 import Logo from "~/components/auth/logo";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
+import Title from "~/components/auth/title";
 
 export default function ReestablecerContraseña() {
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isFormDisabled, setIsFormDisabled] = useState(false);
   const [isEmailWrong, setIsEmailWrong] = useState(false);
   const { mutate: sendPasswordEmail } =
     api.resetPwd.sendResetPwdEmail.useMutation();
@@ -36,16 +37,16 @@ export default function ReestablecerContraseña() {
     toast.success("Se envió un correo para cambiar la contraseña");
 
   const submitData = (data: FormData) => {
-    setIsButtonDisabled(true);
+    setIsFormDisabled(true);
     sendPasswordEmail(
       { email: data.email },
       {
         onSuccess: () => {
-          setIsButtonDisabled(false);
+          setIsFormDisabled(false);
           return void notify();
         },
         onError: (error) => {
-          setIsButtonDisabled(false);
+          setIsFormDisabled(false);
           if (error.message == "Este email no esta registrado") {
             return setIsEmailWrong(true);
           }
@@ -74,9 +75,7 @@ export default function ReestablecerContraseña() {
               <Logo />
             </div>
             <div className="flex select-none flex-col items-center p-5">
-              <h1 className="my-5 text-xl font-semibold text-teal min-[360px]:text-2xl sm:text-3xl lg:-my-1">
-                Reestablecer contraseña
-              </h1>
+              <Title title="Reestablecer contraseña" />
               <p className="max-w-[250px] text-center text-sm font-medium min-[360px]:text-base sm:my-5 lg:mb-0 lg:mt-10">
                 Se enviará un enlace para reestablecer la contraseña a tu correo
                 electrónico
@@ -86,7 +85,11 @@ export default function ReestablecerContraseña() {
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onSubmit={handleSubmit(submitData)}
               >
-                <div className="flex flex-col gap-2">
+                <div
+                  className={`flex flex-col gap-2 ${
+                    isFormDisabled ? "opacity-50" : ""
+                  }`}
+                >
                   <label className="flex flex-col">
                     <span
                       className={`ml-1 font-medium ${
@@ -119,8 +122,8 @@ export default function ReestablecerContraseña() {
                 </div>
                 <div className="flex w-full flex-col items-center gap-5 pt-4">
                   <AuthButton
-                    method="Reset password"
-                    isDisabled={isButtonDisabled}
+                    method="Forgot password"
+                    isDisabled={isFormDisabled}
                     onClick={() => {
                       setIsEmailWrong(false);
                     }}

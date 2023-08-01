@@ -12,7 +12,7 @@ import router from "next/router";
 import { useState } from "react";
 
 export default function SignInForm() {
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isFormDisabled, setIsFormDisabled] = useState(false);
   const [isPasswordWrong, setIsPasswordWrong] = useState(false);
   const [isEmailWrong, setIsEmailWrong] = useState(false);
   const [isGoogleAccount, setIsGoogleAccount] = useState(false);
@@ -37,14 +37,14 @@ export default function SignInForm() {
   });
 
   const submitData = async (data: FormData) => {
-    setIsButtonDisabled(true);
+    setIsFormDisabled(true);
     await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     }).then((response) => {
       if (response?.error) {
-        setIsButtonDisabled(false);
+        setIsFormDisabled(false);
         if (response.error == "Contraseña Incorrecta") {
           return setIsPasswordWrong(true);
         }
@@ -56,99 +56,103 @@ export default function SignInForm() {
         }
         return alert(response.error);
       }
-
       void router.push("/home");
     });
   };
 
   return (
     <form
-      className="flex flex-col justify-center space-y-7 py-3 sm:py-10"
+      className="py-3 sm:py-10"
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onSubmit={handleSubmit(submitData)}
     >
-      <div className="flex flex-col gap-2">
-        <label className="flex flex-col">
-          <span
-            className={`ml-1 font-medium ${isEmailWrong ? "text-red-500" : ""}`}
-            onClick={(e) => e.preventDefault()}
-          >
-            Email
-          </span>
-          <div className="flex flex-col gap-2">
+      <fieldset
+        disabled={isFormDisabled}
+        className="group flex flex-col justify-center space-y-7"
+      >
+        <div className="flex flex-col gap-2 group-disabled:opacity-50">
+          <label className="flex flex-col group-disabled:cursor-not-allowed">
+            <span
+              className={`ml-1 font-medium ${
+                isEmailWrong ? "text-red-500" : ""
+              }`}
+              onClick={(e) => e.preventDefault()}
+            >
+              Email
+            </span>
             <input
               type="text"
-              className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none ${
+              className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed ${
                 isEmailWrong ? "border-red-500" : ""
               }`}
               {...register("email")}
             />
             {isEmailWrong && (
-              <span className="absolute mt-10 text-xs text-red-500">
+              <span className="absolute mt-16 text-xs text-red-500">
                 No existe una cuenta con este email
               </span>
             )}
             {isGoogleAccount && (
-              <span className="absolute mt-10 text-xs text-red-500">
+              <span className="absolute mt-16 text-xs text-red-500">
                 Esta cuenta esta registrada con Google
               </span>
             )}
             {!isEmailWrong && errors.email && (
-              <span className="absolute mt-10 text-xs text-red-500">
+              <span className="absolute mt-16 text-xs text-red-500">
                 Ingrese un email valido
               </span>
             )}
-          </div>
-        </label>
-      </div>
-      <div className="flex flex-col gap-2">
-        <label className="flex flex-col">
-          <span
-            className={`ml-1 font-medium ${
-              isPasswordWrong ? "text-red-500" : ""
-            }`}
-            onClick={(e) => e.preventDefault()}
-          >
-            Contraseña
-          </span>
-          <div
-            className={`flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1 ${
-              isPasswordWrong ? "border-red-500" : ""
-            }`}
-          >
-            <input
-              type={PasswordInputType == "text" ? "text" : "password"}
-              className="w-full outline-none"
-              {...register("password")}
-            />
-            <span>{ToggleIcon}</span>
-          </div>
-          {isPasswordWrong && (
-            <span className="absolute mt-16 text-xs text-red-500">
-              Contraseña incorrecta
+          </label>
+        </div>
+        <div className="flex flex-col gap-2 group-disabled:opacity-50">
+          <label className="flex flex-col group-disabled:cursor-not-allowed">
+            <span
+              className={`ml-1 font-medium ${
+                isPasswordWrong ? "text-red-500" : ""
+              }`}
+              onClick={(e) => e.preventDefault()}
+            >
+              Contraseña
             </span>
-          )}
-          {!isPasswordWrong && errors.password && (
-            <span className="absolute mt-16 text-xs text-red-500">
-              Contraseña: 6-30 caracteres
-            </span>
-          )}
-        </label>
-      </div>
-      <div className="flex w-full flex-col items-center gap-5">
-        <AuthButton
-          method="Sign in"
-          isDisabled={isButtonDisabled}
-          onClick={() => {
-            setIsEmailWrong(false);
-            setIsPasswordWrong(false);
-          }}
-        />
-        <ForgotPasswordButton />
-      </div>
-      <Divider variant="middle">o</Divider>
-      <GoogleAuthShowcase />
-      <AlternativeMethodLink method="Sign up" />
+            <div
+              className={`flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1 ${
+                isPasswordWrong ? "border-red-500" : ""
+              }`}
+            >
+              <input
+                type={PasswordInputType == "text" ? "text" : "password"}
+                className="w-full outline-none group-disabled:cursor-not-allowed"
+                {...register("password")}
+              />
+              <span>{ToggleIcon}</span>
+            </div>
+            {isPasswordWrong && (
+              <span className="absolute mt-16 text-xs text-red-500">
+                Contraseña incorrecta
+              </span>
+            )}
+            {!isPasswordWrong && errors.password && (
+              <span className="absolute mt-16 text-xs text-red-500">
+                Contraseña: 6-30 caracteres
+              </span>
+            )}
+          </label>
+        </div>
+        <div className="flex w-full flex-col items-center gap-5 pt-2">
+          <AuthButton
+            method="Sign in"
+            isDisabled={isFormDisabled}
+            onClick={() => {
+              setIsEmailWrong(false);
+              setIsPasswordWrong(false);
+            }}
+          />
+          <ForgotPasswordButton />
+        </div>
+        <Divider variant="middle">o</Divider>
+        <GoogleAuthShowcase />
+        <AlternativeMethodLink method="Sign up" />
+      </fieldset>
     </form>
   );
 }
