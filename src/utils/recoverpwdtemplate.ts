@@ -44,8 +44,7 @@ const recoverPasswordTemplate = (username: string, redirectURL: string) => `
                 .button {
                 display: inline-block;
                 padding: 10px 20px;
-                background-color: #008080;
-                color: #ffffff;
+                background-color: #008080; 
                 text-decoration: none;
                 border-radius: 4px;
                 }
@@ -60,7 +59,7 @@ const recoverPasswordTemplate = (username: string, redirectURL: string) => `
                     <h1>Recuperación de contraseña</h1>
                     <p>Hola <b>${username}</b>,</p>
                     <p>Hemos recibido una solicitud para restablecer tu contraseña. Para continuar, por favor haz clic en el siguiente botón:</p>
-                    <a href="${redirectURL}" class="button text-white">Restablecer Contraseña</a>
+                    <a href="${redirectURL}" class="button" style="color: #ffffff;" >Restablecer Contraseña</a>
                     <p>Si no solicitaste restablecer la contraseña, por favor ignora este correo electrónico.</p>
                 </div>
             </div>
