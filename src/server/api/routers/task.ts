@@ -1,9 +1,9 @@
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {z} from "zod";
 import { now } from "next-auth/client/_utils";
 
 export const taskRouter = createTRPCRouter({
-    newTask: protectedProcedure
+    createTask: protectedProcedure
         .input(z.object({ name: z.string(), description: z.string(), category: z.string(), routine_id: z.string(),
         event_id: z.string(), estimated_time:z.number(), required_energy: z.number() }))
         .mutation(async ({ input, ctx }) => {
@@ -37,4 +37,14 @@ export const taskRouter = createTRPCRouter({
             return { tasks };
         }
         ),
+    getTasksbyRoutine: protectedProcedure
+        .input(z.object({routine_id: z.string()}))
+        .query(async ({ctx, input})=>{
+            const tasks= await ctx.prisma.task.findMany({
+                where:{
+                    routine_id  : input.routine_id
+                },
+            })
+            return {tasks}
+        })
     })
