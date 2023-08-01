@@ -1,4 +1,4 @@
-import { type ZodType, z, set } from "zod";
+import { type ZodType, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -74,12 +74,16 @@ export default function ReestablecerContraseña() {
 
   const submitData = (data: FormData) => {
     setIsFormDisabled(true);
+    if (!userEmail) {
+      toast.error("El token no es valido");
+      return setIsFormDisabled(false);
+    }
     resetPassword(
-      //   { email: userEmail, password: data.password }, CHEQUEAR getEmailByToken
-      { email: "goldmandan8@gmail.com", password: data.password },
+      { email: userEmail, password: data.password },
       {
         onSuccess: () => {
           setIsFormDisabled(false);
+          deleteToken({ token: token as string });
           return void notify();
         },
         onError: (error) => {
@@ -120,7 +124,7 @@ export default function ReestablecerContraseña() {
                   className="group flex w-full flex-col justify-center space-y-7 py-5 lg:py-12"
                 >
                   <div className="flex flex-col gap-2 group-disabled:opacity-50">
-                    <label className="flex flex-col">
+                    <label className="flex flex-col group-disabled:cursor-not-allowed">
                       <span
                         className="ml-1 font-medium"
                         onClick={(e) => e.preventDefault()}
@@ -132,7 +136,7 @@ export default function ReestablecerContraseña() {
                           type={
                             PasswordInputType == "text" ? "text" : "password"
                           }
-                          className="w-full outline-none"
+                          className="w-full outline-none group-disabled:cursor-not-allowed"
                           {...register("password")}
                         />
                         <span>{ToggleIcon}</span>
@@ -145,7 +149,7 @@ export default function ReestablecerContraseña() {
                     </label>
                   </div>
                   <div className="flex flex-col gap-2 group-disabled:opacity-50">
-                    <label className="flex flex-col">
+                    <label className="flex flex-col group-disabled:cursor-not-allowed">
                       <span
                         className={`ml-1 font-medium ${
                           !isPasswordMatch ? "text-red-500" : ""
@@ -165,7 +169,7 @@ export default function ReestablecerContraseña() {
                               ? "text"
                               : "password"
                           }
-                          className="w-full outline-none"
+                          className="w-full outline-none group-disabled:cursor-not-allowed"
                           {...register("confirmPassword")}
                         />
                         <span>{ToggleIcon2}</span>
@@ -177,25 +181,25 @@ export default function ReestablecerContraseña() {
                       )}
                     </label>
                   </div>
+                  <div className="flex w-full flex-col items-center gap-5 sm:pt-2">
+                    <AuthButton
+                      method="Reset password"
+                      isDisabled={isFormDisabled}
+                      onClick={() => {
+                        setIsPasswordMatch(true);
+                      }}
+                    />
+                    <span className="mt-3 font-medium sm:text-lg">
+                      Volver a{" "}
+                      <Link
+                        href="/signin"
+                        className="no-highlight text-sky-600 underline-offset-2 active:underline"
+                      >
+                        Inicio sesión
+                      </Link>
+                    </span>
+                  </div>
                 </fieldset>
-                <div className="flex w-full flex-col items-center gap-5 pt-2">
-                  <AuthButton
-                    method="Reset password"
-                    isDisabled={isFormDisabled}
-                    onClick={() => {
-                      setIsPasswordMatch(true);
-                    }}
-                  />
-                  <span className="mt-3 font-medium sm:text-lg">
-                    Volver a{" "}
-                    <Link
-                      href="/signin"
-                      className="no-highlight text-sky-600 underline-offset-2 active:underline"
-                    >
-                      Inicio sesión
-                    </Link>
-                  </span>
-                </div>
               </form>
             </div>
             <Toaster />
