@@ -82,13 +82,13 @@ model task{
     id        String   @id @default(cuid())
     name    String
     description String?
-    category String
+    category String ?
     createdAt DateTime @default(now())
-    routine_id String
+    routine_id String ?
     routine routine? @relation(fields: [routine_id], references: [id])
-    event_id String
+    event_id String ?
     event event? @relation(fields: [event_id], references: [id])
-    estimated_time Int
+    estimated_time Int ?
     done Boolean
     real_time Int?
     user_id String
