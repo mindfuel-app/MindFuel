@@ -1,4 +1,5 @@
 import Logo from "./logo";
+import Title from "./title";
 
 export default function authPageLayout({
   children,
@@ -14,9 +15,7 @@ export default function authPageLayout({
         <div className="flex flex-col items-center">
           <Logo />
           <div className="flex select-none flex-col items-center p-5">
-            <h1 className="my-5 text-2xl font-semibold text-teal sm:text-3xl lg:-my-1">
-              {authMethod}
-            </h1>
+            <Title title={authMethod} />
             {children}
           </div>
         </div>
