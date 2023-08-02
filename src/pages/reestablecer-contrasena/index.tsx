@@ -74,7 +74,7 @@ export default function ReestablecerContraseña() {
               </Link>
               <Logo />
             </div>
-            <div className="flex select-none flex-col items-center p-5">
+            <div className="flex flex-col items-center p-5">
               <Title title="Olvidé mi contraseña" />
               <p className="max-w-[250px] text-center text-sm font-medium min-[360px]:text-base sm:my-5 lg:mb-0 lg:mt-10">
                 Se enviará un enlace para reestablecer la contraseña a tu correo

@@ -112,7 +112,7 @@ export default function ReestablecerContraseña() {
               </Link>
               <Logo />
             </div>
-            <div className="flex select-none flex-col items-center p-5">
+            <div className="flex flex-col items-center p-5">
               <Title title="Reestablecer contraseña" />
               <form
                 className="w-full"
