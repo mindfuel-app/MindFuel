@@ -1,13 +1,22 @@
 import { motion } from "framer-motion";
 import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
+import { TaskSkeleton } from "./ui/skeleton";
 
 export default function TaskList() {
   const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({});
 
-  if (isLoading) return <div>Cargando...</div>;
+  if (isLoading) return <TaskSkeleton />;
 
-  if (!userTasks) return <div>No hay tareas cargadas</div>;
+  if (!userTasks)
+    return (
+      <div className="mt-10 flex justify-center text-center font-medium sm:text-lg">
+        <p className="max-w-[300px] sm:max-w-[400px]">
+          No se pudo obtener la información deseada. Intentelo de nuevo más
+          tarde
+        </p>
+      </div>
+    );
 
   return (
     <motion.div
