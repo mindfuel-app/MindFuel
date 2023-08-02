@@ -1,12 +1,12 @@
 import { Checkbox } from "./ui/checkbox";
 
-export type Task = {
-  id: number;
+export default function TaskCard({
+  number,
+  name,
+}: {
   number: number;
   name: string;
-};
-
-export function TaskCard({ number, name }: { number: number; name: string }) {
+}) {
   return (
     <div className="flex w-full">
       <div className="w-[15%] rounded-l-md bg-teal p-2 text-center text-white">

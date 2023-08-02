@@ -1,18 +1,12 @@
 import { useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { type Task, TaskCard } from "./taskCard";
 import { motion } from "framer-motion";
 import Modal from "./ui/modal";
 import RoutineForm from "./routineForm";
+import { type Task } from "~/hooks/useTasks";
+import TaskCard from "./taskCard";
 
-export type Routine = {
-  id: number;
-  name: string;
-  description: string;
-  tasks: Task[];
-};
-
-export function RoutineCard({
+export default function RoutineCard({
   name,
   description,
   tasks,
@@ -57,8 +51,8 @@ export function RoutineCard({
         className="overflow-hidden"
       >
         <div className="-z-10 flex w-full flex-col gap-3 rounded-b-md bg-white py-5 pl-3 pr-4">
-          {tasks.map((task) => (
-            <TaskCard number={task.number} name={task.name} key={task.id} />
+          {tasks.map((task, index) => (
+            <TaskCard number={index} name={task.name} key={task.id} />
           ))}
         </div>
       </motion.div>
