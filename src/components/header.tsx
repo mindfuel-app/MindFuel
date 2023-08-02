@@ -45,11 +45,11 @@ export default function ProfileInfo() {
             />
           </Modal.Content>
         </Modal>
-        <Button className="no-highlight hidden p-2 min-[360px]:flex">
-          <Bars3Icon
-            className="h-5 w-5 text-black"
-            onClick={() => setIsSideMenuOpen(true)}
-          />
+        <Button
+          className="no-highlight hidden p-2 min-[360px]:flex"
+          onClick={() => setIsSideMenuOpen(true)}
+        >
+          <Bars3Icon className="h-5 w-5 text-black" />
         </Button>
       </div>
 
