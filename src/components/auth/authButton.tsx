@@ -17,10 +17,14 @@ export default function AuthButton({
       disabled={isDisabled}
       onClick={onClick}
     >
-      {!isDisabled && (method === "Sign up" ? "Registrarse" : "")}
-      {!isDisabled && (method === "Sign in" ? "Iniciar sesión" : "")}
-      {!isDisabled && (method === "Forgot password" ? "Confirmar" : "")}
-      {!isDisabled && (method === "Reset password" ? "Cambiar contraseña" : "")}
+      {!isDisabled && (
+        <>
+          {method === "Sign up" && "Registrarse"}
+          {method === "Sign in" && "Iniciar sesión"}
+          {method === "Forgot password" && "Confirmar"}
+          {method === "Reset password" && "Cambiar contraseña"}
+        </>
+      )}
       {isDisabled && <CircularProgress color="inherit" size={20} />}
     </Button>
   );
