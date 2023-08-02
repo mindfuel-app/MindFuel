@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+::selection {
+  background: #d1d5db;
+}
+
 @keyframes dialog-content-show {
   from {
     opacity: 0;
