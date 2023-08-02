@@ -1,7 +1,7 @@
 import { api } from "~/utils/api";
 
 export type Task = {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   category?: string;
@@ -12,7 +12,6 @@ export type Task = {
   estimatedTime?: number;
   done: boolean;
   realTime?: number;
-  userId: string;
   requiredEnergy?: number;
 };
 

@@ -21,7 +21,14 @@ export default function AddButton() {
         <RoutineForm
           afterSave={() => setIsModalOpen(false)}
           initialName=""
-          initialTasks={[{ id: 1, number: 1, name: "" }]}
+          initialTasks={[
+            {
+              id: 1,
+              name: "",
+              done: false,
+              createdAt: new Date(),
+            },
+          ]}
         />
       </Modal.Content>
     </Modal>

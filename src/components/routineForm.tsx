@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import Modal from "./ui/modal";
 import { motion, AnimatePresence } from "framer-motion";
 import { type FormEvent, useState } from "react";
-import { type Task } from "./taskCard";
+import { type Task } from "~/hooks/useTasks";
 
 export default function RoutineForm({
   afterSave,
@@ -24,7 +24,12 @@ export default function RoutineForm({
   const addEmptyTask = () => {
     setTasks([
       ...tasks,
-      { id: tasks.length + 1, number: tasks.length + 1, name: "" },
+      {
+        id: tasks.length + 1,
+        name: "",
+        done: false,
+        createdAt: new Date(),
+      },
     ]);
   };
 
@@ -41,7 +46,12 @@ export default function RoutineForm({
   const handleTaskChange = (index: number, value: string) => {
     setTasks((prevTasks) => {
       const updatedTasks = [...prevTasks];
-      updatedTasks[index] = { id: index + 1, number: index + 1, name: value };
+      updatedTasks[index] = {
+        id: index + 1,
+        name: value,
+        createdAt: new Date(),
+        done: false,
+      };
       return updatedTasks;
     });
   };
