@@ -121,6 +121,13 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  callbacks: {
+    session: async ({ session, token }) => {
+      if (!token.sub) return Promise.reject("No sub in token");
+      session.user.id = token.sub;
+      return Promise.resolve(session);
+    },
+  },
   secret: env.JWT_SECRET,
 };
 

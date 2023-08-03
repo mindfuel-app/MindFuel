@@ -42,14 +42,16 @@ export const taskRouter = createTRPCRouter({
       });
       return { task };
     }),
-  getTasks: protectedProcedure.input(z.object({})).query(async ({ ctx }) => {
-    const tasks = await ctx.prisma.task.findMany({
-      where: {
-        user_id: ctx.session.user.id,
-      },
-    });
-    return tasks;
-  }),
+  getTasks: protectedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const tasks = await ctx.prisma.task.findMany({
+        where: {
+          user_id: input.user_id,
+        },
+      });
+      return tasks;
+    }),
   getTasksbyRoutine: protectedProcedure
     .input(z.object({ routine_id: z.string() }))
     .query(async ({ ctx, input }) => {

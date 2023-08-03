@@ -3,8 +3,10 @@ import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
 import { TaskSkeleton } from "./ui/skeleton";
 
-export default function TaskList() {
-  const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({});
+export default function TaskList({ userId }: { userId: string }) {
+  const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({
+    user_id: userId,
+  });
 
   if (isLoading) return <TaskSkeleton />;
 
