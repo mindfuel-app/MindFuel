@@ -1,5 +1,3 @@
-import { api } from "~/utils/api";
-
 export type Task = {
   id: number;
   name: string;
@@ -16,7 +14,5 @@ export type Task = {
 };
 
 export function useTasks() {
-  const { data } = api.tasks.getTasks.useQuery({});
-
-  return data;
+  return;
 }
