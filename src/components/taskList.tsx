@@ -34,7 +34,7 @@ export default function TaskList({ userId }: { userId: string }) {
           <h2 className="my-5">Tareas pendientes de hoy</h2>
           <ul className="flex w-72 flex-col gap-3">
             {userTasks.map((task, index) => (
-              <TaskCard number={index} name={task.name} key={task.id} />
+              <TaskCard number={index + 1} name={task.name} key={task.id} />
             ))}
           </ul>
         </>
