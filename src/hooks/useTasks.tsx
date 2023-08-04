@@ -3,7 +3,6 @@ export type Task = {
   name: string;
   description?: string;
   category?: string;
-  createdAt: Date;
   routineId?: string;
   eventId?: string;
   event?: Event;
