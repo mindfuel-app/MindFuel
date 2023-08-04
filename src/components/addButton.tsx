@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import Modal from "./ui/modal";
 import { useState } from "react";
 import RoutineForm from "./routineForm";
+import AddModal from "./addModal";
+import TaskForm from "./taskForm";
 
 export default function AddButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,18 +19,10 @@ export default function AddButton() {
           +
         </span>
       </Modal.Button>
-      <Modal.Content title="Crear rutina">
-        <RoutineForm
-          afterSave={() => setIsModalOpen(false)}
-          initialName=""
-          initialTasks={[
-            {
-              id: 1,
-              name: "",
-              done: false,
-              createdAt: new Date(),
-            },
-          ]}
+      <Modal.Content>
+        <AddModal
+          TaskForm={<TaskForm afterSave={() => setIsModalOpen(false)} />}
+          RoutineForm={<RoutineForm afterSave={() => setIsModalOpen(false)} />}
         />
       </Modal.Content>
     </Modal>

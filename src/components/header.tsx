@@ -37,19 +37,8 @@ export default function ProfileInfo() {
           <Modal.Button className="no-highlight hidden items-center rounded-lg bg-teal px-3 py-1 text-white transition active:bg-teal/80 lg:flex">
             Crear rutina
           </Modal.Button>
-          <Modal.Content title="Crear rutina">
-            <RoutineForm
-              afterSave={() => setIsModalOpen(false)}
-              initialName=""
-              initialTasks={[
-                {
-                  id: 1,
-                  name: "",
-                  done: false,
-                  createdAt: new Date(),
-                },
-              ]}
-            />
+          <Modal.Content>
+            <RoutineForm afterSave={() => setIsModalOpen(false)} />
           </Modal.Content>
         </Modal>
         <Button

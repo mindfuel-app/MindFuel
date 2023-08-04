@@ -34,8 +34,9 @@ export default function RoutineCard({
             <Modal.Button>
               <PencilSquareIcon className="h-8 w-8" />
             </Modal.Button>
-            <Modal.Content title="Editar rutina">
+            <Modal.Content>
               <RoutineForm
+                mode="edit"
                 afterSave={() => setIsModalOpen(false)}
                 initialName={name}
                 initialTasks={tasks}
