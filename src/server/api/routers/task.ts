@@ -1,46 +1,33 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { z } from "zod";
+import { any, z } from "zod";
 import { now } from "next-auth/client/_utils";
+import { error } from "console";
 
 export const taskRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
-        description: z.string().optional(),
-        category: z.string().optional(),
-        routine_id: z.string().optional(),
-        event_id: z.string().optional(),
-        estimated_time: z.number().optional(),
-        required_energy: z.number().optional(),
+        tasks: z.object({
+          name: z.string(),
+          description: z.string().optional(),
+          category: z.string().optional(),
+          user_id: z.string(),
+          routine_id: z.string().optional(),
+          event_id: z.string().optional(),
+          requiredenergy: z.number().optional(),
+          estimatedtime: z.number().optional(),
+        }).array()
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const {
-        name,
-        description,
-        category,
-        routine_id,
-        event_id,
-        estimated_time,
-        required_energy,
-      } = input;
-      const task = await ctx.prisma.task.create({
-        data: {
-          name,
-          description,
-          category,
-          createdAt: new Date(now()),
-          routine_id,
-          event_id,
-          estimated_time,
-          done: false,
-          real_time: null,
-          user_id: ctx.session.user.id,
-          required_energy,
-        },
+      const tasks = input.tasks;
+      if (!tasks) return error("No tasks provided");
+      const createdTasks = tasks.forEach(async (task) => {
+        await ctx.prisma.task.create({
+          data: task
+        });
       });
-      return { task };
+      return createdTasks;
     }),
   getTasks: protectedProcedure
     .input(z.object({ user_id: z.string() }))
@@ -60,6 +47,31 @@ export const taskRouter = createTRPCRouter({
           routine_id: input.routine_id,
         },
       });
-      return { tasks };
+      return tasks;
+    }),
+
+  setTaskDone: protectedProcedure
+    .input(z.object({ task_id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const createdAt = await ctx.prisma.task.findUnique({
+        where: {
+          id: input.task_id,
+        },
+        select: {
+          createdAt: true,
+        },
+      });
+      if (!createdAt) return error("No task found");
+      const realTime = now() - createdAt.createdAt.getTime();
+      const task = await ctx.prisma.task.update({
+        where: {
+          id: input.task_id,
+        },
+        data: {
+          done: true,
+          real_time: realTime,
+        },
+      });
+      return task;
     }),
 });
