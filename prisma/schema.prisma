@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
@@ -70,56 +70,56 @@ model Example {
     updatedAt DateTime @updatedAt
 }
 
-model friend{
-    id String @id @default(cuid())
-    id_first String
+model friend {
+    id        String  @id @default(cuid())
+    id_first  String
     id_second String
-    accepted Boolean
+    accepted  Boolean
 }
 
-model task{
-    id        String   @id @default(cuid())
-    name    String
-    description String?
-    category String ?
-    createdAt DateTime @default(now())
-    routine_id String ?
-    routine routine? @relation(fields: [routine_id], references: [id])
-    event_id String ?
-    event event? @relation(fields: [event_id], references: [id])
-    estimated_time Int ?
-    done Boolean
-    real_time Int?
-    user_id String
+model task {
+    id              String   @id @default(cuid())
+    name            String
+    description     String?
+    category        String?
+    createdAt       DateTime @default(now())
+    routine_id      String?
+    routine         routine? @relation(fields: [routine_id], references: [id])
+    event_id        String?
+    event           event?   @relation(fields: [event_id], references: [id])
+    estimated_time  Int?
+    done            Boolean  @default(false)
+    real_time       Int?
+    user_id         String
     required_energy Int?
 
     @@index([event_id])
     @@index([routine_id])
 }
 
-model routine{
-    id        String   @id @default(cuid())
-    name    String
+model routine {
+    id          String   @id @default(cuid())
+    name        String
     description String?
-    user_id String
-    createdAt DateTime @default(now())
-    task task[]
+    user_id     String
+    createdAt   DateTime @default(now())
+    task        task[]
 }
 
-model event{
-    id        String   @id @default(cuid())
-    name    String
+model event {
+    id          String   @id @default(cuid())
+    name        String
     description String?
-    category String
-    date DateTime
-    user_id String
-    createdAt DateTime @default(now())
-    task task[]
+    category    String
+    date        DateTime
+    user_id     String
+    createdAt   DateTime @default(now())
+    task        task[]
 }
 
 model passwordResetToken {
-  id        Int      @id @default(autoincrement())
-  email     String
-  token     String   @unique
-  expiresAt DateTime
+    id        Int      @id @default(autoincrement())
+    email     String
+    token     String   @unique
+    expiresAt DateTime
 }
