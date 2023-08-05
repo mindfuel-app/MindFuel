@@ -74,4 +74,42 @@ export const taskRouter = createTRPCRouter({
       });
       return task;
     }),
+  // modifyTask: protectedProcedure
+  //   .input(
+  //     z.object({
+  //       taskId: z.string(),
+  //       field: z.string(),
+  //       value: z.string().optional(),
+  //       numValue: z.number().optional()
+  //     })
+  //   )
+  //   .mutation(async ({ ctx, input }) => {
+  //     const id = input.taskId
+  //     const field = input.field
+  //     const value = input.value
+  //     const numValue = input.numValue
+  //     if (!numValue) {
+  //       ctx.prisma.task.update({
+  //         data: {
+  //           field : value
+  //         },
+  //         where: {
+  //           id
+  //         }
+  //       })
+  //       return ctx.prisma.task.findUnique({ where: { id } })
+  //     }
+  //     if (!value) {
+  //       ctx.prisma.task.update({
+  //         data: {
+  //           field : numValue
+  //         },
+  //         where: {
+  //           id
+  //         }
+  //       })
+  //       return ctx.prisma.task.findUnique({ where: { id } })
+  //     }
+
+  //   })
 });
