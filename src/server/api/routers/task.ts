@@ -22,11 +22,11 @@ export const taskRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const tasks = input.tasks;
       if (!tasks) return error("No tasks provided");
-      const createdTasks = tasks.forEach(async (task) => {
-        await ctx.prisma.task.create({
+      const createdTasks = await Promise.all(tasks.map(async (task) => {
+        return await ctx.prisma.task.create({
           data: task
         });
-      });
+      }));
       return createdTasks;
     }),
   getTasks: protectedProcedure
