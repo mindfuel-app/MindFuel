@@ -5,6 +5,7 @@ import Modal from "./ui/modal";
 import { motion, AnimatePresence } from "framer-motion";
 import { type FormEvent, useState } from "react";
 import { type Task } from "~/hooks/useTasks";
+import { useUser } from "~/lib/UserContext";
 
 export default function RoutineForm({
   mode,
@@ -17,6 +18,7 @@ export default function RoutineForm({
   initialName?: string;
   initialTasks?: Task[];
 }) {
+  const user = useUser();
   const [saving, setSaving] = useState(false);
   const [name, setName] = useState(initialName ? initialName : "");
   const [tasks, setTasks] = useState<Task[]>(
@@ -27,6 +29,7 @@ export default function RoutineForm({
             id: 1,
             name: "",
             done: false,
+            user_id: user.id,
           },
         ]
   );
@@ -40,6 +43,7 @@ export default function RoutineForm({
         id: tasks.length + 1,
         name: "",
         done: false,
+        user_id: user.id,
       },
     ]);
   };
@@ -61,6 +65,7 @@ export default function RoutineForm({
         id: index + 1,
         name: value,
         done: false,
+        user_id: user.id,
       };
       return updatedTasks;
     });

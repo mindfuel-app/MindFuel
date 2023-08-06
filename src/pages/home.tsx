@@ -10,7 +10,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import TaskList from "../components/taskList";
 import RoutineList from "../components/routineList";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -21,14 +21,14 @@ export default function Home() {
   const [selectedTab, setSelectedTab] = useState("tareas");
   const { data: sessionData } = useSession();
 
-  if (!sessionData) return null;
+  if (!sessionData) return void signOut({ callbackUrl: "/signin" });
 
   return (
     <>
       <Head>
         <title>MindFuel</title>
       </Head>
-      <Layout>
+      <Layout sessionData={sessionData}>
         <Tabs defaultValue="tareas" className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
@@ -57,7 +57,7 @@ export default function Home() {
             </TabsList>
           </div>
           <TabsContent value="tareas" className="h-full">
-            <TaskList userId={sessionData.user.id} />
+            <TaskList />
           </TabsContent>
           <TabsContent value="rutinas" className="h-full">
             <RoutineList />

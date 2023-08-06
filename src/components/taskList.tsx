@@ -2,10 +2,12 @@ import { motion } from "framer-motion";
 import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
 import { TaskSkeleton } from "./ui/skeleton";
+import { useUser } from "~/lib/UserContext";
 
-export default function TaskList({ userId }: { userId: string }) {
+export default function TaskList() {
+  const user = useUser();
   const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({
-    user_id: userId,
+    user_id: user.id,
   });
 
   if (isLoading) return <TaskSkeleton />;
