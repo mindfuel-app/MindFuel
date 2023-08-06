@@ -4,6 +4,7 @@ export type Routine = {
   id: number;
   name: string;
   description?: string;
+  user_id: string;
   tasks: Task[];
 };
 
