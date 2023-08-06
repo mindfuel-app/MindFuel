@@ -19,9 +19,7 @@ const Checkbox = React.forwardRef<
     {...props}
   >
     <CheckboxPrimitive.Indicator
-      className={cn(
-        `flex items-center justify-center bg-white group-active:bg-gray-200 lg:group-hover:bg-gray-200`
-      )}
+      className={cn(`flex items-center justify-center bg-white`)}
     >
       <motion.div
         initial={{ scale: 0 }}

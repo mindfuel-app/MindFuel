@@ -13,11 +13,9 @@ export default function AddButton() {
     <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
       <Modal.Button
         disabled={router.pathname != "/home"}
-        className="absolute -top-9 h-14 w-14 rounded-full border-[3px] border-teal bg-white transition-colors group-active:bg-teal min-[425px]:h-16 min-[425px]:w-16 lg:group-hover:bg-teal"
+        className="absolute -top-9 h-14 w-14 transform rounded-full border-[3px] border-teal bg-white transition-all group-active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
       >
-        <span className="text-2xl font-extrabold text-teal group-active:text-white lg:group-hover:text-white">
-          +
-        </span>
+        <span className="text-2xl font-extrabold text-teal">+</span>
       </Modal.Button>
       <Modal.Content>
         <AddModal
