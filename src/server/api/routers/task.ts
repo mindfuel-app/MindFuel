@@ -7,26 +7,31 @@ export const taskRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(
       z.object({
-        tasks: z.object({
-          name: z.string(),
-          description: z.string().optional(),
-          category: z.string().optional(),
-          user_id: z.string(),
-          routine_id: z.string().optional(),
-          event_id: z.string().optional(),
-          requiredenergy: z.number().optional(),
-          estimatedtime: z.number().optional(),
-        }).array()
+        tasks: z
+          .object({
+            name: z.string(),
+            description: z.string().optional(),
+            category: z.string().optional(),
+            routine_id: z.string().optional(),
+            event_id: z.string().optional(),
+            estimatedtime: z.number().optional(),
+            done: z.boolean(),
+            user_id: z.string(),
+            requiredenergy: z.number().optional(),
+          })
+          .array(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       const tasks = input.tasks;
       if (!tasks) return error("No tasks provided");
-      const createdTasks = await Promise.all(tasks.map(async (task) => {
-        return await ctx.prisma.task.create({
-          data: task
-        });
-      }));
+      const createdTasks = await Promise.all(
+        tasks.map(async (task) => {
+          return await ctx.prisma.task.create({
+            data: task,
+          });
+        })
+      );
       return createdTasks;
     }),
   getTasks: protectedProcedure
