@@ -10,7 +10,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import TaskList from "../components/taskList";
 import RoutineList from "../components/routineList";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import Router from "next/router";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -19,9 +20,11 @@ const tabOptions = [
 
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState("tareas");
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession();
 
-  if (!sessionData) return void signOut({ callbackUrl: "/signin" });
+  if (status == "unauthenticated") return void Router.push("/signin");
+
+  if (!sessionData) return;
 
   return (
     <>

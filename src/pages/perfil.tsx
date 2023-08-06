@@ -1,11 +1,14 @@
 import Head from "next/head";
 import Layout from "~/components/layout";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import Router from "next/router";
 
 export default function SelfCare() {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession();
 
-  if (!sessionData) return void signOut({ callbackUrl: "/signin" });
+  if (status == "unauthenticated") return void Router.push("/signin");
+
+  if (!sessionData) return;
 
   return (
     <>
