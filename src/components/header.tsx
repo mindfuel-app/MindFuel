@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import router from "next/router";
 import Modal from "./ui/modal";
 import RoutineForm from "./routineForm";
+import AddModal from "./addModal";
+import TaskForm from "./taskForm";
 
 export default function ProfileInfo() {
   const { data: sessionData } = useSession();
@@ -38,7 +40,12 @@ export default function ProfileInfo() {
             Crear rutina
           </Modal.Button>
           <Modal.Content>
-            <RoutineForm afterSave={() => setIsModalOpen(false)} />
+            <AddModal
+              TaskForm={<TaskForm afterSave={() => setIsModalOpen(false)} />}
+              RoutineForm={
+                <RoutineForm afterSave={() => setIsModalOpen(false)} />
+              }
+            />
           </Modal.Content>
         </Modal>
         <Button
