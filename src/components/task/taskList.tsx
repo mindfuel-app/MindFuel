@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
-import { TaskSkeleton } from "./ui/skeleton";
+import { TaskSkeleton } from "../ui/skeleton";
 import { useUser } from "~/lib/UserContext";
 
 export default function TaskList() {

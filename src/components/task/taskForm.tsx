@@ -1,39 +1,25 @@
 import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { CircularProgress } from "@mui/material";
-import { Button } from "./ui/button";
-import Modal from "./ui/modal";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { type FormEvent, useState } from "react";
 import { type Task } from "~/hooks/useTasks";
+import { Button } from "../ui/button";
+import Modal from "../ui/modal";
+import { CircularProgress } from "@mui/material";
+import { api } from "~/utils/api";
+import toast from "react-hot-toast";
 import { useUser } from "~/lib/UserContext";
 
-export default function RoutineForm({
-  mode,
-  afterSave,
-  initialName,
-  initialTasks,
-}: {
-  mode?: "create" | "edit";
-  afterSave: () => void;
-  initialName?: string;
-  initialTasks?: Task[];
-}) {
+export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   const user = useUser();
   const [saving, setSaving] = useState(false);
-  const [name, setName] = useState(initialName ? initialName : "");
-  const [tasks, setTasks] = useState<Task[]>(
-    initialTasks
-      ? initialTasks
-      : [
-          {
-            id: 1,
-            name: "",
-            done: false,
-            user_id: user.id,
-          },
-        ]
-  );
-  const [nameError, setNameError] = useState(false);
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      id: 1,
+      name: "",
+      done: false,
+      user_id: user.id,
+    },
+  ]);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
 
   const addEmptyTask = () => {
@@ -71,17 +57,21 @@ export default function RoutineForm({
     });
   };
 
+  const { mutate } = api.tasks.createTask.useMutation({
+    onSuccess: () => {
+      setSaving(false);
+      afterSave();
+    },
+    onError: (e) => {
+      setSaving(false);
+      toast.error(e.message);
+    },
+  });
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setNameError(false);
     setEmptyTaskError(false);
     setSaving(true);
-
-    if (name == "") {
-      setNameError(true);
-      setSaving(false);
-      return;
-    }
 
     for (const task of tasks) {
       if (task.name == "") {
@@ -90,41 +80,19 @@ export default function RoutineForm({
       }
     }
 
-    // await addRoutine(data)
     setTimeout(() => {
+      mutate({
+        tasks: tasks,
+      });
       afterSave();
     }, 1000);
   }
 
   return (
     <div className="p-5">
-      {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-5 group-disabled:opacity-50">
-            <label
-              className="flex flex-col gap-1"
-              onClick={(e) => e.preventDefault()}
-            >
-              <div className="flex items-center gap-3">
-                <span>Nombre de rutina</span>
-                {nameError && (
-                  <motion.span
-                    initial={{ opacity: 0.7 }}
-                    animate={{ opacity: 1 }}
-                    className="mt-1 text-xs text-red-500 "
-                  >
-                    Ingrese un nombre
-                  </motion.span>
-                )}
-              </div>
-              <input
-                type="text"
-                className="rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </label>
             <label
               className="flex flex-col gap-3"
               onClick={(e) => e.preventDefault()}
@@ -183,7 +151,7 @@ export default function RoutineForm({
                       />
                       <XMarkIcon
                         className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
-                          task.id == 1 ? "cursor-default opacity-0" : ""
+                          index == 0 ? "cursor-default opacity-0" : ""
                         }`}
                         onClick={() => removeTask(index)}
                       />

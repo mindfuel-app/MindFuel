@@ -8,8 +8,8 @@ import {
 import Head from "next/head";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import TaskList from "../components/taskList";
-import RoutineList from "../components/routineList";
+import TaskList from "../components/task/taskList";
+import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 

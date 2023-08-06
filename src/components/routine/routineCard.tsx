@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
-import Modal from "./ui/modal";
+import Modal from "../ui/modal";
 import RoutineForm from "./routineForm";
 import { type Task } from "~/hooks/useTasks";
-import TaskCard from "./taskCard";
+import TaskCard from "../task/taskCard";
 
 export default function RoutineCard({
   name,

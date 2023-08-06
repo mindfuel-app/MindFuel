@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import Modal from "./ui/modal";
 import { useState } from "react";
-import RoutineForm from "./routineForm";
+import RoutineForm from "./routine/routineForm";
 import AddModal from "./addModal";
-import TaskForm from "./taskForm";
+import TaskForm from "./task/taskForm";
 
 export default function AddButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
