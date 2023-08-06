@@ -7,14 +7,17 @@ import Modal from "./ui/modal";
 import { CircularProgress } from "@mui/material";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { useUser } from "~/lib/UserContext";
 
 export default function TaskForm({ afterSave }: { afterSave: () => void }) {
+  const user = useUser();
   const [saving, setSaving] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: 1,
       name: "",
       done: false,
+      user_id: user.id,
     },
   ]);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
@@ -26,6 +29,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         id: tasks.length + 1,
         name: "",
         done: false,
+        user_id: user.id,
       },
     ]);
   };
@@ -47,6 +51,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         id: index + 1,
         name: value,
         done: false,
+        user_id: user.id,
       };
       return updatedTasks;
     });
@@ -75,8 +80,10 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
       }
     }
 
-    //mutate(tasks);
     setTimeout(() => {
+      mutate({
+        tasks: tasks,
+      });
       afterSave();
     }, 1000);
   }
