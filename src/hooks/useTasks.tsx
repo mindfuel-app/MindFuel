@@ -1,16 +1,16 @@
 export type Task = {
-  id: number;
+  id: string;
   name: string;
-  description?: string;
-  user_id: string;
-  category?: string;
-  routineId?: string;
-  eventId?: string;
-  event?: Event;
-  estimatedTime?: number;
+  description: string | null;
+  category: string | null;
+  createdAt: Date;
+  routine_id: string | null;
+  event_id: string | null;
+  estimated_time: number | null;
   done: boolean;
-  realTime?: number;
-  requiredEnergy?: number;
+  real_time: number | null;
+  user_id: string;
+  required_energy: number | null;
 };
 
 export function useTasks() {

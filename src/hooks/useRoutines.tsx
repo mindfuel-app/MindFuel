@@ -1,11 +1,9 @@
-import { type Task } from "~/hooks/useTasks";
-
 export type Routine = {
-  id: number;
+  id: string;
   name: string;
-  description?: string;
+  description: string | null;
   user_id: string;
-  tasks: Task[];
+  createdAt: Date;
 };
 
 export function useRoutines() {

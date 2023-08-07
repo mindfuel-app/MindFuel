@@ -28,10 +28,18 @@ export default function RoutineForm({
       ? initialTasks
       : [
           {
-            id: 1,
+            id: "1",
             name: "",
+            description: null,
+            category: null,
+            createdAt: new Date(),
+            routine_id: null,
+            event_id: null,
+            estimated_time: null,
             done: false,
+            real_time: null,
             user_id: user.id,
+            required_energy: null,
           },
         ]
   );
@@ -42,10 +50,18 @@ export default function RoutineForm({
     setTasks([
       ...tasks,
       {
-        id: tasks.length + 1,
+        id: (tasks.length + 1).toString(),
         name: "",
+        description: null,
+        category: null,
+        createdAt: new Date(),
+        routine_id: null,
+        event_id: null,
+        estimated_time: null,
         done: false,
+        real_time: null,
         user_id: user.id,
+        required_energy: null,
       },
     ]);
   };
@@ -64,10 +80,18 @@ export default function RoutineForm({
     setTasks((prevTasks) => {
       const updatedTasks = [...prevTasks];
       updatedTasks[index] = {
-        id: index + 1,
+        id: (index + 1).toString(),
         name: value,
+        description: null,
+        category: null,
+        createdAt: new Date(),
+        routine_id: null,
+        event_id: null,
+        estimated_time: null,
         done: false,
+        real_time: null,
         user_id: user.id,
+        required_energy: null,
       };
       return updatedTasks;
     });
@@ -196,7 +220,7 @@ export default function RoutineForm({
                       />
                       <XMarkIcon
                         className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
-                          task.id == 1 ? "cursor-default opacity-0" : ""
+                          task.id == "1" ? "cursor-default opacity-0" : ""
                         }`}
                         onClick={() => removeTask(index)}
                       />

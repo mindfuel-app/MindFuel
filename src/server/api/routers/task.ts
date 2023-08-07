@@ -10,14 +10,14 @@ export const taskRouter = createTRPCRouter({
         tasks: z
           .object({
             name: z.string(),
-            description: z.string().optional(),
-            category: z.string().optional(),
-            routine_id: z.string().optional(),
-            event_id: z.string().optional(),
-            estimatedtime: z.number().optional(),
+            description: z.string().nullish(),
+            category: z.string().nullish(),
+            routine_id: z.string().nullish(),
+            event_id: z.string().nullish(),
+            estimatedtime: z.number().nullish(),
             done: z.boolean(),
             user_id: z.string(),
-            requiredenergy: z.number().optional(),
+            requiredenergy: z.number().nullish(),
           })
           .array(),
       })

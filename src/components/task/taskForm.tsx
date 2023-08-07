@@ -14,10 +14,18 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   const [saving, setSaving] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([
     {
-      id: 1,
+      id: "1",
       name: "",
+      description: null,
+      category: null,
+      createdAt: new Date(),
+      routine_id: null,
+      event_id: null,
+      estimated_time: null,
       done: false,
+      real_time: null,
       user_id: user.id,
+      required_energy: null,
     },
   ]);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
@@ -26,10 +34,18 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     setTasks([
       ...tasks,
       {
-        id: tasks.length + 1,
+        id: (tasks.length + 1).toString(),
         name: "",
+        description: null,
+        category: null,
+        createdAt: new Date(),
+        routine_id: null,
+        event_id: null,
+        estimated_time: null,
         done: false,
+        real_time: null,
         user_id: user.id,
+        required_energy: null,
       },
     ]);
   };
@@ -48,10 +64,18 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     setTasks((prevTasks) => {
       const updatedTasks = [...prevTasks];
       updatedTasks[index] = {
-        id: index + 1,
+        id: (index + 1).toString(),
         name: value,
+        description: null,
+        category: null,
+        createdAt: new Date(),
+        routine_id: null,
+        event_id: null,
+        estimated_time: null,
         done: false,
+        real_time: null,
         user_id: user.id,
+        required_energy: null,
       };
       return updatedTasks;
     });
