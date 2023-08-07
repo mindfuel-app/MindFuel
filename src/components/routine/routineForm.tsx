@@ -68,10 +68,6 @@ export default function RoutineForm({
 
   const removeTask = (indexToRemove: number) => {
     setTasks((prevTasks) => {
-      if (indexToRemove == 0) {
-        return prevTasks;
-      }
-
       return prevTasks.filter((_, i) => i !== indexToRemove);
     });
   };
@@ -220,9 +216,11 @@ export default function RoutineForm({
                       />
                       <XMarkIcon
                         className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
-                          task.id == "1" ? "cursor-default opacity-0" : ""
+                          index == 0 ? "cursor-auto opacity-0" : ""
                         }`}
-                        onClick={() => removeTask(index)}
+                        onClick={() => {
+                          if (index != 0) removeTask(index);
+                        }}
                       />
                     </motion.div>
                   ))}
