@@ -11,6 +11,19 @@ export const routineRouter = createTRPCRouter({
           description: z.string().optional(),
           user_id: z.string(),
           days: z.string(),
+          tasks: z
+            .object({
+              name: z.string(),
+              description: z.string().nullish(),
+              category: z.string().nullish(),
+              routine_id: z.string().nullish(),
+              event_id: z.string().nullish(),
+              estimatedtime: z.number().nullish(),
+              done: z.boolean(),
+              user_id: z.string(),
+              requiredenergy: z.number().nullish(),
+            })
+            .array(),
         }),
       })
     )
@@ -18,9 +31,22 @@ export const routineRouter = createTRPCRouter({
       const routine = input.routine;
       if (!routine) return error("Error: no routine uploaded");
       const createdRoutine = await ctx.prisma.routine.create({
-        data: routine,
+        data: {
+          name: routine.name,
+          description: routine.description,
+          user_id: routine.user_id,
+          days: routine.days,
+        },
       });
-      return createdRoutine;
+      const createdTasks = await Promise.all(
+        routine.tasks.map(async (task) => {
+          task.routine_id = createdRoutine.id;
+          return await ctx.prisma.task.create({
+            data: task,
+          });
+        })
+      );
+      return { createdRoutine, createdTasks };
     }),
   getRoutines: protectedProcedure
     .input(z.object({ user_id: z.string() }))

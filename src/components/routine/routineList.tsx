@@ -9,6 +9,7 @@ export default function RoutineList() {
   const { data: userRoutines, isLoading } = api.routines.getRoutines.useQuery({
     user_id: user.id,
   });
+  const { data: tasks } = api.tasks.getTasks.useQuery({ user_id: user.id });
 
   if (isLoading) return <RoutineSkeleton />;
 
@@ -21,14 +22,6 @@ export default function RoutineList() {
         </p>
       </div>
     );
-
-  const getTasksbyRoutineId = (routineId: string) => {
-    const { data: tasks } = api.tasks.getTasksbyRoutine.useQuery({
-      routine_id: routineId,
-    });
-    if (tasks) return tasks;
-    return [];
-  };
 
   return (
     <motion.div
@@ -47,7 +40,9 @@ export default function RoutineList() {
               <RoutineCard
                 name={routine.name}
                 description={routine.description}
-                tasks={getTasksbyRoutineId(routine.id)}
+                tasks={
+                  tasks?.filter((task) => task.routine_id == routine.id) || []
+                }
                 key={routine.id}
               />
             ))}
