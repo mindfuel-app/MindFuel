@@ -26,7 +26,9 @@ export default function RoutineCard({
           onClick={() => setIsCardOpened(!isCardOpened)}
         >
           <h1 className="text-lg">{name}</h1>
-          <span className="text-sm text-black">5 habitos - 2 horas</span>
+          <span className="text-sm text-black">{`${tasks.length} ${
+            tasks.length == 1 ? "tarea" : "tareas"
+          }`}</span>
           <span className="text-sm font-normal">{description}</span>
         </div>
         <div className="flex items-center py-2">
@@ -53,7 +55,7 @@ export default function RoutineCard({
       >
         <div className="-z-10 flex w-full flex-col gap-3 rounded-b-md bg-white py-5 pl-3 pr-4">
           {tasks.map((task, index) => (
-            <TaskCard number={index} name={task.name} key={task.id} />
+            <TaskCard number={index + 1} name={task.name} key={task.id} />
           ))}
         </div>
       </motion.div>
