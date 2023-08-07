@@ -1,23 +1,41 @@
 import { motion } from "framer-motion";
 import RoutineCard from "./routineCard";
+import { useUser } from "~/lib/UserContext";
+import { api } from "~/utils/api";
+import { RoutineSkeleton } from "../ui/skeleton";
+
+// const userRoutines = [
+//   {
+//     id: "1",
+//     name: "Rutina mañana",
+//     description: "Todos los dias hábiles",
+//     tasks: [],
+//   },
+//   {
+//     id: "2",
+//     name: "Rutina tarde",
+//     description: "Todos los dias",
+//     tasks: [],
+//   },
+// ];
 
 export default function RoutineList() {
-  // const {data: userRoutines, isLoading} = api.routines.getRoutines.useQuery({});
+  const user = useUser();
+  const { data: userRoutines, isLoading } = api.routines.getRoutines.useQuery({
+    user_id: user.id,
+  });
 
-  const userRoutines = [
-    {
-      id: "1",
-      name: "Rutina mañana",
-      description: "Todos los dias hábiles",
-      tasks: [],
-    },
-    {
-      id: "2",
-      name: "Rutina tarde",
-      description: "Todos los dias",
-      tasks: [],
-    },
-  ];
+  if (isLoading) return <RoutineSkeleton />;
+
+  if (!userRoutines)
+    return (
+      <div className="mt-10 flex justify-center text-center font-medium sm:text-lg">
+        <p className="max-w-[300px] sm:max-w-[400px]">
+          No se pudo obtener la información deseada. Intentelo de nuevo más
+          tarde
+        </p>
+      </div>
+    );
 
   return (
     <motion.div
@@ -35,8 +53,8 @@ export default function RoutineList() {
             {userRoutines.map((routine) => (
               <RoutineCard
                 name={routine.name}
-                description={routine.description}
-                tasks={routine.tasks}
+                description="Todos los dias"
+                tasks={[]}
                 key={routine.id}
               />
             ))}
