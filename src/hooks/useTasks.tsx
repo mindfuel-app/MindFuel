@@ -12,7 +12,3 @@ export type Task = {
   user_id: string;
   required_energy: number | null;
 };
-
-export function useTasks() {
-  return;
-}
