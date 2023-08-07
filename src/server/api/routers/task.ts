@@ -79,42 +79,49 @@ export const taskRouter = createTRPCRouter({
       });
       return task;
     }),
-  // modifyTask: protectedProcedure
-  //   .input(
-  //     z.object({
-  //       taskId: z.string(),
-  //       field: z.string(),
-  //       value: z.string().optional(),
-  //       numValue: z.number().optional()
-  //     })
-  //   )
-  //   .mutation(async ({ ctx, input }) => {
-  //     const id = input.taskId
-  //     const field = input.field
-  //     const value = input.value
-  //     const numValue = input.numValue
-  //     if (!numValue) {
-  //       ctx.prisma.task.update({
-  //         data: {
-  //           field : value
-  //         },
-  //         where: {
-  //           id
-  //         }
-  //       })
-  //       return ctx.prisma.task.findUnique({ where: { id } })
-  //     }
-  //     if (!value) {
-  //       ctx.prisma.task.update({
-  //         data: {
-  //           field : numValue
-  //         },
-  //         where: {
-  //           id
-  //         }
-  //       })
-  //       return ctx.prisma.task.findUnique({ where: { id } })
-  //     }
+  modifyTask: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+        category: z.string().optional(),
+        routine_id: z.string().optional(),
+        event_id: z.string().optional(),
+        estimatedtime: z.number().optional(),
+        done: z.boolean(),
+        user_id: z.string(),
+        requiredenergy: z.number().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+        const task = await ctx.prisma.task.update({
+          data: {
+            name: input.name,
+            description: input.description,
+            category: input.category,
+            routine_id: input.routine_id,
+            event_id: input.event_id,
+            estimated_time: input.estimatedtime,
+            done: input.done,
+            user_id: input.user_id,
+            required_energy: input.requiredenergy,
+          },
+          where: {
+            id: input.taskId,
+          }
+        })
+        return task
+      }),
+    deleteTask: protectedProcedure
+    .input(z.object({ taskId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.delete({
+        where: {
+          id: input.taskId,
+        },
+      });
+      return task;
+    })
 
-  //   })
 });
