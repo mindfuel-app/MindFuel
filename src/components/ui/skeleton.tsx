@@ -1,6 +1,6 @@
 import { cn } from "~/lib/utils";
 
-export function TaskSkeleton() {
+function TaskSkeleton() {
   return (
     <div className="flex w-full flex-col items-center gap-5 p-10">
       <div className="flex gap-2">
@@ -8,6 +8,15 @@ export function TaskSkeleton() {
         <Circle />
       </div>
       <Rectangle />
+    </div>
+  );
+}
+
+function RoutineSkeleton() {
+  return (
+    <div className="flex w-full flex-col items-center gap-5 p-10">
+      <Rectangle className="h-16 w-72" />
+      <Rectangle className="h-16 w-72" />
     </div>
   );
 }
@@ -33,3 +42,5 @@ function Circle({ className }: React.HTMLAttributes<HTMLDivElement>) {
     ></div>
   );
 }
+
+export { TaskSkeleton, RoutineSkeleton };
