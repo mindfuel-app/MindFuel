@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { type FormEvent, useState } from "react";
 import { type Task } from "~/hooks/useTasks";
 import { useUser } from "~/lib/UserContext";
+import { api } from "~/utils/api";
+import toast from "react-hot-toast";
 
 export default function RoutineForm({
   mode,
@@ -71,6 +73,17 @@ export default function RoutineForm({
     });
   };
 
+  const { mutate } = api.routines.createRoutine.useMutation({
+    onSuccess: () => {
+      setSaving(false);
+      afterSave();
+    },
+    onError: (e) => {
+      setSaving(false);
+      toast.error(e.message);
+    },
+  });
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setNameError(false);
@@ -90,8 +103,8 @@ export default function RoutineForm({
       }
     }
 
-    // await addRoutine(data)
     setTimeout(() => {
+      mutate({ routine: { name, user_id: user.id } });
       afterSave();
     }, 1000);
   }
