@@ -10,6 +10,7 @@ export const routineRouter = createTRPCRouter({
           name: z.string(),
           description: z.string().optional(),
           user_id: z.string(),
+          days: z.string(),
         }),
       })
     )
@@ -30,5 +31,39 @@ export const routineRouter = createTRPCRouter({
         },
       });
       return routines;
+    }),
+  modifyRoutine: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+        user_id: z.string(),
+        days: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const editedRoutine = await ctx.prisma.routine.update({
+        data: {
+          name: input.name,
+          description: input.description,
+          user_id: input.user_id,
+          days: input.days,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return editedRoutine;
+    }),
+  deleteRoutine: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const deletedRoutine = await ctx.prisma.routine.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      return deletedRoutine;
     }),
 });

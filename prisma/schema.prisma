@@ -103,6 +103,7 @@ model routine {
     description String?
     user_id     String
     createdAt   DateTime @default(now())
+    days        String
     task        task[]
 }
 
