@@ -4,6 +4,7 @@ export type Routine = {
   description: string | null;
   user_id: string;
   createdAt: Date;
+  days: string;
 };
 
 export function useRoutines() {

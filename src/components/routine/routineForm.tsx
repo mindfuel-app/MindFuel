@@ -128,7 +128,7 @@ export default function RoutineForm({
     }
 
     setTimeout(() => {
-      mutate({ routine: { name, user_id: user.id } });
+      mutate({ routine: { name, user_id: user.id, days: "" } });
       afterSave();
     }, 1000);
   }
