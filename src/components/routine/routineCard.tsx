@@ -12,7 +12,7 @@ export default function RoutineCard({
   tasks,
 }: {
   name: string;
-  description: string;
+  description: string | null;
   tasks: Task[];
 }) {
   const [isCardOpened, setIsCardOpened] = useState(false);

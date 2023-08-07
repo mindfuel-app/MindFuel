@@ -4,21 +4,6 @@ import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
 import { RoutineSkeleton } from "../ui/skeleton";
 
-// const userRoutines = [
-//   {
-//     id: "1",
-//     name: "Rutina mañana",
-//     description: "Todos los dias hábiles",
-//     tasks: [],
-//   },
-//   {
-//     id: "2",
-//     name: "Rutina tarde",
-//     description: "Todos los dias",
-//     tasks: [],
-//   },
-// ];
-
 export default function RoutineList() {
   const user = useUser();
   const { data: userRoutines, isLoading } = api.routines.getRoutines.useQuery({
@@ -37,6 +22,14 @@ export default function RoutineList() {
       </div>
     );
 
+  const getTasksbyRoutineId = (routineId: string) => {
+    const { data: tasks } = api.tasks.getTasksbyRoutine.useQuery({
+      routine_id: routineId,
+    });
+    if (tasks) return tasks;
+    return [];
+  };
+
   return (
     <motion.div
       initial={{ x: -10, opacity: 0 }}
@@ -53,8 +46,8 @@ export default function RoutineList() {
             {userRoutines.map((routine) => (
               <RoutineCard
                 name={routine.name}
-                description="Todos los dias"
-                tasks={[]}
+                description={routine.description}
+                tasks={getTasksbyRoutineId(routine.id)}
                 key={routine.id}
               />
             ))}
