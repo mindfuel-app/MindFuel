@@ -84,7 +84,7 @@ model task {
     category        String?
     createdAt       DateTime @default(now())
     routine_id      String?
-    routine         routine? @relation(fields: [routine_id], references: [id])
+    routine         routine? @relation(fields: [routine_id], references: [id], onDelete: Cascade)
     event_id        String?
     event           event?   @relation(fields: [event_id], references: [id])
     estimated_time  Int?
