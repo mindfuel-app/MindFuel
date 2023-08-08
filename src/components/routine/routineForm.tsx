@@ -160,7 +160,7 @@ export default function RoutineForm({
               {dayOptions.map((day) => (
                 <button
                   key={day.value}
-                  className={`no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-200 lg:hover:bg-gray-200 ${
+                  className={`no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100 ${
                     days.includes(day.value) ? "border-[1px] border-teal" : ""
                   }`}
                   onClick={(e) => {
