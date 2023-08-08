@@ -62,7 +62,12 @@ export default function RoutineCard({
       >
         <div className="-z-10 flex w-full flex-col gap-3 rounded-b-md bg-white py-5 pl-3 pr-4">
           {tasks.map((task, index) => (
-            <TaskCard number={index + 1} name={task.name} key={task.id} />
+            <TaskCard
+              id={task.id}
+              number={index + 1}
+              name={task.name}
+              key={task.id}
+            />
           ))}
         </div>
       </motion.div>

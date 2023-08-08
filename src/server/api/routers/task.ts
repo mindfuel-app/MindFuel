@@ -95,25 +95,25 @@ export const taskRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-        const task = await ctx.prisma.task.update({
-          data: {
-            name: input.name,
-            description: input.description,
-            category: input.category,
-            routine_id: input.routine_id,
-            event_id: input.event_id,
-            estimated_time: input.estimatedtime,
-            done: input.done,
-            user_id: input.user_id,
-            required_energy: input.requiredenergy,
-          },
-          where: {
-            id: input.taskId,
-          }
-        })
-        return task
-      }),
-    deleteTask: protectedProcedure
+      const task = await ctx.prisma.task.update({
+        data: {
+          name: input.name,
+          description: input.description,
+          category: input.category,
+          routine_id: input.routine_id,
+          event_id: input.event_id,
+          estimated_time: input.estimatedtime,
+          done: input.done,
+          user_id: input.user_id,
+          required_energy: input.requiredenergy,
+        },
+        where: {
+          id: input.taskId,
+        },
+      });
+      return task;
+    }),
+  deleteTask: protectedProcedure
     .input(z.object({ taskId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const task = await ctx.prisma.task.delete({
@@ -122,6 +122,5 @@ export const taskRouter = createTRPCRouter({
         },
       });
       return task;
-    })
-
+    }),
 });
