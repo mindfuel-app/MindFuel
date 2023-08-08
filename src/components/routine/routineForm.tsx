@@ -1,4 +1,8 @@
-import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ClockIcon,
+  EllipsisVerticalIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { CircularProgress } from "@mui/material";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
@@ -10,7 +14,7 @@ import toast from "react-hot-toast";
 import { dayOptions, orderDays } from "~/lib/days";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useRoutines } from "~/hooks/useRoutines";
-import ClockButton from "../clockButton";
+import TimeForm from "../timeForm";
 
 export default function RoutineForm({
   mode,
@@ -64,6 +68,7 @@ export default function RoutineForm({
   );
   const [nameError, setNameError] = useState(false);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
+  const [isClockOpen, setIsClockOpen] = useState(false);
 
   const addEmptyTask = () => {
     setTasks([
@@ -151,9 +156,12 @@ export default function RoutineForm({
     }, 1000);
   }
 
+  if (isClockOpen) return <TimeForm afterSave={() => setIsClockOpen(false)} />;
+
   return (
     <div className="p-5">
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
+
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-4 group-disabled:opacity-50">
@@ -265,7 +273,12 @@ export default function RoutineForm({
                           handleTaskChange(index, e.target.value)
                         }
                       />
-                      <ClockButton />
+                      <div
+                        onClick={() => setIsClockOpen(true)}
+                        className="no-highlight cursor-pointer rounded-full"
+                      >
+                        <ClockIcon className="h-6 w-6" />
+                      </div>
                       <XMarkIcon
                         className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
                           index == 0 ? "cursor-auto opacity-0" : ""

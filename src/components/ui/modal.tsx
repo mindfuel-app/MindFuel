@@ -17,21 +17,11 @@ export default function Modal({
   );
 }
 
-function ModalContent({
-  children,
-  mode,
-}: {
-  children: ReactNode;
-  mode?: "add" | "time";
-}) {
+function ModalContent({ children }: { children: ReactNode }) {
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-30 bg-black/50 data-[state=closed]:animate-[dialog-overlay-hide_200ms] data-[state=open]:animate-[dialog-overlay-show_200ms]" />
-      <Dialog.Content
-        className={`fixed left-1/2 top-1/2 z-40 w-full max-w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white shadow transition-transform data-[state=closed]:animate-[dialog-content-hide_200ms] data-[state=open]:animate-[dialog-content-show_200ms] min-[500px]:max-w-md ${
-          mode == "time" ? "w-60" : ""
-        }`}
-      >
+      <Dialog.Content className="fixed left-1/2 top-1/2 z-40 w-full max-w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white shadow transition-transform data-[state=closed]:animate-[dialog-content-hide_200ms] data-[state=open]:animate-[dialog-content-show_200ms] min-[500px]:max-w-md">
         {children}
       </Dialog.Content>
     </Dialog.Portal>
