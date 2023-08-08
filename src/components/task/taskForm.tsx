@@ -1,16 +1,26 @@
 import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import { type FormEvent, useState } from "react";
-import { type Task } from "~/hooks/useTasks";
+import { useTasks, type Task } from "~/hooks/useTasks";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
 import { CircularProgress } from "@mui/material";
-import { api } from "~/utils/api";
 import toast from "react-hot-toast";
 import { useUser } from "~/lib/UserContext";
 
 export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   const user = useUser();
+  const { createTasks } = useTasks({
+    onSuccess: () => {
+      setSaving(false);
+      afterSave();
+    },
+    onError: (e) => {
+      setSaving(false);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      toast.error(e.message);
+    },
+  });
   const [saving, setSaving] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([
     {
@@ -77,17 +87,6 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     });
   };
 
-  const { mutate } = api.tasks.createTask.useMutation({
-    onSuccess: () => {
-      setSaving(false);
-      afterSave();
-    },
-    onError: (e) => {
-      setSaving(false);
-      toast.error(e.message);
-    },
-  });
-
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setEmptyTaskError(false);
@@ -101,7 +100,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     }
 
     setTimeout(() => {
-      mutate({
+      createTasks({
         tasks: tasks,
       });
       afterSave();

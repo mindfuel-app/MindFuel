@@ -1,3 +1,5 @@
+import { api } from "~/utils/api";
+
 export type Task = {
   id: string;
   name: string;
@@ -12,3 +14,19 @@ export type Task = {
   user_id: string;
   required_energy: number | null;
 };
+
+export function useTasks({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onError?: (e: any) => void;
+}) {
+  const { mutate: createTasks } = api.tasks.createTask.useMutation({
+    onSuccess: onSuccess,
+    onError: onError,
+  });
+
+  return { createTasks };
+}
