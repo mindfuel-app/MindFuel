@@ -7,10 +7,14 @@ import { type Task } from "~/hooks/useTasks";
 import TaskCard from "../task/taskCard";
 
 export default function RoutineCard({
+  id,
+  days,
   name,
   description,
   tasks,
 }: {
+  id?: string;
+  days: string;
   name: string;
   description: string | null;
   tasks: Task[];
@@ -29,6 +33,7 @@ export default function RoutineCard({
           <span className="text-sm text-black">{`${tasks.length} ${
             tasks.length == 1 ? "tarea" : "tareas"
           }`}</span>
+          <span className="text-sm">{days}</span>
           <span className="text-sm font-normal">{description}</span>
         </div>
         <div className="flex items-center py-2">
@@ -40,6 +45,8 @@ export default function RoutineCard({
               <RoutineForm
                 mode="edit"
                 afterSave={() => setIsModalOpen(false)}
+                id={id}
+                initialDays={days}
                 initialName={name}
                 initialTasks={tasks}
               />

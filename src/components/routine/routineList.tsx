@@ -9,7 +9,9 @@ export default function RoutineList() {
   const { data: userRoutines, isLoading } = api.routines.getRoutines.useQuery({
     user_id: user.id,
   });
-  const { data: tasks } = api.tasks.getTasks.useQuery({ user_id: user.id });
+  const { data: tasks } = api.tasks.getTasks.useQuery({
+    user_id: user.id,
+  });
 
   if (isLoading) return <RoutineSkeleton />;
 
@@ -38,11 +40,13 @@ export default function RoutineList() {
           <ul className="flex flex-col gap-5">
             {userRoutines.map((routine) => (
               <RoutineCard
+                days={routine.days}
                 name={routine.name}
                 description={routine.description}
                 tasks={
                   tasks?.filter((task) => task.routine_id == routine.id) || []
                 }
+                id={routine.id}
                 key={routine.id}
               />
             ))}
