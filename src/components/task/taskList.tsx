@@ -3,10 +3,15 @@ import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
 import { TaskSkeleton } from "../ui/skeleton";
 import { useUser } from "~/lib/UserContext";
+import RefetchButton from "../refetchButton";
 
 export default function TaskList() {
   const user = useUser();
-  const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({
+  const {
+    data: userTasks,
+    isLoading,
+    refetch,
+  } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
 
@@ -26,8 +31,9 @@ export default function TaskList() {
     <motion.div
       initial={{ x: 10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="flex h-full flex-col items-center pb-16 text-lg font-medium"
+      className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
     >
+      <RefetchButton refetch={() => void refetch()} />
       {userTasks.length == 0 && (
         <h2 className="my-5">No hay tareas cargadas</h2>
       )}
