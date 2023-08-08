@@ -61,26 +61,55 @@ export const routineRouter = createTRPCRouter({
   modifyRoutine: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
-        name: z.string(),
-        description: z.string().optional(),
-        user_id: z.string(),
-        days: z.string(),
+        routine: z.object({
+          id: z.string(),
+          name: z.string(),
+          description: z.string().optional(),
+          user_id: z.string(),
+          days: z.string(),
+          tasks: z
+            .object({
+              name: z.string(),
+              description: z.string().nullish(),
+              category: z.string().nullish(),
+              routine_id: z.string().nullish(),
+              event_id: z.string().nullish(),
+              estimatedtime: z.number().nullish(),
+              done: z.boolean(),
+              user_id: z.string(),
+              requiredenergy: z.number().nullish(),
+            })
+            .array(),
+        }),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const routine = input.routine;
       const editedRoutine = await ctx.prisma.routine.update({
         data: {
-          name: input.name,
-          description: input.description,
-          user_id: input.user_id,
-          days: input.days,
+          name: routine.name,
+          description: routine.description,
+          user_id: routine.user_id,
+          days: routine.days,
         },
         where: {
-          id: input.id,
+          id: routine.id,
         },
       });
-      return editedRoutine;
+      await ctx.prisma.task.deleteMany({
+        where: {
+          routine_id: routine.id,
+        },
+      });
+      const updatedTasks = await Promise.all(
+        routine.tasks.map(async (task) => {
+          task.routine_id = editedRoutine.id;
+          return await ctx.prisma.task.create({
+            data: task,
+          });
+        })
+      );
+      return { editedRoutine, updatedTasks };
     }),
   deleteRoutine: protectedProcedure
     .input(z.object({ id: z.string() }))
@@ -90,6 +119,12 @@ export const routineRouter = createTRPCRouter({
           id: input.id,
         },
       });
-      return deletedRoutine;
+      const deletedTasks = await ctx.prisma.task.deleteMany({
+        where: {
+          routine_id: input.id,
+        },
+      });
+
+      return { deletedRoutine, deletedTasks };
     }),
 });
