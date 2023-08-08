@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { dayOptions, orderDays } from "~/lib/days";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useRoutines } from "~/hooks/useRoutines";
+import ClockButton from "../clockButton";
 
 export default function RoutineForm({
   mode,
@@ -156,6 +157,7 @@ export default function RoutineForm({
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-4 group-disabled:opacity-50">
+            <span className="-mt-3">{orderDays(days)}</span>
             <div className="-mt-2 flex justify-between md:justify-around">
               {dayOptions.map((day) => (
                 <button
@@ -232,7 +234,6 @@ export default function RoutineForm({
                   </motion.span>
                 )}
               </div>
-
               <div className="flex flex-col gap-3">
                 <AnimatePresence>
                   {tasks.map((task, index) => (
@@ -249,7 +250,7 @@ export default function RoutineForm({
                       }}
                       exit={{ x: 10, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="flex items-center gap-2"
+                      className="-mx-1 flex items-center gap-2"
                       key={task.id}
                     >
                       <div className="no-highlight flex cursor-pointer justify-center rounded-sm py-2 transition-colors active:bg-gray-200 lg:hover:bg-gray-200">
@@ -264,6 +265,7 @@ export default function RoutineForm({
                           handleTaskChange(index, e.target.value)
                         }
                       />
+                      <ClockButton />
                       <XMarkIcon
                         className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
                           index == 0 ? "cursor-auto opacity-0" : ""
