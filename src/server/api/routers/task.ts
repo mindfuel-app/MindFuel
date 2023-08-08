@@ -80,10 +80,10 @@ export const taskRouter = createTRPCRouter({
       return task;
     }),
   setTaskUndone: protectedProcedure
-  .input(z.object({ day: z.number() }))
-  .mutation(async({ctx, input})=>{
-    
-  }),
+    .input(z.object({ day: z.number() }))
+    .mutation(({ ctx, input }) => {
+      console.log("HOLA");
+    }),
   modifyTask: protectedProcedure
     .input(
       z.object({
