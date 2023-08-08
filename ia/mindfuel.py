@@ -6,6 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from flask_cors import CORS
 import mysql.connector as sql
+import dotenv as env
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -20,7 +21,7 @@ def recomendar():
      
     conn = sql.connect(host="aws.connect.psdb.cloud",
                    user="5223gm1qujsn5a8fdrsc",
-                   password="pscale_pw_X9beGMb7wiR31GBXvFPdj4zC3cfl5yaw7MkHNi0U1cZ",
+                   password=env(DB_PWD),
                    db="mindfuel-data",
                     )
     
