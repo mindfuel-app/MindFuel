@@ -6,22 +6,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import { type FormEvent, useState } from "react";
 import { type Task } from "~/hooks/useTasks";
 import { useUser } from "~/lib/UserContext";
-import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { dayOptions, orderDays } from "~/lib/days";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import { useRoutines } from "~/hooks/useRoutines";
 
 export default function RoutineForm({
   mode,
   afterSave,
+  id,
+  initialDays,
   initialName,
   initialTasks,
 }: {
   mode?: "create" | "edit";
   afterSave: () => void;
+  id?: string;
+  initialDays?: string;
   initialName?: string;
   initialTasks?: Task[];
 }) {
   const user = useUser();
+  const { createRoutine, editRoutine, deleteRoutine } = useRoutines({
+    onSuccess: () => {
+      setSaving(false);
+      afterSave();
+    },
+    onError: (e) => {
+      setSaving(false);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      toast.error(e.message);
+    },
+  });
   const [saving, setSaving] = useState(false);
+  const [days, setDays] = useState(initialDays ? initialDays : "");
   const [name, setName] = useState(initialName ? initialName : "");
   const [tasks, setTasks] = useState<Task[]>(
     initialTasks
@@ -93,17 +111,6 @@ export default function RoutineForm({
     });
   };
 
-  const { mutate } = api.routines.createRoutine.useMutation({
-    onSuccess: () => {
-      setSaving(false);
-      afterSave();
-    },
-    onError: (e) => {
-      setSaving(false);
-      toast.error(e.message);
-    },
-  });
-
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setNameError(false);
@@ -112,8 +119,7 @@ export default function RoutineForm({
 
     if (name == "") {
       setNameError(true);
-      setSaving(false);
-      return;
+      return setSaving(false);
     }
 
     for (const task of tasks) {
@@ -124,7 +130,22 @@ export default function RoutineForm({
     }
 
     setTimeout(() => {
-      mutate({ routine: { name, user_id: user.id, days: "", tasks } });
+      if (mode == "edit" && id) {
+        editRoutine({
+          routine: {
+            id,
+            name,
+            user_id: user.id,
+            days: orderDays(days),
+            tasks,
+          },
+        });
+      } else {
+        createRoutine({
+          routine: { name, user_id: user.id, days: orderDays(days), tasks },
+        });
+      }
+
       afterSave();
     }, 1000);
   }
@@ -134,7 +155,36 @@ export default function RoutineForm({
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
-          <div className="flex flex-col gap-5 group-disabled:opacity-50">
+          <div className="flex flex-col gap-4 group-disabled:opacity-50">
+            <div className="-mt-2 flex justify-between md:justify-around">
+              {dayOptions.map((day) => (
+                <button
+                  key={day.value}
+                  className={`no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-200 lg:hover:bg-gray-200 ${
+                    days.includes(day.value) ? "border-[1px] border-teal" : ""
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (!days.includes(day.value)) {
+                      if (days == "") return setDays(day.value);
+                      return setDays(days + `, ${day.value}`);
+                    }
+                    if (days.length == 3) return setDays("");
+                    if (days.includes(`${day.value}, `))
+                      return setDays(days.replace(`${day.value}, `, ""));
+                    setDays(days.replace(`, ${day.value}`, ""));
+                  }}
+                >
+                  <span
+                    className={`${
+                      days.includes(day.value) ? "text-teal" : "text-gray-600"
+                    }`}
+                  >
+                    {day.label}
+                  </span>
+                </button>
+              ))}
+            </div>
             <label
               className="flex flex-col gap-1"
               onClick={(e) => e.preventDefault()}
@@ -228,18 +278,34 @@ export default function RoutineForm({
               </div>
             </label>
           </div>
-          <div className="no-highlight mt-8 space-x-1 text-right">
-            <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
-              Cancelar
-            </Modal.Close>
-            <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white active:bg-teal/80 group-disabled:pointer-events-none">
-              <CircularProgress
-                color="inherit"
-                size={20}
-                className="absolute group-enabled:opacity-0"
-              />
-              <span className="group-disabled:opacity-0">Guardar</span>
-            </Button>
+          <div
+            className={`flex pt-8 ${
+              mode == "edit" ? "justify-between" : "justify-end"
+            }`}
+          >
+            {mode == "edit" && id && (
+              <div
+                onClick={() => {
+                  deleteRoutine({ id });
+                }}
+                className="no-highlight flex cursor-pointer items-center rounded-md border-[1px] border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
+              >
+                <TrashIcon className="h-5 w-5" />
+              </div>
+            )}
+            <div className="no-highlight space-x-1 text-right">
+              <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
+                Cancelar
+              </Modal.Close>
+              <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white active:bg-teal/80 group-disabled:pointer-events-none">
+                <CircularProgress
+                  color="inherit"
+                  size={20}
+                  className="absolute group-enabled:opacity-0"
+                />
+                <span className="group-disabled:opacity-0">Guardar</span>
+              </Button>
+            </div>
           </div>
         </fieldset>
       </form>
