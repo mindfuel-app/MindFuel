@@ -1,14 +1,11 @@
-from flask import Flask, render_template,request,jsonify
+from flask import Flask, request,jsonify
 import pandas as pd
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from flask_cors import CORS
-import os
-import MySQLdb # import the MySQLdb module
-from dotenv import load_dotenv
-load_dotenv()
+import mysql.connector as sql
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -21,26 +18,19 @@ def home():
 
 def recomendar():
      
-    connection = MySQLdb.connect(
-    host=os.getenv("HOST"),
-    user=os.getenv("USERNAME"),
-    passwd=os.getenv("PASSWORD"),
-    db=os.getenv("DATABASE"),
-    ssl_mode="VERIFY_IDENTITY",
-    ssl={
-            'ca': os.getenv("SSL_CERT")
-        }
-    )
-
-    # Create cursor and use it to execute SQL command
-    cursor = connection.cursor()
-    cursor.execute("select @@version")
-    version = cursor.fetchone()
-
-    if version:
-        print('Running version: ', version)
-    else:
-        print('Not connected.')
+    conn = sql.connect(host="aws.connect.psdb.cloud",
+                   user="5223gm1qujsn5a8fdrsc",
+                   password="pscale_pw_X9beGMb7wiR31GBXvFPdj4zC3cfl5yaw7MkHNi0U1cZ",
+                   db="mindfuel-data",
+                    )
+    
+    cursor = conn.cursor()
+    #select all from user / falta sacar todo de tareas y puntuacion
+    cursor.execute("SELECT * FROM User")
+    result = cursor.fetchall()
+    for row in result:
+        print(row)
+    cursor.close()
 
     tareas = pd.read_csv("./input/tareas.csv")
     ratings = pd.read_csv("./input/puntuacion.csv")
