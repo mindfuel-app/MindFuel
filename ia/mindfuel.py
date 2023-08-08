@@ -6,10 +6,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from flask_cors import CORS
 import mysql.connector as sql
-import dotenv as env
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 cors = CORS(app)
+load_dotenv()
 
 @app.route("/")
 def home():
@@ -18,21 +20,34 @@ def home():
 @app.route("/recomendar", methods = ['GET','POST'])
 
 def recomendar():
-     
-    conn = sql.connect(host="aws.connect.psdb.cloud",
-                   user="5223gm1qujsn5a8fdrsc",
-                   password=env(DB_PWD),
-                   db="mindfuel-data",
+
+    #conexión al .env
+    db_host = os.getenv("DB_HOST")
+    db_user = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD")
+    db_database = os.getenv("DB_DATABASE")
+
+    #conexion a la base de datos
+    conn = sql.connect(host=db_host,
+                   user=db_user,
+                   password=db_password,
+                   db=db_database,
                     )
     
     cursor = conn.cursor()
-    #select all from user / falta sacar todo de tareas y puntuacion
-    cursor.execute("SELECT * FROM User")
+
+    #query: falta sacar los datos necesarios para la recomendación
+    cursor.execute("SELECT * FROM task")
     result = cursor.fetchall()
+    rows_list = []
     for row in result:
-        print(row)
+        rows_list.append(row)
     cursor.close()
 
+    for row in rows_list:
+        print(row)
+
+    #borrar una vez hecha la conexion con la base de datos
     tareas = pd.read_csv("./input/tareas.csv")
     ratings = pd.read_csv("./input/puntuacion.csv")
 
