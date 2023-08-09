@@ -1,7 +1,7 @@
-import { Checkbox } from "../ui/checkbox";
 import { useTasks } from "~/hooks/useTasks";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 export default function TaskCard({
   id,
@@ -13,6 +13,7 @@ export default function TaskCard({
   name: string;
 }) {
   const [isTaskDone, setIsTaskDone] = useState(false);
+  const [showCheck, setShowCheck] = useState(false)
   const { setTaskDone } = useTasks({});
   return (
     <AnimatePresence>
@@ -27,17 +28,30 @@ export default function TaskCard({
           </div>
           <div className="relative flex w-full items-center justify-start rounded-r-md border-2 border-teal bg-white pl-3">
             <span className="text-black">{name}</span>
-            <div
-              onClick={() => {
-                setTimeout(() => {
-                  setIsTaskDone(true);
-                  setTaskDone({ task_id: id });
-                }, 200);
-              }}
-              className="group absolute -right-3 flex h-8 w-8 items-center justify-center rounded-full border-2 border-teal bg-white"
-            >
-              <Checkbox className="no-highlight border-0" />
-            </div>
+              <div
+                onClick={() => {
+                  setShowCheck(!showCheck)
+                  setTimeout(() => {
+                    setIsTaskDone(true);
+                    setTaskDone({ task_id: id });
+                  }, 250);
+                }}
+                className="cursor-pointer group absolute -right-3 flex h-8 w-8 items-center justify-center rounded-full border-2 border-teal bg-white"
+              >
+                {showCheck &&
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20,
+                    }}
+                  >
+                    <CheckIcon className="h-5 w-5 text-teal"/>
+                  </motion.div> 
+                }
+              </div>
           </div>
         </motion.div>
       )}
