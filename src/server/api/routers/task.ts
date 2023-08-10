@@ -58,7 +58,7 @@ export const taskRouter = createTRPCRouter({
   setTaskDone: protectedProcedure
     .input(z.object({ task_id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const createdAt = await ctx.prisma.task.findUnique({
+      let createdAt = await ctx.prisma.task.findUnique({
         where: {
           id: input.task_id,
         },
@@ -67,14 +67,20 @@ export const taskRouter = createTRPCRouter({
         },
       });
       if (!createdAt) return error("No task found");
-      const realTime = now() - createdAt.createdAt.getTime();
+      const today = new Date().getTime()
+      let _createdAt = createdAt.createdAt.getTime();
+      console.log(today)
+      console.log(_createdAt)
+      const realTime = Math.round((today - _createdAt)/(1000*60))
+      console.log(realTime)
+
       const task = await ctx.prisma.task.update({
         where: {
           id: input.task_id,
         },
         data: {
           done: true,
-          // real_time: realTime,
+          real_time: realTime,
         },
       });
       return task;
