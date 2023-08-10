@@ -66,6 +66,8 @@ export default function RoutineCard({
               id={task.id}
               number={index + 1}
               name={task.name}
+              isChecked={task.done}
+              isPartOfRoutine={true}
               key={task.id}
             />
           ))}

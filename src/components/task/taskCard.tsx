@@ -7,19 +7,26 @@ export default function TaskCard({
   id,
   number,
   name,
+  isChecked,
+  isPartOfRoutine,
 }: {
   id: string;
   number: number;
   name: string;
+  isChecked?: boolean;
+  isPartOfRoutine?: boolean;
 }) {
   const [isTaskDone, setIsTaskDone] = useState(false);
-  const [showCheck, setShowCheck] = useState(false);
+  const [showCheck, setShowCheck] = useState(isChecked ? isChecked : false);
   const { setTaskDone } = useTasks({});
   return (
     <AnimatePresence>
-      {!isTaskDone && (
+      {(!isTaskDone || isPartOfRoutine) && (
         <motion.div
-          exit={{ opacity: 0, x: 20 }}
+          exit={{
+            opacity: 0,
+            x: 20,
+          }}
           transition={{ duration: 0.3 }}
           className="flex w-full"
         >
