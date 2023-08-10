@@ -7,19 +7,26 @@ export default function TaskCard({
   id,
   number,
   name,
+  isChecked,
+  isPartOfRoutine,
 }: {
   id: string;
   number: number;
   name: string;
+  isChecked?: boolean;
+  isPartOfRoutine?: boolean;
 }) {
   const [isTaskDone, setIsTaskDone] = useState(false);
-  const [showCheck, setShowCheck] = useState(false)
+  const [showCheck, setShowCheck] = useState(isChecked ? isChecked : false);
   const { setTaskDone } = useTasks({});
   return (
     <AnimatePresence>
-      {!isTaskDone && (
+      {(!isTaskDone || isPartOfRoutine) && (
         <motion.div
-          exit={{ opacity: 0, x: 20 }}
+          exit={{
+            opacity: 0,
+            x: 20,
+          }}
           transition={{ duration: 0.3 }}
           className="flex w-full"
         >
@@ -28,30 +35,30 @@ export default function TaskCard({
           </div>
           <div className="relative flex w-full items-center justify-start rounded-r-md border-2 border-teal bg-white pl-3">
             <span className="text-black">{name}</span>
-              <div
-                onClick={() => {
-                  setShowCheck(!showCheck)
-                  setTimeout(() => {
-                    setIsTaskDone(true);
-                    setTaskDone({ task_id: id });
-                  }, 250);
-                }}
-                className="cursor-pointer group absolute -right-3 flex h-8 w-8 items-center justify-center rounded-full border-2 border-teal bg-white"
-              >
-                {showCheck &&
-                  <motion.div 
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 20,
-                    }}
-                  >
-                    <CheckIcon className="h-5 w-5 text-teal"/>
-                  </motion.div> 
-                }
-              </div>
+            <div
+              onClick={() => {
+                setShowCheck(!showCheck);
+                setTimeout(() => {
+                  setIsTaskDone(true);
+                  setTaskDone({ task_id: id });
+                }, 250);
+              }}
+              className="no-highlight group absolute -right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
+            >
+              {showCheck && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                  }}
+                >
+                  <CheckIcon className="h-5 w-5 text-teal" />
+                </motion.div>
+              )}
+            </div>
           </div>
         </motion.div>
       )}
