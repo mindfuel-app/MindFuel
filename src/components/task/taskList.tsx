@@ -34,15 +34,15 @@ export default function TaskList() {
       className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
     >
       <RefetchButton refetch={() => void refetch()} />
-      {userTasks.length == 0 && (
+      {userTasks.filter((task) => task.done == false).length == 0 && (
         <h2 className="my-5">No hay tareas cargadas</h2>
       )}
-      {userTasks.length > 0 && (
+      {userTasks.filter((task) => task.done == false).length > 0 && (
         <>
           <h2 className="my-5">Tareas pendientes de hoy</h2>
           <ul className="flex w-72 flex-col gap-3">
             {userTasks
-              .filter((task) => task.done != true)
+              .filter((task) => task.done == false)
               .map((task, index) => (
                 <TaskCard
                   id={task.id}
