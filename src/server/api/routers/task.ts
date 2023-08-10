@@ -74,7 +74,7 @@ export const taskRouter = createTRPCRouter({
         },
         data: {
           done: true,
-          real_time: realTime,
+          // real_time: realTime,
         },
       });
       return task;
