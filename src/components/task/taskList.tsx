@@ -41,14 +41,16 @@ export default function TaskList() {
         <>
           <h2 className="my-5">Tareas pendientes de hoy</h2>
           <ul className="flex w-72 flex-col gap-3">
-            {userTasks.map((task, index) => (
-              <TaskCard
-                id={task.id}
-                number={index + 1}
-                name={task.name}
-                key={task.id}
-              />
-            ))}
+            {userTasks
+              .filter((task) => task.done != true)
+              .map((task, index) => (
+                <TaskCard
+                  id={task.id}
+                  number={index + 1}
+                  name={task.name}
+                  key={task.id}
+                />
+              ))}
           </ul>
         </>
       )}
