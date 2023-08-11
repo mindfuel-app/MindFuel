@@ -1,6 +1,6 @@
 import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState, useRef } from "react";
 import { useTasks, type Task } from "~/hooks/useTasks";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useUser } from "~/lib/UserContext";
 
 export default function TaskForm({ afterSave }: { afterSave: () => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const user = useUser();
   const { createTasks } = useTasks({
     onSuccess: () => {
@@ -58,6 +59,9 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         required_energy: null,
       },
     ]);
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
   };
 
   const removeTask = (indexToRemove: number) => {
@@ -136,8 +140,10 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
                   </motion.span>
                 )}
               </div>
-
-              <div className="flex flex-col gap-3">
+              <div
+                ref={containerRef}
+                className="flex max-h-[200px] flex-col gap-3 overflow-y-auto overflow-x-hidden"
+              >
                 <AnimatePresence>
                   {tasks.map((task, index) => (
                     <motion.div

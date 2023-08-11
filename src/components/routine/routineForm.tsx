@@ -7,7 +7,7 @@ import { CircularProgress } from "@mui/material";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
 import { motion, AnimatePresence } from "framer-motion";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState, useRef } from "react";
 import { type Task } from "~/hooks/useTasks";
 import { useUser } from "~/lib/UserContext";
 import toast from "react-hot-toast";
@@ -31,6 +31,7 @@ export default function RoutineForm({
   initialName?: string;
   initialTasks?: Task[];
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const user = useUser();
   const { createRoutine, editRoutine, deleteRoutine } = useRoutines({
     onSuccess: () => {
@@ -88,6 +89,9 @@ export default function RoutineForm({
         required_energy: null,
       },
     ]);
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
   };
 
   const removeTask = (indexToRemove: number) => {
@@ -161,7 +165,6 @@ export default function RoutineForm({
   return (
     <div className="p-5">
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
-
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-4 group-disabled:opacity-50">
@@ -242,7 +245,10 @@ export default function RoutineForm({
                   </motion.span>
                 )}
               </div>
-              <div className="flex flex-col gap-3">
+              <div
+                ref={containerRef}
+                className="flex max-h-[200px] flex-col gap-3 overflow-y-auto overflow-x-hidden"
+              >
                 <AnimatePresence>
                   {tasks.map((task, index) => (
                     <motion.div
