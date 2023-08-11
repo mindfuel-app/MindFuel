@@ -78,7 +78,7 @@ export default function RoutineCard({
         </div>
       </motion.div>
       {isCardOpened && (
-        <motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
+        <motion.div>
           <Button className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-teal px-5 py-2">
             Empezar rutina
           </Button>
