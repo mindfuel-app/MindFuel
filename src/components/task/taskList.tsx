@@ -3,15 +3,11 @@ import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
 import { TaskSkeleton } from "../ui/skeleton";
 import { useUser } from "~/lib/UserContext";
-import RefetchButton from "../refetchButton";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 
 export default function TaskList() {
   const user = useUser();
-  const {
-    data: userTasks,
-    isLoading,
-    refetch,
-  } = api.tasks.getTasks.useQuery({
+  const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
 
@@ -33,7 +29,9 @@ export default function TaskList() {
       animate={{ x: 0, opacity: 1 }}
       className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
     >
-      <RefetchButton refetch={() => void refetch()} />
+      <div className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] active:bg-black/10 lg:hover:bg-black/10">
+        <EllipsisHorizontalIcon className="h-6 w-6" />
+      </div>
       {userTasks.filter((task) => task.done == false).length == 0 && (
         <h2 className="my-5">No hay tareas cargadas</h2>
       )}

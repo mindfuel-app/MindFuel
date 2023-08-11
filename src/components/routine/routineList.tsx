@@ -3,15 +3,10 @@ import RoutineCard from "./routineCard";
 import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
 import { RoutineSkeleton } from "../ui/skeleton";
-import RefetchButton from "../refetchButton";
 
 export default function RoutineList() {
   const user = useUser();
-  const {
-    data: userRoutines,
-    isLoading,
-    refetch,
-  } = api.routines.getRoutines.useQuery({
+  const { data: userRoutines, isLoading } = api.routines.getRoutines.useQuery({
     user_id: user.id,
   });
   const { data: tasks } = api.tasks.getTasks.useQuery({
@@ -36,7 +31,6 @@ export default function RoutineList() {
       animate={{ x: 0, opacity: 1 }}
       className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
     >
-      <RefetchButton refetch={() => void refetch()} />
       {userRoutines.length == 0 && (
         <h2 className="my-5">No hay rutinas cargadas</h2>
       )}
