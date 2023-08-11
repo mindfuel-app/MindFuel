@@ -1,6 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { now } from "next-auth/client/_utils";
 import { error } from "console";
 
 export const taskRouter = createTRPCRouter({
@@ -58,7 +57,7 @@ export const taskRouter = createTRPCRouter({
   setTaskDone: protectedProcedure
     .input(z.object({ task_id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      let createdAt = await ctx.prisma.task.findUnique({
+      const createdAt = await ctx.prisma.task.findUnique({
         where: {
           id: input.task_id,
         },
@@ -67,12 +66,12 @@ export const taskRouter = createTRPCRouter({
         },
       });
       if (!createdAt) return error("No task found");
-      const today = new Date().getTime()
-      let _createdAt = createdAt.createdAt.getTime();
-      console.log(today)
-      console.log(_createdAt)
-      const realTime = Math.round((today - _createdAt)/(1000*60))
-      console.log(realTime)
+      const today = new Date().getTime();
+      const _createdAt = createdAt.createdAt.getTime();
+      console.log(today);
+      console.log(_createdAt);
+      const realTime = Math.round((today - _createdAt) / (1000 * 60));
+      console.log(realTime);
 
       const task = await ctx.prisma.task.update({
         where: {
@@ -87,7 +86,7 @@ export const taskRouter = createTRPCRouter({
     }),
   setTaskUndone: protectedProcedure
     .input(z.object({ day: z.number() }))
-    .mutation(({ ctx, input }) => {
+    .mutation(({}) => {
       console.log("HOLA");
     }),
   modifyTask: protectedProcedure
