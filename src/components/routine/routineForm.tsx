@@ -160,7 +160,10 @@ export default function RoutineForm({
     }, 1000);
   }
 
-  if (isClockOpen) return <TimeForm afterSave={() => setIsClockOpen(false)} />;
+  if (isClockOpen)
+    return (
+      <TimeForm initialTime={86320} afterSave={() => setIsClockOpen(false)} />
+    );
 
   return (
     <div className="p-5">
