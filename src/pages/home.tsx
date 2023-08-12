@@ -12,7 +12,6 @@ import TaskList from "../components/task/taskList";
 import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import { send } from "process";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
