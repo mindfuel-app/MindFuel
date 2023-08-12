@@ -27,7 +27,9 @@ export default function Home() {
 
   if (!sessionData) return;
 
-  Notification.requestPermission()
+  Notification.requestPermission().catch((err) => {
+    alert(err)
+  })
     
 
   const sendNotification = (str:string) => {
