@@ -52,6 +52,8 @@ model User {
     password      String?
     emailVerified DateTime?
     image         String?
+    puntos        Int       @default(0)
+    createdAt     DateTime  @default(now())
     accounts      Account[]
     sessions      Session[]
 }
