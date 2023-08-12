@@ -12,6 +12,7 @@ import TaskList from "../components/task/taskList";
 import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
+import { send } from "process";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -26,12 +27,21 @@ export default function Home() {
 
   if (!sessionData) return;
 
+  Notification.requestPermission()
+    
+
+  const sendNotification = (str:string) => {
+    new Notification(""+str)
+    console.log("notification sent")
+  }
+
   return (
     <>
       <Head>
         <title>MindFuel</title>
       </Head>
       <Layout sessionData={sessionData}>
+      <button id="notification" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>sendNotification("str")}></button>
         <Tabs defaultValue="tareas" className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
