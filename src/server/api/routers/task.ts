@@ -55,24 +55,9 @@ export const taskRouter = createTRPCRouter({
     }),
 
   setTaskDone: protectedProcedure
-    .input(z.object({ task_id: z.string() }))
+    .input(z.object({ task_id: z.string(), realTime: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const createdAt = await ctx.prisma.task.findUnique({
-        where: {
-          id: input.task_id,
-        },
-        select: {
-          createdAt: true,
-        },
-      });
-      if (!createdAt) return error("No task found");
-      const today = new Date().getTime();
-      const _createdAt = createdAt.createdAt.getTime();
-      console.log(today);
-      console.log(_createdAt);
-      const realTime = Math.round((today - _createdAt) / (1000 * 60));
-      console.log(realTime);
-
+      const realTime=input.realTime;
       const task = await ctx.prisma.task.update({
         where: {
           id: input.task_id,
@@ -84,11 +69,27 @@ export const taskRouter = createTRPCRouter({
       });
       return task;
     }),
+
   setTaskUndone: protectedProcedure
-    .input(z.object({ day: z.number() }))
-    .mutation(({}) => {
-      console.log("HOLA");
+    .input(z.object({ tasks: z.string().array() }))
+    .mutation(async({ctx, input}) => {
+      const tasks=input.tasks;
+      const updatedTasks = await Promise.all(
+        tasks.map(async (task) => {
+          await ctx.prisma.task.update({
+            where: {
+              id: task,
+            },
+            data: {
+              done: false,
+              real_time: null,
+            },
+          });
+        })
+      );
+      return updatedTasks;
     }),
+
   modifyTask: protectedProcedure
     .input(
       z.object({
@@ -123,6 +124,7 @@ export const taskRouter = createTRPCRouter({
       });
       return task;
     }),
+    
   deleteTask: protectedProcedure
     .input(z.object({ taskId: z.string() }))
     .mutation(async ({ ctx, input }) => {
