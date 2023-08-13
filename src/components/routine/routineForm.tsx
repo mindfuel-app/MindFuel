@@ -250,7 +250,7 @@ export default function RoutineForm({
               </div>
               <div
                 ref={containerRef}
-                className="flex max-h-[200px] flex-col gap-3 overflow-y-auto overflow-x-hidden"
+                className="flex max-h-[200px] flex-col gap-3 overflow-y-auto overflow-x-hidden scrollbar-track-white scrollbar-thumb-slate-200 lg:scrollbar-thin"
               >
                 <AnimatePresence>
                   {tasks.map((task, index) => (
@@ -321,7 +321,7 @@ export default function RoutineForm({
               <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
                 Cancelar
               </Modal.Close>
-              <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white active:bg-teal/80 group-disabled:pointer-events-none">
+              <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80">
                 <CircularProgress
                   color="inherit"
                   size={20}
