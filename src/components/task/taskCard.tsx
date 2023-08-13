@@ -40,7 +40,7 @@ export default function TaskCard({
                 setShowCheck(!showCheck);
                 setTimeout(() => {
                   setIsTaskDone(true);
-                  setTaskDone({ task_id: id });
+                  setTaskDone({ task_id: id, realTime: 15 }); //puse 15 para que no me tire error
                 }, 250);
               }}
               className="no-highlight group absolute -right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"

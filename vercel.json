@@ -1,8 +1,0 @@
-{
-    "crons": [
-      {
-        "path": "/src/pages/api/cron/setTasksUndone.tsx",
-        "schedule": "0 3 * * *"
-      }
-    ]
-  }

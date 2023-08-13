@@ -26,12 +26,23 @@ export default function Home() {
 
   if (!sessionData) return;
 
+  Notification.requestPermission().catch((err) => {
+    alert(err)
+  })
+    
+
+  const sendNotification = () => {
+    new Notification("Bienvenido a MindFuel")
+    console.log("notification sent")
+  }
+
   return (
     <>
       <Head>
         <title>MindFuel</title>
       </Head>
       <Layout sessionData={sessionData}>
+      <button id="notification" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>sendNotification()}>Probar Notificacion</button>
         <Tabs defaultValue="tareas" className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
