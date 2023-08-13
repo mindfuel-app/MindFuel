@@ -123,10 +123,7 @@ function Navigation() {
 function SideMenu({ closeMenu }: { closeMenu: () => void }) {
   return (
     <>
-      <div
-        onClick={closeMenu}
-        className="fixed inset-0 z-30 bg-black/50 data-[state=closed]:animate-[dialog-overlay-hide_200ms] data-[state=open]:animate-[dialog-overlay-show_200ms]"
-      />
+      <div onClick={closeMenu} className="fixed inset-0 z-30 bg-black/50" />
       <motion.div
         initial={{ width: 0 }}
         animate={{
