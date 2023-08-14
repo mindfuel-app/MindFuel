@@ -29,7 +29,12 @@ export default function TimeForm({
       </div>
       <div className="flex flex-col items-center gap-5 pb-2 pt-6">
         <InputFields initialTime={initialTime} />
-        <Button className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2">
+        <Button
+          onClick={() => {
+            afterSave();
+          }}
+          className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"
+        >
           <CheckIcon className="h-16 w-16" />
         </Button>
       </div>
