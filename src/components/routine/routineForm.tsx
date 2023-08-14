@@ -171,7 +171,13 @@ export default function RoutineForm({
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-4 group-disabled:opacity-50">
-            <span className="-mt-3">{orderDays(days)}</span>
+            <span className="-mt-3 h-6">
+              {orderDays(days).length == 33
+                ? "Todos los dias"
+                : orderDays(days).length == 0
+                ? "Nunca"
+                : orderDays(days)}
+            </span>
             <div className="-mt-2 flex justify-between md:justify-around">
               {dayOptions.map((day) => (
                 <button
