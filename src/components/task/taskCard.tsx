@@ -18,7 +18,7 @@ export default function TaskCard({
 }) {
   const [isTaskDone, setIsTaskDone] = useState(false);
   const [showCheck, setShowCheck] = useState(isChecked ? isChecked : false);
-  const { setTaskDone } = useTasks({});
+  const { setTaskDone, setTaskUndone } = useTasks({});
   return (
     <AnimatePresence>
       {(!isTaskDone || isPartOfRoutine) && (
@@ -27,7 +27,6 @@ export default function TaskCard({
             opacity: 0,
             x: 20,
           }}
-          transition={{ duration: 0.3 }}
           className="flex w-full"
         >
           <div className="w-[15%] rounded-l-md bg-teal p-2 text-center text-white">
@@ -39,8 +38,13 @@ export default function TaskCard({
               onClick={() => {
                 setShowCheck(!showCheck);
                 setTimeout(() => {
-                  setIsTaskDone(true);
-                  setTaskDone({ task_id: id, realTime: 15 }); //puse 15 para que no me tire error
+                  if (showCheck) {
+                    setIsTaskDone(false);
+                    setTaskUndone({ tasks: [id] });
+                  } else {
+                    setIsTaskDone(true);
+                    setTaskDone({ task_id: id, realTime: 15 }); //puse 15 para que no me tire error
+                  }
                 }, 250);
               }}
               className="no-highlight group absolute -right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
