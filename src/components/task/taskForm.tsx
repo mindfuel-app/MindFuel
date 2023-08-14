@@ -1,4 +1,8 @@
-import { EllipsisVerticalIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  CalendarDaysIcon,
+  EllipsisVerticalIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import { type FormEvent, useState, useRef } from "react";
 import { useTasks, type Task } from "~/hooks/useTasks";
@@ -40,6 +44,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     },
   ]);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const addEmptyTask = () => {
     setTasks([
@@ -159,7 +164,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
                       }}
                       exit={{ x: 10, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="flex items-center gap-2"
+                      className="-mx-1 flex items-center gap-2"
                       key={task.id}
                     >
                       <div className="no-highlight flex cursor-pointer justify-center rounded-sm py-2 transition-colors active:bg-gray-200 lg:hover:bg-gray-200">
@@ -174,6 +179,12 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
                           handleTaskChange(index, e.target.value)
                         }
                       />
+                      <div
+                        onClick={() => setIsCalendarOpen(true)}
+                        className="no-highlight cursor-pointer rounded-full"
+                      >
+                        <CalendarDaysIcon className="h-6 w-6" />
+                      </div>
                       <XMarkIcon
                         className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
                           index == 0 ? "cursor-auto opacity-0" : ""
