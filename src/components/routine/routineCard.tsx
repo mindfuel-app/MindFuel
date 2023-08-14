@@ -5,7 +5,7 @@ import Modal from "../ui/modal";
 import RoutineForm from "./routineForm";
 import { type Task } from "~/hooks/useTasks";
 import TaskCard from "../task/taskCard";
-import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function RoutineCard({
   id,
@@ -34,7 +34,13 @@ export default function RoutineCard({
           <span className="text-sm text-black">{`${tasks.length} ${
             tasks.length == 1 ? "tarea" : "tareas"
           }`}</span>
-          <span className="text-sm">{days}</span>
+          <span className="text-sm">
+            {days.length == 33
+              ? "Todos los dias"
+              : days.length == 0
+              ? "Nunca"
+              : days}
+          </span>
           <span className="text-sm font-normal">{description}</span>
         </div>
         <div className="flex items-center py-2">
@@ -77,12 +83,13 @@ export default function RoutineCard({
           ))}
         </div>
       </motion.div>
-      {isCardOpened && (
-        <motion.div>
-          <Button className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-teal px-5 py-2">
-            Empezar rutina
-          </Button>
-        </motion.div>
+      {isCardOpened && id && (
+        <Link
+          href={`/rutinas/${id}`}
+          className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-teal px-4 py-[6px]"
+        >
+          <span className="text-base">Empezar rutina</span>
+        </Link>
       )}
     </div>
   );

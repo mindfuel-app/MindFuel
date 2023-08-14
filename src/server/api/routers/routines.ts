@@ -58,6 +58,16 @@ export const routineRouter = createTRPCRouter({
       });
       return routines;
     }),
+  getRoutineById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const routine = await ctx.prisma.routine.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      return routine;
+    }),
   modifyRoutine: protectedProcedure
     .input(
       z.object({
