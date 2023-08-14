@@ -171,7 +171,7 @@ export default function RoutineForm({
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-4 group-disabled:opacity-50">
-            <span className="-mt-3 h-6">
+            <span className="-mt-3">
               {orderDays(days).length == 33
                 ? "Todos los dias"
                 : orderDays(days).length == 0
