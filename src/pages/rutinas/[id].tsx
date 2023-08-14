@@ -49,17 +49,7 @@ export default function Routine() {
           </div>
           {routineProgress < tasks.length && (
             <div className="flex w-full flex-col text-left font-medium">
-              <div className="jutify-start flex w-full gap-10">
-                Tareas
-                <button
-                  onClick={() => {
-                    if (routineProgress > 0)
-                      setRoutineProgress(routineProgress - 1);
-                  }}
-                >
-                  Atras
-                </button>
-              </div>
+              <div className="jutify-start flex w-full">Tareas</div>
               <ul className="flex max-w-xl flex-col gap-3 py-3">
                 {tasks.map((task, index) => {
                   if (index == routineProgress) {
@@ -85,39 +75,41 @@ export default function Routine() {
           )}
           {routineProgress == tasks.length && <SuccessMessage />}
         </div>
-        <div className="no-highlight fixed bottom-0 w-full bg-white py-3">
-          <div
-            onClick={() => {
-              if (routineProgress < tasks.length)
-                setRoutineProgress(routineProgress + 1);
-            }}
-            className="absolute -top-8 left-1/2 flex h-14 w-14 -translate-x-1/2 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
-          >
-            <CheckIcon className="h-8 w-8 text-white" />
-          </div>
-          <div className="flex w-full justify-around">
-            <button
-              className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
-            >
-              <PlayIcon className="h-6 w-6" />
-              <span className="text-xs font-medium min-[375px]:text-sm">
-                Comenzar
-              </span>
-            </button>
-            <button
+        {routineProgress < tasks.length && (
+          <div className="no-highlight fixed bottom-0 w-full bg-white py-3">
+            <div
               onClick={() => {
                 if (routineProgress < tasks.length)
                   setRoutineProgress(routineProgress + 1);
               }}
-              className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
+              className="absolute -top-8 left-1/2 flex h-14 w-14 -translate-x-1/2 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
             >
-              <ChevronDoubleRightIcon className="h-5 w-5" />
-              <span className="text-xs font-medium min-[375px]:text-sm">
-                Saltear
-              </span>
-            </button>
+              <CheckIcon className="h-8 w-8 text-white" />
+            </div>
+            <div className="flex w-full justify-around">
+              <button
+                className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
+              >
+                <PlayIcon className="h-6 w-6" />
+                <span className="text-xs font-medium min-[375px]:text-sm">
+                  Comenzar
+                </span>
+              </button>
+              <button
+                onClick={() => {
+                  if (routineProgress < tasks.length)
+                    setRoutineProgress(routineProgress + 1);
+                }}
+                className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
+              >
+                <ChevronDoubleRightIcon className="h-5 w-5" />
+                <span className="text-xs font-medium min-[375px]:text-sm">
+                  Saltear
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
@@ -151,7 +143,7 @@ function ActiveTask({
 
 function InactiveTask({ name, isDone }: { name: string; isDone: boolean }) {
   return (
-    <motion.div className="rounded-lg bg-teal p-3 md:p-2">
+    <motion.div className="rounded-lg bg-teal p-2">
       <div
         className={`flex items-center ${
           isDone ? "justify-between" : "justify-start"
