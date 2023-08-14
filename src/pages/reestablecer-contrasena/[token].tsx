@@ -23,10 +23,6 @@ export default function ReestablecerContraseña() {
   const { mutate: resetPassword } = api.resetPwd.resetPwd.useMutation();
   const { mutate: deleteToken } =
     api.resetPwd.deletePwdResetToken.useMutation();
-  const { data: checkToken } = api.resetPwd.checkValidToken.useQuery(
-    { token: token as string },
-    { enabled: token !== undefined }
-  );
   const [isFormDisabled, setIsFormDisabled] = useState(false);
   const [isPasswordMatch, setIsPasswordMatch] = useState(true);
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
