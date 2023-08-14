@@ -16,15 +16,18 @@ export default function TimeForm({
       className="p-5"
     >
       <div className="no-highlight flex w-full justify-end active:text-gray-600 lg:hover:text-gray-600">
-        <XMarkIcon
-          className="h-5 w-5 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            afterSave();
-          }}
-        />
+        <div className="flex w-full items-center justify-between">
+          <h2 className="text-xl">Duracion de tarea</h2>
+          <XMarkIcon
+            className="h-5 w-5 cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              afterSave();
+            }}
+          />
+        </div>
       </div>
-      <div className="flex flex-col items-center gap-5 py-3">
+      <div className="flex flex-col items-center gap-5 pb-2 pt-6">
         <InputFields initialTime={initialTime} />
         <Button className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2">
           <CheckIcon className="h-16 w-16" />
@@ -46,9 +49,7 @@ function InputFields({ initialTime }: { initialTime: number }) {
           type="number"
           max={24}
           className="w-12 border-[1px] border-gray-400 outline-none"
-          onFocus={(e) => {
-            e.target.value = initialHours.toString();
-          }}
+          defaultValue={initialHours}
           onChange={(e) => {
             if (Number(e.target.value) > 24)
               e.target.value = e.target.value.slice(
@@ -64,9 +65,7 @@ function InputFields({ initialTime }: { initialTime: number }) {
           type="number"
           max={60}
           className="w-12 border-[1px] border-gray-400 outline-none"
-          onFocus={(e) => {
-            e.target.value = initialMinutes.toString();
-          }}
+          defaultValue={initialMinutes}
           onChange={(e) => {
             if (Number(e.target.value) > 60)
               e.target.value = e.target.value.slice(
@@ -85,9 +84,7 @@ function InputFields({ initialTime }: { initialTime: number }) {
           type="number"
           max={60}
           className="w-12 border-[1px] border-gray-400 outline-none"
-          onFocus={(e) => {
-            e.target.value = initialSeconds.toString();
-          }}
+          defaultValue={initialSeconds}
           onChange={(e) => {
             if (Number(e.target.value) > 60)
               e.target.value = e.target.value.slice(
