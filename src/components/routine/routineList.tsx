@@ -42,7 +42,7 @@ export default function RoutineList() {
               <RoutineCard
                 days={routine.days}
                 name={routine.name}
-                category={routine.category}
+                category={routine.category || "Otro"}
                 tasks={
                   tasks?.filter((task) => task.routine_id == routine.id) || []
                 }
