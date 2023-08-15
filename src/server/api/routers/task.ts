@@ -53,11 +53,20 @@ export const taskRouter = createTRPCRouter({
       });
       return tasks;
     }),
-
+  getTaskById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      return task;
+    }),
   setTaskDone: protectedProcedure
     .input(z.object({ task_id: z.string(), realTime: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const realTime=input.realTime;
+      const realTime = input.realTime;
       const task = await ctx.prisma.task.update({
         where: {
           id: input.task_id,
@@ -72,8 +81,8 @@ export const taskRouter = createTRPCRouter({
 
   setTaskUndone: protectedProcedure
     .input(z.object({ tasks: z.string().array() }))
-    .mutation(async({ctx, input}) => {
-      const tasks=input.tasks;
+    .mutation(async ({ ctx, input }) => {
+      const tasks = input.tasks;
       const updatedTasks = await Promise.all(
         tasks.map(async (task) => {
           await ctx.prisma.task.update({
@@ -124,7 +133,19 @@ export const taskRouter = createTRPCRouter({
       });
       return task;
     }),
-    
+  updateTaskTime: protectedProcedure
+    .input(z.object({ id: z.string(), estimated_time: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.update({
+        data: {
+          estimated_time: input.estimated_time,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+      return task;
+    }),
   deleteTask: protectedProcedure
     .input(z.object({ taskId: z.string() }))
     .mutation(async ({ ctx, input }) => {

@@ -107,6 +107,7 @@ export default function RoutineForm({
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isClockOpen, setIsClockOpen] = useState(false);
   const [isComboboxOpen, setIsComboboxOpen] = useState(false);
+  const [activeTask, setActiveTask] = useState("");
 
   const addEmptyTask = () => {
     setTasks([
@@ -200,7 +201,10 @@ export default function RoutineForm({
 
   if (isClockOpen)
     return (
-      <TimeForm initialTime={86320} afterSave={() => setIsClockOpen(false)} />
+      <TimeForm
+        activeTask={activeTask}
+        afterSave={() => setIsClockOpen(false)}
+      />
     );
 
   return (
@@ -380,7 +384,10 @@ export default function RoutineForm({
                         }
                       />
                       <div
-                        onClick={() => setIsClockOpen(true)}
+                        onClick={() => {
+                          setActiveTask(task.id);
+                          setIsClockOpen(true);
+                        }}
                         className="no-highlight cursor-pointer rounded-full"
                       >
                         <ClockIcon className="h-6 w-6" />
