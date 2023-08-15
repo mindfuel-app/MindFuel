@@ -43,7 +43,7 @@ export default function TaskCard({
                     setTaskUndone({ tasks: [id] });
                   } else {
                     setIsTaskDone(true);
-                    setTaskDone({ task_id: id, realTime: 15 }); //puse 15 para que no me tire error
+                    setTaskDone({ task_id: id, realTime: 0 });
                   }
                 }, 250);
               }}
