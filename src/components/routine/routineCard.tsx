@@ -11,13 +11,13 @@ export default function RoutineCard({
   id,
   days,
   name,
-  description,
+  category,
   tasks,
 }: {
   id?: string;
   days: string;
   name: string;
-  description: string | null;
+  category: string;
   tasks: Task[];
 }) {
   const [isCardOpened, setIsCardOpened] = useState(false);
@@ -41,7 +41,6 @@ export default function RoutineCard({
               ? "Nunca"
               : days}
           </span>
-          <span className="text-sm font-normal">{description}</span>
         </div>
         <div className="flex items-center py-2">
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -55,6 +54,7 @@ export default function RoutineCard({
                 id={id}
                 initialDays={days}
                 initialName={name}
+                initialCategory={category}
                 initialTasks={tasks}
               />
             </Modal.Content>

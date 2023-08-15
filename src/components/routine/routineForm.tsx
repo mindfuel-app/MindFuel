@@ -15,6 +15,37 @@ import { dayOptions, orderDays } from "~/lib/days";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useRoutines } from "~/hooks/useRoutines";
 import TimeForm from "../timeForm";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "~/lib/utils";
+import { Command, CommandGroup, CommandItem } from "../ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+
+const categories = [
+  {
+    value: "fitness",
+    label: "Fitness",
+  },
+  {
+    value: "higiene",
+    label: "Higiene",
+  },
+  {
+    value: "salud",
+    label: "Salud",
+  },
+  {
+    value: "trabajo",
+    label: "Trabajo",
+  },
+  {
+    value: "estudio",
+    label: "Estudio",
+  },
+  {
+    value: "otro",
+    label: "Otro",
+  },
+];
 
 export default function RoutineForm({
   mode,
@@ -22,6 +53,7 @@ export default function RoutineForm({
   id,
   initialDays,
   initialName,
+  initialCategory,
   initialTasks,
 }: {
   mode?: "create" | "edit";
@@ -29,6 +61,7 @@ export default function RoutineForm({
   id?: string;
   initialDays?: string;
   initialName?: string;
+  initialCategory?: string;
   initialTasks?: Task[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,6 +80,9 @@ export default function RoutineForm({
   const [saving, setSaving] = useState(false);
   const [days, setDays] = useState(initialDays ? initialDays : "");
   const [name, setName] = useState(initialName ? initialName : "");
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialCategory ? initialCategory : ""
+  );
   const [tasks, setTasks] = useState<Task[]>(
     initialTasks
       ? initialTasks
@@ -70,6 +106,7 @@ export default function RoutineForm({
   const [nameError, setNameError] = useState(false);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isClockOpen, setIsClockOpen] = useState(false);
+  const [isComboboxOpen, setIsComboboxOpen] = useState(false);
 
   const addEmptyTask = () => {
     setTasks([
@@ -145,6 +182,7 @@ export default function RoutineForm({
           routine: {
             id,
             name,
+            category: selectedCategory,
             user_id: user.id,
             days: orderDays(days),
             tasks,
@@ -229,6 +267,59 @@ export default function RoutineForm({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
+            </label>
+            <label
+              className="flex flex-col gap-1"
+              onClick={(e) => e.preventDefault()}
+            >
+              <span>Categoría</span>
+              <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={isComboboxOpen}
+                    className="no-highlight w-[200px] justify-between border-gray-400"
+                  >
+                    {selectedCategory
+                      ? categories.find(
+                          (category) => category.value === selectedCategory
+                        )?.label
+                      : "Seleccionar categoría"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandGroup>
+                      {categories.map((category) => (
+                        <CommandItem
+                          key={category.value}
+                          onSelect={(currentValue) => {
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                            setSelectedCategory(
+                              currentValue === selectedCategory
+                                ? ""
+                                : currentValue
+                            );
+                            setIsComboboxOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedCategory === category.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {category.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </label>
             <label
               className="flex flex-col gap-3"

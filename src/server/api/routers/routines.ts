@@ -8,7 +8,7 @@ export const routineRouter = createTRPCRouter({
       z.object({
         routine: z.object({
           name: z.string(),
-          description: z.string().optional(),
+          category: z.string().optional(),
           user_id: z.string(),
           days: z.string(),
           tasks: z
@@ -33,7 +33,7 @@ export const routineRouter = createTRPCRouter({
       const createdRoutine = await ctx.prisma.routine.create({
         data: {
           name: routine.name,
-          description: routine.description,
+          category: routine.category,
           user_id: routine.user_id,
           days: routine.days,
         },
@@ -74,7 +74,7 @@ export const routineRouter = createTRPCRouter({
         routine: z.object({
           id: z.string(),
           name: z.string(),
-          description: z.string().optional(),
+          category: z.string().optional(),
           user_id: z.string(),
           days: z.string(),
           tasks: z
@@ -98,7 +98,7 @@ export const routineRouter = createTRPCRouter({
       const editedRoutine = await ctx.prisma.routine.update({
         data: {
           name: routine.name,
-          description: routine.description,
+          category: routine.category,
           user_id: routine.user_id,
           days: routine.days,
         },

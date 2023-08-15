@@ -102,6 +102,7 @@ model task {
 model routine {
     id          String   @id @default(cuid())
     name        String
+    category    String?
     description String?
     user_id     String
     createdAt   DateTime @default(now())
