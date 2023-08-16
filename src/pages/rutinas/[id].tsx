@@ -2,7 +2,11 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Header from "~/components/header";
-import { PlayIcon, ChevronDoubleRightIcon } from "@heroicons/react/24/solid";
+import {
+  PlayIcon,
+  ChevronDoubleRightIcon,
+  PauseIcon,
+} from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Progress } from "~/components/ui/progressBar";
 import { useEffect, useState } from "react";
@@ -21,6 +25,7 @@ export default function Routine() {
     routine_id: router.query.id as string,
   });
   const [routineProgress, setRoutineProgress] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(true);
 
   if (status == "unauthenticated") return void router.push("/signin");
 
@@ -57,6 +62,7 @@ export default function Routine() {
                       <ActiveTask
                         name={task.name}
                         estimatedTime={task.estimated_time || null}
+                        isTimerRunning={isTimerRunning}
                         key={task.id}
                       />
                     );
@@ -88,11 +94,16 @@ export default function Routine() {
             </div>
             <div className="flex w-full justify-around">
               <button
+                onClick={() => setIsTimerRunning(!isTimerRunning)}
                 className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
               >
-                <PlayIcon className="h-6 w-6" />
+                {isTimerRunning ? (
+                  <PauseIcon className="h-6 w-6" />
+                ) : (
+                  <PlayIcon className="h-6 w-6" />
+                )}
                 <span className="text-xs font-medium min-[375px]:text-sm">
-                  Comenzar
+                  {isTimerRunning ? "Pausar" : "Reanudar"}
                 </span>
               </button>
               <button
@@ -115,18 +126,24 @@ export default function Routine() {
   );
 }
 
-function CountdownTimer({ initialSeconds }: { initialSeconds: number }) {
+function CountdownTimer({
+  initialSeconds,
+  isRunning,
+}: {
+  initialSeconds: number;
+  isRunning: boolean;
+}) {
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
 
   useEffect(() => {
-    if (secondsLeft > 0) {
+    if (secondsLeft > 0 && isRunning) {
       const interval = setInterval(() => {
         setSecondsLeft((prevSeconds) => prevSeconds - 1);
       }, 1000);
 
       return () => clearInterval(interval);
     }
-  }, [secondsLeft]);
+  }, [secondsLeft, isRunning]);
 
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
@@ -135,9 +152,9 @@ function CountdownTimer({ initialSeconds }: { initialSeconds: number }) {
     <>
       <div className="flex">
         <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
-          <span>{`${minutes.toString().length == 1 ? `0${minutes}` : minutes}:${
-            seconds.toString().length == 1 ? `0${seconds}` : seconds
-          }`}</span>
+          <span>{`${minutes.toString().padStart(2, "0")}:${seconds
+            .toString()
+            .padStart(2, "0")}`}</span>
         </div>
         <div
           onClick={() => setSecondsLeft(initialSeconds)}
@@ -157,9 +174,11 @@ function CountdownTimer({ initialSeconds }: { initialSeconds: number }) {
 function ActiveTask({
   name,
   estimatedTime,
+  isTimerRunning,
 }: {
   name: string;
   estimatedTime: number | null;
+  isTimerRunning: boolean;
 }) {
   return (
     <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
@@ -168,7 +187,12 @@ function ActiveTask({
         {name}
         {estimatedTime && <span>{` - ${estimatedTime / 60} min`}</span>}
       </div>
-      {estimatedTime && <CountdownTimer initialSeconds={estimatedTime} />}
+      {estimatedTime && (
+        <CountdownTimer
+          initialSeconds={estimatedTime}
+          isRunning={isTimerRunning}
+        />
+      )}
     </div>
   );
 }
