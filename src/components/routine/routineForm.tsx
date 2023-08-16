@@ -107,7 +107,8 @@ export default function RoutineForm({
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isClockOpen, setIsClockOpen] = useState(false);
   const [isComboboxOpen, setIsComboboxOpen] = useState(false);
-  const [activeTask, setActiveTask] = useState("");
+  const [activeTaskId, setActiveTaskId] = useState("");
+  const [activeTaskIndex, setActiveTaskIndex] = useState<number>();
 
   const addEmptyTask = () => {
     setTasks([
@@ -199,13 +200,29 @@ export default function RoutineForm({
     }, 1000);
   }
 
-  if (isClockOpen)
+  if (isClockOpen && activeTaskIndex !== undefined) {
     return (
       <TimeForm
-        activeTask={activeTask}
-        afterSave={() => setIsClockOpen(false)}
+        taskId={activeTaskId}
+        taskIndex={activeTaskIndex}
+        afterSave={() => {
+          setIsClockOpen(false);
+          const time = localStorage.getItem(`${activeTaskIndex}`);
+          if (time) {
+            setTasks((prevTasks) => {
+              const updatedTasks = [...prevTasks];
+              updatedTasks[activeTaskIndex] = {
+                ...updatedTasks[activeTaskIndex],
+                estimated_time: Number(time),
+              } as Task;
+              return updatedTasks;
+            });
+          }
+          localStorage.removeItem(`${activeTaskIndex}`);
+        }}
       />
     );
+  }
 
   return (
     <div className="p-5">
@@ -385,7 +402,8 @@ export default function RoutineForm({
                       />
                       <div
                         onClick={() => {
-                          setActiveTask(task.id);
+                          setActiveTaskId(task.id);
+                          setActiveTaskIndex(index);
                           setIsClockOpen(true);
                         }}
                         className="no-highlight cursor-pointer rounded-full"

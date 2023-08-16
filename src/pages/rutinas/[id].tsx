@@ -5,7 +5,7 @@ import Header from "~/components/header";
 import { PlayIcon, ChevronDoubleRightIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Progress } from "~/components/ui/progressBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import Head from "next/head";
 import { motion } from "framer-motion";
@@ -40,7 +40,7 @@ export default function Routine() {
             className="max-w-lg"
             value={(100 / tasks.length) * routineProgress}
           />
-          <div className="flex w-[300px] flex-col rounded-md bg-teal p-2 font-medium text-white shadow-xl">
+          <div className="flex w-[270px] flex-col rounded-md bg-teal p-2 font-medium text-white shadow-xl min-[350px]:w-[300px]">
             <h2 className="text-lg">{routine.name}</h2>
             <span className="text-sm text-black">{`${tasks.length} ${
               tasks.length == 1 ? "tarea" : "tareas"
@@ -56,7 +56,7 @@ export default function Routine() {
                     return (
                       <ActiveTask
                         name={task.name}
-                        estimatedTime={task.estimated_time || 5}
+                        estimatedTime={task.estimated_time || null}
                         key={task.id}
                       />
                     );
@@ -115,6 +115,45 @@ export default function Routine() {
   );
 }
 
+function CountdownTimer({ initialSeconds }: { initialSeconds: number }) {
+  const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
+
+  useEffect(() => {
+    if (secondsLeft > 0) {
+      const interval = setInterval(() => {
+        setSecondsLeft((prevSeconds) => prevSeconds - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [secondsLeft]);
+
+  const minutes = Math.floor(secondsLeft / 60);
+  const seconds = secondsLeft % 60;
+
+  return (
+    <>
+      <div className="flex">
+        <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
+          <span>{`${minutes.toString().length == 1 ? `0${minutes}` : minutes}:${
+            seconds.toString().length == 1 ? `0${seconds}` : seconds
+          }`}</span>
+        </div>
+        <div
+          onClick={() => setSecondsLeft(initialSeconds)}
+          className="no-highlight flex cursor-pointer items-center rounded-r-md bg-orange px-2 text-white"
+        >
+          <span>Re-setear</span>
+        </div>
+      </div>
+      <Progress
+        className="my-2"
+        value={(100 / initialSeconds) * (initialSeconds - secondsLeft)}
+      />
+    </>
+  );
+}
+
 function ActiveTask({
   name,
   estimatedTime,
@@ -123,27 +162,20 @@ function ActiveTask({
   estimatedTime: number | null;
 }) {
   return (
-    <motion.div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
+    <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
       <span className="text-sm">Ahora</span>
-      <span className="-mt-2">{`${name} ${
-        estimatedTime ? `- ${estimatedTime} min` : ""
-      }`}</span>
-      <div className="flex">
-        <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
-          <span>01:05 min</span>
-        </div>
-        <div className="no-highlight flex cursor-pointer items-center rounded-r-md bg-orange px-2 text-white">
-          <span>Re-setear</span>
-        </div>
+      <div className="-mt-2">
+        {name}
+        {estimatedTime && <span>{` - ${estimatedTime / 60} min`}</span>}
       </div>
-      <Progress className="my-2" value={20} />
-    </motion.div>
+      {estimatedTime && <CountdownTimer initialSeconds={estimatedTime} />}
+    </div>
   );
 }
 
 function InactiveTask({ name, isDone }: { name: string; isDone: boolean }) {
   return (
-    <motion.div className="rounded-lg bg-teal p-2">
+    <div className="rounded-lg bg-teal p-2">
       <div
         className={`flex items-center ${
           isDone ? "justify-between" : "justify-start"
@@ -156,7 +188,7 @@ function InactiveTask({ name, isDone }: { name: string; isDone: boolean }) {
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }
 

@@ -38,10 +38,5 @@ export function useTasks({
     onError: onError,
   });
 
-  const { mutate: updateTaskTime } = api.tasks.updateTaskTime.useMutation({
-    onSuccess: onSuccess,
-    onError: onError,
-  });
-
-  return { createTasks, setTaskDone, setTaskUndone, updateTaskTime };
+  return { createTasks, setTaskDone, setTaskUndone };
 }

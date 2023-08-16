@@ -1,21 +1,21 @@
 import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useTasks } from "~/hooks/useTasks";
 import { api } from "~/utils/api";
 import { Button } from "./ui/button";
 
 export default function TimeForm({
-  activeTask,
+  taskId,
+  taskIndex,
   afterSave,
 }: {
-  activeTask?: string;
+  taskId?: string;
+  taskIndex: number;
   afterSave: () => void;
 }) {
   const { data: task } = api.tasks.getTaskById.useQuery({
-    id: activeTask || "",
+    id: taskId || "",
   });
-  const { updateTaskTime } = useTasks({});
 
   const initialTime = task?.estimated_time || 0;
 
@@ -31,7 +31,7 @@ export default function TimeForm({
 
   return (
     <motion.div
-      initial={{ opacity: 0.5, scale: 0.95 }}
+      initial={{ opacity: 0.7, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
       className="p-5"
     >
@@ -57,6 +57,11 @@ export default function TimeForm({
               className="w-12 border-[1px] border-gray-400 outline-none"
               defaultValue={hours}
               onChange={(e) => {
+                if (Number(e.target.value) > 24)
+                  e.target.value = e.target.value.slice(
+                    0,
+                    e.target.value.length - 1
+                  );
                 setHours(Number(e.target.value));
               }}
             />
@@ -69,6 +74,11 @@ export default function TimeForm({
               className="w-12 border-[1px] border-gray-400 outline-none"
               defaultValue={minutes}
               onChange={(e) => {
+                if (Number(e.target.value) > 60)
+                  e.target.value = e.target.value.slice(
+                    0,
+                    e.target.value.length - 1
+                  );
                 setMinutes(Number(e.target.value));
               }}
             />
@@ -81,6 +91,11 @@ export default function TimeForm({
               className="w-12 border-[1px] border-gray-400 outline-none"
               defaultValue={seconds}
               onChange={(e) => {
+                if (Number(e.target.value) > 60)
+                  e.target.value = e.target.value.slice(
+                    0,
+                    e.target.value.length - 1
+                  );
                 setSeconds(Number(e.target.value));
               }}
             />
@@ -88,15 +103,8 @@ export default function TimeForm({
         </div>
         <Button
           onClick={() => {
-            if (task) {
-              const totalTime = hours * 3600 + minutes * 60 + seconds;
-              updateTaskTime({
-                id: task.id,
-                estimated_time: totalTime,
-              });
-            } else {
-              // useLocalStorage
-            }
+            const totalTime = hours * 3600 + minutes * 60 + seconds;
+            localStorage.setItem(`${taskIndex}`, totalTime.toString());
             afterSave();
           }}
           className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"
