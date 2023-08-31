@@ -1,5 +1,6 @@
 import {
   CalendarDaysIcon,
+  CheckIcon,
   EllipsisVerticalIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -11,6 +12,8 @@ import Modal from "../ui/modal";
 import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
 import { useUser } from "~/lib/UserContext";
+import { Calendar } from "../ui/calendar";
+import { api } from "~/utils/api";
 
 export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,6 +48,8 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   ]);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [activeTaskId, setActiveTaskId] = useState("");
+  const [activeTaskIndex, setActiveTaskIndex] = useState<number>();
 
   const addEmptyTask = () => {
     setTasks([
@@ -116,6 +121,28 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     }, 1000);
   }
 
+  if (isCalendarOpen && activeTaskIndex !== undefined)
+    return (
+      <CalendarForm
+        taskId={activeTaskId}
+        taskIndex={activeTaskIndex}
+        afterSave={() => {
+          setIsCalendarOpen(false);
+          const date = localStorage.getItem(`${activeTaskIndex}`);
+          if (date) {
+            setTasks((prevTasks) => {
+              const updatedTasks = [...prevTasks];
+              updatedTasks[activeTaskIndex] = {
+                ...updatedTasks[activeTaskIndex],
+                //end: Date.parse(date)
+              } as Task;
+              return updatedTasks;
+            });
+          }
+        }}
+      />
+    );
+
   return (
     <div className="p-5">
       <form onSubmit={handleSubmit}>
@@ -180,7 +207,11 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
                         }
                       />
                       <div
-                        onClick={() => setIsCalendarOpen(true)}
+                        onClick={() => {
+                          setActiveTaskId(task.id);
+                          setActiveTaskIndex(index);
+                          setIsCalendarOpen(true);
+                        }}
                         className="no-highlight cursor-pointer rounded-full"
                       >
                         <CalendarDaysIcon className="h-6 w-6" />
@@ -215,5 +246,53 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         </fieldset>
       </form>
     </div>
+  );
+}
+
+function CalendarForm({
+  taskId,
+  taskIndex,
+  afterSave,
+}: {
+  taskId?: string;
+  taskIndex: number;
+  afterSave: () => void;
+}) {
+  const { data: task } = api.tasks.getTaskById.useQuery({
+    id: taskId || "",
+  });
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
+  return (
+    <motion.div
+      initial={{ opacity: 0.7, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="p-5"
+    >
+      <div className="no-highlight flex w-full justify-end active:text-gray-600 lg:hover:text-gray-600">
+        <div className="flex w-full items-center justify-between">
+          <h2 className="text-lg">Fecha de vencimiento</h2>
+          <XMarkIcon
+            className="h-5 w-5 cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              afterSave();
+            }}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col items-center gap-5 pt-2">
+        <Calendar mode="single" selected={date} onSelect={setDate} />
+        <Button
+          onClick={() => {
+            if (date) localStorage.setItem(`${taskIndex}`, date.toString());
+            afterSave();
+          }}
+          className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"
+        >
+          <CheckIcon className="h-16 w-16" />
+        </Button>
+      </div>
+    </motion.div>
   );
 }
