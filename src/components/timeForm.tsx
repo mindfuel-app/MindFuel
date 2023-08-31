@@ -37,7 +37,7 @@ export default function TimeForm({
     >
       <div className="no-highlight flex w-full justify-end active:text-gray-600 lg:hover:text-gray-600">
         <div className="flex w-full items-center justify-between">
-          <h2 className="text-xl">Duracion de tarea</h2>
+          <h2 className="text-lg">Duracion de tarea</h2>
           <XMarkIcon
             className="h-5 w-5 cursor-pointer"
             onClick={(e) => {
