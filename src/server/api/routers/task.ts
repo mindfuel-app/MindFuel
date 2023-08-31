@@ -41,7 +41,11 @@ export const taskRouter = createTRPCRouter({
           user_id: input.user_id,
         },
       });
-      return tasks;
+      let orderedTasks = tasks.sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      );
+      orderedTasks = tasks.sort((a, b) => Number(a.done) - Number(b.done));
+      return orderedTasks;
     }),
   getTasksbyRoutine: protectedProcedure
     .input(z.object({ routine_id: z.string() }))
