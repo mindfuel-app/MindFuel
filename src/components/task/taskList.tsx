@@ -4,12 +4,17 @@ import { api } from "~/utils/api";
 import { TaskSkeleton } from "../ui/skeleton";
 import { useUser } from "~/lib/UserContext";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import ClickAwayListener from "react-click-away-listener";
+import { NoSymbolIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 export default function TaskList() {
   const user = useUser();
   const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
+  const [completedTasksButton, setCompletedTasksButton] = useState(false);
+  const [showCompletedTasks, setShowCompletedTasks] = useState(false);
 
   if (isLoading) return <TaskSkeleton />;
 
@@ -23,32 +28,63 @@ export default function TaskList() {
       </div>
     );
 
+  const pendingTasks = showCompletedTasks
+    ? userTasks
+    : userTasks.filter((task) => task.done == false);
+
   return (
     <motion.div
       initial={{ x: 10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
     >
-      <div className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] active:bg-black/10 lg:hover:bg-black/10">
+      <div
+        onClick={() => setCompletedTasksButton(!completedTasksButton)}
+        className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] active:bg-black/10 lg:hover:bg-black/10"
+      >
         <EllipsisHorizontalIcon className="h-6 w-6" />
       </div>
-      {userTasks.filter((task) => task.done == false).length == 0 && (
-        <h2 className="my-5">No hay tareas cargadas</h2>
+      {completedTasksButton && (
+        <ClickAwayListener onClickAway={() => setCompletedTasksButton(false)}>
+          <div
+            onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+            className="no-highlight absolute right-0 top-12 z-20 cursor-pointer rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
+          >
+            {showCompletedTasks ? (
+              <div className="flex items-center gap-1">
+                <NoSymbolIcon className="h-6 w-6" />
+                Ocultar tareas completadas
+              </div>
+            ) : (
+              <div className="flex items-center gap-1">
+                <CheckCircleIcon className="h-6 w-6" />
+                Mostrar tareas completadas
+              </div>
+            )}
+          </div>
+        </ClickAwayListener>
       )}
-      {userTasks.filter((task) => task.done == false).length > 0 && (
+      {pendingTasks.length == 0 && (
+        <h2 className="my-5">No hay tareas pendientes</h2>
+      )}
+      {pendingTasks.length > 0 && (
         <>
-          <h2 className="my-5">Tareas pendientes de hoy</h2>
+          <h2 className="my-5">
+            {pendingTasks.filter((task) => task.done == false).length > 0
+              ? "Tareas pendientes"
+              : "No hay tareas pendientes"}
+          </h2>
           <ul className="flex w-72 flex-col gap-3">
-            {userTasks
-              .filter((task) => task.done == false)
-              .map((task, index) => (
-                <TaskCard
-                  id={task.id}
-                  number={index + 1}
-                  name={task.name}
-                  key={task.id}
-                />
-              ))}
+            {pendingTasks.map((task, index) => (
+              <TaskCard
+                id={task.id}
+                number={index + 1}
+                name={task.name}
+                isChecked={task.done}
+                showCompletedTasks={showCompletedTasks}
+                key={task.id}
+              />
+            ))}
           </ul>
         </>
       )}

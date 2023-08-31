@@ -8,12 +8,14 @@ export default function TaskCard({
   number,
   name,
   isChecked,
+  showCompletedTasks,
   isPartOfRoutine,
 }: {
   id: string;
   number: number;
   name: string;
   isChecked?: boolean;
+  showCompletedTasks?: boolean;
   isPartOfRoutine?: boolean;
 }) {
   const [isTaskDone, setIsTaskDone] = useState(false);
@@ -21,7 +23,7 @@ export default function TaskCard({
   const { setTaskDone, setTaskUndone } = useTasks({});
   return (
     <AnimatePresence>
-      {(!isTaskDone || isPartOfRoutine) && (
+      {(!isTaskDone || isPartOfRoutine || showCompletedTasks) && (
         <motion.div
           exit={{
             opacity: 0,
@@ -33,9 +35,19 @@ export default function TaskCard({
             {number}
           </div>
           <div className="relative flex w-full items-center justify-start rounded-r-md border-2 border-teal bg-white pl-3">
-            <span className="text-black">{name}</span>
+            <span
+              className={`text-black ${
+                (isChecked && showCompletedTasks) ||
+                (isTaskDone && showCompletedTasks)
+                  ? "line-through opacity-50"
+                  : ""
+              }`}
+            >
+              {name}
+            </span>
             <div
               onClick={() => {
+                if ((isChecked || isTaskDone) && showCompletedTasks) return;
                 setShowCheck(!showCheck);
                 setTimeout(() => {
                   if (showCheck) {
