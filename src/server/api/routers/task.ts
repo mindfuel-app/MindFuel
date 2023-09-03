@@ -11,6 +11,7 @@ export const taskRouter = createTRPCRouter({
             name: z.string(),
             description: z.string().nullish(),
             category: z.string().nullish(),
+            deadline: z.date().nullish(),
             routine_id: z.string().nullish(),
             event_id: z.string().nullish(),
             estimated_time: z.number().nullish(),

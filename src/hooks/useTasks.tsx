@@ -5,7 +5,7 @@ export type Task = {
   name: string;
   description: string | null;
   category: string | null;
-  createdAt: Date;
+  deadline: Date | null;
   routine_id: string | null;
   event_id: string | null;
   estimated_time: number | null;

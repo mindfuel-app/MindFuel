@@ -36,7 +36,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
       name: "",
       description: null,
       category: null,
-      createdAt: new Date(),
+      deadline: null,
       routine_id: null,
       event_id: null,
       estimated_time: null,
@@ -59,7 +59,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         name: "",
         description: null,
         category: null,
-        createdAt: new Date(),
+        deadline: null,
         routine_id: null,
         event_id: null,
         estimated_time: null,
@@ -88,7 +88,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         name: value,
         description: null,
         category: null,
-        createdAt: new Date(),
+        deadline: null,
         routine_id: null,
         event_id: null,
         estimated_time: null,
@@ -134,7 +134,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
               const updatedTasks = [...prevTasks];
               updatedTasks[activeTaskIndex] = {
                 ...updatedTasks[activeTaskIndex],
-                //end: Date.parse(date)
+                deadline: new Date(date),
               } as Task;
               return updatedTasks;
             });
