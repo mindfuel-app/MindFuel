@@ -13,7 +13,6 @@ import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
 import { useUser } from "~/lib/UserContext";
 import { Calendar } from "../ui/calendar";
-import { api } from "~/utils/api";
 
 export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -139,6 +138,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
               return updatedTasks;
             });
           }
+          localStorage.removeItem(`${activeTaskIndex}`);
         }}
       />
     );
@@ -250,7 +250,6 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
 }
 
 function CalendarForm({
-  taskId,
   taskIndex,
   afterSave,
 }: {
@@ -258,9 +257,6 @@ function CalendarForm({
   taskIndex: number;
   afterSave: () => void;
 }) {
-  const { data: task } = api.tasks.getTaskById.useQuery({
-    id: taskId || "",
-  });
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
