@@ -1,12 +1,13 @@
 import { useTasks } from "~/hooks/useTasks";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, CalendarIcon } from "@heroicons/react/24/outline";
 
 export default function TaskCard({
   id,
   number,
   name,
+  deadline,
   isChecked,
   showCompletedTasks,
   isPartOfRoutine,
@@ -14,6 +15,7 @@ export default function TaskCard({
   id: string;
   number: number;
   name: string;
+  deadline: Date | null;
   isChecked?: boolean;
   showCompletedTasks?: boolean;
   isPartOfRoutine?: boolean;
@@ -21,6 +23,11 @@ export default function TaskCard({
   const [isTaskDone, setIsTaskDone] = useState(false);
   const [showCheck, setShowCheck] = useState(isChecked ? isChecked : false);
   const { setTaskDone, setTaskUndone } = useTasks({});
+
+  const deadlineDate = deadline
+    ? `${deadline.getDate()}/${deadline.getMonth() + 1}`
+    : null;
+
   return (
     <AnimatePresence>
       {(!isTaskDone || isPartOfRoutine || showCompletedTasks) && (
@@ -31,20 +38,38 @@ export default function TaskCard({
           }}
           className="flex w-full"
         >
-          <div className="w-[15%] rounded-l-md bg-teal p-2 text-center text-white">
+          <div className="flex w-[15%] items-center justify-center rounded-l-md bg-teal p-2 text-white">
             {number}
           </div>
           <div className="relative flex w-full items-center justify-start rounded-r-md border-2 border-teal bg-white pl-3">
-            <span
-              className={`text-black ${
-                (isChecked && showCompletedTasks) ||
-                (isTaskDone && showCompletedTasks)
-                  ? "line-through opacity-50"
-                  : ""
-              }`}
-            >
-              {name}
-            </span>
+            <div className="flex flex-col py-1">
+              <span
+                className={`text-black ${
+                  (isChecked && showCompletedTasks) ||
+                  (isTaskDone && showCompletedTasks)
+                    ? "line-through opacity-50"
+                    : ""
+                }`}
+              >
+                {name}
+              </span>
+              {deadlineDate && (
+                <div className="flex gap-1">
+                  <CalendarIcon className="h-4 w-4 text-red-500" />
+                  <span
+                    className={`text-sm text-red-500 ${
+                      (isChecked && showCompletedTasks) ||
+                      (isTaskDone && showCompletedTasks)
+                        ? "text-gray-500 line-through"
+                        : ""
+                    }`}
+                  >
+                    {deadlineDate}
+                  </span>
+                </div>
+              )}
+            </div>
+
             <div
               onClick={() => {
                 if ((isChecked || isTaskDone) && showCompletedTasks) return;

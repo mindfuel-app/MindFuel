@@ -80,6 +80,8 @@ export default function TaskList() {
                 id={task.id}
                 number={index + 1}
                 name={task.name}
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                deadline={task.deadline}
                 isChecked={task.done}
                 showCompletedTasks={showCompletedTasks}
                 key={task.id}
