@@ -2,6 +2,34 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { error } from "console";
 
+type Task = {
+  id: string;
+  name: string;
+  description: string | null;
+  category: string | null;
+  createdAt: Date;
+  deadline: Date | null;
+  routine_id: string | null;
+  event_id: string | null;
+  required_energy: number | null;
+};
+
+function sortTasksByDeadline(a: Task, b: Task): number {
+  if (a.deadline === null && b.deadline !== null) {
+    return 1;
+  }
+  if (a.deadline !== null && b.deadline === null) {
+    return -1;
+  }
+  if (a.deadline && b.deadline) {
+    const deadlineComparison = a.deadline.getTime() - b.deadline.getTime();
+    if (deadlineComparison !== 0) {
+      return deadlineComparison;
+    }
+  }
+  return 0;
+}
+
 export const taskRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(
@@ -42,9 +70,7 @@ export const taskRouter = createTRPCRouter({
           user_id: input.user_id,
         },
       });
-      let orderedTasks = tasks.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-      );
+      let orderedTasks = tasks.sort(sortTasksByDeadline);
       orderedTasks = tasks.sort((a, b) => Number(a.done) - Number(b.done));
       return orderedTasks;
     }),
