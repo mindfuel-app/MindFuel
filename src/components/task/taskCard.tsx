@@ -15,7 +15,7 @@ export default function TaskCard({
   id: string;
   number: number;
   name: string;
-  deadline: Date | null;
+  deadline?: Date | null;
   isChecked?: boolean;
   showCompletedTasks?: boolean;
   isPartOfRoutine?: boolean;
