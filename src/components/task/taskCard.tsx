@@ -55,7 +55,7 @@ export default function TaskCard({
               </span>
               {deadlineDate && (
                 <div className="flex gap-1">
-                  <CalendarIcon className="h-4 w-4 text-red-500" />
+                  <CalendarIcon className="mt-[1px] h-4 w-4 text-red-500" />
                   <span
                     className={`text-sm text-red-500 ${
                       (isChecked && showCompletedTasks) ||
