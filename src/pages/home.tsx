@@ -6,12 +6,16 @@ import {
   TabsTrigger,
 } from "../components/ui/tabs";
 import Head from "next/head";
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import TaskList from "../components/task/taskList";
 import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
+import { messaging } from "../utils/firebase";
+import {getToken, onMessage} from "firebase/messaging";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -22,28 +26,42 @@ export default function Home() {
   const [selectedTab, setSelectedTab] = useState("tareas");
   const { data: sessionData, status } = useSession();
 
-  if (status == "unauthenticated") return void Router.push("/signin");
+  React.useEffect(() => {
+    onMessage(messaging, (payload) => {
+      console.log("Message received. ", payload);
+      toast("Tienes una nueva tarea", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+      });
+    });
+  }, []);
 
+  if (status == "unauthenticated") return void Router.push("/signin");
   if (!sessionData) return;
 
-  Notification.requestPermission().catch((err) => {
-    alert(err);
-  });
-
-  const sendNotification = () => {
-    new Notification("Bienvenido a MindFuel");
+  const activateNotification = async () => {
+    const token = await getToken(messaging, {
+      vapidKey: "BP5uRjnZKgTEbIjvIZRcRbpP93jXilaxX9nfuZREoOZeUuz8hwMeXOa3MLgpxFenYTSoBCpClA4wVpqjNgiuzTg" 
+    }).catch((err) => {
+      console.log(err);
+    });
+    if(token) {console.log(token)}
+    if(!token) {console.log("no token")}
   };
 
   return (
+  activateNotification(),
     <>
       <Head>
         <title>MindFuel</title>
       </Head>
       <Layout sessionData={sessionData}>
+        <ToastContainer />
         <button
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={() => sendNotification()}
-        >
+          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"        >
           Probar Notificacion
         </button>
         <Tabs defaultValue="tareas" className="h-full w-full">
