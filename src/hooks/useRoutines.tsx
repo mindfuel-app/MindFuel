@@ -5,7 +5,6 @@ export type Routine = {
   name: string;
   description: string | null;
   user_id: string;
-  createdAt: Date;
   days: string;
 };
 
