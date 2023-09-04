@@ -15,7 +15,7 @@ const useSwipe = (input: SwipeInput): SwipeOutput => {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-  const minSwipeDistance = 50;
+  const minSwipeDistance = 75;
 
   const onTouchStart = (e: TouchEvent) => {
     setTouchEnd(0);

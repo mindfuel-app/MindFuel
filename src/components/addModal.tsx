@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
+import useSwipe from "~/hooks/useSwipe";
 
 export default function AddModal({
   TaskForm,
@@ -11,6 +12,18 @@ export default function AddModal({
   const [selectedTab, setSelectedTab] = useState<"tareas" | "rutinas">(
     "tareas"
   );
+
+  const swipeLeftHandler = useSwipe({
+    onSwipedLeft: () => {
+      setSelectedTab("rutinas");
+    },
+  });
+
+  const swipeRightHandler = useSwipe({
+    onSwipedRight: () => {
+      setSelectedTab("tareas");
+    },
+  });
 
   return (
     <div>
@@ -43,7 +56,11 @@ export default function AddModal({
         </Button>
         <div className="absolute bottom-0 w-full border-[1px] border-gray-100"></div>
       </div>
-      {selectedTab == "tareas" ? TaskForm : RoutineForm}
+      {selectedTab == "tareas" ? (
+        <div {...swipeLeftHandler}>{TaskForm}</div>
+      ) : (
+        <div {...swipeRightHandler}>{RoutineForm}</div>
+      )}
     </div>
   );
 }

@@ -144,7 +144,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     );
 
   return (
-    <div className="p-5">
+    <motion.div initial={{ x: 10 }} animate={{ x: 0 }} className="p-5">
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-5 group-disabled:opacity-50">
@@ -245,7 +245,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
           </div>
         </fieldset>
       </form>
-    </div>
+    </motion.div>
   );
 }
 

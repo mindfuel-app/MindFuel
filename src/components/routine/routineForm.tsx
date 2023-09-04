@@ -225,7 +225,11 @@ export default function RoutineForm({
   }
 
   return (
-    <div className="p-5">
+    <motion.div
+      initial={{ x: mode != "edit" ? -10 : 0 }}
+      animate={{ x: 0 }}
+      className="p-5"
+    >
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
@@ -455,6 +459,6 @@ export default function RoutineForm({
           </div>
         </fieldset>
       </form>
-    </div>
+    </motion.div>
   );
 }
