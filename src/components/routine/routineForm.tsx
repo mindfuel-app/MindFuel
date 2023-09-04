@@ -226,8 +226,8 @@ export default function RoutineForm({
 
   return (
     <motion.div
-      initial={{ x: mode != "edit" ? -10 : 0 }}
-      animate={{ x: 0 }}
+      initial={{ scale: 0.97 }}
+      animate={{ scale: 1 }}
       className="p-5"
     >
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
