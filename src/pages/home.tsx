@@ -48,12 +48,12 @@ export default function Home() {
         <title>MindFuel</title>
       </Head>
       <Layout sessionData={sessionData}>
-        <button
+        {/* <button
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           onClick={() => sendNotification()}
         >
           Probar Notificacion
-        </button>
+        </button> */}
         <Tabs className="h-screen w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
