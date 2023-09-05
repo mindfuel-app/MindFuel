@@ -62,6 +62,7 @@ export default function Routine() {
                     return (
                       <ActiveTask
                         name={task.name}
+                        usesAI={task.usesAI}
                         estimatedTime={task.estimated_time || null}
                         isTimerRunning={isTimerRunning}
                         key={task.id}
@@ -182,13 +183,17 @@ const aiTasks = [
 
 function ActiveTask({
   name,
+  usesAI,
   estimatedTime,
   isTimerRunning,
 }: {
   name: string;
+  usesAI: boolean;
   estimatedTime: number | null;
   isTimerRunning: boolean;
 }) {
+  const [checked, setChecked] = useState<boolean[]>([]);  
+
   return (
     <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
       <span className="text-sm">Ahora</span>
@@ -202,12 +207,18 @@ function ActiveTask({
           isRunning={isTimerRunning}
         />
       )}
-      {true && (
-        <ul className="flex flex-col gap-2">
-          {aiTasks.map((task) => (
-            <div key={task.name} className="flex items-center gap-1">
-              <Checkbox />
-              <span>{task.name}</span>
+      {usesAI && (
+        <ul className="flex flex-col gap-2 px-1">
+          {aiTasks.map((task, index) => (
+            <div key={task.name} 
+            onClick={()=>setChecked(prev=> {
+              const updatedChecks = [...prev];
+              updatedChecks[index] = !updatedChecks[index];
+              return updatedChecks
+            })}
+            className="flex items-center gap-1">
+              <Checkbox checked={checked[index]} className="h-4 w-4"/>
+              <span className="text-sm">{task.name}</span>
             </div>
           ))}
         </ul>

@@ -97,6 +97,7 @@ export default function RoutineForm({
             deadline: null,
             routine_id: null,
             event_id: null,
+            usesAI: false,
             estimated_time: null,
             done: false,
             real_time: null,
@@ -123,6 +124,7 @@ export default function RoutineForm({
         deadline: null,
         routine_id: null,
         event_id: null,
+        usesAI: false,
         estimated_time: null,
         done: false,
         real_time: null,
@@ -151,6 +153,7 @@ export default function RoutineForm({
         category: null,
         deadline: null,
         routine_id: null,
+        usesAI: false,
         event_id: null,
         estimated_time: null,
         done: false,
@@ -179,7 +182,7 @@ export default function RoutineForm({
         return setSaving(false);
       }
     }
-
+    
     setTimeout(() => {
       if (mode == "edit" && id) {
         editRoutine({
@@ -373,8 +376,8 @@ export default function RoutineForm({
                 )}
                 <div className="absolute right-7">
                   <Tooltip
-                    information="La AI te ayudará a dividir una gran tarea en pequeños pasos"
-                    element={<span className="font-medium">AI</span>}
+                    information="La inteligencia artificial te ayudará a dividir una gran tarea en pequeños pasos"
+                    element={<span className="font-medium">IA</span>}
                   />
                 </div>
               </div>
@@ -424,12 +427,13 @@ export default function RoutineForm({
                       </div>
                       <div className="flex items-center">
                         <Checkbox
+                          defaultChecked={task.usesAI}
                           onCheckedChange={(checked) => {
                             setTasks((prevTasks) => {
                               const updatedTasks = [...prevTasks];
                               updatedTasks[index] = {
                                 ...updatedTasks[index],
-                                ai: checked,
+                                usesAI: checked,
                               } as Task;
                               return updatedTasks;
                             });

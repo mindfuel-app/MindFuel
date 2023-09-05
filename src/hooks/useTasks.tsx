@@ -8,6 +8,7 @@ export type Task = {
   deadline: Date | null;
   routine_id: string | null;
   event_id: string | null;
+  usesAI: boolean;
   estimated_time: number | null;
   done: boolean;
   real_time: number | null;

@@ -1,7 +1,6 @@
 import {
   CalendarDaysIcon,
   CheckIcon,
-  EllipsisVerticalIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
@@ -37,6 +36,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
       category: null,
       deadline: null,
       routine_id: null,
+      usesAI: false,
       event_id: null,
       estimated_time: null,
       done: false,
@@ -61,6 +61,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         deadline: null,
         routine_id: null,
         event_id: null,
+        usesAI: false,
         estimated_time: null,
         done: false,
         real_time: null,
@@ -90,6 +91,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         deadline: null,
         routine_id: null,
         event_id: null,
+        usesAI: false,
         estimated_time: null,
         done: false,
         real_time: null,
@@ -195,13 +197,9 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
                       }}
                       exit={{ x: 10, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="-mx-1 flex items-center gap-2"
+                      className="pl-1 flex items-center gap-2"
                       key={task.id}
                     >
-                      <div className="no-highlight flex cursor-pointer justify-center rounded-sm py-2 transition-colors active:bg-gray-200 lg:hover:bg-gray-200">
-                        <EllipsisVerticalIcon className="h-5 w-5 text-xl" />
-                        <EllipsisVerticalIcon className="-ml-[14px] h-5 w-5 text-xl" />
-                      </div>
                       <input
                         type="text"
                         className="w-full rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
