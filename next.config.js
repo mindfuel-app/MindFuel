@@ -11,4 +11,10 @@ module.exports = withPWA({
     locales: ["en"],
     defaultLocale: "en",
   },
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.optimization.splitChunks = false;
+    }
+    return config;
+  },
 });
