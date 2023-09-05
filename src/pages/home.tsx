@@ -60,10 +60,6 @@ export default function Home() {
       </Head>
       <Layout sessionData={sessionData}>
         <ToastContainer />
-        <button
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"        >
-          Probar Notificacion
-        </button>
         <Tabs defaultValue="tareas" className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
