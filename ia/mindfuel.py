@@ -37,7 +37,7 @@ def recomendar():
     cursor = conn.cursor()
 
     #query: falta sacar los datos necesarios para la recomendación
-    cursor.execute("SELECT * FROM User")
+    cursor.execute("SELECT * FROM task")
     result = cursor.fetchall()
     rows_list = []
     for row in result:
@@ -93,6 +93,10 @@ def recomendar():
         results = search(title)
         tarea_id = results.iloc[0]["Id"]
         recomendacion = find_similar_tarea(tarea_id)
+    else:
+        recomendacion = pd.DataFrame()
+        warning = "Ingrese por lo menos 5 caracteres."
+        return jsonify(warning)
     recomendacion_data = recomendacion.to_dict(orient='records')
     return jsonify(recomendacion_data)
     
