@@ -1,8 +1,13 @@
 import { ClickAwayListener, Tooltip, Grow } from "@mui/material";
-import { BsQuestionCircleFill } from "react-icons/bs";
 import { useState } from "react";
 
-export default function HoverTooltip() {
+export default function HoverTooltip({
+  information,
+  element,
+}: {
+  information: string;
+  element: JSX.Element;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,8 +24,7 @@ export default function HoverTooltip() {
           disableTouchListener
           TransitionComponent={Grow}
           TransitionProps={{ timeout: 200 }}
-          title="Tu nombre de usuario te identifica y es el que veran tus amigos en la
-          app"
+          title={information}
           arrow
           placement="top"
         >
@@ -28,7 +32,7 @@ export default function HoverTooltip() {
             className="no-highlight flex items-center"
             onClick={() => setOpen(true)}
           >
-            <BsQuestionCircleFill />
+            {element}
           </button>
         </Tooltip>
       </div>
