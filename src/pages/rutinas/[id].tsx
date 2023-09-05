@@ -14,6 +14,7 @@ import { api } from "~/utils/api";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Checkbox } from "~/components/ui/checkbox";
 
 export default function Routine() {
   const router = useRouter();
@@ -171,6 +172,14 @@ function CountdownTimer({
   );
 }
 
+const aiTasks = [
+  { name: "Prender el horno" },
+  { name: "Preparar la masa" },
+  { name: "Cortar los ingredientes" },
+  { name: "Hornear la pizza" },
+  { name: "Servir la pizza" },
+];
+
 function ActiveTask({
   name,
   estimatedTime,
@@ -192,6 +201,16 @@ function ActiveTask({
           initialSeconds={estimatedTime}
           isRunning={isTimerRunning}
         />
+      )}
+      {true && (
+        <ul className="flex flex-col gap-2">
+          {aiTasks.map((task) => (
+            <div key={task.name} className="flex items-center gap-1">
+              <Checkbox />
+              <span>{task.name}</span>
+            </div>
+          ))}
+        </ul>
       )}
     </div>
   );

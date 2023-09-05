@@ -19,6 +19,8 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Command, CommandGroup, CommandItem } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Checkbox } from "../ui/checkbox";
+import Tooltip from "../auth/tooltip";
 
 const categories = [
   {
@@ -350,7 +352,7 @@ export default function RoutineForm({
               className="flex flex-col gap-3"
               onClick={(e) => e.preventDefault()}
             >
-              <div className="flex items-center">
+              <div className="relative flex items-center">
                 <span>Tareas</span>
                 <Button
                   className="no-highlight h-6 w-10 text-xl text-teal"
@@ -369,6 +371,12 @@ export default function RoutineForm({
                     Complete los campos
                   </motion.span>
                 )}
+                <div className="absolute right-7">
+                  <Tooltip
+                    information="La AI te ayudará a dividir una gran tarea en pequeños pasos"
+                    element={<span className="font-medium">AI</span>}
+                  />
+                </div>
               </div>
               <div
                 ref={containerRef}
@@ -389,13 +397,13 @@ export default function RoutineForm({
                       }}
                       exit={{ x: 10, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="-mx-1 flex items-center gap-2"
+                      className="flex items-center gap-2"
                       key={task.id}
                     >
-                      <div className="no-highlight flex cursor-pointer justify-center rounded-sm py-2 transition-colors active:bg-gray-200 lg:hover:bg-gray-200">
+                      {/* <div className="no-highlight flex cursor-pointer justify-center rounded-sm py-2 transition-colors active:bg-gray-200 lg:hover:bg-gray-200">
                         <EllipsisVerticalIcon className="h-5 w-5 text-xl" />
                         <EllipsisVerticalIcon className="-ml-[14px] h-5 w-5 text-xl" />
-                      </div>
+                      </div> */}
                       <input
                         type="text"
                         className="w-full rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
@@ -413,6 +421,21 @@ export default function RoutineForm({
                         className="no-highlight cursor-pointer rounded-full"
                       >
                         <ClockIcon className="h-6 w-6" />
+                      </div>
+                      <div className="flex items-center">
+                        <Checkbox
+                          onCheckedChange={(checked) => {
+                            setTasks((prevTasks) => {
+                              const updatedTasks = [...prevTasks];
+                              updatedTasks[index] = {
+                                ...updatedTasks[index],
+                                ai: checked,
+                              } as Task;
+                              return updatedTasks;
+                            });
+                          }}
+                          className="h-[18px] w-[18px]"
+                        />
                       </div>
                       <XMarkIcon
                         className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
