@@ -9,6 +9,7 @@ type Task = {
   category: string | null;
   createdAt: Date;
   deadline: Date | null;
+  usesAI:boolean;
   routine_id: string | null;
   event_id: string | null;
   required_energy: number | null;
@@ -40,6 +41,7 @@ export const taskRouter = createTRPCRouter({
             description: z.string().nullish(),
             category: z.string().nullish(),
             deadline: z.date().nullish(),
+            usesAI: z.boolean(),
             routine_id: z.string().nullish(),
             event_id: z.string().nullish(),
             estimated_time: z.number().nullish(),
@@ -137,6 +139,8 @@ export const taskRouter = createTRPCRouter({
         name: z.string(),
         description: z.string().optional(),
         category: z.string().optional(),
+        deadline: z.string().optional(),
+        usesAI: z.boolean(),
         routine_id: z.string().optional(),
         event_id: z.string().optional(),
         estimated_time: z.number().optional(),
