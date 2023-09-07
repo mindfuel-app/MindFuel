@@ -6,6 +6,8 @@ import RoutineForm from "./routineForm";
 import { type Task } from "~/hooks/useTasks";
 import TaskCard from "../task/taskCard";
 import Link from "next/link";
+import { useUser } from "~/lib/UserContext";
+import { api } from "~/utils/api";
 
 export default function RoutineCard({
   id,
@@ -20,6 +22,13 @@ export default function RoutineCard({
   category: string;
   tasks: Task[];
 }) {
+  const user = useUser();
+  const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
+    user_id: user.id,
+  });
+  const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
+    user_id: user.id,
+  });
   const [isCardOpened, setIsCardOpened] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -50,7 +59,11 @@ export default function RoutineCard({
             <Modal.Content>
               <RoutineForm
                 mode="edit"
-                afterSave={() => setIsModalOpen(false)}
+                afterSave={() => {
+                  void refetchRoutines();
+                  void refetchTasks();
+                  setIsModalOpen(false);
+                }}
                 id={id}
                 initialDays={days}
                 initialName={name}
@@ -83,7 +96,7 @@ export default function RoutineCard({
           ))}
         </div>
       </motion.div>
-      {isCardOpened && id && (
+      {isCardOpened && id && tasks.length > 0 && (
         <Link
           href={`/rutinas/${id}`}
           className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-teal px-4 py-[6px]"

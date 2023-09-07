@@ -4,10 +4,19 @@ import { useState } from "react";
 import RoutineForm from "./routine/routineForm";
 import AddModal from "./addModal";
 import TaskForm from "./task/taskForm";
+import { api } from "~/utils/api";
+import { useUser } from "~/lib/UserContext";
 
 export default function AddButton() {
+  const user = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+  const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
+    user_id: user.id,
+  });
+  const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
+    user_id: user.id,
+  });
 
   return (
     <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -19,8 +28,22 @@ export default function AddButton() {
       </Modal.Button>
       <Modal.Content>
         <AddModal
-          TaskForm={<TaskForm afterSave={() => setIsModalOpen(false)} />}
-          RoutineForm={<RoutineForm afterSave={() => setIsModalOpen(false)} />}
+          TaskForm={
+            <TaskForm
+              afterSave={() => {
+                void refetchTasks();
+                setIsModalOpen(false);
+              }}
+            />
+          }
+          RoutineForm={
+            <RoutineForm
+              afterSave={() => {
+                void refetchRoutines();
+                setIsModalOpen(false);
+              }}
+            />
+          }
         />
       </Modal.Content>
     </Modal>
