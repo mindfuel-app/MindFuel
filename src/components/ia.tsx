@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, type SyntheticEvent } from "react";
 
 interface Recommendation {
   Tareas: string;

@@ -10,6 +10,7 @@ import AlternativeMethodLink from "./alternativeMethodLink";
 import router from "next/router";
 import { useState } from "react";
 import Tooltip from "./tooltip";
+import { BsQuestionCircleFill } from "react-icons/bs";
 
 export default function SignUpForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -78,7 +79,11 @@ export default function SignUpForm() {
               }`}
               onClick={(e) => e.preventDefault()}
             >
-              Nombre de usuario <Tooltip />
+              Nombre de usuario{" "}
+              <Tooltip
+                information="Tu nombre de usuario te identifica y es el que veran tus amigos en la app"
+                element={<BsQuestionCircleFill />}
+              />
             </span>
             <input
               type="text"

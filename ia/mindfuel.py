@@ -94,9 +94,9 @@ def recomendar():
         tarea_id = results.iloc[0]["Id"]
         recomendacion = find_similar_tarea(tarea_id)
     else:
-       warning = "Ingrese por lo menos 5 caracteres."
-       return jsonify({"warning": warning})
-
+        recomendacion = pd.DataFrame()
+        warning = "Ingrese por lo menos 5 caracteres."
+        return jsonify(warning)
     recomendacion_data = recomendacion.to_dict(orient='records')
     return jsonify(recomendacion_data)
     

@@ -85,6 +85,7 @@ model task {
     description     String?
     category        String?
     createdAt       DateTime @default(now())
+    usesAI  Boolean @default(false)
     deadline        DateTime?
     routine_id      String?
     routine         routine? @relation(fields: [routine_id], references: [id], onDelete: Cascade)

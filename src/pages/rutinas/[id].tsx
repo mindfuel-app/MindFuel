@@ -14,6 +14,7 @@ import { api } from "~/utils/api";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Checkbox } from "~/components/ui/checkbox";
 
 export default function Routine() {
   const router = useRouter();
@@ -61,6 +62,7 @@ export default function Routine() {
                     return (
                       <ActiveTask
                         name={task.name}
+                        usesAI={task.usesAI}
                         estimatedTime={task.estimated_time || null}
                         isTimerRunning={isTimerRunning}
                         key={task.id}
@@ -171,15 +173,27 @@ function CountdownTimer({
   );
 }
 
+const aiTasks = [
+  { name: "Prender el horno" },
+  { name: "Preparar la masa" },
+  { name: "Cortar los ingredientes" },
+  { name: "Hornear la pizza" },
+  { name: "Servir la pizza" },
+];
+
 function ActiveTask({
   name,
+  usesAI,
   estimatedTime,
   isTimerRunning,
 }: {
   name: string;
+  usesAI: boolean;
   estimatedTime: number | null;
   isTimerRunning: boolean;
 }) {
+  const [checked, setChecked] = useState<boolean[]>([]);  
+
   return (
     <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
       <span className="text-sm">Ahora</span>
@@ -192,6 +206,22 @@ function ActiveTask({
           initialSeconds={estimatedTime}
           isRunning={isTimerRunning}
         />
+      )}
+      {usesAI && (
+        <ul className="flex flex-col gap-2 px-1">
+          {aiTasks.map((task, index) => (
+            <div key={task.name} 
+            onClick={()=>setChecked(prev=> {
+              const updatedChecks = [...prev];
+              updatedChecks[index] = !updatedChecks[index];
+              return updatedChecks
+            })}
+            className="flex items-center gap-1">
+              <Checkbox checked={checked[index]} className="h-4 w-4"/>
+              <span className="text-sm">{task.name}</span>
+            </div>
+          ))}
+        </ul>
       )}
     </div>
   );
