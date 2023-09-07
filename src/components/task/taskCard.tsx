@@ -69,37 +69,38 @@ export default function TaskCard({
                 </div>
               )}
             </div>
-
-            <div
-              onClick={() => {
-                if ((isChecked || isTaskDone) && showCompletedTasks) return;
-                setShowCheck(!showCheck);
-                setTimeout(() => {
-                  if (showCheck) {
-                    setIsTaskDone(false);
-                    setTaskUndone({ tasks: [id] });
-                  } else {
-                    setIsTaskDone(true);
-                    setTaskDone({ task_id: id, realTime: 0 });
-                  }
-                }, 250);
-              }}
-              className="no-highlight group absolute -right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
-            >
-              {showCheck && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 20,
-                  }}
-                >
-                  <CheckIcon className="h-5 w-5 text-teal" />
-                </motion.div>
-              )}
-            </div>
+            {!isPartOfRoutine && (
+              <div
+                onClick={() => {
+                  if ((isChecked || isTaskDone) && showCompletedTasks) return;
+                  setShowCheck(!showCheck);
+                  setTimeout(() => {
+                    if (showCheck) {
+                      setIsTaskDone(false);
+                      setTaskUndone({ tasks: [id] });
+                    } else {
+                      setIsTaskDone(true);
+                      setTaskDone({ task_id: id, realTime: 0 });
+                    }
+                  }, 250);
+                }}
+                className="no-highlight group absolute -right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
+              >
+                {showCheck && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20,
+                    }}
+                  >
+                    <CheckIcon className="h-5 w-5 text-teal" />
+                  </motion.div>
+                )}
+              </div>
+            )}
           </div>
         </motion.div>
       )}
