@@ -26,6 +26,7 @@ export default function Routine() {
     routine_id: router.query.id as string,
   });
   const [routineProgress, setRoutineProgress] = useState(0);
+  const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
 
   if (status == "unauthenticated") return void router.push("/signin");
@@ -72,7 +73,10 @@ export default function Routine() {
                     return (
                       <InactiveTask
                         name={task.name}
-                        isDone={index < routineProgress}
+                        isDone={
+                          index < routineProgress &&
+                          !skippedTasks.includes(index)
+                        }
                         key={task.id}
                       />
                     );
@@ -110,8 +114,10 @@ export default function Routine() {
               </button>
               <button
                 onClick={() => {
-                  if (routineProgress < tasks.length)
+                  if (routineProgress < tasks.length) {
+                    setSkippedTasks((prev) => [...prev, routineProgress]);
                     setRoutineProgress(routineProgress + 1);
+                  }
                 }}
                 className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
               >
@@ -192,7 +198,7 @@ function ActiveTask({
   estimatedTime: number | null;
   isTimerRunning: boolean;
 }) {
-  const [checked, setChecked] = useState<boolean[]>([]);  
+  const [checked, setChecked] = useState<boolean[]>([]);
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
@@ -210,14 +216,18 @@ function ActiveTask({
       {usesAI && (
         <ul className="flex flex-col gap-2 px-1">
           {aiTasks.map((task, index) => (
-            <div key={task.name} 
-            onClick={()=>setChecked(prev=> {
-              const updatedChecks = [...prev];
-              updatedChecks[index] = !updatedChecks[index];
-              return updatedChecks
-            })}
-            className="flex items-center gap-1">
-              <Checkbox checked={checked[index]} className="h-4 w-4"/>
+            <div
+              key={task.name}
+              onClick={() =>
+                setChecked((prev) => {
+                  const updatedChecks = [...prev];
+                  updatedChecks[index] = !updatedChecks[index];
+                  return updatedChecks;
+                })
+              }
+              className="flex items-center gap-1"
+            >
+              <Checkbox checked={checked[index]} className="h-4 w-4" />
               <span className="text-sm">{task.name}</span>
             </div>
           ))}
