@@ -12,10 +12,7 @@ import TaskList from "../components/task/taskList";
 import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import { messaging } from "../utils/firebase";
-import {getToken, onMessage} from "firebase/messaging";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -26,40 +23,18 @@ export default function Home() {
   const [selectedTab, setSelectedTab] = useState("tareas");
   const { data: sessionData, status } = useSession();
 
-  React.useEffect(() => {
-    onMessage(messaging, (payload) => {
-      console.log("Message received. ", payload);
-      toast("Tienes una nueva tarea", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-      });
-    });
-  }, []);
-
   if (status == "unauthenticated") return void Router.push("/signin");
   if (!sessionData) return;
 
-  const activateNotification = async () => {
-    const token = await getToken(messaging, {
-      vapidKey: "BP5uRjnZKgTEbIjvIZRcRbpP93jXilaxX9nfuZREoOZeUuz8hwMeXOa3MLgpxFenYTSoBCpClA4wVpqjNgiuzTg" 
-    }).catch((err) => {
-      console.log(err);
-    });
-    if(token) {console.log(token)}
-    if(!token) {console.log("no token")}
-  };
 
+  
   return (
-  activateNotification(),
     <>
       <Head>
         <title>MindFuel</title>
       </Head>
       <Layout sessionData={sessionData}>
-        <ToastContainer />
+        <button>Probar Notificaciones</button>
         <Tabs defaultValue="tareas" className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
