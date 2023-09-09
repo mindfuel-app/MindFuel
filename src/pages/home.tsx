@@ -12,6 +12,7 @@ import TaskList from "../components/task/taskList";
 import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
+import { ToastContainer } from "react-toastify";
 
 
 const tabOptions = [
@@ -34,7 +35,7 @@ export default function Home() {
         <title>MindFuel</title>
       </Head>
       <Layout sessionData={sessionData}>
-        <button>Probar Notificaciones</button>
+        <ToastContainer />
         <Tabs defaultValue="tareas" className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
