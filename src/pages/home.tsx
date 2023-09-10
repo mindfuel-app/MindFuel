@@ -8,6 +8,8 @@ import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import useSwipe from "~/hooks/useSwipe";
+import { registerServiceWorker } from "~/utils/registerServiceWorker";
+import { askPermission } from "~/utils/registerServiceWorker";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -34,14 +36,18 @@ export default function Home() {
 
   if (!sessionData) return;
 
-  Notification.requestPermission().catch((err) => {
-    alert(err);
-  });
+  if (!('serviceWorker' in navigator)) {
+    // Service Worker isn't supported on this browser, disable or hide UI.
+    throw new Error('Service Worker not supported, we need Notification API support');
+  }
+  
+  if (!('PushManager' in window)) {
+    // Push isn't supported on this browser, disable or hide UI.
+    throw new Error('Push not supported, we need Notification API support');
+  }
 
-  const sendNotification = () => {
-    new Notification("Bienvenido a MindFuel");
-  };
-
+  registerServiceWorker().catch(error => console.error(error));
+  askPermission().catch(error => console.error(error));
   return (
     <>
       <Head>
