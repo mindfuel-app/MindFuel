@@ -13,6 +13,7 @@ export async function obtenerListaDePasos(tarea: string): Promise<string[]> {
     });
 
     if (response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data: DivisionTareaResponse = await response.json();
       return data.respuesta;
     } else {
