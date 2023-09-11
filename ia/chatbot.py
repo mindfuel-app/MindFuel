@@ -47,10 +47,12 @@ def procesar_tarea():
     data = request.get_json()  # Obtener datos como JSON
     tarea = data.get('tareas', '')
     print(tarea)
-
-    respuesta = dividir_tarea_en_pasos(tarea)
-    print(respuesta)
-    return jsonify(respuesta)
+    if len(tarea) < 3:
+        return ()
+    else:
+        respuesta = dividir_tarea_en_pasos(tarea)
+        print(respuesta)
+        return jsonify(respuesta)
 
 if __name__ == '__main__':
     app.run()
