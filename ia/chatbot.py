@@ -12,7 +12,7 @@ openai.api_version = "2023-07-01-preview"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app, resources={r"/dividir_tarea": {"origins": "https://tasty-nightgown-hare.cyclic.cloud"}})
 
 @app.route("/")
 def home():
