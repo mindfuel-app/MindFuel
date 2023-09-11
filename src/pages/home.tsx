@@ -8,8 +8,8 @@ import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import useSwipe from "~/hooks/useSwipe";
-import { registerServiceWorker } from "~/utils/registerServiceWorker";
-import { askPermission } from "~/utils/registerServiceWorker";
+import { registerServiceWorker } from "~/utils/registerPushSuscription";
+import { askPermission } from "~/utils/registerPushSuscription";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
