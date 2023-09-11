@@ -2,6 +2,8 @@ import openai
 from flask import Flask, request, jsonify
 import os
 from dotenv import load_dotenv
+from flask_cors import CORS
+import re
 load_dotenv()
 
 openai.api_type = "azure"
@@ -10,35 +12,45 @@ openai.api_version = "2023-07-01-preview"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
+cors = CORS(app)
 
-def dividir_tarea_en_pasos(prompt):
-    solicitud = [
-        {"role": "user", "content": prompt},
-        {"role": "assistant", "content": "Divide la tarea en 3 pasos más simples y cortos, sin explayarte tanto:"}
-    ]
-    
-    response = openai.ChatCompletion.create(
-        engine="mindfuel",
-        messages=solicitud,
-        temperature=0.7,
-        max_tokens=200,
-        top_p=0.95,
-        frequency_penalty=0,
-        presence_penalty=0,
-        stop=None
-    )
-
-    respuesta = response['choices'][0]['message']['content']
-    return respuesta
+@app.route("/")
+def home():
+    return "hello world"
 
 @app.route('/dividir_tarea', methods=['POST'])
 def procesar_tarea():
-    data = request.get_json()
-    tarea = data.get('tarea')
+    def dividir_tarea_en_pasos(prompt):
+        solicitud = [
+            {"role": "user", "content": prompt},
+            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, sin explayarte tanto:"}
+        ]
+        
+        response = openai.ChatCompletion.create(
+            engine="mindfuel",
+            messages=solicitud,
+            temperature=0.7,
+            max_tokens=200,
+            top_p=0.95,
+            frequency_penalty=0,
+            presence_penalty=0,
+            stop=None
+        )
+
+        respuesta = response['choices'][0]['message']['content']
+        respuesta = respuesta.replace('\n', '')
+        pasos = re.split(r'\d+\.\s*', respuesta)
+        # Filtra los elementos vacíos en la lista de pasos
+        pasos = list(filter(None, pasos))
+        return pasos
+    
+    data = request.get_json()  # Obtener datos como JSON
+    tarea = data.get('tareas', '')
+    print(tarea)
 
     respuesta = dividir_tarea_en_pasos(tarea)
-
-    return jsonify({"respuesta": respuesta})
+    print(respuesta)
+    return jsonify(respuesta)
 
 if __name__ == '__main__':
     app.run()
