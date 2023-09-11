@@ -4,7 +4,7 @@ interface DivisionTareaResponse {
 
 export async function obtenerListaDePasos(tarea: string): Promise<string[]> {
   try {
-    const response = await fetch("/dividir_tarea", {
+    const response = await fetch("https://tasty-nightgown-hare.cyclic.cloud/dividir_tarea", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
