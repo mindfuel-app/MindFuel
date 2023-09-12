@@ -12,11 +12,9 @@ openai.api_version = "2023-07-01-preview"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
+CORS(app)
 @app.route("/")
 @cross_origin(origin='*')
-
-@app.route("/home")
 def home():
     return jsonify({"message":"Hello, World!"})
     
