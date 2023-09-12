@@ -13,7 +13,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 CORS(app)
-@app.route("/")
+@app.route("/home")
 @cross_origin(origin='*')
 def home():
     return jsonify({"message":"Hello, World!"})
