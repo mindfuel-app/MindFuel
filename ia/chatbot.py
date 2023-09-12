@@ -18,8 +18,7 @@ CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
 
 @app.route("/home")
 def home():
-    response = {'message': 'Hello, World!'}
-    return jsonify(response)
+    return jsonify("Hello, World!")
     
 
 @app.route('/dividir_tarea', methods=['POST'])
