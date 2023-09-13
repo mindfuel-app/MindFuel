@@ -1,10 +1,6 @@
-interface DivisionTareaResponse {
-  respuesta: string[];
-}
-
 export async function obtenerListaDePasos(tarea: string): Promise<string[]> {
   try {
-    const response = await fetch("https://tasty-nightgown-hare.cyclic.cloud/dividir_tarea", {
+    const response = await fetch("http://127.0.0.1:5000/dividir_tarea", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -14,8 +10,9 @@ export async function obtenerListaDePasos(tarea: string): Promise<string[]> {
 
     if (response.ok) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const data: DivisionTareaResponse = await response.json();
-      return data.respuesta;
+      const data = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return data;
     } else {
       throw new Error("Error al procesar la solicitud.");
     }

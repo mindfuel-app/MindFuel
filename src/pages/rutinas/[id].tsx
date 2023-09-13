@@ -15,6 +15,7 @@ import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Checkbox } from "~/components/ui/checkbox";
+import { obtenerListaDePasos } from "~/components/openai";
 
 export default function Routine() {
   const router = useRouter();
@@ -199,6 +200,12 @@ function ActiveTask({
   isTimerRunning: boolean;
 }) {
   const [checked, setChecked] = useState<boolean[]>([]);
+  const [steps, setSteps] = useState<string[]>();
+
+  useEffect(() => {
+    const stepsPromise = obtenerListaDePasos(name);
+    void stepsPromise.then((result) => setSteps(result));
+  }, [name]);
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
@@ -215,9 +222,9 @@ function ActiveTask({
       )}
       {usesAI && (
         <ul className="flex flex-col gap-2 px-1">
-          {aiTasks.map((task, index) => (
+          {steps?.map((task, index) => (
             <div
-              key={task.name}
+              key={task}
               onClick={() =>
                 setChecked((prev) => {
                   const updatedChecks = [...prev];
@@ -225,10 +232,10 @@ function ActiveTask({
                   return updatedChecks;
                 })
               }
-              className="flex items-center gap-1"
+              className="flex items-center gap-2"
             >
               <Checkbox checked={checked[index]} className="h-4 w-4" />
-              <span className="text-sm">{task.name}</span>
+              <span className="text-sm">{task}</span>
             </div>
           ))}
         </ul>
