@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Checkbox } from "~/components/ui/checkbox";
 import { obtenerListaDePasos } from "~/components/openai";
+import { CircularProgress } from "@mui/material";
 
 export default function Routine() {
   const router = useRouter();
@@ -188,6 +189,15 @@ const aiTasks = [
   { name: "Servir la pizza" },
 ];
 
+function LoadingSteps() {
+  return (
+    <div className="flex flex-col items-center gap-3 pb-2 pt-4">
+      <CircularProgress color="primary" size={25} />
+      <span className="font-normal">Cargando desglose de tarea...</span>
+    </div>
+  );
+}
+
 function ActiveTask({
   name,
   usesAI,
@@ -201,11 +211,15 @@ function ActiveTask({
 }) {
   const [checked, setChecked] = useState<boolean[]>([]);
   const [steps, setSteps] = useState<string[]>();
+  const [loadingSteps, setLoadingSteps] = useState(false);
 
   useEffect(() => {
+    if (!usesAI) return;
+    setLoadingSteps(true);
     const stepsPromise = obtenerListaDePasos(name);
     void stepsPromise.then((result) => setSteps(result));
-  }, [name]);
+    void stepsPromise.finally(() => setLoadingSteps(false));
+  }, [usesAI, name]);
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
@@ -222,22 +236,28 @@ function ActiveTask({
       )}
       {usesAI && (
         <ul className="flex flex-col gap-2 px-1">
-          {steps?.map((task, index) => (
-            <div
-              key={task}
-              onClick={() =>
-                setChecked((prev) => {
-                  const updatedChecks = [...prev];
-                  updatedChecks[index] = !updatedChecks[index];
-                  return updatedChecks;
-                })
-              }
-              className="flex items-center gap-2"
-            >
-              <Checkbox checked={checked[index]} className="h-4 w-4" />
-              <span className="text-sm">{task}</span>
-            </div>
-          ))}
+          {loadingSteps ? (
+            <LoadingSteps />
+          ) : (
+            steps?.map((task, index) => (
+              <motion.div
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}
+                key={task}
+                onClick={() =>
+                  setChecked((prev) => {
+                    const updatedChecks = [...prev];
+                    updatedChecks[index] = !updatedChecks[index];
+                    return updatedChecks;
+                  })
+                }
+                className="flex items-center gap-2"
+              >
+                <Checkbox checked={checked[index]} className="h-4 w-4" />
+                <span className="text-sm">{task}</span>
+              </motion.div>
+            ))
+          )}
         </ul>
       )}
     </div>
