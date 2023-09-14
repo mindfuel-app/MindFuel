@@ -7,17 +7,22 @@ import { Button } from "./ui/button";
 export default function TimeForm({
   taskId,
   taskIndex,
+  initialValue,
   afterSave,
 }: {
   taskId?: string;
   taskIndex: number;
+  initialValue?: number | null;
   afterSave: () => void;
 }) {
   const { data: task } = api.tasks.getTaskById.useQuery({
     id: taskId || "",
   });
 
-  const initialTime = task?.estimated_time || 0;
+  const initialTime =
+    initialValue !== null && initialValue !== undefined
+      ? initialValue
+      : task?.estimated_time || 0;
 
   const [hours, setHours] = useState(
     initialTime ? Math.floor(initialTime / 3600) : 0
