@@ -238,8 +238,8 @@ function ActiveTask({
         <ul className="flex flex-col gap-2 px-1">
           {loadingSteps ? (
             <LoadingSteps />
-          ) : (
-            steps?.map((task, index) => (
+          ) : steps ? (
+            steps.map((task, index) => (
               <motion.div
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
@@ -257,6 +257,10 @@ function ActiveTask({
                 <span className="text-sm">{task}</span>
               </motion.div>
             ))
+          ) : (
+            <span className="py-2 text-center font-normal">
+              No se pudo cargar el desglose de tarea
+            </span>
           )}
         </ul>
       )}
