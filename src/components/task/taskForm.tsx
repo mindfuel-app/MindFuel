@@ -122,11 +122,13 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     }, 1000);
   }
 
-  if (isCalendarOpen && activeTaskIndex !== undefined)
+  if (isCalendarOpen && activeTaskIndex !== undefined) {
+    const initialValue = tasks[activeTaskIndex]?.deadline;
+
     return (
       <CalendarForm
-        taskId={activeTaskId}
         taskIndex={activeTaskIndex}
+        initialValue={initialValue}
         afterSave={() => {
           setIsCalendarOpen(false);
           const date = localStorage.getItem(`${activeTaskIndex}`);
@@ -144,7 +146,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
         }}
       />
     );
-
+  }
   return (
     <motion.div
       initial={{ scale: 0.97 }}
@@ -197,7 +199,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
                       }}
                       exit={{ x: 10, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="pl-1 flex items-center gap-2"
+                      className="flex items-center gap-2 pl-1"
                       key={task.id}
                     >
                       <input
@@ -253,13 +255,19 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
 
 function CalendarForm({
   taskIndex,
+  initialValue,
   afterSave,
 }: {
-  taskId?: string;
   taskIndex: number;
+  initialValue?: Date | null;
   afterSave: () => void;
 }) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const initialDate =
+    initialValue !== null && initialValue !== undefined
+      ? initialValue
+      : new Date();
+
+  const [date, setDate] = useState<Date | undefined>(initialDate);
 
   return (
     <motion.div

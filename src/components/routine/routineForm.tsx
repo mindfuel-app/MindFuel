@@ -182,7 +182,7 @@ export default function RoutineForm({
         return setSaving(false);
       }
     }
-    
+
     setTimeout(() => {
       if (mode == "edit" && id) {
         editRoutine({
@@ -206,10 +206,12 @@ export default function RoutineForm({
   }
 
   if (isClockOpen && activeTaskIndex !== undefined) {
+    const initialValue = tasks[activeTaskIndex]?.estimated_time;
     return (
       <TimeForm
         taskId={activeTaskId}
         taskIndex={activeTaskIndex}
+        initialValue={initialValue}
         afterSave={() => {
           setIsClockOpen(false);
           const time = localStorage.getItem(`${activeTaskIndex}`);
