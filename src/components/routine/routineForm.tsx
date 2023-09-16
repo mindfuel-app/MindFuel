@@ -233,7 +233,7 @@ export default function RoutineForm({
 
   return (
     <motion.div
-      initial={{ scale: 0.97 }}
+      initial={{ scale: 0.98 }}
       animate={{ scale: 1 }}
       className="p-5"
     >

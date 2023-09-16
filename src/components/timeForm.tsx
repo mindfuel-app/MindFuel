@@ -36,8 +36,8 @@ export default function TimeForm({
 
   return (
     <motion.div
-      initial={{ opacity: 0.7, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ scale: 0.98 }}
+      animate={{ scale: 1 }}
       className="p-5"
     >
       <div className="no-highlight flex w-full justify-end active:text-gray-600 lg:hover:text-gray-600">
