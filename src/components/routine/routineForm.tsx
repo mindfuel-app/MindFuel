@@ -207,10 +207,12 @@ export default function RoutineForm({
 
   if (isClockOpen && activeTaskIndex !== undefined) {
     const initialValue = tasks[activeTaskIndex]?.estimated_time;
+    const taskName = tasks[activeTaskIndex]?.name;
     return (
       <TimeForm
         taskId={activeTaskId}
         taskIndex={activeTaskIndex}
+        taskName={taskName}
         initialValue={initialValue}
         afterSave={() => {
           setIsClockOpen(false);
