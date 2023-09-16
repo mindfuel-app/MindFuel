@@ -9,14 +9,13 @@ import {
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Progress } from "~/components/ui/progressBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { api } from "~/utils/api";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Checkbox } from "~/components/ui/checkbox";
-import { obtenerListaDePasos } from "~/components/openai";
-import { CircularProgress } from "@mui/material";
+import ActiveTask from "./activeTask";
+import InactiveTask from "./inactiveTask";
 
 export default function Routine() {
   const router = useRouter();
@@ -133,157 +132,6 @@ export default function Routine() {
         )}
       </div>
     </>
-  );
-}
-
-function CountdownTimer({
-  initialSeconds,
-  isRunning,
-}: {
-  initialSeconds: number;
-  isRunning: boolean;
-}) {
-  const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
-
-  useEffect(() => {
-    if (secondsLeft > 0 && isRunning) {
-      const interval = setInterval(() => {
-        setSecondsLeft((prevSeconds) => prevSeconds - 1);
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [secondsLeft, isRunning]);
-
-  const minutes = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft % 60;
-
-  return (
-    <>
-      <div className="flex">
-        <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
-          <span>{`${minutes.toString().padStart(2, "0")}:${seconds
-            .toString()
-            .padStart(2, "0")}`}</span>
-        </div>
-        <div
-          onClick={() => setSecondsLeft(initialSeconds)}
-          className="no-highlight flex cursor-pointer items-center rounded-r-md bg-orange px-2 text-white"
-        >
-          <span>Re-setear</span>
-        </div>
-      </div>
-      <Progress
-        className="my-2"
-        value={(100 / initialSeconds) * (initialSeconds - secondsLeft)}
-      />
-    </>
-  );
-}
-
-const aiTasks = [
-  { name: "Prender el horno" },
-  { name: "Preparar la masa" },
-  { name: "Cortar los ingredientes" },
-  { name: "Hornear la pizza" },
-  { name: "Servir la pizza" },
-];
-
-function LoadingSteps() {
-  return (
-    <div className="flex flex-col items-center gap-3 pb-2 pt-4">
-      <CircularProgress color="primary" size={25} />
-      <span className="font-normal">Cargando desglose de tarea...</span>
-    </div>
-  );
-}
-
-function ActiveTask({
-  name,
-  usesAI,
-  estimatedTime,
-  isTimerRunning,
-}: {
-  name: string;
-  usesAI: boolean;
-  estimatedTime: number | null;
-  isTimerRunning: boolean;
-}) {
-  const [checked, setChecked] = useState<boolean[]>([]);
-  const [steps, setSteps] = useState<string[]>();
-  const [loadingSteps, setLoadingSteps] = useState(false);
-
-  useEffect(() => {
-    if (!usesAI) return;
-    setLoadingSteps(true);
-    const stepsPromise = obtenerListaDePasos(name);
-    void stepsPromise.then((result) => setSteps(result));
-    void stepsPromise.finally(() => setLoadingSteps(false));
-  }, [usesAI, name]);
-
-  return (
-    <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
-      <span className="text-sm">Ahora</span>
-      <div className="-mt-2">
-        {name}
-        {estimatedTime && <span>{` - ${estimatedTime / 60} min`}</span>}
-      </div>
-      {estimatedTime && (
-        <CountdownTimer
-          initialSeconds={estimatedTime}
-          isRunning={isTimerRunning}
-        />
-      )}
-      {usesAI && (
-        <ul className="flex flex-col gap-2 px-1">
-          {loadingSteps ? (
-            <LoadingSteps />
-          ) : steps ? (
-            steps.map((task, index) => (
-              <motion.div
-                initial={{ scale: 0.95 }}
-                animate={{ scale: 1 }}
-                key={task}
-                onClick={() =>
-                  setChecked((prev) => {
-                    const updatedChecks = [...prev];
-                    updatedChecks[index] = !updatedChecks[index];
-                    return updatedChecks;
-                  })
-                }
-                className="flex items-center gap-2"
-              >
-                <Checkbox checked={checked[index]} className="h-4 w-4" />
-                <span className="text-sm">{task}</span>
-              </motion.div>
-            ))
-          ) : (
-            <span className="py-2 text-center font-normal">
-              No se pudo cargar el desglose de tarea
-            </span>
-          )}
-        </ul>
-      )}
-    </div>
-  );
-}
-
-function InactiveTask({ name, isDone }: { name: string; isDone: boolean }) {
-  return (
-    <div className="rounded-lg bg-teal p-2">
-      <div
-        className={`flex items-center ${
-          isDone ? "justify-between" : "justify-start"
-        }`}
-      >
-        <span className="ml-2 text-white">{name}</span>
-        {isDone && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-            <CheckIcon className="h-6 w-6 text-teal" />
-          </div>
-        )}
-      </div>
-    </div>
   );
 }
 
