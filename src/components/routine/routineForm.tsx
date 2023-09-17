@@ -330,7 +330,6 @@ export default function RoutineForm({
                         <CommandItem
                           key={category.value}
                           onSelect={(currentValue) => {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                             setSelectedCategory(
                               currentValue === selectedCategory
                                 ? ""
