@@ -21,10 +21,10 @@ export default function Routine() {
   const router = useRouter();
   const { data: sessionData, status } = useSession();
   const { data: routine } = api.routines.getRoutineById.useQuery({
-    id: router.query.id as string,
+    id: typeof router.query.id == "string" ? router.query.id : "",
   });
   const { data: tasks } = api.tasks.getTasksbyRoutine.useQuery({
-    routine_id: router.query.id as string,
+    routine_id: typeof router.query.id == "string" ? router.query.id : "",
   });
   const [routineProgress, setRoutineProgress] = useState(0);
   const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
