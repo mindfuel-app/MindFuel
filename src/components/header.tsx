@@ -13,11 +13,22 @@ import { FaUserFriends, FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ProfileInfo() {
+  const router = useRouter();
   const { data: sessionData } = useSession();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const tabParam =
+    searchParams.get("tab") == "tareas" || searchParams.get("tab") == "rutinas"
+      ? (searchParams.get("tab") as string)
+      : "tareas";
+  const isModalOpen = searchParams.get("add") == "true";
+  const setIsModalOpen = (open: boolean) => {
+    const queryString = open ? `?tab=${tabParam}&add=true` : `?tab=${tabParam}`;
+    router.push(queryString);
+  };
 
   if (!sessionData)
     return (
