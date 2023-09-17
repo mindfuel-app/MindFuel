@@ -9,13 +9,56 @@ import {
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Progress } from "~/components/ui/progressBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import ActiveTask from "./activeTask";
 import InactiveTask from "./inactiveTask";
+import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
+
+function ErrorPage() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    if (seconds >= 5) return;
+    const interval = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  });
+
+  return (
+    <>
+      <Head>
+        <title>MindFuel</title>
+      </Head>
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        {seconds < 5 ? (
+          <SingleRoutineSkeleton />
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center gap-10 py-36 text-center"
+          >
+            <span className="max-w-[250px] text-2xl">
+              Ups... Parece que la rutina no existe
+            </span>
+            <Link
+              href="/home"
+              className="no-highlight rounded-xl bg-cornflower-blue px-5 py-3 text-xl text-white active:bg-cornflower-blue/80"
+            >
+              Volver a la home
+            </Link>
+          </motion.div>
+        )}
+      </div>
+    </>
+  );
+}
 
 export default function Routine() {
   const router = useRouter();
@@ -34,7 +77,9 @@ export default function Routine() {
 
   if (!sessionData) return;
 
-  if (!tasks || !routine) return <div>No hay tareas</div>;
+  if (!tasks || !routine) {
+    return <ErrorPage />;
+  }
 
   return (
     <>
