@@ -63,8 +63,10 @@ export default function SignInForm() {
   return (
     <form
       className="py-3 sm:py-10"
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onSubmit={handleSubmit(submitData)}
+      onSubmit={(event) => {
+        event.preventDefault();
+        void handleSubmit(submitData)(event);
+      }}
     >
       <fieldset
         disabled={isFormDisabled}

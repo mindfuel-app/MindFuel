@@ -82,8 +82,10 @@ export default function ReestablecerContraseña() {
               </p>
               <form
                 className="w-full"
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onSubmit={handleSubmit(submitData)}
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  void handleSubmit(submitData)(event);
+                }}
               >
                 <fieldset
                   disabled={isFormDisabled}
