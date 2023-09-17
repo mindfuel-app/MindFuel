@@ -3,32 +3,19 @@ import Head from "next/head";
 import Router from "next/router";
 import Logo from "~/components/auth/logo";
 import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Progress } from "../components/ui/progressBar";
+import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function Landing() {
   const { status } = useSession();
   const [screenTouches, setScreenTouches] = useState(0);
-  const [isWidthGreaterThan768px, setIsWidthGreaterThan768px] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsWidthGreaterThan768px(window.innerWidth > 768);
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const windowWidth = useWindowWidth();
 
   if (status == "authenticated") {
     return void Router.push("/home");
   } else if (status == "unauthenticated") {
-    if (isWidthGreaterThan768px) {
+    if (windowWidth > 768) {
       return void Router.push("/signup");
     }
 
