@@ -2,6 +2,7 @@ import { useTasks } from "~/hooks/useTasks";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckIcon, CalendarIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 
 export default function TaskCard({
   id,
@@ -38,10 +39,10 @@ export default function TaskCard({
           }}
           className="flex w-full"
         >
-          <div className="flex w-[15%] items-center justify-center rounded-l-md bg-teal p-2 text-white">
+          {/* <div className="flex w-[15%] items-center justify-center rounded-l-md bg-teal p-2 text-white">
             {number}
-          </div>
-          <div className="relative flex w-full items-center justify-start rounded-r-md border-2 border-teal bg-white pl-3">
+          </div> */}
+          <div className="relative flex w-full items-center justify-start rounded-md border-2 border-teal bg-white py-1 pl-3">
             <div className="flex flex-col py-1">
               <span
                 className={`text-black ${
@@ -55,9 +56,9 @@ export default function TaskCard({
               </span>
               {deadlineDate && (
                 <div className="flex gap-1">
-                  <CalendarIcon className="mt-[1px] h-4 w-4 text-red-500" />
+                  <CalendarIcon className="mt-[1px] h-4 w-4 text-orange" />
                   <span
-                    className={`text-sm text-red-500 ${
+                    className={`text-sm text-orange ${
                       (isChecked && showCompletedTasks) ||
                       (isTaskDone && showCompletedTasks)
                         ? "text-gray-500 line-through"
@@ -69,6 +70,9 @@ export default function TaskCard({
                 </div>
               )}
             </div>
+            <button className="no-highlight group absolute right-6">
+              <PencilSquareIcon className="h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
+            </button>
             {!isPartOfRoutine && (
               <div
                 onClick={() => {
