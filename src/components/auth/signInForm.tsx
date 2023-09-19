@@ -60,6 +60,20 @@ export default function SignInForm() {
     });
   };
 
+  const emailErrorMessage = isEmailWrong
+    ? "No existe una cuenta con este email"
+    : !isEmailWrong && errors.email
+    ? "Ingrese un email valido"
+    : isGoogleAccount
+    ? "Esta cuenta esta registrada con Google"
+    : null;
+
+  const passwordErrorMessage = isPasswordWrong
+    ? "Contraseña incorrecta"
+    : !isPasswordWrong && errors.password
+    ? "Contraseña: 6-30 caracteres"
+    : null;
+
   return (
     <form
       className="py-3 sm:py-10"
@@ -88,20 +102,11 @@ export default function SignInForm() {
                 isEmailWrong ? "border-red-500" : ""
               }`}
               {...register("email")}
+              onChange={() => setIsGoogleAccount(false)}
             />
-            {isEmailWrong && (
+            {emailErrorMessage && (
               <span className="absolute mt-16 text-xs text-red-500">
-                No existe una cuenta con este email
-              </span>
-            )}
-            {isGoogleAccount && (
-              <span className="absolute mt-16 text-xs text-red-500">
-                Esta cuenta esta registrada con Google
-              </span>
-            )}
-            {!isEmailWrong && errors.email && (
-              <span className="absolute mt-16 text-xs text-red-500">
-                Ingrese un email valido
+                {emailErrorMessage}
               </span>
             )}
           </label>
@@ -128,14 +133,9 @@ export default function SignInForm() {
               />
               <span>{ToggleIcon}</span>
             </div>
-            {isPasswordWrong && (
+            {passwordErrorMessage && (
               <span className="absolute mt-16 text-xs text-red-500">
-                Contraseña incorrecta
-              </span>
-            )}
-            {!isPasswordWrong && errors.password && (
-              <span className="absolute mt-16 text-xs text-red-500">
-                Contraseña: 6-30 caracteres
+                {passwordErrorMessage}
               </span>
             )}
           </label>
