@@ -41,23 +41,23 @@ export default function SelfCare() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-3 px-7 py-5"
+        className="flex flex-col gap-3 px-4 py-2"
       >
         <h3 className="text-lg">Opciones</h3>
         {options.map((option) => (
           <Link
             key={option.title}
             href={`/self-care${option.href}`}
-            className="no-highlight flex rounded-md bg-white p-2 transition-transform active:scale-[97%]"
+            className="no-highlight flex gap-1 rounded-md bg-white p-2 transition-transform active:scale-[97%]"
           >
             <Image
               width={71}
               height={68}
               alt={option.title}
               src={`/self-care${option.image}`}
-              className="w-[30%]"
+              className="w-1/4"
             />
-            <div className="">
+            <div className="w-3/4">
               <h2 className="font-semibold">{option.title}</h2>
               <h3 className="text-sm font-medium">{`Duracion: ${option.duration} minutos`}</h3>
               <h4 className="text-sm">{option.description}</h4>
