@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import SelfCareLayout from "./layout";
+import SelfCareLayout from "../../components/selfCareLayout";
 import Router from "next/router";
 import { MdArrowBackIosNew } from "react-icons/md";
 import Link from "next/link";

@@ -3,7 +3,7 @@ import Router from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import SelfCareLayout from "./layout";
+import SelfCareLayout from "../../components/selfCareLayout";
 
 const options = [
   {
