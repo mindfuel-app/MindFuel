@@ -24,7 +24,7 @@ function NavigationItem({
     <Link
       href={href}
       className={`${
-        router.pathname == href ? "text-teal" : ""
+        router.pathname.startsWith(href) ? "text-teal" : ""
       } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
     >
