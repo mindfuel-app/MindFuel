@@ -47,7 +47,6 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   ]);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [activeTaskId, setActiveTaskId] = useState("");
   const [activeTaskIndex, setActiveTaskIndex] = useState<number>();
 
   const addEmptyTask = () => {
@@ -214,7 +213,6 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
                       />
                       <div
                         onClick={() => {
-                          setActiveTaskId(task.id);
                           setActiveTaskIndex(index);
                           setIsCalendarOpen(true);
                         }}
@@ -266,10 +264,7 @@ function CalendarForm({
   initialValue?: Date | null;
   afterSave: () => void;
 }) {
-  const initialDate =
-    initialValue !== null && initialValue !== undefined
-      ? initialValue
-      : new Date();
+  const initialDate = initialValue || new Date();
 
   const [date, setDate] = useState<Date | undefined>(initialDate);
 

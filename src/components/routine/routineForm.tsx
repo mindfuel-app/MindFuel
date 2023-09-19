@@ -80,37 +80,34 @@ export default function RoutineForm({
     },
   });
   const [saving, setSaving] = useState(false);
-  const [days, setDays] = useState(initialDays ? initialDays : "");
-  const [name, setName] = useState(initialName ? initialName : "");
+  const [days, setDays] = useState(initialDays || "");
+  const [name, setName] = useState(initialName || "");
   const [selectedCategory, setSelectedCategory] = useState(
-    initialCategory ? initialCategory : ""
+    initialCategory || ""
   );
   const [tasks, setTasks] = useState<Task[]>(
-    initialTasks
-      ? initialTasks
-      : [
-          {
-            id: "1",
-            name: "",
-            description: null,
-            category: null,
-            deadline: null,
-            routine_id: null,
-            event_id: null,
-            usesAI: false,
-            estimated_time: null,
-            done: false,
-            real_time: null,
-            user_id: user.id,
-            required_energy: null,
-          },
-        ]
+    initialTasks || [
+      {
+        id: "1",
+        name: "",
+        description: null,
+        category: null,
+        deadline: null,
+        routine_id: null,
+        event_id: null,
+        usesAI: false,
+        estimated_time: null,
+        done: false,
+        real_time: null,
+        user_id: user.id,
+        required_energy: null,
+      },
+    ]
   );
   const [nameError, setNameError] = useState(false);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isClockOpen, setIsClockOpen] = useState(false);
   const [isComboboxOpen, setIsComboboxOpen] = useState(false);
-  const [activeTaskId, setActiveTaskId] = useState("");
   const [activeTaskIndex, setActiveTaskIndex] = useState<number>();
 
   const addEmptyTask = () => {
@@ -210,7 +207,6 @@ export default function RoutineForm({
     const taskName = tasks[activeTaskIndex]?.name;
     return (
       <TimeForm
-        taskId={activeTaskId}
         taskIndex={activeTaskIndex}
         taskName={taskName}
         initialValue={initialValue}
@@ -420,7 +416,6 @@ export default function RoutineForm({
                       />
                       <div
                         onClick={() => {
-                          setActiveTaskId(task.id);
                           setActiveTaskIndex(index);
                           setIsClockOpen(true);
                         }}

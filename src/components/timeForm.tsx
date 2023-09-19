@@ -1,40 +1,24 @@
 import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { api } from "~/utils/api";
 import { Button } from "./ui/button";
 
 export default function TimeForm({
-  taskId,
   taskIndex,
   taskName,
   initialValue,
   afterSave,
 }: {
-  taskId?: string;
   taskIndex: number;
   taskName?: string;
   initialValue?: number | null;
   afterSave: () => void;
 }) {
-  const { data: task } = api.tasks.getTaskById.useQuery({
-    id: taskId || "",
-  });
+  const initialTime = initialValue || 0;
 
-  const initialTime =
-    initialValue !== null && initialValue !== undefined
-      ? initialValue
-      : task?.estimated_time || 0;
-
-  const [hours, setHours] = useState(
-    initialTime ? Math.floor(initialTime / 3600) : 0
-  );
-  const [minutes, setMinutes] = useState(
-    initialTime ? Math.floor((initialTime % 3600) / 60) : 0
-  );
-  const [seconds, setSeconds] = useState(
-    initialTime ? Math.floor((initialTime % 3600) % 60) : 0
-  );
+  const [hours, setHours] = useState(Math.floor(initialTime / 3600));
+  const [minutes, setMinutes] = useState(Math.floor((initialTime % 3600) / 60));
+  const [seconds, setSeconds] = useState(Math.floor((initialTime % 3600) % 60));
 
   return (
     <motion.div
