@@ -88,7 +88,7 @@ export default function TaskCard({
                     }
                   }, 250);
                 }}
-                className="no-highlight group absolute -right-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
+                className="no-highlight group absolute right-1 flex h-8 w-8 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
               >
                 {showCheck && (
                   <motion.div
