@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import AddButton from "./addButton";
+import { usePreviousPath } from "~/hooks/usePreviousPath";
 
 function NavigationItem({
   href,
@@ -34,12 +35,11 @@ function NavigationItem({
   );
 }
 
-let previousRoute = "/";
-
 export default function Navigation() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const animationDuration = 0.3;
+  const { previousPath, onRouteChange } = usePreviousPath();
 
   useEffect(() => {
     setIsLoading(false);
@@ -47,7 +47,7 @@ export default function Navigation() {
 
   return (
     <div className="no-highlight fixed bottom-0 w-full bg-white py-3 lg:hidden">
-      {(router.pathname == "/home" || previousRoute == "/home") && (
+      {(router.pathname == "/home" || previousPath == "/home") && (
         <motion.div
           className="group relative flex justify-center"
           layout
@@ -78,7 +78,7 @@ export default function Navigation() {
       >
         <div
           className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] min-[500px]:w-full ${
-            previousRoute != "/home" && router.pathname != "/home"
+            previousPath != "/home" && router.pathname != "/home"
               ? "-mr-2 flex-1"
               : isLoading && router.pathname == "/home"
               ? "-mr-2 flex-1"
@@ -100,7 +100,7 @@ export default function Navigation() {
               icon={<AiFillHome className="text-3xl" />}
               name="Home"
               handleClick={() => {
-                previousRoute = router.pathname;
+                onRouteChange(router.pathname);
               }}
             />
           </motion.div>
@@ -115,14 +115,14 @@ export default function Navigation() {
               icon={<FaHandHoldingHeart className="text-3xl" />}
               name="Self-care"
               handleClick={() => {
-                previousRoute = router.pathname;
+                onRouteChange(router.pathname);
               }}
             />
           </motion.div>
         </div>
         <div
           className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] min-[500px]:w-full ${
-            previousRoute != "/home" && router.pathname != "/home"
+            previousPath != "/home" && router.pathname != "/home"
               ? "-ml-2 flex-1"
               : isLoading && router.pathname == "/home"
               ? "-ml-2 flex-1"
@@ -144,7 +144,7 @@ export default function Navigation() {
               icon={<FaUserFriends className="text-3xl" />}
               name="Amigos"
               handleClick={() => {
-                previousRoute = router.pathname;
+                onRouteChange(router.pathname);
               }}
             />
           </motion.div>
@@ -159,7 +159,7 @@ export default function Navigation() {
               icon={<BsPersonCircle className="text-3xl" />}
               name="Perfil"
               handleClick={() => {
-                previousRoute = router.pathname;
+                onRouteChange(router.pathname);
               }}
             />
           </motion.div>

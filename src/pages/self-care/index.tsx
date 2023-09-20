@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import SelfCareLayout from "../../components/selfCareLayout";
+import { usePreviousPath } from "~/hooks/usePreviousPath";
 
 const options = [
   {
@@ -31,6 +32,7 @@ const options = [
 
 export default function SelfCare() {
   const { data: sessionData, status } = useSession();
+  const { onRouteChange } = usePreviousPath();
 
   if (status == "unauthenticated") return void Router.push("/signin");
 
@@ -49,6 +51,7 @@ export default function SelfCare() {
             key={option.title}
             href={`/self-care${option.href}`}
             className="no-highlight flex gap-1 rounded-md bg-white p-2 transition-transform active:scale-[97%]"
+            onClick={() => onRouteChange(`/self-care${option.href}`)}
           >
             <Image
               width={71}
