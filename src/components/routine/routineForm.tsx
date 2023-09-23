@@ -144,20 +144,9 @@ export default function RoutineForm({
     setTasks((prevTasks) => {
       const updatedTasks = [...prevTasks];
       updatedTasks[index] = {
-        id: (index + 1).toString(),
+        ...updatedTasks[index],
         name: value,
-        description: null,
-        category: null,
-        deadline: null,
-        routine_id: null,
-        usesAI: false,
-        event_id: null,
-        estimated_time: null,
-        done: false,
-        real_time: null,
-        user_id: user.id,
-        required_energy: null,
-      };
+      } as Task;
       return updatedTasks;
     });
   };
