@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import Modal from "../ui/modal";
 import RoutineForm from "./routineForm";
 import { type Task } from "~/hooks/useTasks";
-import TaskCard from "../task/taskCard";
 import Link from "next/link";
 import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
+import RoutineTaskCard from "../task/routineTaskCard";
 
 export default function RoutineCard({
   id,
@@ -85,12 +85,9 @@ export default function RoutineCard({
             <div className="text-center text-black">No hay tareas cargadas</div>
           )}
           {tasks.map((task, index) => (
-            <TaskCard
-              id={task.id}
+            <RoutineTaskCard
               number={index + 1}
               name={task.name}
-              isChecked={task.done}
-              isPartOfRoutine={true}
               key={task.id}
             />
           ))}
