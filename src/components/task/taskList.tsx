@@ -10,7 +10,11 @@ import { NoSymbolIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 export default function TaskList() {
   const user = useUser();
-  const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({
+  const {
+    data: userTasks,
+    isLoading,
+    refetch: refetchTasks,
+  } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
   const [completedTasksButton, setCompletedTasksButton] = useState(false);
@@ -47,7 +51,10 @@ export default function TaskList() {
       {completedTasksButton && (
         <ClickAwayListener onClickAway={() => setCompletedTasksButton(false)}>
           <div
-            onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+            onClick={() => {
+              void refetchTasks();
+              setShowCompletedTasks(!showCompletedTasks);
+            }}
             className="no-highlight absolute right-0 top-12 z-20 cursor-pointer rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
           >
             {showCompletedTasks ? (
