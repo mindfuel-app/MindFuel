@@ -17,8 +17,8 @@ export default function TaskCard({
   isChecked?: boolean;
   showCompletedTasks?: boolean;
 }) {
-  const [isTaskDone, setIsTaskDone] = useState(false);
-  const [showCheck, setShowCheck] = useState(isChecked ? isChecked : false);
+  const [isTaskDone, setIsTaskDone] = useState(isChecked || false);
+  const [showCheck, setShowCheck] = useState(isChecked || false);
   const { setTaskDone, setTaskUndone } = useTasks({});
 
   const deadlineDate = deadline
@@ -52,10 +52,7 @@ export default function TaskCard({
                   <CalendarIcon className="mt-[1px] h-4 w-4 text-orange" />
                   <span
                     className={`text-sm text-orange ${
-                      (isChecked && showCompletedTasks) ||
-                      (isTaskDone && showCompletedTasks)
-                        ? "text-gray-500 line-through"
-                        : ""
+                      isTaskDone ? "text-gray-500 line-through" : ""
                     }`}
                   >
                     {deadlineDate}
@@ -63,12 +60,17 @@ export default function TaskCard({
                 </div>
               )}
             </div>
-            <button className="no-highlight group absolute right-6">
-              <PencilSquareIcon className="h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
-            </button>
+            {!isTaskDone && (
+              <motion.button
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="no-highlight group absolute right-6"
+              >
+                <PencilSquareIcon className="h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
+              </motion.button>
+            )}
             <div
               onClick={() => {
-                if ((isChecked || isTaskDone) && showCompletedTasks) return;
                 setShowCheck(!showCheck);
                 setTimeout(() => {
                   if (showCheck) {
