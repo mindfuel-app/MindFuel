@@ -14,8 +14,8 @@ import { api } from "~/utils/api";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import ActiveTask from "./activeTask";
-import InactiveTask from "./inactiveTask";
+import ActiveTask from "../../components/task/activeTask";
+import InactiveTask from "../../components/task/inactiveTask";
 import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
 
 function ErrorPage() {
