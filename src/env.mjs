@@ -26,6 +26,7 @@ export const env = createEnv({
     JWT_SECRET: z.string(),
     PUBLIC_VAPID: z.string(),
     PRIVATE_VAPID: z.string(),
+    GCMAPI_KEY: z.string(),
   },
 
   /**
@@ -51,6 +52,7 @@ export const env = createEnv({
     JWT_SECRET: process.env.JWT_SECRET,
     PUBLIC_VAPID: process.env.PUBLIC_VAPID,
     PRIVATE_VAPID: process.env.PRIVATE_VAPID,
+    GCMAPI_KEY: process.env.GCMAPI,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

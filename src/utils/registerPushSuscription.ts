@@ -1,3 +1,5 @@
+import { api } from "~/utils/api";
+
 export function registerServiceWorker() {
   return navigator.serviceWorker
     .register('./push-sw.js')
@@ -36,7 +38,7 @@ function subscribeUserToPush() {
     .then(function (registration) {
       const subscribeOptions = {
         userVisibleOnly: true,
-        applicationServerKey: "BAfc7r8bQIg9A6NXPHJzx72YzivmtEQ13CdnZviOHsL-mtf3k6W4YCMcEpsFjb3UGLhAslARg4koZf2I-OY82WQ",
+        applicationServerKey: "BJw57keq3mApSgaxzVzpdNMmViHi4EG5zTXalzO3ktWP4PXDHHW0qXTCfrJuZYF4ehzGI6yOI1jATxXcfo2W5Ww",
       };
 
       return registration.pushManager.subscribe(subscribeOptions);
@@ -47,6 +49,7 @@ function subscribeUserToPush() {
     });
 }
 
+
 function saveSuscriptionInDb(suscription: object){
-  console.log(suscription);
+  //make query
 }
