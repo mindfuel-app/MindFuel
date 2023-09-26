@@ -1,9 +1,7 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import webpush from "web-push" // Typescript doesn't recognize web-push as a module, so we need to import it like this
-// import webpush from 'web-push';
 import { env } from "~/env.mjs";
-import { WEB_VITALS } from "next/dist/shared/lib/utils";
 
 webpush.setGCMAPIKey(env.GCMAPI_KEY)
 const vapidKeys = {
@@ -25,7 +23,7 @@ export const pushRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const pushSubscription = await ctx.prisma.pushSubscription.create({
         data: {
-          user_id: input.user_id,
+          user_id: input.userId,
           suscription: input.PushSubscription
           }
           });
@@ -45,7 +43,7 @@ export const pushRouter = createTRPCRouter({
           title: input.title,
           body: input.body,
         });
-        webpush.sendNotification(pushSubscription.suscription, payload).catch((error) => console.error(error));
+        //webpush.sendNotification(pushSubscription.suscription, payload).catch((error) => console.error(error));
       });
       return pushSubscriptions;
     }),

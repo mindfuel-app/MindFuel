@@ -1,3 +1,4 @@
+import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
 
 export function registerServiceWorker() {
@@ -11,7 +12,7 @@ export function registerServiceWorker() {
     });
 }
 
-export function askPermission() {
+export function askPermission(userId:string) {
   return new Promise(function (resolve, reject) {
     const permissionResult = Notification.requestPermission(function (result) {
       resolve(result);
@@ -25,14 +26,14 @@ export function askPermission() {
       throw new Error('We weren\'t granted permission.');
     }
     else if (permissionResult === 'granted') {
-      subscribeUserToPush().catch((err) => {
+      subscribeUserToPush(userId).catch((err) => {
         alert(err);
       });
     }
   });
 }
 
-function subscribeUserToPush() {
+function subscribeUserToPush(userId:string) {
   return navigator.serviceWorker
     .register('./push-sw.js')
     .then(function (registration) {
@@ -44,12 +45,6 @@ function subscribeUserToPush() {
       return registration.pushManager.subscribe(subscribeOptions);
     })
     .then(function (pushSubscription) {
-      const suscription = pushSubscription;
-      saveSuscriptionInDb(suscription);
+      console.log(pushSubscription)
     });
-}
-
-
-function saveSuscriptionInDb(suscription: object){
-  //make query
 }

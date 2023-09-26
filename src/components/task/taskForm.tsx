@@ -116,7 +116,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
 
     setTimeout(() => {
       createTasks({
-        tasks: tasks,
+        tasks,
       });
       afterSave();
     }, 1000);

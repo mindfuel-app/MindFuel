@@ -47,7 +47,7 @@ export default function Home() {
   }
 
   registerServiceWorker().catch(error => console.error(error));
-  askPermission().catch(error => console.error(error));
+  console.log(askPermission(sessionData.user.id).catch(error => console.error(error)))
   return (
     <>
       <Head>
