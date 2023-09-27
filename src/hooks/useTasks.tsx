@@ -24,7 +24,7 @@ export function useTasks({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError?: (e: any) => void;
 }) {
-  const { mutate: createTasks } = api.tasks.createTask.useMutation({
+  const { mutate: createTask } = api.tasks.createTask.useMutation({
     onSuccess: onSuccess,
     onError: onError,
   });
@@ -39,5 +39,5 @@ export function useTasks({
     onError: onError,
   });
 
-  return { createTasks, setTaskDone, setTaskUndone };
+  return { createTask, setTaskDone, setTaskUndone };
 }

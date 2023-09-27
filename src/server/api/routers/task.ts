@@ -9,7 +9,7 @@ type Task = {
   category: string | null;
   createdAt: Date;
   deadline: Date | null;
-  usesAI:boolean;
+  usesAI: boolean;
   routine_id: string | null;
   event_id: string | null;
   required_energy: number | null;
@@ -35,34 +35,22 @@ export const taskRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(
       z.object({
-        tasks: z
-          .object({
-            name: z.string(),
-            description: z.string().nullish(),
-            category: z.string().nullish(),
-            deadline: z.date().nullish(),
-            usesAI: z.boolean(),
-            routine_id: z.string().nullish(),
-            event_id: z.string().nullish(),
-            estimated_time: z.number().nullish(),
-            done: z.boolean(),
-            user_id: z.string(),
-            requiredenergy: z.number().nullish(),
-          })
-          .array(),
+        task: z.object({
+          name: z.string(),
+          description: z.string().nullish(),
+          deadline: z.date().nullish(),
+          routine_id: z.string().nullish(),
+          user_id: z.string(),
+        }),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const tasks = input.tasks;
-      if (!tasks) return error("No tasks provided");
-      const createdTasks = await Promise.all(
-        tasks.map(async (task) => {
-          return await ctx.prisma.task.create({
-            data: task,
-          });
-        })
-      );
-      return createdTasks;
+      const task = input.task;
+      if (!task) return error("No tasks provided");
+      const createdTask = await ctx.prisma.task.create({
+        data: task,
+      });
+      return createdTask;
     }),
   getTasks: protectedProcedure
     .input(z.object({ user_id: z.string() }))
