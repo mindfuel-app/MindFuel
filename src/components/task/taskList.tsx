@@ -81,7 +81,7 @@ export default function TaskList() {
               ? "Tareas pendientes"
               : "No hay tareas pendientes"}
           </h2>
-          <ul className="flex w-72 flex-col gap-3">
+          <ul className="flex w-72 flex-col gap-3 sm:w-80 lg:w-96">
             {pendingTasks.map((task) => (
               <TaskCard
                 id={task.id}
