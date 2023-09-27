@@ -123,38 +123,25 @@ export const taskRouter = createTRPCRouter({
   modifyTask: protectedProcedure
     .input(
       z.object({
-        taskId: z.string(),
-        name: z.string(),
-        description: z.string().optional(),
-        category: z.string().optional(),
-        deadline: z.string().optional(),
-        usesAI: z.boolean(),
-        routine_id: z.string().optional(),
-        event_id: z.string().optional(),
-        estimated_time: z.number().optional(),
-        done: z.boolean(),
-        user_id: z.string(),
-        requiredenergy: z.number().optional(),
+        task: z.object({
+          id: z.string(),
+          name: z.string(),
+          description: z.string().nullish(),
+          deadline: z.date().nullish(),
+          routine_id: z.string().nullish(),
+          user_id: z.string(),
+        }),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const task = await ctx.prisma.task.update({
-        data: {
-          name: input.name,
-          description: input.description,
-          category: input.category,
-          routine_id: input.routine_id,
-          event_id: input.event_id,
-          estimated_time: input.estimated_time,
-          done: input.done,
-          user_id: input.user_id,
-          required_energy: input.requiredenergy,
-        },
+      const task = input.task;
+      const editedTask = await ctx.prisma.task.update({
+        data: task,
         where: {
-          id: input.taskId,
+          id: task.id,
         },
       });
-      return task;
+      return editedTask;
     }),
   updateTaskTime: protectedProcedure
     .input(z.object({ id: z.string(), estimated_time: z.number() }))
@@ -170,11 +157,11 @@ export const taskRouter = createTRPCRouter({
       return task;
     }),
   deleteTask: protectedProcedure
-    .input(z.object({ taskId: z.string() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const task = await ctx.prisma.task.delete({
         where: {
-          id: input.taskId,
+          id: input.id,
         },
       });
       return task;

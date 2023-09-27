@@ -12,12 +12,14 @@ export default function TaskCard({
   id,
   name,
   deadline,
+  description,
   isChecked,
   showCompletedTasks,
 }: {
   id: string;
   name: string;
   deadline?: Date | null;
+  description?: string | null;
   isChecked?: boolean;
   showCompletedTasks?: boolean;
 }) {
@@ -72,28 +74,34 @@ export default function TaskCard({
             )}
           </div>
           {!isTaskDone && (
-            <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <Modal.Button>
-                <motion.button
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="no-highlight group"
-                >
-                  <div className="flex h-full items-center">
-                    <PencilSquareIcon className="h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
-                  </div>
-                </motion.button>
-              </Modal.Button>
-              <Modal.Content>
-                <TaskForm
-                  afterSave={() => {
-                    void refetchRoutines();
-                    void refetchTasks();
-                    setIsModalOpen(false);
-                  }}
-                />
-              </Modal.Content>
-            </Modal>
+            <>
+              <motion.button
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="no-highlight group"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <div className="flex h-full items-center">
+                  <PencilSquareIcon className="absolute right-6 h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
+                </div>
+              </motion.button>
+              <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <Modal.Content>
+                  <TaskForm
+                    mode="edit"
+                    id={id}
+                    initialName={name}
+                    initialDescription={description || ""}
+                    initialDeadline={deadline}
+                    afterSave={() => {
+                      void refetchRoutines();
+                      void refetchTasks();
+                      setIsModalOpen(false);
+                    }}
+                  />
+                </Modal.Content>
+              </Modal>
+            </>
           )}
           <div
             onClick={() => {

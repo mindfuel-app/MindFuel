@@ -1,6 +1,7 @@
 import {
   CalendarDaysIcon,
   CheckIcon,
+  TrashIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
@@ -14,14 +15,29 @@ import { useUser } from "~/lib/UserContext";
 import { Calendar } from "../ui/calendar";
 
 type Task = {
+  id: string;
   name: string;
   deadline: Date | null;
   description: string;
 };
 
-export default function TaskForm({ afterSave }: { afterSave: () => void }) {
+export default function TaskForm({
+  mode,
+  id,
+  initialName,
+  initialDeadline,
+  initialDescription,
+  afterSave,
+}: {
+  mode: "create" | "edit";
+  id?: string;
+  initialName?: string;
+  initialDeadline?: Date | null;
+  initialDescription: string;
+  afterSave: () => void;
+}) {
   const user = useUser();
-  const { createTask } = useTasks({
+  const { createTask, editTask, deleteTask } = useTasks({
     onSuccess: () => {
       setSaving(false);
       afterSave();
@@ -34,9 +50,10 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
   });
   const [saving, setSaving] = useState(false);
   const [task, setTask] = useState<Task>({
-    name: "",
-    deadline: null,
-    description: "",
+    id: id || "",
+    name: initialName || "",
+    deadline: initialDeadline || null,
+    description: initialDescription || "",
   });
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -52,9 +69,16 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     }
 
     setTimeout(() => {
-      createTask({
-        task: { ...task, user_id: user.id },
-      });
+      if (mode == "edit" && id) {
+        editTask({
+          task: { ...task, user_id: user.id },
+        });
+      } else {
+        createTask({
+          task: { ...task, user_id: user.id },
+        });
+      }
+
       afterSave();
     }, 1000);
   }
@@ -84,6 +108,7 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
       animate={{ scale: 1 }}
       className="p-5"
     >
+      {mode == "edit" && <h2 className="mb-5 text-xl">Editar tarea</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-4 group-disabled:opacity-50">
@@ -157,18 +182,32 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
               />
             </label>
           </div>
-          <div className="no-highlight mt-8 space-x-1 text-right">
-            <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
-              Cancelar
-            </Modal.Close>
-            <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80">
-              <CircularProgress
-                color="inherit"
-                size={20}
-                className="absolute group-enabled:opacity-0"
-              />
-              <span className="group-disabled:opacity-0">Guardar</span>
-            </Button>
+          <div
+            className={`flex pt-8 ${
+              mode == "edit" ? "justify-between" : "justify-end"
+            }`}
+          >
+            {mode == "edit" && id && (
+              <div
+                onClick={() => deleteTask({ id })}
+                className="no-highlight flex cursor-pointer items-center rounded-md border-[1px] border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
+              >
+                <TrashIcon className="h-5 w-5" />
+              </div>
+            )}
+            <div className="no-highlight space-x-1 text-right">
+              <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
+                Cancelar
+              </Modal.Close>
+              <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80">
+                <CircularProgress
+                  color="inherit"
+                  size={20}
+                  className="absolute group-enabled:opacity-0"
+                />
+                <span className="group-disabled:opacity-0">Guardar</span>
+              </Button>
+            </div>
           </div>
         </fieldset>
       </form>

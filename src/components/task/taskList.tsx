@@ -87,6 +87,7 @@ export default function TaskList() {
                 id={task.id}
                 name={task.name}
                 deadline={task.deadline}
+                description={task.description}
                 isChecked={task.done}
                 showCompletedTasks={showCompletedTasks}
                 key={task.id}

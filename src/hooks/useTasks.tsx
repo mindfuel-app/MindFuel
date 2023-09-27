@@ -29,6 +29,16 @@ export function useTasks({
     onError: onError,
   });
 
+  const { mutate: editTask } = api.tasks.modifyTask.useMutation({
+    onSuccess: onSuccess,
+    onError: onError,
+  });
+
+  const { mutate: deleteTask } = api.tasks.deleteTask.useMutation({
+    onSuccess: onSuccess,
+    onError: onError,
+  });
+
   const { mutate: setTaskDone } = api.tasks.setTaskDone.useMutation({
     onSuccess: onSuccess,
     onError: onError,
@@ -39,5 +49,5 @@ export function useTasks({
     onError: onError,
   });
 
-  return { createTask, setTaskDone, setTaskUndone };
+  return { createTask, editTask, deleteTask, setTaskDone, setTaskUndone };
 }
