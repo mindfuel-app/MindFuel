@@ -3,6 +3,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckIcon, CalendarIcon } from "@heroicons/react/24/outline";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import Modal from "../ui/modal";
+import TaskForm from "./taskForm";
+import { api } from "~/utils/api";
+import { useUser } from "~/lib/UserContext";
 
 export default function TaskCard({
   id,
@@ -17,9 +21,17 @@ export default function TaskCard({
   isChecked?: boolean;
   showCompletedTasks?: boolean;
 }) {
+  const user = useUser();
+  const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
+    user_id: user.id,
+  });
+  const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
+    user_id: user.id,
+  });
   const [isTaskDone, setIsTaskDone] = useState(isChecked || false);
   const [showCheck, setShowCheck] = useState(isChecked || false);
   const { setTaskDone, setTaskUndone } = useTasks({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const deadlineDate = deadline
     ? `${deadline.getDate()}/${deadline.getMonth() + 1}`
@@ -33,7 +45,7 @@ export default function TaskCard({
             opacity: 0,
             x: 20,
           }}
-          className="relative flex w-full items-center justify-start rounded-md border-2 border-teal bg-white py-1 pl-3"
+          className="relative flex w-full items-center justify-between rounded-md border-2 border-teal bg-white py-1 pl-3"
         >
           <div className="flex flex-col py-1">
             <span
@@ -60,13 +72,28 @@ export default function TaskCard({
             )}
           </div>
           {!isTaskDone && (
-            <motion.button
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="no-highlight group absolute right-6"
-            >
-              <PencilSquareIcon className="h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
-            </motion.button>
+            <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <Modal.Button>
+                <motion.button
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="no-highlight group"
+                >
+                  <div className="flex h-full items-center">
+                    <PencilSquareIcon className="h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
+                  </div>
+                </motion.button>
+              </Modal.Button>
+              <Modal.Content>
+                <TaskForm
+                  afterSave={() => {
+                    void refetchRoutines();
+                    void refetchTasks();
+                    setIsModalOpen(false);
+                  }}
+                />
+              </Modal.Content>
+            </Modal>
           )}
           <div
             onClick={() => {
