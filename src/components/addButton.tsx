@@ -41,6 +41,7 @@ export default function AddButton() {
         <AddModal
           TaskForm={
             <TaskForm
+              mode="create"
               afterSave={() => {
                 void refetchTasks();
                 setIsModalOpen(false);
