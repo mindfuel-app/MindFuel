@@ -33,7 +33,7 @@ export default function TaskForm({
   id?: string;
   initialName?: string;
   initialDeadline?: Date | null;
-  initialDescription: string;
+  initialDescription?: string;
   afterSave: () => void;
 }) {
   const user = useUser();
