@@ -57,13 +57,13 @@ export default function ProfileInfo() {
             </Modal.Button>
             <Modal.Content>
               <AddModal
-                TaskForm={
+                TaskModal={
                   <TaskForm
                     mode="create"
                     afterSave={() => setIsModalOpen(false)}
                   />
                 }
-                RoutineForm={
+                RoutineModal={
                   <RoutineForm afterSave={() => setIsModalOpen(false)} />
                 }
               />
