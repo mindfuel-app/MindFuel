@@ -3,11 +3,11 @@ import { Button } from "./ui/button";
 import useSwipe from "~/hooks/useSwipe";
 
 export default function AddModal({
-  TaskForm,
-  RoutineForm,
+  TaskModal,
+  RoutineModal,
 }: {
-  TaskForm: JSX.Element;
-  RoutineForm: JSX.Element;
+  TaskModal: JSX.Element;
+  RoutineModal: JSX.Element;
 }) {
   const [selectedTab, setSelectedTab] = useState<"tareas" | "rutinas">(
     "tareas"
@@ -26,7 +26,7 @@ export default function AddModal({
   });
 
   return (
-    <div>
+    <>
       <div className="no-highlight relative flex w-full">
         <Button
           className={`relative h-14 w-1/2 text-xl active:bg-gray-100 ${
@@ -57,10 +57,10 @@ export default function AddModal({
         <div className="absolute bottom-0 w-full border-[1px] border-gray-100"></div>
       </div>
       {selectedTab == "tareas" ? (
-        <div {...swipeLeftHandler}>{TaskForm}</div>
+        <div {...swipeLeftHandler}>{TaskModal}</div>
       ) : (
-        <div {...swipeRightHandler}>{RoutineForm}</div>
+        <div {...swipeRightHandler}>{RoutineModal}</div>
       )}
-    </div>
+    </>
   );
 }

@@ -39,7 +39,7 @@ export default function AddButton() {
       </Modal.Button>
       <Modal.Content>
         <AddModal
-          TaskForm={
+          TaskModal={
             <TaskForm
               mode="create"
               afterSave={() => {
@@ -48,7 +48,7 @@ export default function AddButton() {
               }}
             />
           }
-          RoutineForm={
+          RoutineModal={
             <RoutineForm
               afterSave={() => {
                 void refetchRoutines();
