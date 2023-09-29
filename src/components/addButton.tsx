@@ -1,4 +1,3 @@
-import router from "next/router";
 import Modal from "./ui/modal";
 import RoutineForm from "./routine/routineForm";
 import AddModal from "./addModal";
@@ -6,6 +5,7 @@ import TaskForm from "./task/taskForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 import { useSearchParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function AddButton() {
   const user = useUser();
@@ -31,11 +31,15 @@ export default function AddButton() {
 
   return (
     <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <Modal.Button
-        disabled={router.pathname != "/home"}
-        className="absolute -top-9 h-14 w-14 transform rounded-full border-[3px] border-teal bg-white transition-all group-active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
-      >
-        <span className="text-2xl font-extrabold text-teal">+</span>
+      <Modal.Button>
+        <motion.button
+          // initial={{ x: 20 }}
+          // animate={{ x: 0 }}
+          // transition={{ duration: 0.2 }}
+          className="no-highlight absolute h-14 w-14 transform rounded-full border-[3px] border-teal bg-white transition-all group-active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
+        >
+          <span className="text-2xl font-extrabold text-teal">+</span>
+        </motion.button>
       </Modal.Button>
       <Modal.Content>
         <AddModal

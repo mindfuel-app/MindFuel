@@ -9,6 +9,7 @@ import Router from "next/router";
 import useSwipe from "~/hooks/useSwipe";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import AddButton from "~/components/addButton";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -85,6 +86,9 @@ export default function Home() {
             </div>
           )}
         </Tabs>
+        <div className="fixed bottom-40 right-20">
+          <AddButton />
+        </div>
       </Layout>
     </>
   );
