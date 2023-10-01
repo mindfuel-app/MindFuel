@@ -16,11 +16,11 @@ export default function AppLayout({
       name={sessionData.user.name || ""}
       email={sessionData.user.email || ""}
     >
-      <div className="flex min-h-screen flex-col">
+      <div className="flex h-screen flex-col">
         <Header />
-        <div className="mb-[86px] flex h-full flex-col items-center bg-alabaster p-3">
+        <main className="mb-[86px] flex h-full flex-col items-center bg-alabaster p-3">
           {children}
-        </div>
+        </main>
         <BottomNavigation />
       </div>
     </UserProvider>

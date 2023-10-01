@@ -44,7 +44,7 @@ export default function Home() {
         <title>MindFuel</title>
       </Head>
       <Layout sessionData={sessionData}>
-        <Tabs className="h-screen w-full">
+        <Tabs className="h-full w-full">
           <div className="mt-5 flex justify-center">
             <TabsList>
               {tabOptions.map((tab) => (
