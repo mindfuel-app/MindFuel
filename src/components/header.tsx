@@ -46,20 +46,22 @@ export default function ProfileInfo() {
   return (
     <div className="flex items-center justify-between bg-alabaster p-3 pt-5 font-medium">
       <div className="relative flex items-center gap-1">
-        <span>
-          Bienvenido,{" "}
+        <span>Bienvenido, </span>
+        <div
+          onClick={() => setShowLogout(!showLogout)}
+          className="flex items-center gap-1 rounded-md transition-colors"
+        >
           <span className="font-semibold text-orange">
             {sessionData.user.name}
           </span>
-        </span>
-        <motion.div
-          initial={{ rotate: 0 }}
-          animate={{ rotate: showLogout ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-          onClick={() => setShowLogout(!showLogout)}
-        >
-          <ChevronDownIcon className="h-4 w-4 text-gray-600 active:text-gray-900" />
-        </motion.div>
+          <motion.div
+            initial={{ rotate: 0 }}
+            animate={{ rotate: showLogout ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ChevronDownIcon className="h-4 w-4 text-gray-600 active:text-gray-900" />
+          </motion.div>
+        </div>
         <AnimatePresence>
           {showLogout && (
             <motion.div
