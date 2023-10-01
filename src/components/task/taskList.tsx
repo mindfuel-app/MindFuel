@@ -44,7 +44,7 @@ export default function TaskList() {
     >
       <div
         onClick={() => setCompletedTasksButton(!completedTasksButton)}
-        className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] active:bg-black/10 lg:hover:bg-black/10"
+        className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] transition-colors active:bg-black/10 lg:hover:bg-black/10"
       >
         <EllipsisHorizontalIcon className="h-6 w-6" />
       </div>
