@@ -55,8 +55,7 @@ export default function TaskCard({
           <div className="flex flex-col py-1">
             <span
               className={`text-black ${
-                (isChecked && showCompletedTasks) ||
-                (isTaskDone && showCompletedTasks)
+                isTaskDone && showCompletedTasks
                   ? "line-through opacity-50"
                   : ""
               }`}
