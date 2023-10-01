@@ -52,7 +52,7 @@ export default function AddButton() {
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-            <span className="text-xl font-medium text-teal">Crear</span>
+            <span className="text-lg font-medium text-teal">Crear</span>
           </button>
         </motion.div>
       </Modal.Button>
