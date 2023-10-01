@@ -6,27 +6,50 @@ import { motion } from "framer-motion";
 import SelfCareLayout from "../../components/selfCareLayout";
 import { usePreviousPath } from "~/hooks/usePreviousPath";
 
-const options = [
+type Option = {
+  title: string;
+  href: string;
+  description: string;
+  image: string;
+};
+
+const options: Option[] = [
   {
     title: "Mindfulness",
     href: "/mindfulness",
-    duration: 10,
-    description: "Variedad de ejercicios para relajar",
+    description: "Variedad de ejercicios para relajar.",
     image: "/mindfulness.png",
   },
   {
     title: "Apreciacion",
     href: "/apreciacion",
-    duration: 10,
-    description: "Concentrate en pequeñas cosas y aprecialas",
+    description: "Concentrate en pequeñas cosas y aprecialas.",
     image: "/apreciacion.png",
   },
   {
     title: "Tomar agua",
     href: "/tomar-agua",
-    duration: 10,
-    description: "Es importante mantenerse hidratado",
+    description: "Es importante mantenerse hidratado.",
     image: "/tomar-agua.png",
+  },
+  {
+    title: "Técnica Pomodoro",
+    href: "/pomodoro",
+    description:
+      "Haz tus tareas usando este método para mejorar la administración del tiempo.",
+    image: "/pomodoro.png",
+  },
+  {
+    title: "Diario personal",
+    href: "/diario-personal",
+    description: "Escribe sobre lo que quieras aquí. Sé libre y exprésate.",
+    image: "/diario-personal.png",
+  },
+  {
+    title: "Respiración",
+    href: "/respiracion",
+    description: "Tomate un tiempo para relajar y recuperar la atención.",
+    image: "/respiracion.png",
   },
 ];
 
@@ -53,16 +76,17 @@ export default function SelfCare() {
             className="no-highlight flex gap-1 rounded-md bg-white p-2 transition-transform active:scale-[97%]"
             onClick={() => onRouteChange(`/self-care${option.href}`)}
           >
-            <Image
-              width={71}
-              height={68}
-              alt={option.title}
-              src={`/self-care${option.image}`}
-              className="w-1/4"
-            />
+            {option.image && (
+              <Image
+                width={71}
+                height={68}
+                alt={option.title}
+                src={`/self-care${option.image}`}
+                className="w-1/4"
+              />
+            )}
             <div className="w-3/4">
               <h2 className="font-semibold">{option.title}</h2>
-              <h3 className="text-sm font-medium">{`Duracion: ${option.duration} minutos`}</h3>
               <h4 className="text-sm">{option.description}</h4>
             </div>
           </Link>
