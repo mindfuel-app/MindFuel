@@ -16,6 +16,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import ClickAwayListener from "react-click-away-listener";
 
 export default function ProfileInfo() {
   const router = useRouter();
@@ -47,21 +48,23 @@ export default function ProfileInfo() {
     <div className="flex items-center justify-between bg-alabaster p-3 pt-5 font-medium">
       <div className="relative flex items-center gap-1">
         <span>Bienvenido, </span>
-        <div
-          onClick={() => setShowLogout(!showLogout)}
-          className="flex items-center gap-1 rounded-md transition-colors"
-        >
-          <span className="font-semibold text-orange">
-            {sessionData.user.name}
-          </span>
-          <motion.div
-            initial={{ rotate: 0 }}
-            animate={{ rotate: showLogout ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
+        <ClickAwayListener onClickAway={() => setShowLogout(false)}>
+          <div
+            onClick={() => setShowLogout(!showLogout)}
+            className="no-highlight flex cursor-pointer select-none items-center gap-1 rounded-md transition-colors active:bg-gray-300"
           >
-            <ChevronDownIcon className="h-4 w-4 text-gray-600 active:text-gray-900" />
-          </motion.div>
-        </div>
+            <span className="font-semibold text-orange">
+              {sessionData.user.name}
+            </span>
+            <motion.div
+              initial={{ rotate: 0 }}
+              animate={{ rotate: showLogout ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ChevronDownIcon className="h-4 w-4 text-gray-600 active:text-gray-900" />
+            </motion.div>
+          </div>
+        </ClickAwayListener>
         <AnimatePresence>
           {showLogout && (
             <motion.div
