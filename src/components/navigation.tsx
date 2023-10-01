@@ -2,7 +2,8 @@ import Link from "next/link";
 import { FaUserFriends, FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
+import { motion } from "framer-motion";
 
 function NavigationItem({
   href,
@@ -54,9 +55,9 @@ const navigationItems = [
   },
 ];
 
-export default function Navigation() {
+export function BottomNavigation() {
   return (
-    <div className="no-highlight fixed bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
+    <div className="no-highlight sticky bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
       {navigationItems.map((item) => (
         <NavigationItem
           key={item.href}
@@ -64,6 +65,38 @@ export default function Navigation() {
           icon={item.icon}
           name={item.name}
         />
+      ))}
+    </div>
+  );
+}
+
+export function TopNavigation() {
+  return (
+    <div className="fixed left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-10 lg:flex xl:gap-16">
+      {navigationItems.map((item) => (
+        <Link
+          key={item.name}
+          href={item.href}
+          className={`no-highlight px-3 py-1.5 transition ${
+            !router.pathname.startsWith(item.href) ? "hover:opacity-70" : ""
+          }`}
+        >
+          <span
+            className={`${
+              router.pathname.startsWith(item.href)
+                ? "font-medium"
+                : "font-normal"
+            }`}
+          >
+            {item.name}
+          </span>
+          {router.pathname.startsWith(item.href) && (
+            <motion.div
+              layoutId="active-underline"
+              className="border-2 border-teal"
+            ></motion.div>
+          )}
+        </Link>
       ))}
     </div>
   );

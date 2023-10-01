@@ -1,14 +1,10 @@
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import router from "next/router";
 import Modal from "./ui/modal";
 import RoutineForm from "./routine/routineForm";
 import AddModal from "./addModal";
 import TaskForm from "./task/taskForm";
-import { FaUserFriends, FaHandHoldingHeart } from "react-icons/fa";
-import { AiFillHome } from "react-icons/ai";
-import { BsPersonCircle } from "react-icons/bs";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   ArrowLeftOnRectangleIcon,
@@ -17,8 +13,9 @@ import {
 import { useState } from "react";
 import { Button } from "./ui/button";
 import ClickAwayListener from "react-click-away-listener";
+import { TopNavigation } from "./navigation";
 
-export default function ProfileInfo() {
+export default function Header() {
   const router = useRouter();
   const [showLogout, setShowLogout] = useState(false);
   const { data: sessionData } = useSession();
@@ -87,7 +84,7 @@ export default function ProfileInfo() {
           )}
         </AnimatePresence>
       </div>
-      <Navigation />
+      <TopNavigation />
       <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
         <Modal.Button className="no-highlight fixed right-7 hidden rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:block">
           Crear rutina
@@ -103,55 +100,6 @@ export default function ProfileInfo() {
           />
         </Modal.Content>
       </Modal>
-    </div>
-  );
-}
-
-const navigationItems = [
-  { href: "/home", label: "Home", icon: <AiFillHome className="h-6 w-6" /> },
-  {
-    href: "/self-care",
-    label: "Self-care",
-    icon: <FaHandHoldingHeart className="h-6 w-6" />,
-  },
-  {
-    href: "/amigos",
-    label: "Amigos",
-    icon: <FaUserFriends className="h-6 w-6" />,
-  },
-  {
-    href: "/perfil",
-    label: "Perfil",
-    icon: <BsPersonCircle className="h-6 w-6" />,
-  },
-];
-
-function Navigation() {
-  return (
-    <div className="fixed left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-10 lg:flex xl:gap-16">
-      {navigationItems.map((item) => (
-        <Link
-          key={item.label}
-          href={item.href}
-          className={`no-highlight px-3 py-1.5 transition ${
-            router.pathname != item.href ? "hover:opacity-70" : ""
-          }`}
-        >
-          <span
-            className={`${
-              router.pathname == item.href ? "font-medium" : "font-normal"
-            }`}
-          >
-            {item.label}
-          </span>
-          {router.pathname == item.href && (
-            <motion.div
-              layoutId="active-underline"
-              className="border-2 border-teal"
-            ></motion.div>
-          )}
-        </Link>
-      ))}
     </div>
   );
 }

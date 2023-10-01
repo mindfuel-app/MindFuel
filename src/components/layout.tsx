@@ -1,4 +1,4 @@
-import Navigation from "./navigation";
+import { BottomNavigation } from "./navigation";
 import Header from "./header";
 import { UserProvider } from "~/lib/UserContext";
 import { type Session } from "next-auth";
@@ -21,7 +21,7 @@ export default function AppLayout({
         <div className="mb-[86px] flex h-full flex-col items-center bg-alabaster p-3">
           {children}
         </div>
-        <Navigation />
+        <BottomNavigation />
       </div>
     </UserProvider>
   );
