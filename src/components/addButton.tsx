@@ -32,14 +32,29 @@ export default function AddButton() {
   return (
     <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
       <Modal.Button>
-        <motion.button
-          // initial={{ x: 20 }}
-          // animate={{ x: 0 }}
-          // transition={{ duration: 0.2 }}
-          className="no-highlight absolute h-14 w-14 transform rounded-full border-[3px] border-teal bg-white transition-all group-active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
+        <motion.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center justify-center"
         >
-          <span className="text-2xl font-extrabold text-teal">+</span>
-        </motion.button>
+          <button className="no-highlight absolute flex transform items-center gap-3 rounded-2xl border-2 border-teal bg-white px-4 py-3 shadow-lg transition-all active:scale-[98%] ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="teal"
+              className="h-6 w-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+            <span className="text-xl font-medium text-teal">Crear</span>
+          </button>
+        </motion.div>
       </Modal.Button>
       <Modal.Content>
         <AddModal

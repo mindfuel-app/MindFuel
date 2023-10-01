@@ -86,7 +86,7 @@ export default function Home() {
             </div>
           )}
         </Tabs>
-        <div className="fixed bottom-40 right-20">
+        <div className="fixed bottom-[120px] right-[80px] lg:hidden">
           <AddButton />
         </div>
       </Layout>
