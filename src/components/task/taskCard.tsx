@@ -21,7 +21,7 @@ export default function TaskCard({
   deadline?: Date | null;
   description?: string | null;
   isChecked?: boolean;
-  showCompletedTasks?: boolean;
+  showCompletedTasks: boolean;
 }) {
   const user = useUser();
   const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
@@ -43,6 +43,8 @@ export default function TaskCard({
     <AnimatePresence>
       {(!isTaskDone || showCompletedTasks) && (
         <motion.div
+          initial={{ opacity: isTaskDone ? 0.5 : 1 }}
+          animate={{ opacity: 1 }}
           exit={{
             opacity: 0,
             x: 20,

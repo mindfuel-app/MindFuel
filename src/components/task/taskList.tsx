@@ -57,17 +57,23 @@ export default function TaskList() {
             }}
             className="no-highlight absolute right-0 top-12 z-20 cursor-pointer rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
           >
-            {showCompletedTasks ? (
-              <div className="flex items-center gap-1">
-                <NoSymbolIcon className="h-6 w-6" />
-                Ocultar tareas completadas
-              </div>
-            ) : (
-              <div className="flex items-center gap-1">
-                <CheckCircleIcon className="h-6 w-6" />
-                Mostrar tareas completadas
-              </div>
-            )}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex items-center gap-1"
+            >
+              {showCompletedTasks ? (
+                <>
+                  <NoSymbolIcon className="h-6 w-6" />
+                  Ocultar tareas completadas
+                </>
+              ) : (
+                <>
+                  <CheckCircleIcon className="h-6 w-6" />
+                  Mostrar tareas completadas
+                </>
+              )}
+            </motion.div>
           </div>
         </ClickAwayListener>
       )}
