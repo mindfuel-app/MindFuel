@@ -43,7 +43,7 @@ export default function TaskCard({
     <AnimatePresence>
       {(!isTaskDone || showCompletedTasks) && (
         <motion.div
-          initial={{ opacity: isTaskDone ? 0.5 : 1 }}
+          initial={{ opacity: isTaskDone ? 0 : 1 }}
           animate={{ opacity: 1 }}
           exit={{
             opacity: 0,
