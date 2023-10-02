@@ -2,27 +2,33 @@ import Link from "next/link";
 import { FaUserFriends, FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
-import router, { useRouter } from "next/router";
+import router from "next/router";
 import { motion } from "framer-motion";
+import { useUser } from "~/lib/UserContext";
 
 function NavigationItem({
   href,
   icon,
   name,
+  userName,
   handleClick,
 }: {
   href: string;
   icon: JSX.Element;
   name: string;
+  userName: string;
   handleClick?: () => void;
 }) {
-  const router = useRouter();
+  const { name: routerName } = router.query;
 
   return (
     <Link
       href={href}
       className={`${
-        router.pathname.startsWith(href) ? "text-teal" : ""
+        router.pathname.startsWith(href) ||
+        (name == "Perfil" && routerName == userName)
+          ? "text-teal"
+          : ""
       } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
     >
@@ -56,14 +62,17 @@ const navigationItems = [
 ];
 
 export function BottomNavigation() {
+  const { name } = useUser();
+
   return (
     <div className="no-highlight sticky bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
       {navigationItems.map((item) => (
         <NavigationItem
           key={item.href}
-          href={item.href}
+          href={item.name == "Perfil" ? `/${name}` : item.href}
           icon={item.icon}
           name={item.name}
+          userName={name}
         />
       ))}
     </div>
