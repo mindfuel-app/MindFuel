@@ -2,29 +2,33 @@ import Link from "next/link";
 import { FaUserFriends, FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
-import { useRouter } from "next/router";
+import router from "next/router";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import AddButton from "./addButton";
+import { useUser } from "~/lib/UserContext";
 
 function NavigationItem({
   href,
   icon,
   name,
+  userName,
   handleClick,
 }: {
   href: string;
   icon: JSX.Element;
   name: string;
+  userName: string;
   handleClick?: () => void;
 }) {
-  const router = useRouter();
+  const { name: routerName } = router.query;
 
   return (
     <Link
       href={href}
       className={`${
-        router.pathname == href ? "text-teal" : ""
+        router.pathname.startsWith(href) ||
+        (name == "Perfil" && routerName == userName)
+          ? "text-teal"
+          : ""
       } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
     >
@@ -34,137 +38,75 @@ function NavigationItem({
   );
 }
 
-let previousRoute = "/";
+const navigationItems = [
+  {
+    href: "/home",
+    icon: <AiFillHome className="text-3xl" />,
+    name: "Home",
+  },
+  {
+    href: "/self-care",
+    icon: <FaHandHoldingHeart className="text-3xl" />,
+    name: "Self-care",
+  },
+  {
+    href: "/amigos",
+    icon: <FaUserFriends className="text-3xl" />,
+    name: "Amigos",
+  },
+  {
+    href: "/perfil",
+    icon: <BsPersonCircle className="text-3xl" />,
+    name: "Perfil",
+  },
+];
 
-export default function Navigation() {
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-  const animationDuration = 0.3;
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
+export function BottomNavigation() {
+  const { name } = useUser();
 
   return (
-    <div className="no-highlight fixed bottom-0 w-full bg-white py-3 lg:hidden">
-      {(router.pathname == "/home" || previousRoute == "/home") && (
-        <motion.div
-          className="group relative flex justify-center"
-          layout
-          initial={{
-            y: router.pathname == "/home" ? 15 : 0,
-            opacity: router.pathname == "/home" ? 0.5 : 1,
-          }}
-          animate={{
-            y: router.pathname == "/home" ? 0 : -20,
-            opacity: router.pathname == "/home" ? 1 : 0,
-          }}
-        >
-          <span className="absolute -top-10 h-16 w-16 rounded-full bg-alabaster min-[425px]:h-[72px] min-[425px]:w-[72px]"></span>
-          <AddButton />
-        </motion.div>
-      )}
-      <motion.div
-        layout
-        className={`flex ${
-          isLoading && router.pathname == "/home"
-            ? "justify-stretch"
-            : !isLoading && router.pathname == "/home"
-            ? "justify-between"
-            : isLoading && router.pathname != "/home"
-            ? "justify-between"
-            : "justify-stretch"
-        }`}
-      >
-        <div
-          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] min-[500px]:w-full ${
-            previousRoute != "/home" && router.pathname != "/home"
-              ? "-mr-2 flex-1"
-              : isLoading && router.pathname == "/home"
-              ? "-mr-2 flex-1"
-              : isLoading && router.pathname != "/home"
-              ? "min-[500px]:max-md:mr-5"
-              : router.pathname != "/home"
-              ? "-mr-2 flex-1"
-              : "min-[500px]:max-md:mr-5"
+    <div className="no-highlight sticky bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
+      {navigationItems.map((item) => (
+        <NavigationItem
+          key={item.href}
+          href={item.name == "Perfil" ? `/${name}` : item.href}
+          icon={item.icon}
+          name={item.name}
+          userName={name}
+        />
+      ))}
+    </div>
+  );
+}
+
+export function TopNavigation() {
+  return (
+    <div className="fixed left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-10 lg:flex xl:gap-16">
+      {navigationItems.map((item) => (
+        <Link
+          key={item.name}
+          href={item.href}
+          className={`no-highlight px-3 py-1.5 transition ${
+            !router.pathname.startsWith(item.href) ? "hover:opacity-70" : ""
           }`}
         >
-          <motion.div
-            layout
-            transition={{
-              duration: animationDuration,
-            }}
+          <span
+            className={`${
+              router.pathname.startsWith(item.href)
+                ? "font-medium"
+                : "font-normal"
+            }`}
           >
-            <NavigationItem
-              href="/home"
-              icon={<AiFillHome className="text-3xl" />}
-              name="Home"
-              handleClick={() => {
-                previousRoute = router.pathname;
-              }}
-            />
-          </motion.div>
-          <motion.div
-            layout
-            transition={{
-              duration: animationDuration,
-            }}
-          >
-            <NavigationItem
-              href="/self-care"
-              icon={<FaHandHoldingHeart className="text-3xl" />}
-              name="Self-care"
-              handleClick={() => {
-                previousRoute = router.pathname;
-              }}
-            />
-          </motion.div>
-        </div>
-        <div
-          className={`flex w-[140px] justify-evenly min-[350px]:w-[150px] min-[375px]:w-[160px] min-[425px]:w-[180px] min-[500px]:w-full ${
-            previousRoute != "/home" && router.pathname != "/home"
-              ? "-ml-2 flex-1"
-              : isLoading && router.pathname == "/home"
-              ? "-ml-2 flex-1"
-              : isLoading && router.pathname != "/home"
-              ? "min-[500px]:max-md:ml-5"
-              : router.pathname != "/home"
-              ? "-ml-2 flex-1"
-              : "min-[500px]:max-md:ml-5"
-          }`}
-        >
-          <motion.div
-            layout
-            transition={{
-              duration: animationDuration,
-            }}
-          >
-            <NavigationItem
-              href="/amigos"
-              icon={<FaUserFriends className="text-3xl" />}
-              name="Amigos"
-              handleClick={() => {
-                previousRoute = router.pathname;
-              }}
-            />
-          </motion.div>
-          <motion.div
-            layout
-            transition={{
-              duration: animationDuration,
-            }}
-          >
-            <NavigationItem
-              href="/perfil"
-              icon={<BsPersonCircle className="text-3xl" />}
-              name="Perfil"
-              handleClick={() => {
-                previousRoute = router.pathname;
-              }}
-            />
-          </motion.div>
-        </div>
-      </motion.div>
+            {item.name}
+          </span>
+          {router.pathname.startsWith(item.href) && (
+            <motion.div
+              layoutId="active-underline"
+              className="border-2 border-teal"
+            ></motion.div>
+          )}
+        </Link>
+      ))}
     </div>
   );
 }

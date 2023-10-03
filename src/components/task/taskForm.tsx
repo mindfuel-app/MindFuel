@@ -1,11 +1,12 @@
 import {
   CalendarDaysIcon,
   CheckIcon,
+  TrashIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { AnimatePresence, motion } from "framer-motion";
-import { type FormEvent, useState, useRef } from "react";
-import { useTasks, type Task } from "~/hooks/useTasks";
+import { motion } from "framer-motion";
+import { type FormEvent, useState } from "react";
+import { useTasks } from "~/hooks/useTasks";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
 import { CircularProgress } from "@mui/material";
@@ -13,10 +14,30 @@ import toast from "react-hot-toast";
 import { useUser } from "~/lib/UserContext";
 import { Calendar } from "../ui/calendar";
 
-export default function TaskForm({ afterSave }: { afterSave: () => void }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+type Task = {
+  id: string;
+  name: string;
+  deadline: Date | null;
+  description: string;
+};
+
+export default function TaskForm({
+  mode,
+  id,
+  initialName,
+  initialDeadline,
+  initialDescription,
+  afterSave,
+}: {
+  mode: "create" | "edit";
+  id?: string;
+  initialName?: string;
+  initialDeadline?: Date | null;
+  initialDescription?: string;
+  afterSave: () => void;
+}) {
   const user = useUser();
-  const { createTasks } = useTasks({
+  const { createTask, editTask, deleteTask } = useTasks({
     onSuccess: () => {
       setSaving(false);
       afterSave();
@@ -28,222 +49,165 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
     },
   });
   const [saving, setSaving] = useState(false);
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: "1",
-      name: "",
-      description: null,
-      category: null,
-      deadline: null,
-      routine_id: null,
-      usesAI: false,
-      event_id: null,
-      estimated_time: null,
-      done: false,
-      real_time: null,
-      user_id: user.id,
-      required_energy: null,
-    },
-  ]);
+  const [task, setTask] = useState<Task>({
+    id: id || "",
+    name: initialName || "",
+    deadline: initialDeadline || null,
+    description: initialDescription || "",
+  });
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [activeTaskId, setActiveTaskId] = useState("");
-  const [activeTaskIndex, setActiveTaskIndex] = useState<number>();
-
-  const addEmptyTask = () => {
-    setTasks([
-      ...tasks,
-      {
-        id: (tasks.length + 1).toString(),
-        name: "",
-        description: null,
-        category: null,
-        deadline: null,
-        routine_id: null,
-        event_id: null,
-        usesAI: false,
-        estimated_time: null,
-        done: false,
-        real_time: null,
-        user_id: user.id,
-        required_energy: null,
-      },
-    ]);
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  };
-
-  const removeTask = (indexToRemove: number) => {
-    setTasks((prevTasks) => {
-      return prevTasks.filter((_, i) => i !== indexToRemove);
-    });
-  };
-
-  const handleTaskChange = (index: number, value: string) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = [...prevTasks];
-      updatedTasks[index] = {
-        id: (index + 1).toString(),
-        name: value,
-        description: null,
-        category: null,
-        deadline: null,
-        routine_id: null,
-        event_id: null,
-        usesAI: false,
-        estimated_time: null,
-        done: false,
-        real_time: null,
-        user_id: user.id,
-        required_energy: null,
-      };
-      return updatedTasks;
-    });
-  };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setEmptyTaskError(false);
     setSaving(true);
 
-    for (const task of tasks) {
-      if (task.name == "") {
-        setEmptyTaskError(true);
-        return setSaving(false);
-      }
+    if (task.name == "") {
+      setEmptyTaskError(true);
+      return setSaving(false);
     }
 
     setTimeout(() => {
-      createTasks({
-        tasks,
-      });
+      if (mode == "edit" && id) {
+        editTask({
+          task: { ...task, user_id: user.id },
+        });
+      } else {
+        createTask({
+          task: { ...task, user_id: user.id },
+        });
+      }
+
       afterSave();
     }, 1000);
   }
 
-  if (isCalendarOpen && activeTaskIndex !== undefined)
+  if (isCalendarOpen) {
+    const initialValue = task.deadline;
+    const taskName = task.name;
+
     return (
       <CalendarForm
-        taskId={activeTaskId}
-        taskIndex={activeTaskIndex}
+        taskName={taskName}
+        initialValue={initialValue}
         afterSave={() => {
           setIsCalendarOpen(false);
-          const date = localStorage.getItem(`${activeTaskIndex}`);
+          const date = localStorage.getItem("deadline");
           if (date) {
-            setTasks((prevTasks) => {
-              const updatedTasks = [...prevTasks];
-              updatedTasks[activeTaskIndex] = {
-                ...updatedTasks[activeTaskIndex],
-                deadline: new Date(date),
-              } as Task;
-              return updatedTasks;
-            });
+            setTask({ ...task, deadline: new Date(date) });
           }
-          localStorage.removeItem(`${activeTaskIndex}`);
+          localStorage.removeItem("deadline");
         }}
       />
     );
-
+  }
   return (
     <motion.div
-      initial={{ scale: 0.97 }}
+      initial={{ scale: 0.98 }}
       animate={{ scale: 1 }}
       className="p-5"
     >
+      {mode == "edit" && <h2 className="mb-5 text-xl">Editar tarea</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
-          <div className="flex flex-col gap-5 group-disabled:opacity-50">
+          <div className="flex flex-col gap-4 group-disabled:opacity-50">
             <label
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-2"
               onClick={(e) => e.preventDefault()}
             >
-              <div className="flex items-center">
-                <span>Tareas</span>
-                <Button
-                  className="no-highlight h-6 w-10 text-xl text-teal"
-                  onClick={() => {
-                    addEmptyTask();
-                  }}
-                >
-                  +
-                </Button>
+              <div className="flex items-center gap-4">
+                <span>Nombre</span>
                 {emptyTaskError && (
                   <motion.span
                     initial={{ opacity: 0.7 }}
                     animate={{ opacity: 1 }}
-                    className="mt-1 text-xs text-red-500 "
+                    className="text-xs text-red-500 "
                   >
                     Complete los campos
                   </motion.span>
                 )}
               </div>
-              <div
-                ref={containerRef}
-                className="flex max-h-[200px] flex-col gap-3 overflow-y-auto overflow-x-hidden scrollbar-track-white scrollbar-thumb-slate-200 lg:scrollbar-thin"
+              <motion.div
+                initial={{
+                  y: task.name == "" ? -3 : 0,
+                  x: 0,
+                  opacity: task.name == "" ? 0.5 : 1,
+                }}
+                animate={{
+                  y: 0,
+                  x: 0,
+                  opacity: 1,
+                }}
+                transition={{ duration: 0.2 }}
+                className="flex items-center gap-2"
               >
-                <AnimatePresence>
-                  {tasks.map((task, index) => (
-                    <motion.div
-                      initial={{
-                        y: task.name == "" ? -3 : 0,
-                        x: 0,
-                        opacity: task.name == "" ? 0.5 : 1,
-                      }}
-                      animate={{
-                        y: 0,
-                        x: 0,
-                        opacity: 1,
-                      }}
-                      exit={{ x: 10, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="pl-1 flex items-center gap-2"
-                      key={task.id}
-                    >
-                      <input
-                        type="text"
-                        className="w-full rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
-                        value={tasks[index]?.name}
-                        onChange={(e) =>
-                          handleTaskChange(index, e.target.value)
-                        }
-                      />
-                      <div
-                        onClick={() => {
-                          setActiveTaskId(task.id);
-                          setActiveTaskIndex(index);
-                          setIsCalendarOpen(true);
-                        }}
-                        className="no-highlight cursor-pointer rounded-full"
-                      >
-                        <CalendarDaysIcon className="h-6 w-6" />
-                      </div>
-                      <XMarkIcon
-                        className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
-                          index == 0 ? "cursor-auto opacity-0" : ""
-                        }`}
-                        onClick={() => {
-                          if (index != 0) removeTask(index);
-                        }}
-                      />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
+                <input
+                  type="text"
+                  className="w-full rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
+                  value={task.name}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setTask({ ...task, name: e.target.value });
+                  }}
+                />
+                <div
+                  onClick={() => {
+                    setIsCalendarOpen(true);
+                  }}
+                  className="no-highlight cursor-pointer rounded-full"
+                >
+                  <CalendarDaysIcon className="h-6 w-6" />
+                </div>
+              </motion.div>
+            </label>
+            <label className="flex flex-col gap-2">
+              <span>Descripcion</span>
+              <motion.textarea
+                initial={{
+                  y: -3,
+                  opacity: 0.5,
+                }}
+                animate={{
+                  y: 0,
+                  opacity: 1,
+                }}
+                transition={{ duration: 0.2 }}
+                className="w-full resize-none rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
+                value={task.description}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setTask({ ...task, description: e.target.value });
+                }}
+              />
             </label>
           </div>
-          <div className="no-highlight mt-8 space-x-1 text-right">
-            <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
-              Cancelar
-            </Modal.Close>
-            <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80">
-              <CircularProgress
-                color="inherit"
-                size={20}
-                className="absolute group-enabled:opacity-0"
-              />
-              <span className="group-disabled:opacity-0">Guardar</span>
-            </Button>
+          <div
+            className={`flex pt-8 ${
+              mode == "edit" ? "justify-between" : "justify-end"
+            }`}
+          >
+            {mode == "edit" && id && (
+              <div
+                onClick={() => deleteTask({ id })}
+                className="no-highlight flex cursor-pointer items-center rounded-md border-[1px] border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
+              >
+                <TrashIcon className="h-5 w-5" />
+              </div>
+            )}
+            <div className="no-highlight space-x-1 text-right">
+              <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
+                Cancelar
+              </Modal.Close>
+              <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80">
+                <CircularProgress
+                  color="inherit"
+                  size={20}
+                  className="absolute group-enabled:opacity-0"
+                />
+                <span className="group-disabled:opacity-0">Guardar</span>
+              </Button>
+            </div>
           </div>
         </fieldset>
       </form>
@@ -252,24 +216,30 @@ export default function TaskForm({ afterSave }: { afterSave: () => void }) {
 }
 
 function CalendarForm({
-  taskIndex,
+  taskName,
+  initialValue,
   afterSave,
 }: {
-  taskId?: string;
-  taskIndex: number;
+  taskName?: string;
+  initialValue?: Date | null;
   afterSave: () => void;
 }) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const initialDate = initialValue || new Date();
+
+  const [date, setDate] = useState<Date | undefined>(initialDate);
 
   return (
     <motion.div
-      initial={{ opacity: 0.7, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ scale: 0.98 }}
+      animate={{ scale: 1 }}
       className="p-5"
     >
       <div className="no-highlight flex w-full justify-end active:text-gray-600 lg:hover:text-gray-600">
         <div className="flex w-full items-center justify-between">
-          <h2 className="text-lg">Fecha de vencimiento</h2>
+          <h2 className="text-lg">
+            Fecha de vencimiento de{" "}
+            {taskName && taskName.trim() !== "" ? `'${taskName}'` : "tarea"}
+          </h2>
           <XMarkIcon
             className="h-5 w-5 cursor-pointer"
             onClick={(e) => {
@@ -283,7 +253,7 @@ function CalendarForm({
         <Calendar mode="single" selected={date} onSelect={setDate} />
         <Button
           onClick={() => {
-            if (date) localStorage.setItem(`${taskIndex}`, date.toString());
+            if (date) localStorage.setItem("deadline", date.toString());
             afterSave();
           }}
           className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"

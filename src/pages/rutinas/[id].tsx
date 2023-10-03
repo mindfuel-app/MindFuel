@@ -1,7 +1,6 @@
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Header from "~/components/header";
 import {
   PlayIcon,
   ChevronDoubleRightIcon,
@@ -14,16 +13,63 @@ import { api } from "~/utils/api";
 import Head from "next/head";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Checkbox } from "~/components/ui/checkbox";
+import ActiveTask from "../../components/task/activeTask";
+import InactiveTask from "../../components/task/inactiveTask";
+import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
+import BackButton from "~/components/backButton";
+
+function ErrorPage() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    if (seconds >= 5) return;
+    const interval = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  });
+
+  return (
+    <>
+      <Head>
+        <title>MindFuel</title>
+      </Head>
+      <div className="flex min-h-screen flex-col">
+        <div className="flex w-full items-center justify-start pl-5 pt-5">
+          <BackButton href={`/home?tab=rutinas`} />
+        </div>
+        {seconds < 5 ? (
+          <SingleRoutineSkeleton />
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center gap-10 py-36 text-center"
+          >
+            <span className="max-w-[250px] text-2xl">
+              Ups... Parece que la rutina no existe
+            </span>
+            <Link
+              href="/home"
+              className="no-highlight rounded-xl bg-cornflower-blue px-5 py-3 text-xl text-white active:bg-cornflower-blue/80"
+            >
+              Volver a la home
+            </Link>
+          </motion.div>
+        )}
+      </div>
+    </>
+  );
+}
 
 export default function Routine() {
   const router = useRouter();
   const { data: sessionData, status } = useSession();
   const { data: routine } = api.routines.getRoutineById.useQuery({
-    id: router.query.id as string,
+    id: typeof router.query.id == "string" ? router.query.id : "",
   });
   const { data: tasks } = api.tasks.getTasksbyRoutine.useQuery({
-    routine_id: router.query.id as string,
+    routine_id: typeof router.query.id == "string" ? router.query.id : "",
   });
   const [routineProgress, setRoutineProgress] = useState(0);
   const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
@@ -33,7 +79,9 @@ export default function Routine() {
 
   if (!sessionData) return;
 
-  if (!tasks || !routine) return <div>No hay tareas</div>;
+  if (!tasks || !routine) {
+    return <ErrorPage />;
+  }
 
   return (
     <>
@@ -41,8 +89,10 @@ export default function Routine() {
         <title>{routine.name}</title>
       </Head>
       <div className="flex min-h-screen flex-col">
-        <Header />
-        <div className="mb-[86px] flex h-full flex-col items-center gap-6 bg-alabaster px-6 py-8">
+        <div className="flex w-full items-center justify-start pl-5 pt-5">
+          <BackButton href={`/home?tab=rutinas`} />
+        </div>
+        <div className="mb-[86px] flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
           <Progress
             className="max-w-lg"
             value={(100 / tasks.length) * routineProgress}
@@ -131,128 +181,6 @@ export default function Routine() {
         )}
       </div>
     </>
-  );
-}
-
-function CountdownTimer({
-  initialSeconds,
-  isRunning,
-}: {
-  initialSeconds: number;
-  isRunning: boolean;
-}) {
-  const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
-
-  useEffect(() => {
-    if (secondsLeft > 0 && isRunning) {
-      const interval = setInterval(() => {
-        setSecondsLeft((prevSeconds) => prevSeconds - 1);
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [secondsLeft, isRunning]);
-
-  const minutes = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft % 60;
-
-  return (
-    <>
-      <div className="flex">
-        <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
-          <span>{`${minutes.toString().padStart(2, "0")}:${seconds
-            .toString()
-            .padStart(2, "0")}`}</span>
-        </div>
-        <div
-          onClick={() => setSecondsLeft(initialSeconds)}
-          className="no-highlight flex cursor-pointer items-center rounded-r-md bg-orange px-2 text-white"
-        >
-          <span>Re-setear</span>
-        </div>
-      </div>
-      <Progress
-        className="my-2"
-        value={(100 / initialSeconds) * (initialSeconds - secondsLeft)}
-      />
-    </>
-  );
-}
-
-const aiTasks = [
-  { name: "Prender el horno" },
-  { name: "Preparar la masa" },
-  { name: "Cortar los ingredientes" },
-  { name: "Hornear la pizza" },
-  { name: "Servir la pizza" },
-];
-
-function ActiveTask({
-  name,
-  usesAI,
-  estimatedTime,
-  isTimerRunning,
-}: {
-  name: string;
-  usesAI: boolean;
-  estimatedTime: number | null;
-  isTimerRunning: boolean;
-}) {
-  const [checked, setChecked] = useState<boolean[]>([]);
-
-  return (
-    <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
-      <span className="text-sm">Ahora</span>
-      <div className="-mt-2">
-        {name}
-        {estimatedTime && <span>{` - ${estimatedTime / 60} min`}</span>}
-      </div>
-      {estimatedTime && (
-        <CountdownTimer
-          initialSeconds={estimatedTime}
-          isRunning={isTimerRunning}
-        />
-      )}
-      {usesAI && (
-        <ul className="flex flex-col gap-2 px-1">
-          {aiTasks.map((task, index) => (
-            <div
-              key={task.name}
-              onClick={() =>
-                setChecked((prev) => {
-                  const updatedChecks = [...prev];
-                  updatedChecks[index] = !updatedChecks[index];
-                  return updatedChecks;
-                })
-              }
-              className="flex items-center gap-1"
-            >
-              <Checkbox checked={checked[index]} className="h-4 w-4" />
-              <span className="text-sm">{task.name}</span>
-            </div>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
-function InactiveTask({ name, isDone }: { name: string; isDone: boolean }) {
-  return (
-    <div className="rounded-lg bg-teal p-2">
-      <div
-        className={`flex items-center ${
-          isDone ? "justify-between" : "justify-start"
-        }`}
-      >
-        <span className="ml-2 text-white">{name}</span>
-        {isDone && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-            <CheckIcon className="h-6 w-6 text-teal" />
-          </div>
-        )}
-      </div>
-    </div>
   );
 }
 

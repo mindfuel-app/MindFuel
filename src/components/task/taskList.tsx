@@ -10,7 +10,11 @@ import { NoSymbolIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 export default function TaskList() {
   const user = useUser();
-  const { data: userTasks, isLoading } = api.tasks.getTasks.useQuery({
+  const {
+    data: userTasks,
+    isLoading,
+    refetch: refetchTasks,
+  } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
   const [completedTasksButton, setCompletedTasksButton] = useState(false);
@@ -40,27 +44,32 @@ export default function TaskList() {
     >
       <div
         onClick={() => setCompletedTasksButton(!completedTasksButton)}
-        className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] active:bg-black/10 lg:hover:bg-black/10"
+        className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] transition-colors active:bg-black/10 lg:hover:bg-black/10"
       >
         <EllipsisHorizontalIcon className="h-6 w-6" />
       </div>
       {completedTasksButton && (
         <ClickAwayListener onClickAway={() => setCompletedTasksButton(false)}>
           <div
-            onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+            onClick={() => {
+              void refetchTasks();
+              setShowCompletedTasks(!showCompletedTasks);
+            }}
             className="no-highlight absolute right-0 top-12 z-20 cursor-pointer rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
           >
-            {showCompletedTasks ? (
-              <div className="flex items-center gap-1">
-                <NoSymbolIcon className="h-6 w-6" />
-                Ocultar tareas completadas
-              </div>
-            ) : (
-              <div className="flex items-center gap-1">
-                <CheckCircleIcon className="h-6 w-6" />
-                Mostrar tareas completadas
-              </div>
-            )}
+            <div className="flex items-center gap-1">
+              {showCompletedTasks ? (
+                <>
+                  <NoSymbolIcon className="h-6 w-6" />
+                  Ocultar tareas completadas
+                </>
+              ) : (
+                <>
+                  <CheckCircleIcon className="h-6 w-6" />
+                  Mostrar tareas completadas
+                </>
+              )}
+            </div>
           </div>
         </ClickAwayListener>
       )}
@@ -74,17 +83,17 @@ export default function TaskList() {
               ? "Tareas pendientes"
               : "No hay tareas pendientes"}
           </h2>
-          <ul className="flex w-72 flex-col gap-3">
-            {pendingTasks.map((task, index) => (
+          <ul className="flex w-72 flex-col gap-3 sm:w-80 lg:w-96">
+            {pendingTasks.map((task) => (
               <TaskCard
-                id={task.id}
-                number={index + 1}
-                name={task.name}
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                deadline={task.deadline}
-                isChecked={task.done}
-                showCompletedTasks={showCompletedTasks}
                 key={task.id}
+                id={task.id}
+                name={task.name}
+                deadline={task.deadline}
+                description={task.description}
+                isChecked={task.done}
+                isPartOfRoutine={task.routine_id != null}
+                showCompletedTasks={showCompletedTasks}
               />
             ))}
           </ul>

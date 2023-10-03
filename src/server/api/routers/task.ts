@@ -6,13 +6,8 @@ type Task = {
   id: string;
   name: string;
   description: string | null;
-  category: string | null;
-  createdAt: Date;
   deadline: Date | null;
-  usesAI:boolean;
-  routine_id: string | null;
-  event_id: string | null;
-  required_energy: number | null;
+  done: boolean;
 };
 
 function sortTasksByDeadline(a: Task, b: Task): number {
@@ -35,34 +30,21 @@ export const taskRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(
       z.object({
-        tasks: z
-          .object({
-            name: z.string(),
-            description: z.string().nullish(),
-            category: z.string().nullish(),
-            deadline: z.date().nullish(),
-            usesAI: z.boolean(),
-            routine_id: z.string().nullish(),
-            event_id: z.string().nullish(),
-            estimated_time: z.number().nullish(),
-            done: z.boolean(),
-            user_id: z.string(),
-            requiredenergy: z.number().nullish(),
-          })
-          .array(),
+        task: z.object({
+          name: z.string(),
+          description: z.string().nullable(),
+          deadline: z.date().nullable(),
+          user_id: z.string(),
+        }),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const tasks = input.tasks;
-      if (!tasks) return error("No tasks provided");
-      const createdTasks = await Promise.all(
-        tasks.map(async (task) => {
-          return await ctx.prisma.task.create({
-            data: task,
-          });
-        })
-      );
-      return createdTasks;
+      const task = input.task;
+      if (!task) return error("No tasks provided");
+      const createdTask = await ctx.prisma.task.create({
+        data: task,
+      });
+      return createdTask;
     }),
   getTasks: protectedProcedure
     .input(z.object({ user_id: z.string() }))
@@ -71,10 +53,51 @@ export const taskRouter = createTRPCRouter({
         where: {
           user_id: input.user_id,
         },
+        select: {
+          id: true,
+          name: true,
+          deadline: true,
+          description: true,
+          done: true,
+          routine_id: true,
+        },
       });
-      let orderedTasks = tasks.sort(sortTasksByDeadline);
-      orderedTasks = tasks.sort((a, b) => Number(a.done) - Number(b.done));
-      return orderedTasks;
+
+      return tasks
+        .sort(sortTasksByDeadline)
+        .sort((a, b) => Number(a.done) - Number(b.done));
+    }),
+  getTasksForRoutine: protectedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const tasks = await ctx.prisma.task.findMany({
+        where: {
+          user_id: input.user_id,
+          routine_id: {
+            not: null,
+          },
+          routine_order: {
+            not: null,
+          },
+        },
+        select: {
+          name: true,
+          estimated_time: true,
+          usesAI: true,
+          routine_id: true,
+          routine_order: true,
+        },
+      });
+
+      return tasks.map((task) => {
+        return {
+          name: task.name,
+          estimatedTime: task.estimated_time,
+          usesAI: task.usesAI,
+          routineId: task.routine_id,
+          routineOrder: task.routine_order || 0,
+        };
+      });
     }),
   getTasksbyRoutine: protectedProcedure
     .input(z.object({ routine_id: z.string() }))
@@ -82,9 +105,15 @@ export const taskRouter = createTRPCRouter({
       const tasks = await ctx.prisma.task.findMany({
         where: {
           routine_id: input.routine_id,
+          routine_order: {
+            not: null,
+          },
         },
       });
-      return tasks;
+      return tasks.sort((a, b) => {
+        if (a.routine_order === null || b.routine_order === null) return 0;
+        return a.routine_order - b.routine_order;
+      });
     }),
   getTaskById: protectedProcedure
     .input(z.object({ id: z.string() }))
@@ -97,16 +126,14 @@ export const taskRouter = createTRPCRouter({
       return task;
     }),
   setTaskDone: protectedProcedure
-    .input(z.object({ task_id: z.string(), realTime: z.number() }))
+    .input(z.object({ task_id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const realTime = input.realTime;
       const task = await ctx.prisma.task.update({
         where: {
           id: input.task_id,
         },
         data: {
           done: true,
-          real_time: realTime,
         },
       });
       return task;
@@ -124,7 +151,6 @@ export const taskRouter = createTRPCRouter({
             },
             data: {
               done: false,
-              real_time: null,
             },
           });
         })
@@ -135,38 +161,25 @@ export const taskRouter = createTRPCRouter({
   modifyTask: protectedProcedure
     .input(
       z.object({
-        taskId: z.string(),
-        name: z.string(),
-        description: z.string().optional(),
-        category: z.string().optional(),
-        deadline: z.string().optional(),
-        usesAI: z.boolean(),
-        routine_id: z.string().optional(),
-        event_id: z.string().optional(),
-        estimated_time: z.number().optional(),
-        done: z.boolean(),
-        user_id: z.string(),
-        requiredenergy: z.number().optional(),
+        task: z.object({
+          id: z.string(),
+          name: z.string(),
+          description: z.string().nullish(),
+          deadline: z.date().nullish(),
+          routine_id: z.string().nullish(),
+          user_id: z.string(),
+        }),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const task = await ctx.prisma.task.update({
-        data: {
-          name: input.name,
-          description: input.description,
-          category: input.category,
-          routine_id: input.routine_id,
-          event_id: input.event_id,
-          estimated_time: input.estimated_time,
-          done: input.done,
-          user_id: input.user_id,
-          required_energy: input.requiredenergy,
-        },
+      const task = input.task;
+      const editedTask = await ctx.prisma.task.update({
+        data: task,
         where: {
-          id: input.taskId,
+          id: task.id,
         },
       });
-      return task;
+      return editedTask;
     }),
   updateTaskTime: protectedProcedure
     .input(z.object({ id: z.string(), estimated_time: z.number() }))
@@ -182,11 +195,11 @@ export const taskRouter = createTRPCRouter({
       return task;
     }),
   deleteTask: protectedProcedure
-    .input(z.object({ taskId: z.string() }))
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const task = await ctx.prisma.task.delete({
         where: {
-          id: input.taskId,
+          id: input.id,
         },
       });
       return task;

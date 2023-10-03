@@ -21,6 +21,18 @@ function RoutineSkeleton() {
   );
 }
 
+function SingleRoutineSkeleton() {
+  return (
+    <div className="flex w-full flex-col items-center gap-20 py-16">
+      <Rectangle className="h-16 w-72" />
+      <div className="flex flex-col gap-3">
+        <Rectangle className="h-16 w-80" />
+        <Rectangle className="h-16 w-80" />
+      </div>
+    </div>
+  );
+}
+
 function Rectangle({ className }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
@@ -43,4 +55,4 @@ function Circle({ className }: React.HTMLAttributes<HTMLDivElement>) {
   );
 }
 
-export { TaskSkeleton, RoutineSkeleton };
+export { TaskSkeleton, RoutineSkeleton, SingleRoutineSkeleton };

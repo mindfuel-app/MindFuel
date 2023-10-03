@@ -1,43 +1,37 @@
 import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { api } from "~/utils/api";
 import { Button } from "./ui/button";
 
 export default function TimeForm({
-  taskId,
   taskIndex,
+  taskName,
+  initialValue,
   afterSave,
 }: {
-  taskId?: string;
   taskIndex: number;
+  taskName?: string;
+  initialValue?: number | null;
   afterSave: () => void;
 }) {
-  const { data: task } = api.tasks.getTaskById.useQuery({
-    id: taskId || "",
-  });
+  const initialTime = initialValue || 0;
 
-  const initialTime = task?.estimated_time || 0;
-
-  const [hours, setHours] = useState(
-    initialTime ? Math.floor(initialTime / 3600) : 0
-  );
-  const [minutes, setMinutes] = useState(
-    initialTime ? Math.floor((initialTime % 3600) / 60) : 0
-  );
-  const [seconds, setSeconds] = useState(
-    initialTime ? Math.floor((initialTime % 3600) % 60) : 0
-  );
+  const [hours, setHours] = useState(Math.floor(initialTime / 3600));
+  const [minutes, setMinutes] = useState(Math.floor((initialTime % 3600) / 60));
+  const [seconds, setSeconds] = useState(Math.floor((initialTime % 3600) % 60));
 
   return (
     <motion.div
-      initial={{ opacity: 0.7, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ scale: 0.98 }}
+      animate={{ scale: 1 }}
       className="p-5"
     >
       <div className="no-highlight flex w-full justify-end active:text-gray-600 lg:hover:text-gray-600">
         <div className="flex w-full items-center justify-between">
-          <h2 className="text-lg">Duracion de tarea</h2>
+          <h2 className="text-lg">
+            Duracion de{" "}
+            {taskName && taskName.trim() !== "" ? `'${taskName}'` : "tarea"}
+          </h2>
           <XMarkIcon
             className="h-5 w-5 cursor-pointer"
             onClick={(e) => {

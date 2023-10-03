@@ -1,6 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { error } from "console";
 
 export const routineRouter = createTRPCRouter({
   createRoutine: protectedProcedure
@@ -14,40 +13,88 @@ export const routineRouter = createTRPCRouter({
           tasks: z
             .object({
               name: z.string(),
-              description: z.string().nullish(),
-              category: z.string().nullish(),
-              routine_id: z.string().nullish(),
-              event_id: z.string().nullish(),
+              estimated_time: z.number().nullable(),
               usesAI: z.boolean(),
-              estimated_time: z.number().nullish(),
-              done: z.boolean(),
-              user_id: z.string(),
-              requiredenergy: z.number().nullish(),
+              routine_order: z.number(),
             })
             .array(),
         }),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const routine = input.routine;
-      if (!routine) return error("Error: no routine uploaded");
+      const { name, category, user_id, days, tasks } = input.routine;
+
       const createdRoutine = await ctx.prisma.routine.create({
         data: {
-          name: routine.name,
-          category: routine.category,
-          user_id: routine.user_id,
-          days: routine.days,
+          name,
+          category,
+          user_id,
+          days,
         },
       });
       const createdTasks = await Promise.all(
-        routine.tasks.map(async (task) => {
-          task.routine_id = createdRoutine.id;
+        tasks.map(async (task) => {
           return await ctx.prisma.task.create({
-            data: task,
+            data: {
+              ...task,
+              user_id,
+              routine_id: createdRoutine.id,
+            },
           });
         })
       );
       return { createdRoutine, createdTasks };
+    }),
+  modifyRoutine: protectedProcedure
+    .input(
+      z.object({
+        routine: z.object({
+          id: z.string(),
+          name: z.string(),
+          category: z.string().optional(),
+          user_id: z.string(),
+          days: z.string(),
+          tasks: z
+            .object({
+              name: z.string(),
+              estimated_time: z.number().nullable(),
+              usesAI: z.boolean(),
+              routine_order: z.number(),
+            })
+            .array(),
+        }),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { name, category, user_id, days, id, tasks } = input.routine;
+      const editedRoutine = await ctx.prisma.routine.update({
+        data: {
+          name,
+          category,
+          user_id,
+          days,
+        },
+        where: {
+          id,
+        },
+      });
+      await ctx.prisma.task.deleteMany({
+        where: {
+          routine_id: id,
+        },
+      });
+      const updatedTasks = await Promise.all(
+        tasks.map(async (task) => {
+          return await ctx.prisma.task.create({
+            data: {
+              ...task,
+              user_id,
+              routine_id: editedRoutine.id,
+            },
+          });
+        })
+      );
+      return { editedRoutine, updatedTasks };
     }),
   getRoutines: protectedProcedure
     .input(z.object({ user_id: z.string() }))
@@ -69,60 +116,7 @@ export const routineRouter = createTRPCRouter({
       });
       return routine;
     }),
-  modifyRoutine: protectedProcedure
-    .input(
-      z.object({
-        routine: z.object({
-          id: z.string(),
-          name: z.string(),
-          category: z.string().optional(),
-          user_id: z.string(),
-          days: z.string(),
-          tasks: z
-            .object({
-              name: z.string(),
-              description: z.string().nullish(),
-              category: z.string().nullish(),
-              routine_id: z.string().nullish(),
-              usesAI: z.boolean(),
-              event_id: z.string().nullish(),
-              estimated_time: z.number().nullish(),
-              done: z.boolean(),
-              user_id: z.string(),
-              requiredenergy: z.number().nullish(),
-            })
-            .array(),
-        }),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const routine = input.routine;
-      const editedRoutine = await ctx.prisma.routine.update({
-        data: {
-          name: routine.name,
-          category: routine.category,
-          user_id: routine.user_id,
-          days: routine.days,
-        },
-        where: {
-          id: routine.id,
-        },
-      });
-      await ctx.prisma.task.deleteMany({
-        where: {
-          routine_id: routine.id,
-        },
-      });
-      const updatedTasks = await Promise.all(
-        routine.tasks.map(async (task) => {
-          task.routine_id = editedRoutine.id;
-          return await ctx.prisma.task.create({
-            data: task,
-          });
-        })
-      );
-      return { editedRoutine, updatedTasks };
-    }),
+
   deleteRoutine: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

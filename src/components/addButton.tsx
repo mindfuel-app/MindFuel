@@ -1,16 +1,27 @@
-import { useRouter } from "next/router";
 import Modal from "./ui/modal";
-import { useState } from "react";
 import RoutineForm from "./routine/routineForm";
 import AddModal from "./addModal";
 import TaskForm from "./task/taskForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function AddButton() {
   const user = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
+  const routerNav = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam =
+    searchParams.get("tab") === "tareas" ||
+    searchParams.get("tab") === "rutinas"
+      ? (searchParams.get("tab") as string)
+      : "tareas";
+  const isModalOpen = searchParams.get("add") == "true";
+
+  const setIsModalOpen = (open: boolean) => {
+    const queryString = open ? `?tab=${tabParam}&add=true` : `?tab=${tabParam}`;
+    routerNav.push(queryString);
+  };
   const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
@@ -20,23 +31,43 @@ export default function AddButton() {
 
   return (
     <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <Modal.Button
-        disabled={router.pathname != "/home"}
-        className="absolute -top-9 h-14 w-14 transform rounded-full border-[3px] border-teal bg-white transition-all group-active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
-      >
-        <span className="text-2xl font-extrabold text-teal">+</span>
+      <Modal.Button>
+        <motion.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center justify-center"
+        >
+          <div className="no-highlight absolute flex transform items-center gap-3 rounded-2xl border-2 border-teal bg-white px-4 py-3 shadow-lg transition-all active:scale-[98%] ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="teal"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+            <span className="text-lg font-medium text-teal">Crear</span>
+          </div>
+        </motion.div>
       </Modal.Button>
       <Modal.Content>
         <AddModal
-          TaskForm={
+          TaskModal={
             <TaskForm
+              mode="create"
               afterSave={() => {
                 void refetchTasks();
                 setIsModalOpen(false);
               }}
             />
           }
-          RoutineForm={
+          RoutineModal={
             <RoutineForm
               afterSave={() => {
                 void refetchRoutines();

@@ -1,9 +1,9 @@
-import Navigation from "./navigation";
-import Header from "./header";
+import { BottomNavigation } from "../navigation";
+import Header from "../header";
 import { UserProvider } from "~/lib/UserContext";
 import { type Session } from "next-auth";
 
-export default function AppLayout({
+export default function HomeLayout({
   children,
   sessionData,
 }: {
@@ -16,12 +16,12 @@ export default function AppLayout({
       name={sessionData.user.name || ""}
       email={sessionData.user.email || ""}
     >
-      <div className="flex min-h-screen flex-col">
+      <div className="flex h-screen flex-col">
         <Header />
-        <div className="mb-[86px] flex h-full flex-col items-center bg-alabaster p-3">
+        <main className="mb-[86px] flex h-full flex-col items-center bg-alabaster p-3">
           {children}
-        </div>
-        <Navigation />
+        </main>
+        <BottomNavigation />
       </div>
     </UserProvider>
   );

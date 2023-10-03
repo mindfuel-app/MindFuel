@@ -1,14 +1,9 @@
-import {
-  ClockIcon,
-  EllipsisVerticalIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { CircularProgress } from "@mui/material";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
 import { motion, AnimatePresence } from "framer-motion";
 import { type FormEvent, useState, useRef } from "react";
-import { type Task } from "~/hooks/useTasks";
 import { useUser } from "~/lib/UserContext";
 import toast from "react-hot-toast";
 import { dayOptions, orderDays } from "~/lib/days";
@@ -49,6 +44,21 @@ const categories = [
   },
 ];
 
+type Routine = {
+  id: string;
+  days: string;
+  name: string;
+  category: string;
+  tasks: Task[];
+};
+
+export type Task = {
+  name: string;
+  estimatedTime: number | null;
+  usesAI: boolean;
+  routineOrder: number;
+};
+
 export default function RoutineForm({
   mode,
   afterSave,
@@ -80,88 +90,75 @@ export default function RoutineForm({
     },
   });
   const [saving, setSaving] = useState(false);
-  const [days, setDays] = useState(initialDays ? initialDays : "");
-  const [name, setName] = useState(initialName ? initialName : "");
-  const [selectedCategory, setSelectedCategory] = useState(
-    initialCategory ? initialCategory : ""
-  );
-  const [tasks, setTasks] = useState<Task[]>(
-    initialTasks
-      ? initialTasks
-      : [
-          {
-            id: "1",
-            name: "",
-            description: null,
-            category: null,
-            deadline: null,
-            routine_id: null,
-            event_id: null,
-            usesAI: false,
-            estimated_time: null,
-            done: false,
-            real_time: null,
-            user_id: user.id,
-            required_energy: null,
-          },
-        ]
-  );
+  const [routine, setRoutine] = useState<Routine>({
+    id: id || "",
+    days: initialDays || "",
+    name: initialName || "",
+    category: initialCategory || "",
+    tasks: initialTasks || [
+      {
+        name: "",
+        estimatedTime: null,
+        usesAI: false,
+        routineOrder: 1,
+      },
+    ],
+  });
   const [nameError, setNameError] = useState(false);
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isClockOpen, setIsClockOpen] = useState(false);
   const [isComboboxOpen, setIsComboboxOpen] = useState(false);
-  const [activeTaskId, setActiveTaskId] = useState("");
   const [activeTaskIndex, setActiveTaskIndex] = useState<number>();
 
   const addEmptyTask = () => {
-    setTasks([
-      ...tasks,
-      {
-        id: (tasks.length + 1).toString(),
-        name: "",
-        description: null,
-        category: null,
-        deadline: null,
-        routine_id: null,
-        event_id: null,
-        usesAI: false,
-        estimated_time: null,
-        done: false,
-        real_time: null,
-        user_id: user.id,
-        required_energy: null,
-      },
-    ]);
+    setRoutine({
+      ...routine,
+      tasks: [
+        ...routine.tasks,
+        {
+          name: "",
+          estimatedTime: null,
+          usesAI: false,
+          routineOrder: routine.tasks.length + 1,
+        },
+      ],
+    });
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   };
 
   const removeTask = (indexToRemove: number) => {
-    setTasks((prevTasks) => {
-      return prevTasks.filter((_, i) => i !== indexToRemove);
+    const updatedTasks = routine.tasks
+      .filter((_, i) => i !== indexToRemove)
+      .map((task) => {
+        if (!task.routineOrder) return task;
+        if (task.routineOrder > indexToRemove + 1) {
+          return {
+            ...task,
+            routineOrder: task.routineOrder - 1,
+          };
+        }
+        return task;
+      });
+
+    setRoutine({
+      ...routine,
+      tasks: updatedTasks,
     });
   };
 
   const handleTaskChange = (index: number, value: string) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = [...prevTasks];
+    setRoutine((prev) => {
+      const updatedTasks = [...prev.tasks];
       updatedTasks[index] = {
-        id: (index + 1).toString(),
+        ...updatedTasks[index],
         name: value,
-        description: null,
-        category: null,
-        deadline: null,
-        routine_id: null,
-        usesAI: false,
-        event_id: null,
-        estimated_time: null,
-        done: false,
-        real_time: null,
-        user_id: user.id,
-        required_energy: null,
+      } as Task;
+      return {
+        ...prev,
+        tasks: updatedTasks,
       };
-      return updatedTasks;
     });
   };
 
@@ -171,33 +168,48 @@ export default function RoutineForm({
     setEmptyTaskError(false);
     setSaving(true);
 
-    if (name == "") {
+    if (routine.name == "") {
       setNameError(true);
       return setSaving(false);
     }
 
-    for (const task of tasks) {
+    for (const task of routine.tasks) {
       if (task.name == "") {
         setEmptyTaskError(true);
         return setSaving(false);
       }
     }
-    
+
     setTimeout(() => {
-      if (mode == "edit" && id) {
+      if (mode == "edit") {
         editRoutine({
           routine: {
-            id,
-            name,
-            category: selectedCategory,
+            ...routine,
             user_id: user.id,
-            days: orderDays(days),
-            tasks,
+            days: orderDays(routine.days),
+            tasks: routine.tasks.map((task) => {
+              return {
+                ...task,
+                estimated_time: task.estimatedTime,
+                routine_order: task.routineOrder,
+              };
+            }),
           },
         });
       } else {
         createRoutine({
-          routine: { name, user_id: user.id, days: orderDays(days), tasks },
+          routine: {
+            ...routine,
+            user_id: user.id,
+            days: orderDays(routine.days),
+            tasks: routine.tasks.map((task) => {
+              return {
+                ...task,
+                estimated_time: task.estimatedTime,
+                routine_order: task.routineOrder,
+              };
+            }),
+          },
         });
       }
 
@@ -206,21 +218,27 @@ export default function RoutineForm({
   }
 
   if (isClockOpen && activeTaskIndex !== undefined) {
+    const initialValue = routine.tasks[activeTaskIndex]?.estimatedTime;
+    const taskName = routine.tasks[activeTaskIndex]?.name;
     return (
       <TimeForm
-        taskId={activeTaskId}
         taskIndex={activeTaskIndex}
+        taskName={taskName}
+        initialValue={initialValue}
         afterSave={() => {
           setIsClockOpen(false);
           const time = localStorage.getItem(`${activeTaskIndex}`);
           if (time) {
-            setTasks((prevTasks) => {
-              const updatedTasks = [...prevTasks];
+            setRoutine((prev) => {
+              const updatedTasks = [...prev.tasks];
               updatedTasks[activeTaskIndex] = {
                 ...updatedTasks[activeTaskIndex],
-                estimated_time: Number(time),
+                estimatedTime: Number(time),
               } as Task;
-              return updatedTasks;
+              return {
+                ...prev,
+                tasks: updatedTasks,
+              };
             });
           }
           localStorage.removeItem(`${activeTaskIndex}`);
@@ -231,7 +249,7 @@ export default function RoutineForm({
 
   return (
     <motion.div
-      initial={{ scale: 0.97 }}
+      initial={{ scale: 0.98 }}
       animate={{ scale: 1 }}
       className="p-5"
     >
@@ -240,34 +258,52 @@ export default function RoutineForm({
         <fieldset disabled={saving} className="group">
           <div className="flex flex-col gap-4 group-disabled:opacity-50">
             <span className="-mt-3">
-              {orderDays(days).length == 33
+              {orderDays(routine.days).length == 33
                 ? "Todos los dias"
-                : orderDays(days).length == 0
+                : orderDays(routine.days).length == 0
                 ? "Nunca"
-                : orderDays(days)}
+                : orderDays(routine.days)}
             </span>
             <div className="-mt-2 flex justify-between md:justify-around">
               {dayOptions.map((day) => (
                 <button
                   key={day.value}
                   className={`no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100 ${
-                    days.includes(day.value) ? "border-[1px] border-teal" : ""
+                    routine.days.includes(day.value)
+                      ? "border-[1px] border-teal"
+                      : ""
                   }`}
                   onClick={(e) => {
                     e.preventDefault();
-                    if (!days.includes(day.value)) {
-                      if (days == "") return setDays(day.value);
-                      return setDays(days + `, ${day.value}`);
+                    if (!routine.days.includes(day.value)) {
+                      if (routine.days == "") {
+                        return setRoutine({ ...routine, days: day.value });
+                      }
+                      return setRoutine({
+                        ...routine,
+                        days: routine.days + `, ${day.value}`,
+                      });
                     }
-                    if (days.length == 3) return setDays("");
-                    if (days.includes(`${day.value}, `))
-                      return setDays(days.replace(`${day.value}, `, ""));
-                    setDays(days.replace(`, ${day.value}`, ""));
+                    if (routine.days.length == 3) {
+                      return setRoutine({ ...routine, days: "" });
+                    }
+                    if (routine.days.includes(`${day.value}, `)) {
+                      return setRoutine({
+                        ...routine,
+                        days: routine.days.replace(`${day.value}, `, ""),
+                      });
+                    }
+                    setRoutine({
+                      ...routine,
+                      days: routine.days.replace(`, ${day.value}`, ""),
+                    });
                   }}
                 >
                   <span
                     className={`${
-                      days.includes(day.value) ? "text-teal" : "text-gray-600"
+                      routine.days.includes(day.value)
+                        ? "text-teal"
+                        : "text-gray-600"
                     }`}
                   >
                     {day.label}
@@ -294,8 +330,10 @@ export default function RoutineForm({
               <input
                 type="text"
                 className="rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={routine.name}
+                onChange={(e) =>
+                  setRoutine({ ...routine, name: e.target.value })
+                }
               />
             </label>
             <label
@@ -311,9 +349,9 @@ export default function RoutineForm({
                     aria-expanded={isComboboxOpen}
                     className="no-highlight w-[200px] justify-between border-gray-400"
                   >
-                    {selectedCategory
+                    {routine.category
                       ? categories.find(
-                          (category) => category.value === selectedCategory
+                          (category) => category.value === routine.category
                         )?.label || "Seleccionar categoría"
                       : "Seleccionar categoría"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -326,19 +364,20 @@ export default function RoutineForm({
                         <CommandItem
                           key={category.value}
                           onSelect={(currentValue) => {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                            setSelectedCategory(
-                              currentValue === selectedCategory
-                                ? ""
-                                : currentValue
-                            );
+                            setRoutine({
+                              ...routine,
+                              category:
+                                currentValue == routine.category
+                                  ? ""
+                                  : currentValue,
+                            });
                             setIsComboboxOpen(false);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              selectedCategory === category.value
+                              routine.category === category.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
@@ -386,7 +425,7 @@ export default function RoutineForm({
                 className="flex max-h-[200px] flex-col gap-3 overflow-y-auto overflow-x-hidden scrollbar-track-white scrollbar-thumb-slate-200 lg:scrollbar-thin"
               >
                 <AnimatePresence>
-                  {tasks.map((task, index) => (
+                  {routine.tasks.map((task, index) => (
                     <motion.div
                       initial={{
                         y: task.name == "" ? -3 : 0,
@@ -401,23 +440,18 @@ export default function RoutineForm({
                       exit={{ x: 10, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                       className="flex items-center gap-2"
-                      key={task.id}
+                      key={task.routineOrder}
                     >
-                      {/* <div className="no-highlight flex cursor-pointer justify-center rounded-sm py-2 transition-colors active:bg-gray-200 lg:hover:bg-gray-200">
-                        <EllipsisVerticalIcon className="h-5 w-5 text-xl" />
-                        <EllipsisVerticalIcon className="-ml-[14px] h-5 w-5 text-xl" />
-                      </div> */}
                       <input
                         type="text"
                         className="w-full rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
-                        value={tasks[index]?.name}
+                        value={task.name}
                         onChange={(e) =>
                           handleTaskChange(index, e.target.value)
                         }
                       />
                       <div
                         onClick={() => {
-                          setActiveTaskId(task.id);
                           setActiveTaskIndex(index);
                           setIsClockOpen(true);
                         }}
@@ -429,13 +463,16 @@ export default function RoutineForm({
                         <Checkbox
                           defaultChecked={task.usesAI}
                           onCheckedChange={(checked) => {
-                            setTasks((prevTasks) => {
-                              const updatedTasks = [...prevTasks];
+                            setRoutine((prev) => {
+                              const updatedTasks = [...prev.tasks];
                               updatedTasks[index] = {
                                 ...updatedTasks[index],
-                                usesAI: checked,
+                                usesAI: checked as boolean,
                               } as Task;
-                              return updatedTasks;
+                              return {
+                                ...prev,
+                                tasks: updatedTasks,
+                              };
                             });
                           }}
                           className="h-[18px] w-[18px]"

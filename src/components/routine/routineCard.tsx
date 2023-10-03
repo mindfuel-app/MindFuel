@@ -2,12 +2,11 @@ import { useState } from "react";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import Modal from "../ui/modal";
-import RoutineForm from "./routineForm";
-import { type Task } from "~/hooks/useTasks";
-import TaskCard from "../task/taskCard";
+import RoutineForm, { type Task } from "./routineForm";
 import Link from "next/link";
 import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
+import RoutineTaskCard from "../task/routineTaskCard";
 
 export default function RoutineCard({
   id,
@@ -16,7 +15,7 @@ export default function RoutineCard({
   category,
   tasks,
 }: {
-  id?: string;
+  id: string;
   days: string;
   name: string;
   category: string;
@@ -26,7 +25,7 @@ export default function RoutineCard({
   const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
     user_id: user.id,
   });
-  const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
+  const { refetch: refetchTasks } = api.tasks.getTasksForRoutine.useQuery({
     user_id: user.id,
   });
   const [isCardOpened, setIsCardOpened] = useState(false);
@@ -81,22 +80,20 @@ export default function RoutineCard({
         className="overflow-hidden"
       >
         <div className="-z-10 flex w-full flex-col gap-3 rounded-b-md bg-white pb-7 pl-3 pr-4 pt-5">
-          {tasks.length == 0 && (
+          {tasks.length == 0 ? (
             <div className="text-center text-black">No hay tareas cargadas</div>
+          ) : (
+            tasks.map((task, index) => (
+              <RoutineTaskCard
+                number={index + 1}
+                name={task.name}
+                key={task.name}
+              />
+            ))
           )}
-          {tasks.map((task, index) => (
-            <TaskCard
-              id={task.id}
-              number={index + 1}
-              name={task.name}
-              isChecked={task.done}
-              isPartOfRoutine={true}
-              key={task.id}
-            />
-          ))}
         </div>
       </motion.div>
-      {isCardOpened && id && tasks.length > 0 && (
+      {isCardOpened && tasks.length > 0 && (
         <Link
           href={`/rutinas/${id}`}
           className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-teal px-4 py-[6px]"
