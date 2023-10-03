@@ -4,6 +4,7 @@ import Head from "next/head";
 import { BottomNavigation, TopNavigation } from "~/components/navigation";
 import { UserProvider } from "~/lib/UserContext";
 import BackButton from "../backButton";
+import { FaHandHoldingHeart } from "react-icons/fa";
 
 export default function SelfCareLayout({
   children,
@@ -38,12 +39,12 @@ function Header() {
   const isInMenus = !router.pathname.startsWith("/self-care/");
 
   return (
-    <div
-      className={`relative flex w-full items-center px-6 py-4 ${
-        isInMenus ? "justify-end" : "justify-between"
-      }`}
-    >
-      {!isInMenus && <BackButton href="/self-care" color="teal" />}
+    <div className="relative flex w-full items-center justify-between px-6 py-4">
+      {!isInMenus ? (
+        <BackButton href="/self-care" color="teal" />
+      ) : (
+        <FaHandHoldingHeart className="text-2xl text-teal" />
+      )}
       <TopNavigation />
       <span className="text-lg font-medium text-teal">Self-care</span>
       <div className="absolute bottom-0 left-0 w-full border-[3px] border-teal lg:hidden" />
