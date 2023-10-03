@@ -37,7 +37,7 @@ export default function AddButton() {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center justify-center"
         >
-          <button className="no-highlight absolute flex transform items-center gap-3 rounded-2xl border-2 border-teal bg-white px-4 py-3 shadow-lg transition-all active:scale-[98%] ">
+          <div className="no-highlight absolute flex transform items-center gap-3 rounded-2xl border-2 border-teal bg-white px-4 py-3 shadow-lg transition-all active:scale-[98%] ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -53,7 +53,7 @@ export default function AddButton() {
               />
             </svg>
             <span className="text-lg font-medium text-teal">Crear</span>
-          </button>
+          </div>
         </motion.div>
       </Modal.Button>
       <Modal.Content>
