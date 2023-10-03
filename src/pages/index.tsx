@@ -31,7 +31,11 @@ export default function Landing() {
         >
           <Logo />
           {screenTouches == 0 && (
-            <div className="flex flex-col items-center gap-12 py-24 text-center font-semibold">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center gap-12 py-24 text-center font-semibold"
+            >
               <h1 className="max-w-[300px] text-3xl text-teal min-[360px]:text-4xl">
                 Bienvenido a MindFuel
               </h1>
@@ -39,13 +43,17 @@ export default function Landing() {
                 Toque en cualquier parte de la pantalla para comenzar
               </p>
               <Icon icon="carbon:touch-1" className="text-8xl" />
-            </div>
+            </motion.div>
           )}
           {screenTouches > 0 && (
             <div className="flex flex-col px-6 py-3">
-              <h1 className="text-2xl font-semibold italic text-orange sm:text-3xl">
+              <motion.h1
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-2xl font-semibold italic text-orange sm:text-3xl"
+              >
                 Fuel your mind, fuel your life
-              </h1>
+              </motion.h1>
               <div className="flex max-w-[500px] flex-col gap-7 py-8 text-left font-semibold sm:py-12 sm:text-lg">
                 {screenTouches > 1 && (
                   <Message>
