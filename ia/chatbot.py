@@ -1,9 +1,9 @@
 import openai
-from flask import Flask, request, jsonify
 import os
 from dotenv import load_dotenv
-from flask_cors import CORS, cross_origin
 import re
+from fastapi import FastAPI, HTTPException
+
 load_dotenv()
 
 openai.api_type = "azure"
@@ -11,22 +11,20 @@ openai.api_base = "https://mindfuel.openai.azure.com/"
 openai.api_version = "2023-07-01-preview"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-app = Flask(__name__)
-CORS(app)
-@app.route("/home")
-@cross_origin(origin='*')
-def home():
-    return jsonify({"message":"Hello, World!"})
-    
+app = FastAPI()
 
-@app.route('/dividir_tarea', methods=['POST'])
-def procesar_tarea():
+@app.get("/home")
+def home():
+    return {"message": "Hello, World!"}
+
+@app.post('/dividir_tarea')
+def procesar_tarea(tarea: dict):
     def dividir_tarea_en_pasos(prompt):
         solicitud = [
             {"role": "user", "content": prompt},
             {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, sin explayarte tanto:"}
         ]
-        
+
         response = openai.ChatCompletion.create(
             engine="mindfuel",
             messages=solicitud,
@@ -44,16 +42,11 @@ def procesar_tarea():
         # Filtra los elementos vacíos en la lista de pasos
         pasos = list(filter(None, pasos))
         return pasos
-    
-    data = request.get_json()  # Obtener datos como JSON
-    tarea = data.get('tareas', '')
-    print(tarea)
-    if len(tarea) < 3:
-        return ()
-    else:
-        respuesta = dividir_tarea_en_pasos(tarea)
-        print(respuesta)
-        return jsonify(respuesta)
 
-if __name__ == '__main__':
-    app.run()
+    tarea_texto = tarea.get('tareas', '')
+    
+    if len(tarea_texto) < 3:
+        raise HTTPException(status_code=400, detail="La tarea es demasiado corta")
+    else:
+        respuesta = dividir_tarea_en_pasos(tarea_texto)
+        return respuesta
