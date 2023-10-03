@@ -83,19 +83,17 @@ model task {
     id              String   @id @default(cuid())
     name            String
     description     String?
-    category        String?
     createdAt       DateTime @default(now())
     usesAI  Boolean @default(false)
     deadline        DateTime?
     routine_id      String?
     routine         routine? @relation(fields: [routine_id], references: [id], onDelete: Cascade)
+    routine_order   Int?
     event_id        String?
     event           event?   @relation(fields: [event_id], references: [id])
     estimated_time  Int?
     done            Boolean  @default(false)
-    real_time       Int?
     user_id         String
-    required_energy Int?
 
     @@index([event_id])
     @@index([routine_id])

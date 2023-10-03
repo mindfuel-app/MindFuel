@@ -24,9 +24,6 @@ export default function TaskCard({
   showCompletedTasks: boolean;
 }) {
   const user = useUser();
-  const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
-    user_id: user.id,
-  });
   const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
@@ -96,7 +93,6 @@ export default function TaskCard({
                     initialDescription={description || ""}
                     initialDeadline={deadline}
                     afterSave={() => {
-                      void refetchRoutines();
                       void refetchTasks();
                       setIsModalOpen(false);
                     }}
@@ -114,7 +110,7 @@ export default function TaskCard({
                   setTaskUndone({ tasks: [id] });
                 } else {
                   setIsTaskDone(true);
-                  setTaskDone({ task_id: id, realTime: 0 });
+                  setTaskDone({ task_id: id });
                 }
               }, 250);
             }}
