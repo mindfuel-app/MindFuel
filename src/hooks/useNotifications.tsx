@@ -1,5 +1,11 @@
-import { resolve } from "path";
+import { useEffect, useState } from "react";
 
 export function useNotifications() {
-    Notification.requestPermission()
+  const [permission, setPermission] = useState<NotificationPermission>();
+
+  useEffect(() => {
+    void Notification.requestPermission().then(setPermission);
+  }, []);
+
+  return permission;
 }
