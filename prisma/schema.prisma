@@ -127,3 +127,9 @@ model passwordResetToken {
     token     String   @unique
     expiresAt DateTime
 }
+
+model pushSubscription {
+    id        String   @id @default(cuid())
+    suscription Json
+    user_id   String
+}

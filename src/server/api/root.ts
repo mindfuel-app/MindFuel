@@ -4,6 +4,7 @@ import { taskRouter } from "./routers/task";
 import { routineRouter } from "./routers/routines";
 import { pointsRouter } from "./routers/points";
 import { friendRouter } from "./routers/friends";
+import { pushRouter } from "./routers/pushSuscriptions";
 
 
 /**
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   resetPwd: resetPwdRouter,
   points: pointsRouter,
   friends: friendRouter,
+  pushSuscriptions: pushRouter,
 });
 
 // export type definition of API

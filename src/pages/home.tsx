@@ -7,6 +7,9 @@ import RoutineList from "../components/routine/routineList";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import useSwipe from "~/hooks/useSwipe";
+import { registerServiceWorker } from "~/utils/registerPushSuscription";
+import { askPermission } from "~/utils/registerPushSuscription";
+import { useNotifications } from "~/hooks/useNotifications";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import AddButton from "~/components/addButton";
@@ -33,11 +36,29 @@ export default function Home() {
   const swipeRightHandler = useSwipe({
     onSwipedRight: () => router.push("?tab=tareas"),
   });
-
+  const permission = useNotifications();
+  console.log(permission);
   if (status == "unauthenticated") return void Router.push("/signin");
 
   if (!sessionData) return;
 
+  if (!("serviceWorker" in navigator)) {
+    // Service Worker isn't supported on this browser, disable or hide UI.
+    throw new Error(
+      "Service Worker not supported, we need Notification API support"
+    );
+  }
+
+  if (!("PushManager" in window)) {
+    // Push isn't supported on this browser, disable or hide UI.
+    throw new Error("Push not supported, we need Notification API support");
+  }
+
+  registerServiceWorker().catch((error) => console.error(error));
+  console.log(
+    askPermission(sessionData.user.id).catch((error) => console.error(error))
+  );
+      
   return (
     <>
       <Head>
