@@ -6,13 +6,8 @@ type Task = {
   id: string;
   name: string;
   description: string | null;
-  category: string | null;
-  createdAt: Date;
   deadline: Date | null;
-  usesAI: boolean;
-  routine_id: string | null;
-  event_id: string | null;
-  required_energy: number | null;
+  done: boolean;
 };
 
 function sortTasksByDeadline(a: Task, b: Task): number {
@@ -37,9 +32,8 @@ export const taskRouter = createTRPCRouter({
       z.object({
         task: z.object({
           name: z.string(),
-          description: z.string().nullish(),
-          deadline: z.date().nullish(),
-          routine_id: z.string().nullish(),
+          description: z.string().nullable(),
+          deadline: z.date().nullable(),
           user_id: z.string(),
         }),
       })
@@ -59,10 +53,50 @@ export const taskRouter = createTRPCRouter({
         where: {
           user_id: input.user_id,
         },
+        select: {
+          id: true,
+          name: true,
+          deadline: true,
+          description: true,
+          done: true,
+        },
       });
-      let orderedTasks = tasks.sort(sortTasksByDeadline);
-      orderedTasks = tasks.sort((a, b) => Number(a.done) - Number(b.done));
-      return orderedTasks;
+
+      return tasks
+        .sort(sortTasksByDeadline)
+        .sort((a, b) => Number(a.done) - Number(b.done));
+    }),
+  getTasksForRoutine: protectedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const tasks = await ctx.prisma.task.findMany({
+        where: {
+          user_id: input.user_id,
+          routine_id: {
+            not: null,
+          },
+          routine_order: {
+            not: null,
+          },
+        },
+        select: {
+          name: true,
+          estimated_time: true,
+          usesAI: true,
+          routine_id: true,
+          routine_order: true,
+        },
+      });
+
+      return tasks.map((task) => {
+        return {
+          name: task.name,
+          estimatedTime: task.estimated_time,
+          usesAI: task.usesAI,
+          routineId: task.routine_id,
+          routineOrder: task.routine_order || 0,
+        };
+      });
     }),
   getTasksbyRoutine: protectedProcedure
     .input(z.object({ routine_id: z.string() }))
@@ -70,9 +104,15 @@ export const taskRouter = createTRPCRouter({
       const tasks = await ctx.prisma.task.findMany({
         where: {
           routine_id: input.routine_id,
+          routine_order: {
+            not: null,
+          },
         },
       });
-      return tasks;
+      return tasks.sort((a, b) => {
+        if (a.routine_order === null || b.routine_order === null) return 0;
+        return a.routine_order - b.routine_order;
+      });
     }),
   getTaskById: protectedProcedure
     .input(z.object({ id: z.string() }))
@@ -85,16 +125,14 @@ export const taskRouter = createTRPCRouter({
       return task;
     }),
   setTaskDone: protectedProcedure
-    .input(z.object({ task_id: z.string(), realTime: z.number() }))
+    .input(z.object({ task_id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const realTime = input.realTime;
       const task = await ctx.prisma.task.update({
         where: {
           id: input.task_id,
         },
         data: {
           done: true,
-          real_time: realTime,
         },
       });
       return task;
@@ -112,7 +150,6 @@ export const taskRouter = createTRPCRouter({
             },
             data: {
               done: false,
-              real_time: null,
             },
           });
         })

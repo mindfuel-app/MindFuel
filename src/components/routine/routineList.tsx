@@ -9,7 +9,7 @@ export default function RoutineList() {
   const { data: userRoutines, isLoading } = api.routines.getRoutines.useQuery({
     user_id: user.id,
   });
-  const { data: tasks } = api.tasks.getTasks.useQuery({
+  const { data: tasks } = api.tasks.getTasksForRoutine.useQuery({
     user_id: user.id,
   });
 
@@ -44,7 +44,9 @@ export default function RoutineList() {
                 name={routine.name}
                 category={routine.category || "Otro"}
                 tasks={
-                  tasks?.filter((task) => task.routine_id == routine.id) || []
+                  tasks
+                    ?.filter((task) => task.routineId == routine.id)
+                    .sort((a, b) => a.routineOrder - b.routineOrder) || []
                 }
                 id={routine.id}
                 key={routine.id}

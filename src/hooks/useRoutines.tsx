@@ -1,13 +1,5 @@
 import { api } from "~/utils/api";
 
-export type Routine = {
-  id: string;
-  name: string;
-  description: string | null;
-  user_id: string;
-  days: string;
-};
-
 export function useRoutines({
   onSuccess,
   onError,
