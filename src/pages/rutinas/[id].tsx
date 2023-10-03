@@ -1,7 +1,6 @@
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Header from "~/components/header";
 import {
   PlayIcon,
   ChevronDoubleRightIcon,
@@ -17,6 +16,7 @@ import Image from "next/image";
 import ActiveTask from "../../components/task/activeTask";
 import InactiveTask from "../../components/task/inactiveTask";
 import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
+import BackButton from "~/components/backButton";
 
 function ErrorPage() {
   const [seconds, setSeconds] = useState(0);
@@ -35,7 +35,9 @@ function ErrorPage() {
         <title>MindFuel</title>
       </Head>
       <div className="flex min-h-screen flex-col">
-        <Header />
+        <div className="flex w-full items-center justify-start pl-5 pt-5">
+          <BackButton href={`/home?tab=rutinas`} />
+        </div>
         {seconds < 5 ? (
           <SingleRoutineSkeleton />
         ) : (
@@ -87,8 +89,10 @@ export default function Routine() {
         <title>{routine.name}</title>
       </Head>
       <div className="flex min-h-screen flex-col">
-        <Header />
-        <div className="mb-[86px] flex h-full flex-col items-center gap-6 bg-alabaster px-6 py-8">
+        <div className="flex w-full items-center justify-start pl-5 pt-5">
+          <BackButton href={`/home?tab=rutinas`} />
+        </div>
+        <div className="mb-[86px] flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
           <Progress
             className="max-w-lg"
             value={(100 / tasks.length) * routineProgress}
