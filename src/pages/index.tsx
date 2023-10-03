@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import { Progress } from "../components/ui/progressBar";
 import useWindowWidth from "~/hooks/useWindowWidth";
+import { motion } from "framer-motion";
 
 export default function Landing() {
   const { status } = useSession();
@@ -47,39 +48,49 @@ export default function Landing() {
               </h1>
               <div className="flex max-w-[500px] flex-col gap-7 py-8 text-left font-semibold sm:py-12 sm:text-lg">
                 {screenTouches > 1 && (
-                  <p>
-                    La{" "}
-                    <span className="font-extrabold">
-                      planificación de rutinas
-                    </span>{" "}
-                    es un paso importante que no puede faltar en nuestro día a
-                    día.
-                  </p>
+                  <Message>
+                    <p>
+                      La{" "}
+                      <span className="font-extrabold">
+                        planificación de rutinas
+                      </span>{" "}
+                      es un paso importante que no puede faltar en nuestro día a
+                      día.
+                    </p>
+                  </Message>
                 )}
                 {screenTouches > 2 && (
-                  <p>
-                    Sin una{" "}
-                    <span className="font-extrabold">buena organización</span>{" "}
-                    existe la posibilidad de tener dificultades al completar
-                    tareas, concentrarse, mantener foco en una única cosa a la
-                    vez y vivir en el presente.
-                  </p>
+                  <Message>
+                    <p>
+                      Sin una{" "}
+                      <span className="font-extrabold">buena organización</span>{" "}
+                      existe la posibilidad de tener dificultades al completar
+                      tareas, concentrarse, mantener foco en una única cosa a la
+                      vez y vivir en el presente.
+                    </p>
+                  </Message>
                 )}
                 {screenTouches > 3 && (
-                  <p>
-                    Con la ayuda de{" "}
-                    <span className="font-extrabold">MindFuel</span>, mediante
-                    una buena planificación de objetivos alcanzables, la
-                    motivación y la disciplina se generan en el tiempo.
-                  </p>
+                  <Message>
+                    <p>
+                      Con la ayuda de{" "}
+                      <span className="font-extrabold">MindFuel</span>, mediante
+                      una buena planificación de objetivos alcanzables, la
+                      motivación y la disciplina se generan en el tiempo.
+                    </p>
+                  </Message>
                 )}
                 {screenTouches > 4 && (
-                  <p>
-                    Es un{" "}
-                    <span className="font-extrabold text-orange">proceso</span>,
-                    las pequeñas acciones diarias son la llave secreta para el
-                    éxito.
-                  </p>
+                  <Message>
+                    <p>
+                      Es un{" "}
+                      <span className="font-extrabold text-orange">
+                        proceso
+                      </span>
+                      , las pequeñas acciones diarias son la llave secreta para
+                      el éxito.
+                    </p>
+                  </Message>
                 )}
                 {screenTouches > 5 && void Router.push("/signup")}
               </div>
@@ -95,4 +106,12 @@ export default function Landing() {
       </>
     );
   }
+}
+
+function Message({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      {children}
+    </motion.div>
+  );
 }
