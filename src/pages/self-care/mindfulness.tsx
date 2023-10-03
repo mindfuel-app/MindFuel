@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import SelfCareLayout from "../../components/selfCareLayout";
+import SelfCareLayout from "../../components/layouts/selfCareLayout";
 import Router from "next/router";
 
 export default function Mindfulness() {

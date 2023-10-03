@@ -1,4 +1,4 @@
-import Layout from "~/components/layout";
+import Layout from "~/components/layouts/homeLayout";
 import { Tabs, TabsList } from "../components/ui/tabs";
 import Head from "next/head";
 import { motion } from "framer-motion";

@@ -1,7 +1,7 @@
 import { type Session } from "next-auth";
 import Head from "next/head";
 import { UserProvider } from "~/lib/UserContext";
-import { BottomNavigation } from "./navigation";
+import { BottomNavigation } from "../navigation";
 
 export default function ProfileLayout({
   header,

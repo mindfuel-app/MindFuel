@@ -2,7 +2,7 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import BackButton from "~/components/backButton";
-import ProfileLayout from "~/components/profileLayout";
+import ProfileLayout from "~/components/layouts/profileLayout";
 
 export default function Configuracion() {
   const { data: sessionData, status } = useSession();

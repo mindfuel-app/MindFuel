@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Layout from "~/components/layout";
+import Layout from "~/components/layouts/homeLayout";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 

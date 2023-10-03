@@ -1,9 +1,9 @@
-import { BottomNavigation } from "./navigation";
-import Header from "./header";
+import { BottomNavigation } from "../navigation";
+import Header from "../header";
 import { UserProvider } from "~/lib/UserContext";
 import { type Session } from "next-auth";
 
-export default function AppLayout({
+export default function HomeLayout({
   children,
   sessionData,
 }: {

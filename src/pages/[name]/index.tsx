@@ -9,7 +9,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { StarIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import ProfileLayout from "~/components/profileLayout";
+import ProfileLayout from "~/components/layouts/profileLayout";
+import { motion } from "framer-motion";
 
 const userStats = [
   {
@@ -66,30 +67,53 @@ export default function Profile() {
           {sessionData.user.name}
         </span>
       </div>
-      <div className="flex w-full items-center justify-center px-7 pt-24">
-        <div className="grid w-full grid-cols-2 gap-6 rounded-xl bg-[#d9d9d9] p-4">
-          {userStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center text-center"
-            >
-              {stat.icon}
-              <span className="text-lg font-medium text-orange">
-                {stat.number}
-              </span>
-              <span className="-mt-2 text-lg font-medium">
-                {stat.label.split(" ")[0]}
-              </span>
-              {stat.label.split(" ").length > 1 && (
-                <span className="-mt-2 font-medium">
-                  {stat.label.split(" ")[1]}
+      <div className="flex w-full flex-col items-center gap-4 px-6 pb-5 pt-20">
+        <Section title="Estadísticas">
+          <div className="grid grid-cols-2 gap-6">
+            {userStats.map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col items-center text-center"
+              >
+                {stat.icon}
+                <span className="text-lg font-medium text-orange">
+                  {stat.number}
                 </span>
-              )}
-            </div>
-          ))}
-        </div>
+                <span className="-mt-2 text-lg font-medium">
+                  {stat.label.split(" ")[0]}
+                </span>
+                {stat.label.split(" ").length > 1 && (
+                  <span className="-mt-2 font-medium">
+                    {stat.label.split(" ")[1]}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </Section>
+        <Section title="Logros">Logros</Section>
+        <Section title="Resumen semanal">Resumen semanal</Section>
       </div>
     </ProfileLayout>
+  );
+}
+
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -5 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex w-full flex-col gap-1"
+    >
+      <h3 className="ml-1 text-lg font-medium">{title}</h3>
+      <div className="rounded-xl bg-[#d9d9d9] p-4">{children}</div>
+    </motion.div>
   );
 }
 
