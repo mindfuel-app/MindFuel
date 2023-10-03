@@ -59,6 +59,7 @@ export const taskRouter = createTRPCRouter({
           deadline: true,
           description: true,
           done: true,
+          routine_id: true,
         },
       });
 

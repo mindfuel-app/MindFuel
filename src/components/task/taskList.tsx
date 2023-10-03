@@ -86,13 +86,14 @@ export default function TaskList() {
           <ul className="flex w-72 flex-col gap-3 sm:w-80 lg:w-96">
             {pendingTasks.map((task) => (
               <TaskCard
+                key={task.id}
                 id={task.id}
                 name={task.name}
                 deadline={task.deadline}
                 description={task.description}
                 isChecked={task.done}
+                isPartOfRoutine={task.routine_id != null}
                 showCompletedTasks={showCompletedTasks}
-                key={task.id}
               />
             ))}
           </ul>

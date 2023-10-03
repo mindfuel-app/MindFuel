@@ -14,6 +14,7 @@ export default function TaskCard({
   deadline,
   description,
   isChecked,
+  isPartOfRoutine,
   showCompletedTasks,
 }: {
   id: string;
@@ -21,6 +22,7 @@ export default function TaskCard({
   deadline?: Date | null;
   description?: string | null;
   isChecked?: boolean;
+  isPartOfRoutine: boolean;
   showCompletedTasks: boolean;
 }) {
   const user = useUser();
@@ -72,7 +74,7 @@ export default function TaskCard({
               </div>
             )}
           </div>
-          {!isTaskDone && (
+          {!isTaskDone && !isPartOfRoutine && (
             <>
               <motion.button
                 initial={{ scale: 0.9, opacity: 0 }}
