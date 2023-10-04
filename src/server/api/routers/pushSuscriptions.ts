@@ -35,14 +35,20 @@ export const pushRouter = createTRPCRouter({
           suscription: input.PushSubscription
         },
       })
-      if (isAlreadySubscribed) return;
-      const pushSubscription = await ctx.prisma.pushSubscription.create({
-        data: {
-          user_id: userId,
-          suscription: PushSubscription,
-        },
-      });
-      return pushSubscription;
+      if (isAlreadySubscribed[0]) {
+        console.log(isAlreadySubscribed)
+        return "user already Subscribed";
+      }
+      else{
+          const pushSubscription = await ctx.prisma.pushSubscription.create({
+          data: {
+            user_id: userId,
+            suscription: PushSubscription,
+          },
+        });
+        return pushSubscription;
+      }
+      
     }),
 
   sendPushToOne: publicProcedure
