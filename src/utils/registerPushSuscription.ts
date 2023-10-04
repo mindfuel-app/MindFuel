@@ -22,15 +22,13 @@ export function askPermission(userId: string) {
     if (permissionResult !== "granted") {
       throw new Error("We weren't granted permission.");
     } else if (permissionResult === "granted") {
-      subscribeUserToPush(userId).catch((err) => {
-        alert(err);
-      });
+      subscribeUserToPush(userId);
     }
   });
 }
 
-function subscribeUserToPush(userId: string) {
-  return navigator.serviceWorker
+export function subscribeUserToPush(userId: string) {
+  void navigator.serviceWorker
     .register("./push-sw.js")
     .then(function (registration) {
       const subscribeOptions = {
@@ -42,6 +40,6 @@ function subscribeUserToPush(userId: string) {
       return registration.pushManager.subscribe(subscribeOptions);
     })
     .then(function (pushSubscription) {
-      console.log(pushSubscription);
+      return pushSubscription;
     });
 }

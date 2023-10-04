@@ -9,10 +9,14 @@ import Router from "next/router";
 import useSwipe from "~/hooks/useSwipe";
 import { registerServiceWorker } from "~/utils/registerPushSuscription";
 import { askPermission } from "~/utils/registerPushSuscription";
+import { subscribeUserToPush } from "~/utils/registerPushSuscription";
 import { useNotifications } from "~/hooks/useNotifications";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import AddButton from "~/components/addButton";
+import { useEffect, useState } from "react";
+import { useUser } from "~/lib/UserContext";
+import { api } from "~/utils/api";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -37,7 +41,28 @@ export default function Home() {
     onSwipedRight: () => router.push("?tab=tareas"),
   });
   const permission = useNotifications();
-  console.log(permission);
+  const [pushSubscription, setPushSubscription] = useState<PushSubscription>();
+  const { mutate } = api.pushSuscriptions.addPush.useMutation();
+
+  useEffect(() => console.log(pushSubscription), [pushSubscription]);
+
+  useEffect(() => {
+    if (permission == "granted") {
+      void navigator.serviceWorker
+        .register("./push-sw.js")
+        .then(function (registration) {
+          const subscribeOptions = {
+            userVisibleOnly: true,
+            applicationServerKey:
+              "BJw57keq3mApSgaxzVzpdNMmViHi4EG5zTXalzO3ktWP4PXDHHW0qXTCfrJuZYF4ehzGI6yOI1jATxXcfo2W5Ww",
+          };
+
+          return registration.pushManager.subscribe(subscribeOptions);
+        })
+        .then((pushSubscription) => console.log(pushSubscription));
+    }
+  }, [permission]);
+
   if (status == "unauthenticated") return void Router.push("/signin");
 
   if (!sessionData) return;
@@ -54,11 +79,11 @@ export default function Home() {
     throw new Error("Push not supported, we need Notification API support");
   }
 
-  registerServiceWorker().catch((error) => console.error(error));
-  console.log(
-    askPermission(sessionData.user.id).catch((error) => console.error(error))
-  );
-      
+  // registerServiceWorker().catch((error) => console.error(error));
+  // console.log(
+  //   askPermission(sessionData.user.id).catch((error) => console.error(error))
+  // );
+
   return (
     <>
       <Head>
