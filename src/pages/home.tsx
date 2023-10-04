@@ -17,6 +17,7 @@ import AddButton from "~/components/addButton";
 import { useEffect, useState } from "react";
 import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
+import { json } from "stream/consumers";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -42,12 +43,24 @@ export default function Home() {
   });
   const permission = useNotifications();
   const [pushSubscription, setPushSubscription] = useState<PushSubscription>();
-  const { mutate } = api.pushSuscriptions.addPush.useMutation();
+  const { mutate: addPush } = api.pushSuscriptions.addPush.useMutation();
 
   useEffect(() => console.log(pushSubscription), [pushSubscription]);
+  
 
   useEffect(() => {
-    if (permission == "granted") {
+    if (!("serviceWorker" in navigator)) {
+      // Service Worker isn't supported on this browser, disable or hide UI.
+      throw new Error(
+        "Service Worker not supported, we need Notification API support"
+      );
+    }
+  
+    if (!("PushManager" in window)) {
+      // Push isn't supported on this browser, disable or hide UI.
+      throw new Error("Push not supported, we need Notification API support");
+    }
+    if (permission == "granted" && sessionData?.user.id) {
       void navigator.serviceWorker
         .register("./push-sw.js")
         .then(function (registration) {
@@ -59,25 +72,20 @@ export default function Home() {
 
           return registration.pushManager.subscribe(subscribeOptions);
         })
-        .then((pushSubscription) => console.log(pushSubscription));
+        .then((pushSubscription) => {
+          const pushJSON = pushSubscription.toJSON()
+          if(!pushJSON.keys || !pushJSON.endpoint) return 
+          console.log(JSON.stringify(pushJSON))
+          addPush({
+          userId: sessionData.user.id,
+          PushSubscription: JSON.stringify(pushJSON)
+        })});
     }
   }, [permission]);
 
   if (status == "unauthenticated") return void Router.push("/signin");
 
   if (!sessionData) return;
-
-  if (!("serviceWorker" in navigator)) {
-    // Service Worker isn't supported on this browser, disable or hide UI.
-    throw new Error(
-      "Service Worker not supported, we need Notification API support"
-    );
-  }
-
-  if (!("PushManager" in window)) {
-    // Push isn't supported on this browser, disable or hide UI.
-    throw new Error("Push not supported, we need Notification API support");
-  }
 
   // registerServiceWorker().catch((error) => console.error(error));
   // console.log(

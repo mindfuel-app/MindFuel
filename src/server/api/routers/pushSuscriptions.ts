@@ -24,10 +24,7 @@ export const pushRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        PushSubscription: z.object({
-          endpoint: z.string(),
-          keys: z.object({ p256dh: z.string(), auth: z.string() }),
-        }),
+        PushSubscription: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
