@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import SelfCareLayout from "../../components/layouts/selfCareLayout";
 import Router from "next/router";
+import { OptionLayout } from ".";
 
 export default function Mindfulness() {
   const { data: sessionData, status } = useSession();
@@ -11,7 +12,7 @@ export default function Mindfulness() {
 
   return (
     <SelfCareLayout sessionData={sessionData}>
-      <h1 className="mt-10 text-3xl font-medium">Mindfulness</h1>
+      <OptionLayout title="Mindfulness">Mindfulness</OptionLayout>
     </SelfCareLayout>
   );
 }
