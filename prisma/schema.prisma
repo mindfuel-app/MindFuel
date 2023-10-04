@@ -130,6 +130,6 @@ model passwordResetToken {
 
 model pushSubscription {
     id        String   @id @default(cuid())
-    suscription Json
+    suscription String @db.Text
     user_id   String
 }
