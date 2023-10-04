@@ -104,9 +104,9 @@ export function OptionLayout({
   title: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-5 pt-5">
+    <div className="flex flex-col items-center gap-5 pt-3">
       <TodayDate />
-      <h1 className="text-3xl font-medium">{title}</h1>
+      <h1 className="-mt-2 text-3xl font-medium">{title}</h1>
       {children}
     </div>
   );

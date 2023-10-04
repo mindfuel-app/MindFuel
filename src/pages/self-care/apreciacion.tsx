@@ -13,14 +13,14 @@ export default function Apreciacion() {
   return (
     <SelfCareLayout sessionData={sessionData}>
       <OptionLayout title="Apreciación">
-        <div className="flex h-[170px] w-[170px] items-center justify-center rounded-full border-2 border-[#E97B82] bg-white">
+        <div className="flex h-[150px] w-[150px] items-center justify-center rounded-full border-2 border-[#E97B82] bg-white">
           Apreciacion
         </div>
         <p className="max-w-[270px] text-center text-xl">
           Dí <span className="font-bold">cuatro</span> cosas por las que estés
           agradecido el día de hoy.
         </p>
-        <div className="-mt-3 flex flex-col gap-4">
+        <div className="-mt-3 flex flex-col gap-3">
           {Array(4)
             .fill(null)
             .map((_, index) => (
