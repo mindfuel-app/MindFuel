@@ -19,6 +19,7 @@ import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
 import { json } from "stream/consumers";
 
+
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
   { value: "rutinas", label: "Rutinas" },
@@ -44,6 +45,7 @@ export default function Home() {
   const permission = useNotifications();
   const [pushSubscription, setPushSubscription] = useState<PushSubscription>();
   const { mutate: addPush } = api.pushSuscriptions.addPush.useMutation();
+  const {mutate: sendPush} = api.pushSuscriptions.sendPushToOne.useMutation()
 
   useEffect(() => console.log(pushSubscription), [pushSubscription]);
   
@@ -91,6 +93,12 @@ export default function Home() {
   // console.log(
   //   askPermission(sessionData.user.id).catch((error) => console.error(error))
   // );
+  function sendNotification(){
+    if(!sessionData) return;
+    const user_Id = sessionData.user.id
+    const Notification = sendPush({user_id:user_Id, title:"Welcome to MindFuel", body:"This is a test notification"})
+    console.log(Notification)
+  }
 
   return (
     <>
@@ -99,7 +107,9 @@ export default function Home() {
       </Head>
       <Layout sessionData={sessionData}>
         <Tabs className="h-full w-full">
+        
           <div className="mt-5 flex justify-center">
+            
             <TabsList>
               {tabOptions.map((tab) => (
                 <Link
@@ -128,6 +138,7 @@ export default function Home() {
                 </Link>
               ))}
             </TabsList>
+            <button className="rounded-sm bg-teal p-2 border-2 border-indigo-600" onClick={sendNotification}>Send Notification</button>
           </div>
           {selectedTab == "tareas" && (
             <div {...swipeLeftHandler} className="h-full">

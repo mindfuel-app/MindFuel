@@ -6,6 +6,7 @@ import {
 import { z } from "zod";
 import webpush from "web-push"; // Typescript doesn't recognize web-push as a module, so we need to import it like this
 import { env } from "~/env.mjs";
+import { PushSubscription } from "web-push";
 
 webpush.setGCMAPIKey(env.GCMAPI_KEY);
 const vapidKeys = {
@@ -67,7 +68,10 @@ export const pushRouter = createTRPCRouter({
           title: input.title,
           body: input.body,
         });
-        //webpush.sendNotification(pushSubscription.suscription, payload).catch((error) => console.error(error));
+
+        const ps = JSON.parse(pushSubscription.suscription) as PushSubscription
+
+        console.log(webpush.sendNotification(ps, payload).catch((error) => console.error(error)));
       });
       return pushSubscriptions;
     }),
