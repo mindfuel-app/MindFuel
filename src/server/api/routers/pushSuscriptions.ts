@@ -35,7 +35,7 @@ export const pushRouter = createTRPCRouter({
           suscription: input.PushSubscription
         },
       })
-      if (isAlreadySubscribed[0]) {
+      if (isAlreadySubscribed.length!==0) {
         console.log(isAlreadySubscribed)
         return "user already Subscribed";
       }
