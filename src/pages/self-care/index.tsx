@@ -73,7 +73,7 @@ export default function SelfCare() {
           <Link
             key={option.title}
             href={`/self-care${option.href}`}
-            className="no-highlight flex gap-1 rounded-md bg-white p-2 transition-transform active:scale-[97%]"
+            className="no-highlight flex max-w-[400px] gap-1 rounded-md bg-white p-2 transition-transform active:scale-[97%]"
             onClick={() => onRouteChange(`/self-care${option.href}`)}
           >
             {option.image && (
