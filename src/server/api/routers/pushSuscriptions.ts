@@ -29,6 +29,13 @@ export const pushRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { userId, PushSubscription } = input;
+      const isAlreadySubscribed = await ctx.prisma.pushSubscription.findMany({
+        where:{
+          user_id: input.userId,
+          suscription: input.PushSubscription
+        },
+      })
+      if (isAlreadySubscribed) return;
       const pushSubscription = await ctx.prisma.pushSubscription.create({
         data: {
           user_id: userId,
