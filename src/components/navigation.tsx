@@ -65,7 +65,7 @@ export function BottomNavigation() {
   const { name } = useUser();
 
   return (
-    <div className="no-highlight sticky bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
+    <div className="no-highlight fixed bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
       {navigationItems.map((item) => (
         <NavigationItem
           key={item.href}
