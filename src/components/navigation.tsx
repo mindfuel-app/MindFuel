@@ -28,12 +28,11 @@ function NavigationItem({
         router.pathname.startsWith(href) ||
         (name == "Perfil" && routerName == userName)
           ? "text-teal"
-          : ""
+          : "text-gray-700"
       } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
     >
       {icon}
-      <span className="text-xs font-medium min-[375px]:text-sm">{name}</span>
     </Link>
   );
 }
