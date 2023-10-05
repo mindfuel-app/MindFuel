@@ -32,25 +32,25 @@ const options: Option[] = [
     description: "Es importante mantenerse hidratado.",
     image: "/tomar-agua.png",
   },
-  {
-    title: "Técnica Pomodoro",
-    href: "/pomodoro",
-    description:
-      "Haz tus tareas usando este método para mejorar la administración del tiempo.",
-    image: "/pomodoro.png",
-  },
-  {
-    title: "Diario personal",
-    href: "/diario-personal",
-    description: "Escribe sobre lo que quieras aquí. Sé libre y exprésate.",
-    image: "/diario-personal.png",
-  },
-  {
-    title: "Respiración",
-    href: "/respiracion",
-    description: "Tomate un tiempo para relajar y recuperar la atención.",
-    image: "/respiracion.png",
-  },
+  // {
+  //   title: "Técnica Pomodoro",
+  //   href: "/pomodoro",
+  //   description:
+  //     "Haz tus tareas usando este método para mejorar la administración del tiempo.",
+  //   image: "/pomodoro.png",
+  // },
+  // {
+  //   title: "Diario personal",
+  //   href: "/diario-personal",
+  //   description: "Escribe sobre lo que quieras aquí. Sé libre y exprésate.",
+  //   image: "/diario-personal.png",
+  // },
+  // {
+  //   title: "Respiración",
+  //   href: "/respiracion",
+  //   description: "Tomate un tiempo para relajar y recuperar la atención.",
+  //   image: "/respiracion.png",
+  // },
 ];
 
 export default function SelfCare() {
