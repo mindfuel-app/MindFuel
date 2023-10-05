@@ -40,7 +40,7 @@ export default function TaskList() {
     <motion.div
       initial={{ x: 10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="padding-footer relative flex h-full flex-col items-center text-lg font-medium"
+      className="padding-footer relative flex flex-col items-center text-lg font-medium"
     >
       <div
         onClick={() => {

@@ -25,11 +25,8 @@ export default function Home() {
 
   const { data: sessionData, status } = useSession();
 
-  const swipeLeftHandler = useSwipe({
+  const swipeHandler = useSwipe({
     onSwipedLeft: () => router.push("?tab=rutinas"),
-  });
-
-  const swipeRightHandler = useSwipe({
     onSwipedRight: () => router.push("?tab=tareas"),
   });
 
@@ -39,7 +36,7 @@ export default function Home() {
 
   return (
     <Layout sessionData={sessionData}>
-      <Tabs className="h-full w-full">
+      <Tabs {...swipeHandler} className="h-full w-full">
         <div className="mt-5 flex justify-center">
           <TabsList>
             {tabOptions.map((tab) => (
@@ -70,16 +67,8 @@ export default function Home() {
             ))}
           </TabsList>
         </div>
-        {selectedTab == "tareas" && (
-          <div {...swipeLeftHandler}>
-            <TaskList />
-          </div>
-        )}
-        {selectedTab == "rutinas" && (
-          <div {...swipeRightHandler}>
-            <RoutineList />
-          </div>
-        )}
+        {selectedTab == "tareas" && <TaskList />}
+        {selectedTab == "rutinas" && <RoutineList />}
       </Tabs>
       <div className="fixed bottom-[100px] right-[80px] lg:hidden">
         <AddButton />
