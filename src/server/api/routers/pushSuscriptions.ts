@@ -47,6 +47,7 @@ export const pushRouter = createTRPCRouter({
             suscription: PushSubscription,
           },
         });
+        console.log(pushSubscription);
         return pushSubscription;
       }
       
@@ -69,9 +70,9 @@ export const pushRouter = createTRPCRouter({
           body: input.body,
         });
 
-        const ps = JSON.parse(pushSubscription.suscription) as PushSubscription
-
-        console.log(webpush.sendNotification(ps, payload).catch((error) => console.error(error)));
+        const ps = JSON.parse(pushSubscription.suscription) as webpush.PushSubscription
+        console.log(ps)
+        console.log(webpush.sendNotification(ps, "Hello").catch((error) => console.error(error)));
       });
       return pushSubscriptions;
     }),
