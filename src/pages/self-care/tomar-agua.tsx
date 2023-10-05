@@ -16,7 +16,7 @@ export default function TomarAgua() {
   return (
     <SelfCareLayout sessionData={sessionData}>
       <OptionLayout title="Tomar agua">
-        <div className="flex h-[150px] w-[150px] items-center justify-center rounded-full border-2 border-[#75CFF9] bg-white">
+        <div className="flex h-[160px] w-[160px] items-center justify-center rounded-full border-2 border-[#75CFF9] bg-white">
           Agua
         </div>
         <p className="max-w-[270px] text-center text-xl">

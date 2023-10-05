@@ -13,7 +13,7 @@ export default function Apreciacion() {
   return (
     <SelfCareLayout sessionData={sessionData}>
       <OptionLayout title="Apreciación">
-        <div className="flex h-[150px] w-[150px] items-center justify-center rounded-full border-2 border-[#E97B82] bg-white">
+        <div className="flex h-[160px] w-[160px] items-center justify-center rounded-full border-2 border-[#E97B82] bg-white">
           Apreciacion
         </div>
         <p className="max-w-[270px] text-center text-xl">
