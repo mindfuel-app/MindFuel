@@ -17,7 +17,7 @@ export default function TaskList() {
   } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
-  const [completedTasksButton, setCompletedTasksButton] = useState(false);
+  const [showSubMenu, setShowSubMenu] = useState(false);
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
 
   if (isLoading) return <TaskSkeleton />;
@@ -43,13 +43,15 @@ export default function TaskList() {
       className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
     >
       <div
-        onClick={() => setCompletedTasksButton(!completedTasksButton)}
+        onClick={() => {
+          setShowSubMenu((showSubMenu) => !showSubMenu);
+        }}
         className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] transition-colors active:bg-black/10 lg:hover:bg-black/10"
       >
         <EllipsisHorizontalIcon className="h-6 w-6" />
       </div>
-      {completedTasksButton && (
-        <ClickAwayListener onClickAway={() => setCompletedTasksButton(false)}>
+      {showSubMenu && (
+        <ClickAwayListener onClickAway={() => setShowSubMenu(false)}>
           <div
             onClick={() => {
               void refetchTasks();
