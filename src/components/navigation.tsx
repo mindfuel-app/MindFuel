@@ -64,7 +64,7 @@ export function Footer() {
   const { name } = useUser();
 
   return (
-    <footer className="no-highlight fixed bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
+    <footer className="no-highlight fixed bottom-0 z-20 flex w-full justify-evenly bg-white py-3 lg:hidden">
       {navigationItems.map((item) => (
         <NavigationItem
           key={item.href}

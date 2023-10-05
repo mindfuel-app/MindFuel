@@ -57,17 +57,19 @@ export default function Profile() {
       header={<Header userName={sessionData.user.name} />}
       sessionData={sessionData}
     >
-      <div className="relative h-[72px] w-full bg-teal">
-        <div className="absolute bottom-0 left-8 flex h-[120px] w-[120px] translate-y-1/2 items-center justify-center rounded-full border-[3px] border-teal bg-[#d9d9d9]">
+      <div className="relative flex w-full items-center py-3">
+        <div className="absolute left-0 top-0 h-1/2 w-full bg-teal">
+          <span className="absolute bottom-1 left-1/2 -translate-x-2 text-2xl text-white">
+            {sessionData.user.name}
+          </span>
+        </div>
+        <div className="z-10 ml-8 flex h-[120px] w-[120px] items-center justify-center rounded-full border-[3px] border-teal bg-[#d9d9d9]">
           <span className="text-7xl text-teal">
             {sessionData.user.name[0]?.toLocaleUpperCase()}
           </span>
         </div>
-        <span className="absolute bottom-1 left-1/2 -translate-x-2 text-2xl text-white">
-          {sessionData.user.name}
-        </span>
       </div>
-      <div className="flex w-full flex-col items-center gap-4 px-6 pb-[72px] pt-20">
+      <div className="flex w-full flex-col items-center gap-4 px-6 pb-[72px] pt-2">
         <Section title="Estadísticas">
           <div className="grid grid-cols-2 gap-6">
             {userStats.map((stat) => (
