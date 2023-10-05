@@ -89,79 +89,80 @@ export default function Routine() {
           <span className="text-sm">{routine.days}</span>
         </div>
         {routineProgress < tasks.length && (
-          <div className="flex w-full flex-col text-left font-medium">
-            <div className="jutify-start flex w-full">Tareas</div>
-            <ul className="padding-footer flex max-w-xl flex-col gap-3 py-3">
-              {tasks.map((task, index) => {
-                if (index == routineProgress) {
-                  return (
-                    <ActiveTask
-                      name={task.name}
-                      usesAI={task.usesAI}
-                      estimatedTime={task.estimated_time || null}
-                      isTimerRunning={isTimerRunning}
-                      key={task.id}
-                    />
-                  );
-                } else {
-                  return (
-                    <InactiveTask
-                      name={task.name}
-                      isDone={
-                        index < routineProgress && !skippedTasks.includes(index)
-                      }
-                      key={task.id}
-                    />
-                  );
-                }
-              })}
-            </ul>
-          </div>
+          <>
+            <div className="flex w-full flex-col pb-[110px] text-left font-medium">
+              <div className="jutify-start flex w-full">Tareas</div>
+              <ul className="flex max-w-xl flex-col gap-3 py-3">
+                {tasks.map((task, index) => {
+                  if (index == routineProgress) {
+                    return (
+                      <ActiveTask
+                        name={task.name}
+                        usesAI={task.usesAI}
+                        estimatedTime={task.estimated_time || null}
+                        isTimerRunning={isTimerRunning}
+                        key={task.id}
+                      />
+                    );
+                  } else {
+                    return (
+                      <InactiveTask
+                        name={task.name}
+                        isDone={
+                          index < routineProgress &&
+                          !skippedTasks.includes(index)
+                        }
+                        key={task.id}
+                      />
+                    );
+                  }
+                })}
+              </ul>
+            </div>
+            <div className="no-highlight fixed bottom-0 w-full border-t border-gray-300 bg-white py-3">
+              <div
+                onClick={() => {
+                  if (routineProgress < tasks.length)
+                    setRoutineProgress(routineProgress + 1);
+                }}
+                className="absolute -top-8 left-1/2 flex h-14 w-14 -translate-x-1/2 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
+              >
+                <CheckIcon className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex w-full justify-around">
+                <button
+                  onClick={() => setIsTimerRunning(!isTimerRunning)}
+                  className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
+                >
+                  {isTimerRunning ? (
+                    <PauseIcon className="h-6 w-6" />
+                  ) : (
+                    <PlayIcon className="h-6 w-6" />
+                  )}
+                  <span className="text-xs font-medium min-[375px]:text-sm">
+                    {isTimerRunning ? "Pausar" : "Reanudar"}
+                  </span>
+                </button>
+                <button
+                  onClick={() => {
+                    if (routineProgress < tasks.length) {
+                      setSkippedTasks((prev) => [...prev, routineProgress]);
+                      setRoutineProgress(routineProgress + 1);
+                    }
+                  }}
+                  className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
+                >
+                  <ChevronDoubleRightIcon className="h-5 w-5" />
+                  <span className="text-xs font-medium min-[375px]:text-sm">
+                    Saltear
+                  </span>
+                </button>
+              </div>
+            </div>
+          </>
         )}
         {routineProgress == tasks.length && <SuccessMessage />}
       </div>
-      {routineProgress < tasks.length && (
-        <div className="no-highlight fixed bottom-0 w-full bg-white py-3">
-          <div
-            onClick={() => {
-              if (routineProgress < tasks.length)
-                setRoutineProgress(routineProgress + 1);
-            }}
-            className="absolute -top-8 left-1/2 flex h-14 w-14 -translate-x-1/2 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
-          >
-            <CheckIcon className="h-8 w-8 text-white" />
-          </div>
-          <div className="flex w-full justify-around">
-            <button
-              onClick={() => setIsTimerRunning(!isTimerRunning)}
-              className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
-            >
-              {isTimerRunning ? (
-                <PauseIcon className="h-6 w-6" />
-              ) : (
-                <PlayIcon className="h-6 w-6" />
-              )}
-              <span className="text-xs font-medium min-[375px]:text-sm">
-                {isTimerRunning ? "Pausar" : "Reanudar"}
-              </span>
-            </button>
-            <button
-              onClick={() => {
-                if (routineProgress < tasks.length) {
-                  setSkippedTasks((prev) => [...prev, routineProgress]);
-                  setRoutineProgress(routineProgress + 1);
-                }
-              }}
-              className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
-            >
-              <ChevronDoubleRightIcon className="h-5 w-5" />
-              <span className="text-xs font-medium min-[375px]:text-sm">
-                Saltear
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
     </RoutineLayout>
   );
 }
