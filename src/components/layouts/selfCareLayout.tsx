@@ -25,9 +25,9 @@ export default function SelfCareLayout({
       >
         <div className="flex h-screen flex-col">
           <Header />
-          <div className="flex h-full flex-col items-center bg-alabaster p-3">
+          <main className="flex h-full flex-col items-center bg-alabaster p-3">
             {children}
-          </div>
+          </main>
           <BottomNavigation />
         </div>
       </UserProvider>
