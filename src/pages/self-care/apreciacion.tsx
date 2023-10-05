@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Router from "next/router";
 import SelfCareLayout from "~/components/layouts/selfCareLayout";
 import { OptionLayout } from ".";
+import Image from "next/image";
 
 export default function Apreciacion() {
   const { data: sessionData, status } = useSession();
@@ -14,7 +15,12 @@ export default function Apreciacion() {
     <SelfCareLayout sessionData={sessionData}>
       <OptionLayout title="Apreciación">
         <div className="flex h-[160px] w-[160px] items-center justify-center rounded-full border-2 border-[#E97B82] bg-white">
-          Apreciacion
+          <Image
+            width={80}
+            height={80}
+            alt="Apreaciacion"
+            src={`/self-care/apreciacion.png`}
+          />
         </div>
         <p className="max-w-[270px] text-center text-xl">
           Dí <span className="font-bold">cuatro</span> cosas por las que estés

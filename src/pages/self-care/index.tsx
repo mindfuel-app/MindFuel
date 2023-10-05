@@ -104,7 +104,7 @@ export function OptionLayout({
   title: string;
 }) {
   return (
-    <div className="padding-footer flex flex-col items-center gap-5 pt-5">
+    <div className="padding-footer flex flex-col items-center gap-6 pt-5">
       <TodayDate />
       <h1 className="text-3xl font-medium">{title}</h1>
       {children}

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { OptionLayout } from ".";
+import Image from "next/image";
 
 export default function TomarAgua() {
   const { data: sessionData, status } = useSession();
@@ -17,13 +18,18 @@ export default function TomarAgua() {
     <SelfCareLayout sessionData={sessionData}>
       <OptionLayout title="Tomar agua">
         <div className="flex h-[160px] w-[160px] items-center justify-center rounded-full border-2 border-[#75CFF9] bg-white">
-          Agua
+          <Image
+            width={80}
+            height={80}
+            alt="Tomar agua"
+            src={`/self-care/tomar-agua.png`}
+          />
         </div>
         <p className="max-w-[270px] text-center text-xl">
           Es recomendable tomar 8 vasos de agua (2L) al día para mantenerse bien
           hidratado.
         </p>
-        <div className="my-5 grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-4 gap-4 pb-3 pt-5">
           {Array(8)
             .fill(null)
             .map((_, index) => (
