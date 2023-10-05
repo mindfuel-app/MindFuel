@@ -17,7 +17,7 @@ const options: Option[] = [
   {
     title: "Mindfulness",
     href: "/mindfulness",
-    description: "Variedad de ejercicios para relajar.",
+    description: "Disfruta el hoy y mantente en el presente.",
     image: "/mindfulness.png",
   },
   {
@@ -78,14 +78,14 @@ export default function SelfCare() {
           >
             {option.image && (
               <Image
-                width={71}
-                height={68}
+                width={70}
+                height={70}
                 alt={option.title}
                 src={`/self-care${option.image}`}
-                className="w-1/4"
+                className="w-1/4 p-1"
               />
             )}
-            <div className="w-3/4">
+            <div className="flex w-3/4 flex-col pt-1">
               <h2 className="font-semibold">{option.title}</h2>
               <h4 className="text-sm">{option.description}</h4>
             </div>
