@@ -37,7 +37,7 @@ export default function RoutineList() {
       {userRoutines.length > 0 && (
         <>
           <h2 className="my-5">Tus rutinas</h2>
-          <ul className="flex flex-col gap-7">
+          <ul className="padding-footer flex flex-col gap-7">
             {userRoutines.map((routine) => (
               <RoutineCard
                 days={routine.days}

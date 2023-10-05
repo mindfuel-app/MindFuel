@@ -23,7 +23,7 @@ export default function TomarAgua() {
           Es recomendable tomar 8 vasos de agua (2L) al día para mantenerse bien
           hidratado.
         </p>
-        <div className="mt-5 grid grid-cols-4 gap-4">
+        <div className="my-5 grid grid-cols-4 gap-4">
           {Array(8)
             .fill(null)
             .map((_, index) => (
