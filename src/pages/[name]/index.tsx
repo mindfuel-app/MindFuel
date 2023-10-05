@@ -67,7 +67,7 @@ export default function Profile() {
           {sessionData.user.name}
         </span>
       </div>
-      <div className="flex w-full flex-col items-center gap-4 px-6 pb-5 pt-20">
+      <div className="flex w-full flex-col items-center gap-4 px-6 pb-[72px] pt-20">
         <Section title="Estadísticas">
           <div className="grid grid-cols-2 gap-6">
             {userStats.map((stat) => (
