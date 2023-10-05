@@ -71,12 +71,12 @@ export default function Home() {
           </TabsList>
         </div>
         {selectedTab == "tareas" && (
-          <div {...swipeLeftHandler} className="h-full">
+          <div {...swipeLeftHandler}>
             <TaskList />
           </div>
         )}
         {selectedTab == "rutinas" && (
-          <div {...swipeRightHandler} className="h-full">
+          <div {...swipeRightHandler}>
             <RoutineList />
           </div>
         )}

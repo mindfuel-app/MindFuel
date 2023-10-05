@@ -40,7 +40,7 @@ export default function TaskList() {
     <motion.div
       initial={{ x: 10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
+      className="padding-footer relative flex h-full flex-col items-center text-lg font-medium"
     >
       <div
         onClick={() => {
@@ -85,7 +85,7 @@ export default function TaskList() {
               ? "Tareas pendientes"
               : "No hay tareas pendientes"}
           </h2>
-          <ul className="padding-footer flex w-72 flex-col gap-3 sm:w-80 lg:w-96">
+          <ul className="flex flex-col gap-3">
             {pendingTasks.map((task) => (
               <TaskCard
                 key={task.id}

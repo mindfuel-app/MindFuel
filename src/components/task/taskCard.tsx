@@ -49,7 +49,7 @@ export default function TaskCard({
             x: 20,
           }}
           transition={{ duration: 0.2 }}
-          className="relative flex w-full items-center justify-between rounded-md border-2 border-teal bg-white py-1 pl-3"
+          className="relative flex w-72 items-center justify-between rounded-md border-2 border-teal bg-white py-1 pl-3 sm:w-80 lg:w-96"
         >
           <div className="flex flex-col py-1">
             <span

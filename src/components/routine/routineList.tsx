@@ -29,7 +29,7 @@ export default function RoutineList() {
     <motion.div
       initial={{ x: -10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
+      className="padding-footer relative flex h-full flex-col items-center text-lg font-medium"
     >
       {userRoutines.length == 0 && (
         <h2 className="my-5">No hay rutinas cargadas</h2>
@@ -37,7 +37,7 @@ export default function RoutineList() {
       {userRoutines.length > 0 && (
         <>
           <h2 className="my-5">Tus rutinas</h2>
-          <ul className="padding-footer flex flex-col gap-7">
+          <ul className="flex flex-col gap-7">
             {userRoutines.map((routine) => (
               <RoutineCard
                 days={routine.days}
