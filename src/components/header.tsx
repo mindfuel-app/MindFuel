@@ -89,16 +89,6 @@ export default function Header() {
         <Modal.Button className="no-highlight fixed right-7 hidden rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:block">
           Crear rutina
         </Modal.Button>
-        <Modal.Content>
-          <AddModal
-            TaskModal={
-              <TaskForm mode="create" afterSave={() => setIsModalOpen(false)} />
-            }
-            RoutineModal={
-              <RoutineForm afterSave={() => setIsModalOpen(false)} />
-            }
-          />
-        </Modal.Content>
       </Modal>
     </div>
   );
