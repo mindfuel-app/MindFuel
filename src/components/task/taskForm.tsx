@@ -105,7 +105,7 @@ export default function TaskForm({
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
           <motion.div
-            initial={{ x: 10, opacity: 0 }}
+            initial={{ x: mode != "edit" ? 10 : 0, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.2 }}
             className="flex flex-col gap-5 group-disabled:opacity-50"
