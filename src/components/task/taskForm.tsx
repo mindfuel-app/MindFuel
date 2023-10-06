@@ -4,7 +4,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState, useEffect } from "react";
 import { useTasks } from "~/hooks/useTasks";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
@@ -56,6 +56,9 @@ export default function TaskForm({
   });
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => setLoading(false), []);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -135,6 +138,7 @@ export default function TaskForm({
                     e.preventDefault();
                     setTask({ ...task, name: e.target.value });
                   }}
+                  readOnly={loading}
                 />
               </div>
             </label>
