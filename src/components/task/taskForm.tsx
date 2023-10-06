@@ -1,9 +1,7 @@
 import {
   ArrowPathIcon,
   CalendarDaysIcon,
-  CheckIcon,
   TrashIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { type FormEvent, useState } from "react";
@@ -102,15 +100,16 @@ export default function TaskForm({
   }
 
   return (
-    <motion.div
-      initial={{ scale: 0.98 }}
-      animate={{ scale: 1 }}
-      className="p-5"
-    >
+    <div className="p-5">
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar tarea</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
-          <div className="flex flex-col gap-4 group-disabled:opacity-50">
+          <motion.div
+            initial={{ x: 10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col gap-5 group-disabled:opacity-50"
+          >
             <label
               className="flex flex-col gap-2"
               onClick={(e) => e.preventDefault()}
@@ -137,17 +136,9 @@ export default function TaskForm({
                     setTask({ ...task, name: e.target.value });
                   }}
                 />
-                <div
-                  onClick={() => {
-                    setIsCalendarOpen(true);
-                  }}
-                  className="no-highlight cursor-pointer rounded-full"
-                >
-                  <CalendarDaysIcon className="h-6 w-6" />
-                </div>
               </div>
             </label>
-            {/* <label
+            <label
               onClick={(e) => e.preventDefault()}
               className="flex flex-col gap-2"
             >
@@ -175,14 +166,14 @@ export default function TaskForm({
                   <ArrowPathIcon className="h-6 w-6 text-gray-900" />
                 </Button>
               </div>
-            </label> */}
+            </label>
             <label
               onClick={(e) => e.preventDefault()}
               className="flex flex-col gap-2"
             >
               Descripcion
               <textarea
-                className="w-full resize-none rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
+                className="h-20 w-full resize-none rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
                 value={task.description}
                 onChange={(e) => {
                   e.preventDefault();
@@ -190,9 +181,9 @@ export default function TaskForm({
                 }}
               />
             </label>
-          </div>
+          </motion.div>
           <div
-            className={`flex pt-8 ${
+            className={`flex pt-9 ${
               mode == "edit" ? "justify-between" : "justify-end"
             }`}
           >
@@ -220,7 +211,7 @@ export default function TaskForm({
           </div>
         </fieldset>
       </form>
-    </motion.div>
+    </div>
   );
 }
 
@@ -236,12 +227,8 @@ function CalendarForm({
   const [date, setDate] = useState<Date | undefined>(initialDate || new Date());
 
   return (
-    <motion.div
-      initial={{ scale: 0.98 }}
-      animate={{ scale: 1 }}
-      className="p-5"
-    >
-      {taskName && <h2 className="mb-6 text-xl">Editar {`"${taskName}"`}</h2>}
+    <div className="p-5">
+      {taskName && <h2 className="mb-6 text-xl">Editar tarea</h2>}
       <div className="-mt-5 flex flex-col items-center gap-3">
         <Calendar mode="single" selected={date} onSelect={setDate} />
         <div className="no-highlight flex w-full justify-end gap-1 text-right">
@@ -265,6 +252,6 @@ function CalendarForm({
           </Button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

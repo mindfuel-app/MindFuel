@@ -248,15 +248,16 @@ export default function RoutineForm({
   }
 
   return (
-    <motion.div
-      initial={{ scale: 0.98 }}
-      animate={{ scale: 1 }}
-      className="p-5"
-    >
+    <div className="p-5">
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
-          <div className="flex flex-col gap-4 group-disabled:opacity-50">
+          <motion.div
+            initial={{ x: -10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col gap-4 group-disabled:opacity-50"
+          >
             <span className="-mt-3">
               {orderDays(routine.days).length == 33
                 ? "Todos los dias"
@@ -491,7 +492,7 @@ export default function RoutineForm({
                 </AnimatePresence>
               </div>
             </label>
-          </div>
+          </motion.div>
           <div
             className={`flex pt-8 ${
               mode == "edit" ? "justify-between" : "justify-end"
@@ -523,6 +524,6 @@ export default function RoutineForm({
           </div>
         </fieldset>
       </form>
-    </motion.div>
+    </div>
   );
 }
