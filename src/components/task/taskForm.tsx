@@ -1,4 +1,5 @@
 import {
+  ArrowPathIcon,
   CalendarDaysIcon,
   CheckIcon,
   TrashIcon,
@@ -84,13 +85,10 @@ export default function TaskForm({
   }
 
   if (isCalendarOpen) {
-    const initialValue = task.deadline;
-    const taskName = task.name;
-
     return (
       <CalendarForm
-        taskName={taskName}
-        initialValue={initialValue}
+        taskName={mode == "edit" ? task.name : null}
+        initialDate={task.deadline}
         afterSave={() => {
           setIsCalendarOpen(false);
           const date = localStorage.getItem("deadline");
@@ -102,6 +100,7 @@ export default function TaskForm({
       />
     );
   }
+
   return (
     <motion.div
       initial={{ scale: 0.98 }}
@@ -117,7 +116,7 @@ export default function TaskForm({
               onClick={(e) => e.preventDefault()}
             >
               <div className="flex items-center gap-4">
-                <span>Nombre</span>
+                Nombre
                 {emptyTaskError && (
                   <motion.span
                     initial={{ opacity: 0.7 }}
@@ -128,20 +127,7 @@ export default function TaskForm({
                   </motion.span>
                 )}
               </div>
-              <motion.div
-                initial={{
-                  y: task.name == "" ? -3 : 0,
-                  x: 0,
-                  opacity: task.name == "" ? 0.5 : 1,
-                }}
-                animate={{
-                  y: 0,
-                  x: 0,
-                  opacity: 1,
-                }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center gap-2"
-              >
+              <div className="flex items-center gap-2">
                 <input
                   type="text"
                   className="w-full rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
@@ -159,20 +145,43 @@ export default function TaskForm({
                 >
                   <CalendarDaysIcon className="h-6 w-6" />
                 </div>
-              </motion.div>
+              </div>
             </label>
-            <label className="flex flex-col gap-2">
-              <span>Descripcion</span>
-              <motion.textarea
-                initial={{
-                  y: -3,
-                  opacity: 0.5,
-                }}
-                animate={{
-                  y: 0,
-                  opacity: 1,
-                }}
-                transition={{ duration: 0.2 }}
+            {/* <label
+              onClick={(e) => e.preventDefault()}
+              className="flex flex-col gap-2"
+            >
+              Fecha de vencimiento
+              <div className="flex items-center gap-3">
+                <div className="flex w-[150px] items-center justify-between gap-4 rounded-lg border-2 border-gray-500 p-2 pl-3">
+                  {task.deadline
+                    ? task.deadline.toLocaleDateString()
+                    : "--/--/--"}
+                  <div
+                    onClick={() => {
+                      setIsCalendarOpen(true);
+                    }}
+                    className="no-highlight cursor-pointer rounded-full"
+                  >
+                    <CalendarDaysIcon className="h-6 w-6" />
+                  </div>
+                </div>
+                <Button
+                  onClick={() => {
+                    setTask({ ...task, deadline: null });
+                  }}
+                  className="no-highlight p-2"
+                >
+                  <ArrowPathIcon className="h-6 w-6 text-gray-900" />
+                </Button>
+              </div>
+            </label> */}
+            <label
+              onClick={(e) => e.preventDefault()}
+              className="flex flex-col gap-2"
+            >
+              Descripcion
+              <textarea
                 className="w-full resize-none rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"
                 value={task.description}
                 onChange={(e) => {
@@ -217,16 +226,14 @@ export default function TaskForm({
 
 function CalendarForm({
   taskName,
-  initialValue,
+  initialDate,
   afterSave,
 }: {
-  taskName?: string;
-  initialValue?: Date | null;
+  taskName: string | null;
+  initialDate?: Date | null;
   afterSave: () => void;
 }) {
-  const initialDate = initialValue || new Date();
-
-  const [date, setDate] = useState<Date | undefined>(initialDate);
+  const [date, setDate] = useState<Date | undefined>(initialDate || new Date());
 
   return (
     <motion.div
@@ -234,32 +241,29 @@ function CalendarForm({
       animate={{ scale: 1 }}
       className="p-5"
     >
-      <div className="no-highlight flex w-full justify-end active:text-gray-600 lg:hover:text-gray-600">
-        <div className="flex w-full items-center justify-between">
-          <h2 className="text-lg">
-            Fecha de vencimiento de{" "}
-            {taskName && taskName.trim() !== "" ? `'${taskName}'` : "tarea"}
-          </h2>
-          <XMarkIcon
-            className="h-5 w-5 cursor-pointer"
+      {taskName && <h2 className="mb-6 text-xl">Editar {`"${taskName}"`}</h2>}
+      <div className="-mt-5 flex flex-col items-center gap-3">
+        <Calendar mode="single" selected={date} onSelect={setDate} />
+        <div className="no-highlight flex w-full justify-end gap-1 text-right">
+          <Button
             onClick={(e) => {
               e.preventDefault();
               afterSave();
             }}
-          />
+            className="text rounded-md bg-transparent px-4 py-2 text-base text-teal"
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={() => {
+              if (date) localStorage.setItem("deadline", date.toString());
+              afterSave();
+            }}
+            className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80"
+          >
+            <span className="group-disabled:opacity-0">Guardar</span>
+          </Button>
         </div>
-      </div>
-      <div className="flex flex-col items-center gap-5 pt-2">
-        <Calendar mode="single" selected={date} onSelect={setDate} />
-        <Button
-          onClick={() => {
-            if (date) localStorage.setItem("deadline", date.toString());
-            afterSave();
-          }}
-          className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"
-        >
-          <CheckIcon className="h-16 w-16" />
-        </Button>
       </div>
     </motion.div>
   );

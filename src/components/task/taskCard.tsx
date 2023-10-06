@@ -83,7 +83,7 @@ export default function TaskCard({
                 onClick={() => setIsModalOpen(true)}
               >
                 <div className="flex h-full items-center">
-                  <PencilSquareIcon className="absolute right-6 h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
+                  <PencilSquareIcon className="absolute right-7 h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
                 </div>
               </motion.button>
               <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>

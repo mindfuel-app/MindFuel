@@ -428,7 +428,7 @@ export default function RoutineForm({
                   {routine.tasks.map((task, index) => (
                     <motion.div
                       initial={{
-                        y: task.name == "" ? -3 : 0,
+                        y: task.name == "" && index != 0 ? -3 : 0,
                         x: 0,
                         opacity: task.name == "" ? 0.5 : 1,
                       }}
