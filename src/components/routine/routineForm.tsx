@@ -270,9 +270,7 @@ export default function RoutineForm({
                 <button
                   key={day.value}
                   className={`no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100 ${
-                    routine.days.includes(day.value)
-                      ? "border-[1px] border-teal"
-                      : ""
+                    routine.days.includes(day.value) ? "border border-teal" : ""
                   }`}
                   onClick={(e) => {
                     e.preventDefault();
@@ -503,7 +501,7 @@ export default function RoutineForm({
                 onClick={() => {
                   deleteRoutine({ id });
                 }}
-                className="no-highlight flex cursor-pointer items-center rounded-md border-[1px] border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
+                className="no-highlight flex cursor-pointer items-center rounded-md border border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
               >
                 <TrashIcon className="h-5 w-5" />
               </div>

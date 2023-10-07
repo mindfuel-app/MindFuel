@@ -48,7 +48,7 @@ export default function TimeForm({
             <input
               type="number"
               max={24}
-              className="w-12 border-[1px] border-gray-400 outline-none"
+              className="w-12 border border-gray-400 outline-none"
               defaultValue={hours}
               onChange={(e) => {
                 if (Number(e.target.value) > 24)
@@ -65,7 +65,7 @@ export default function TimeForm({
             <input
               type="number"
               max={60}
-              className="w-12 border-[1px] border-gray-400 outline-none"
+              className="w-12 border border-gray-400 outline-none"
               defaultValue={minutes}
               onChange={(e) => {
                 if (Number(e.target.value) > 60)
@@ -82,7 +82,7 @@ export default function TimeForm({
             <input
               type="number"
               max={60}
-              className="w-12 border-[1px] border-gray-400 outline-none"
+              className="w-12 border border-gray-400 outline-none"
               defaultValue={seconds}
               onChange={(e) => {
                 if (Number(e.target.value) > 60)

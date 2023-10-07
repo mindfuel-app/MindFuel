@@ -194,7 +194,7 @@ export default function TaskForm({
             {mode == "edit" && id && (
               <div
                 onClick={() => deleteTask({ id })}
-                className="no-highlight flex cursor-pointer items-center rounded-md border-[1px] border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
+                className="no-highlight flex cursor-pointer items-center rounded-md border border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
               >
                 <TrashIcon className="h-5 w-5" />
               </div>
