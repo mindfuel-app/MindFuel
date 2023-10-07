@@ -49,9 +49,9 @@ export default function TaskCard({
             x: 20,
           }}
           transition={{ duration: 0.2 }}
-          className="relative flex w-72 items-center justify-between rounded-md border-2 border-teal bg-white py-1 pl-3 sm:w-80 lg:w-96"
+          className="relative flex w-72 items-center justify-between rounded-md border-2 border-teal bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-80 lg:w-96"
         >
-          <div className="flex flex-col py-1">
+          <div className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px]">
             <span
               className={`text-black ${
                 isTaskDone && showCompletedTasks
