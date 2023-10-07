@@ -7,6 +7,10 @@ body {
   font-family: Rubik;
 }
 
+:root {
+  --footer-height: 62px;
+}
+
 ::selection {
   background: #d1d5db;
 }
@@ -20,8 +24,20 @@ body {
     -webkit-tap-highlight-color: transparent;
   }
 
-  .padding-footer {
-    padding-bottom: 82px;
+  .padding-footer-sm {
+    padding-bottom: calc(var(--footer-height) + 20px);
+  }
+
+  .padding-footer-md {
+    padding-bottom: calc(var(--footer-height) + 50px);
+  }
+
+  .padding-footer-lg {
+    padding-bottom: calc(var(--footer-height) + 80px);
+  }
+
+  .padding-footer-xl {
+    padding-bottom: calc(var(--footer-height) + 100px);
   }
 
   .border-red-500 {

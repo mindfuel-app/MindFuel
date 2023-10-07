@@ -69,7 +69,7 @@ export default function Profile() {
           </span>
         </div>
       </div>
-      <div className="padding-footer flex w-full flex-col items-center gap-4 px-6 pt-2">
+      <div className="padding-footer-sm flex w-full flex-col items-center gap-4 px-6 pt-2">
         <Section title="Estadísticas">
           <div className="grid grid-cols-2 gap-6">
             {userStats.map((stat) => (
