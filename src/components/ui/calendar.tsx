@@ -1,11 +1,24 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import { es } from "date-fns/locale";
+import { type DateFormatter, DayPicker } from "react-day-picker";
 
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "./button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+
+const formatCaption: DateFormatter = (date) => {
+  const year = date.getFullYear().toLocaleString("es-ES");
+  const month = date.toLocaleString("default", { month: "long" });
+  const formattedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+  return `${formattedMonth} ${year}`;
+};
+
+const formatWeekdayName: DateFormatter = (date) => {
+  const weekday = date.toLocaleString("default", { weekday: "short" });
+  return weekday.charAt(0).toUpperCase() + weekday.slice(1, 2);
+};
 
 function Calendar({
   className,
@@ -15,7 +28,10 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
+      locale={es}
+      weekStartsOn={0}
       showOutsideDays={showOutsideDays}
+      formatters={{ formatCaption, formatWeekdayName }}
       className={cn("no-highlight rounded-md p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
