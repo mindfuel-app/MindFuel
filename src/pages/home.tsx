@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <Layout sessionData={sessionData}>
       <Tabs {...swipeHandler} className="h-full w-full">
-        <div className="mt-5 flex justify-center">
+        <div className="mt-3 flex justify-center">
           <TabsList>
             {tabOptions.map((tab) => (
               <Link
