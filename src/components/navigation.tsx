@@ -80,7 +80,7 @@ export function Footer() {
 
 export function TopNavigation() {
   return (
-    <div className="fixed left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-10 lg:flex xl:gap-16">
+    <div className="absolute left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-10 lg:flex xl:gap-16">
       {navigationItems.map((item) => (
         <Link
           key={item.name}

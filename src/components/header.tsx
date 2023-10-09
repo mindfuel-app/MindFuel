@@ -86,7 +86,7 @@ export default function Header() {
       </div>
       <TopNavigation />
       <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <Modal.Button className="no-highlight fixed right-7 hidden rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:block">
+        <Modal.Button className="no-highlight absolute right-7 hidden rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:block">
           Crear rutina
         </Modal.Button>
       </Modal>
