@@ -132,4 +132,5 @@ model pushSubscription {
     id        String   @id @default(cuid())
     suscription String @db.Text
     user_id   String
+    createdAt DateTime @default(now())
 }
