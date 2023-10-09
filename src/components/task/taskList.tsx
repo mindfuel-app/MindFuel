@@ -53,13 +53,13 @@ export default function TaskList() {
       {showSubMenu && (
         <ClickAwayListener onClickAway={() => setShowSubMenu(false)}>
           <div
-            onClick={() => {
-              void refetchTasks();
-              setShowCompletedTasks(!showCompletedTasks);
-            }}
-            className="no-highlight absolute right-0 top-12 z-20 cursor-pointer rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
+            onClick={() => void refetchTasks()}
+            className="no-highlight absolute right-0 top-12 z-20 flex cursor-pointer flex-col gap-1 rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
           >
-            <div className="flex items-center gap-1">
+            <div
+              onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+              className="flex items-center gap-1"
+            >
               {showCompletedTasks ? (
                 <>
                   <NoSymbolIcon className="h-6 w-6" />
@@ -93,6 +93,7 @@ export default function TaskList() {
                 name={task.name}
                 deadline={task.deadline}
                 description={task.description}
+                routineId={task.routine_id || ""}
                 isChecked={task.done}
                 isPartOfRoutine={task.routine_id != null}
                 showCompletedTasks={showCompletedTasks}

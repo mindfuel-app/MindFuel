@@ -13,6 +13,7 @@ export default function TaskCard({
   name,
   deadline,
   description,
+  routineId,
   isChecked,
   isPartOfRoutine,
   showCompletedTasks,
@@ -21,6 +22,7 @@ export default function TaskCard({
   name: string;
   deadline?: Date | null;
   description?: string | null;
+  routineId: string;
   isChecked?: boolean;
   isPartOfRoutine: boolean;
   showCompletedTasks: boolean;
@@ -29,10 +31,19 @@ export default function TaskCard({
   const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
+  const { data: routine } = api.routines.getRoutineById.useQuery({
+    id: routineId,
+  });
+
   const [isTaskDone, setIsTaskDone] = useState(isChecked || false);
   const [showCheck, setShowCheck] = useState(isChecked || false);
   const { setTaskDone, setTaskUndone } = useTasks({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  let dayOfWeek = new Date().toLocaleString("es", { weekday: "short" });
+  dayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+
+  const isForToday = routine?.days.includes(dayOfWeek);
 
   const deadlineDate = deadline
     ? `${deadline.getDate()}/${deadline.getMonth() + 1}`
@@ -40,7 +51,7 @@ export default function TaskCard({
 
   return (
     <AnimatePresence>
-      {(!isTaskDone || showCompletedTasks) && (
+      {(!isTaskDone || showCompletedTasks) && isForToday !== false && (
         <motion.div
           initial={{ opacity: isTaskDone ? 0 : 1 }}
           animate={{ opacity: 1 }}
