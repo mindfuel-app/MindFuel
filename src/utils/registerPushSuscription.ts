@@ -1,6 +1,6 @@
 export function registerServiceWorker() {
   return navigator.serviceWorker
-    .register("./push-sw.js")
+    .register("public\push-sw.js")
     .then(function (registration) {
       return registration;
     })
