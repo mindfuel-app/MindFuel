@@ -75,7 +75,7 @@ export default function ActiveTask({
 
   useEffect(() => {
     if (!usesAI) return;
-    fetch("http://127.0.0.1:5000/dividir_tarea", {
+    fetch("https://mindfuel-ia.onrender.com/dividir_tarea", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
