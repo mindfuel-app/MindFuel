@@ -135,9 +135,9 @@ export default function TaskForm({
               className="flex flex-col gap-2"
             >
               Fecha de vencimiento
-              <div className="relative flex items-center gap-3">
+              <div className="no-highlight relative flex items-center gap-3">
                 <Popover>
-                  <PopoverTrigger asChild>
+                  <PopoverTrigger>
                     <Button
                       variant={"outline"}
                       className={cn(
@@ -167,7 +167,7 @@ export default function TaskForm({
                     e.preventDefault();
                     setTask({ ...task, deadline: null });
                   }}
-                  className="no-highlight p-2"
+                  className="p-2"
                 >
                   <ArrowPathIcon className="h-6 w-6 text-gray-900" />
                 </Button>

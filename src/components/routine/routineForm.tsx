@@ -340,54 +340,56 @@ export default function RoutineForm({
               onClick={(e) => e.preventDefault()}
             >
               <span>Categoría</span>
-              <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={isComboboxOpen}
-                    className="no-highlight w-[200px] justify-between border-gray-400"
-                  >
-                    {routine.category
-                      ? categories.find(
-                          (category) => category.value === routine.category
-                        )?.label || "Seleccionar categoría"
-                      : "Seleccionar categoría"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandGroup>
-                      {categories.map((category) => (
-                        <CommandItem
-                          key={category.value}
-                          onSelect={(currentValue) => {
-                            setRoutine({
-                              ...routine,
-                              category:
-                                currentValue == routine.category
-                                  ? ""
-                                  : currentValue,
-                            });
-                            setIsComboboxOpen(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              routine.category === category.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {category.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              <div className="no-highlight">
+                <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
+                  <PopoverTrigger>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={isComboboxOpen}
+                      className="no-highlight w-[200px] justify-between border-gray-400"
+                    >
+                      {routine.category
+                        ? categories.find(
+                            (category) => category.value === routine.category
+                          )?.label || "Seleccionar categoría"
+                        : "Seleccionar categoría"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandGroup>
+                        {categories.map((category) => (
+                          <CommandItem
+                            key={category.value}
+                            onSelect={(currentValue) => {
+                              setRoutine({
+                                ...routine,
+                                category:
+                                  currentValue == routine.category
+                                    ? ""
+                                    : currentValue,
+                              });
+                              setIsComboboxOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                routine.category === category.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {category.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
             </label>
             <label
               className="flex flex-col gap-3"
