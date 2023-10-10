@@ -32,19 +32,19 @@ const options: Option[] = [
     description: "Es importante mantenerse hidratado.",
     image: "/tomar-agua.png",
   },
-  // {
-  //   title: "Técnica Pomodoro",
-  //   href: "/pomodoro",
-  //   description:
-  //     "Haz tus tareas usando este método para mejorar la administración del tiempo.",
-  //   image: "/pomodoro.png",
-  // },
-  // {
-  //   title: "Diario personal",
-  //   href: "/diario-personal",
-  //   description: "Escribe sobre lo que quieras aquí. Sé libre y exprésate.",
-  //   image: "/diario-personal.png",
-  // },
+  {
+    title: "Técnica Pomodoro",
+    href: "/pomodoro",
+    description:
+      "Haz tus tareas usando este método para mejorar la administración del tiempo.",
+    image: "/manzana.png",
+  },
+  {
+    title: "Diario personal",
+    href: "/diario-personal",
+    description: "Escribe sobre lo que quieras aquí. Sé libre y exprésate.",
+    image: "/diario.png",
+  },
   // {
   //   title: "Respiración",
   //   href: "/respiracion",
@@ -73,21 +73,21 @@ export default function SelfCare() {
           <Link
             key={option.title}
             href={`/self-care${option.href}`}
-            className="no-highlight flex max-w-[400px] gap-1 rounded-md bg-white p-2 transition-transform active:scale-[97%]"
+            className="no-highlight flex max-h-[120px] min-h-[100px] w-[300px] gap-2 rounded-md bg-white p-2 transition-transform active:scale-[97%] sm:w-[400px]"
             onClick={() => onRouteChange(`/self-care${option.href}`)}
           >
             {option.image && (
               <Image
-                width={70}
-                height={70}
+                width={100}
+                height={100}
                 alt={option.title}
                 src={`/self-care${option.image}`}
-                className="w-1/4 p-1"
+                className="w-1/4 p-1.5"
               />
             )}
             <div className="flex w-3/4 flex-col pt-1">
-              <h2 className="font-semibold">{option.title}</h2>
-              <h4 className="text-sm">{option.description}</h4>
+              <h2 className="font-semibold sm:text-lg">{option.title}</h2>
+              <h4 className="text-sm sm:text-base">{option.description}</h4>
             </div>
           </Link>
         ))}
