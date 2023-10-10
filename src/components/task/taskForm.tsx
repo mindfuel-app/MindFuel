@@ -57,7 +57,6 @@ export default function TaskForm({
     description: initialDescription || "",
   });
   const [emptyTaskError, setEmptyTaskError] = useState(false);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => setLoading(false), []);
@@ -90,23 +89,6 @@ export default function TaskForm({
   const setDeadline = (date: Date | undefined) => {
     if (date) setTask({ ...task, deadline: date });
   };
-
-  if (isCalendarOpen) {
-    return (
-      <CalendarForm
-        taskName={mode == "edit" ? task.name : null}
-        initialDate={task.deadline}
-        afterSave={() => {
-          setIsCalendarOpen(false);
-          const date = localStorage.getItem("deadline");
-          if (date) {
-            setTask({ ...task, deadline: new Date(date) });
-          }
-          localStorage.removeItem("deadline");
-        }}
-      />
-    );
-  }
 
   return (
     <div className="p-5">
@@ -235,47 +217,6 @@ export default function TaskForm({
           </div>
         </fieldset>
       </form>
-    </div>
-  );
-}
-
-function CalendarForm({
-  taskName,
-  initialDate,
-  afterSave,
-}: {
-  taskName: string | null;
-  initialDate?: Date | null;
-  afterSave: () => void;
-}) {
-  const [date, setDate] = useState<Date | undefined>(initialDate || new Date());
-
-  return (
-    <div className="p-5">
-      {taskName && <h2 className="mb-6 text-xl">Editar tarea</h2>}
-      <div className="-mt-5 flex flex-col items-center gap-3">
-        <Calendar mode="single" selected={date} onSelect={setDate} />
-        <div className="no-highlight flex w-full justify-end gap-1 text-right">
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              afterSave();
-            }}
-            className="text rounded-md bg-transparent px-4 py-2 text-base text-teal"
-          >
-            Cancelar
-          </Button>
-          <Button
-            onClick={() => {
-              if (date) localStorage.setItem("deadline", date.toString());
-              afterSave();
-            }}
-            className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80"
-          >
-            <span className="group-disabled:opacity-0">Guardar</span>
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
