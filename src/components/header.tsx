@@ -2,9 +2,6 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import Modal from "./ui/modal";
-import RoutineForm from "./routine/routineForm";
-import AddModal from "./addModal";
-import TaskForm from "./task/taskForm";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   ArrowLeftOnRectangleIcon,
@@ -86,8 +83,22 @@ export default function Header() {
       </div>
       <TopNavigation />
       <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <Modal.Button className="no-highlight absolute right-7 hidden rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:block">
-          Crear rutina
+        <Modal.Button className="no-highlight absolute right-7 hidden items-center gap-2 rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:flex">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="white"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Crear
         </Modal.Button>
       </Modal>
     </div>
