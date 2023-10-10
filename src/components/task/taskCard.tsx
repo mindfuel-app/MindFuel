@@ -20,8 +20,8 @@ export default function TaskCard({
 }: {
   id: string;
   name: string;
-  deadline?: Date | null;
-  description?: string | null;
+  deadline: Date | null;
+  description: string | null;
   routineId: string;
   isChecked?: boolean;
   isPartOfRoutine: boolean;
@@ -72,6 +72,9 @@ export default function TaskCard({
             >
               {name}
             </span>
+            {description && (
+              <span className="mb-1 text-sm text-gray-500">{description}</span>
+            )}
             {deadlineDate && (
               <div className="flex gap-1">
                 <CalendarIcon className="mt-[1px] h-4 w-4 text-orange" />
