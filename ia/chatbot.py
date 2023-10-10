@@ -2,7 +2,7 @@ import openai
 import os
 from dotenv import load_dotenv
 import re
-from fastapi import FastAPI, HTTPException
+from flask import Flask, request, jsonify
 
 load_dotenv()
 
@@ -11,14 +11,16 @@ openai.api_base = "https://mindfuel.openai.azure.com/"
 openai.api_version = "2023-07-01-preview"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-app = FastAPI()
+app = Flask(__name__)
 
-@app.get("/home")
+@app.route("/home", methods=["GET"])
 def home():
-    return {"message": "Hello, World!"}
+    return jsonify({"message": "Hello, World!"})
 
-@app.post('/dividir_tarea')
-def procesar_tarea(tarea: dict):
+@app.route('/dividir_tarea', methods=["POST"])
+def procesar_tarea():
+    tarea = request.get_json()
+    
     def dividir_tarea_en_pasos(prompt):
         solicitud = [
             {"role": "user", "content": prompt},
@@ -46,7 +48,10 @@ def procesar_tarea(tarea: dict):
     tarea_texto = tarea.get('tareas', '')
     
     if len(tarea_texto) < 3:
-        raise HTTPException(status_code=400, detail="La tarea es demasiado corta")
+        return jsonify({"error": "La tarea es demasiado corta"}), 400
     else:
         respuesta = dividir_tarea_en_pasos(tarea_texto)
-        return respuesta
+        return jsonify(respuesta)
+
+if __name__ == "__main__":
+    app.run()
