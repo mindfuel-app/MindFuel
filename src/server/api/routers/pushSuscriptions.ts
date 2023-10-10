@@ -24,23 +24,22 @@ export const pushRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        PushSubscription: z.string()
+        PushSubscription: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const { userId, PushSubscription } = input;
       const isAlreadySubscribed = await ctx.prisma.pushSubscription.findMany({
-        where:{
+        where: {
           user_id: input.userId,
-          suscription: input.PushSubscription
+          suscription: input.PushSubscription,
         },
-      })
-      if (isAlreadySubscribed.length!==0) {
-        console.log(isAlreadySubscribed)
+      });
+      if (isAlreadySubscribed.length !== 0) {
+        console.log(isAlreadySubscribed);
         return "user already Subscribed";
-      }
-      else{
-          const pushSubscription = await ctx.prisma.pushSubscription.create({
+      } else {
+        const pushSubscription = await ctx.prisma.pushSubscription.create({
           data: {
             user_id: userId,
             suscription: PushSubscription,
@@ -49,7 +48,6 @@ export const pushRouter = createTRPCRouter({
         console.log(pushSubscription);
         return pushSubscription;
       }
-      
     }),
 
   sendPushToOne: publicProcedure
@@ -66,12 +64,19 @@ export const pushRouter = createTRPCRouter({
       pushSubscriptions.forEach((pushSubscription) => {
         const payload = JSON.stringify({
           title: input.title,
-          body: input.body,
+          //body: input.body,
+          body: `${new Date().getMinutes()}:${new Date().getSeconds()}`,
         });
 
-        const ps = JSON.parse(pushSubscription.suscription) as webpush.PushSubscription
-        console.log(ps)
-        console.log(webpush.sendNotification(ps, payload).catch((error) => console.error(error)));
+        const ps = JSON.parse(
+          pushSubscription.suscription
+        ) as webpush.PushSubscription;
+        console.log(ps);
+        console.log(
+          webpush
+            .sendNotification(ps, payload)
+            .catch((error) => console.error(error))
+        );
       });
       return pushSubscriptions;
     }),
