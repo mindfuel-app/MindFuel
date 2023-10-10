@@ -269,9 +269,10 @@ export default function RoutineForm({
               {dayOptions.map((day) => (
                 <button
                   key={day.value}
-                  className={`no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100 ${
-                    routine.days.includes(day.value) ? "border border-teal" : ""
-                  }`}
+                  className={cn(
+                    "no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100",
+                    routine.days.includes(day.value) && "border border-teal"
+                  )}
                   onClick={(e) => {
                     e.preventDefault();
                     if (!routine.days.includes(day.value)) {
@@ -480,9 +481,10 @@ export default function RoutineForm({
                         />
                       </div>
                       <XMarkIcon
-                        className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
-                          index == 0 ? "cursor-auto opacity-0" : ""
-                        }`}
+                        className={cn(
+                          "no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600",
+                          index == 0 && "cursor-auto opacity-0"
+                        )}
                         onClick={() => {
                           if (index != 0) removeTask(index);
                         }}

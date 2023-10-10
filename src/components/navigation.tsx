@@ -5,6 +5,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import router from "next/router";
 import { motion } from "framer-motion";
 import { useUser } from "~/lib/UserContext";
+import { cn } from "~/lib/utils";
 
 function NavigationItem({
   href,
@@ -80,14 +81,15 @@ export function Footer() {
 
 export function TopNavigation() {
   return (
-    <div className="absolute left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-10 lg:flex xl:gap-16">
+    <div className="absolute left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-14 lg:flex xl:gap-16">
       {navigationItems.map((item) => (
         <Link
           key={item.name}
           href={item.href}
-          className={`no-highlight px-3 py-1.5 transition ${
-            !router.pathname.startsWith(item.href) ? "hover:opacity-70" : ""
-          }`}
+          className={cn(
+            "no-highlight p-1 transition",
+            !router.pathname.startsWith(item.href) && "hover:opacity-70"
+          )}
         >
           <span
             className={`${

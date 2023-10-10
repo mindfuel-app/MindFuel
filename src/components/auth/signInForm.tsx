@@ -10,6 +10,7 @@ import AlternativeMethodLink from "./alternativeMethodLink";
 import ForgotPasswordButton from "./forgotPasswordButton";
 import router from "next/router";
 import { useState } from "react";
+import { cn } from "~/lib/utils";
 
 export default function SignInForm() {
   const [isFormDisabled, setIsFormDisabled] = useState(false);
@@ -89,18 +90,17 @@ export default function SignInForm() {
         <div className="flex flex-col gap-2 group-disabled:opacity-50">
           <label className="flex flex-col group-disabled:cursor-not-allowed">
             <span
-              className={`ml-1 font-medium ${
-                isEmailWrong ? "text-red-500" : ""
-              }`}
+              className={cn("ml-1 font-medium", isEmailWrong && "text-red-500")}
               onClick={(e) => e.preventDefault()}
             >
               Email
             </span>
             <input
               type="text"
-              className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed ${
-                isEmailWrong ? "border-red-500" : ""
-              }`}
+              className={cn(
+                "w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed",
+                isEmailWrong && "border-red-500"
+              )}
               {...register("email")}
               onChange={() => setIsGoogleAccount(false)}
             />
@@ -114,17 +114,19 @@ export default function SignInForm() {
         <div className="flex flex-col gap-2 group-disabled:opacity-50">
           <label className="flex flex-col group-disabled:cursor-not-allowed">
             <span
-              className={`ml-1 font-medium ${
-                isPasswordWrong ? "text-red-500" : ""
-              }`}
+              className={cn(
+                "ml-1 font-medium",
+                isPasswordWrong && "text-red-500"
+              )}
               onClick={(e) => e.preventDefault()}
             >
               Contraseña
             </span>
             <div
-              className={`flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1 ${
-                isPasswordWrong ? "border-red-500" : ""
-              }`}
+              className={cn(
+                "flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1",
+                isPasswordWrong && "border-red-500"
+              )}
             >
               <input
                 type={PasswordInputType == "text" ? "text" : "password"}

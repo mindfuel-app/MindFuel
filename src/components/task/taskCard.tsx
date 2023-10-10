@@ -7,6 +7,7 @@ import Modal from "../ui/modal";
 import TaskForm from "./taskForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
+import { cn } from "~/lib/utils";
 
 export default function TaskCard({
   id,
@@ -64,11 +65,10 @@ export default function TaskCard({
         >
           <div className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px]">
             <span
-              className={`text-black ${
-                isTaskDone && showCompletedTasks
-                  ? "line-through opacity-50"
-                  : ""
-              }`}
+              className={cn(
+                "text-black",
+                isTaskDone && "line-through opacity-50"
+              )}
             >
               {name}
             </span>
@@ -79,9 +79,10 @@ export default function TaskCard({
               <div className="flex gap-1">
                 <CalendarIcon className="mt-[1px] h-4 w-4 text-orange" />
                 <span
-                  className={`text-sm text-orange ${
-                    isTaskDone ? "text-gray-500 line-through" : ""
-                  }`}
+                  className={cn(
+                    "text-sm text-orange",
+                    isTaskDone && "text-gray-500 line-through"
+                  )}
                 >
                   {deadlineDate}
                 </span>

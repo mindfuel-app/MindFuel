@@ -11,6 +11,7 @@ import router from "next/router";
 import { useState } from "react";
 import Tooltip from "./tooltip";
 import { BsQuestionCircleFill } from "react-icons/bs";
+import { cn } from "~/lib/utils";
 
 export default function SignUpForm() {
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
@@ -76,9 +77,10 @@ export default function SignUpForm() {
         <div className="flex flex-col gap-2 group-disabled:opacity-50">
           <label className="flex flex-col group-disabled:cursor-not-allowed">
             <span
-              className={`ml-1 flex items-center gap-1 font-medium ${
-                isUsernameWrong ? "text-red-500" : ""
-              }`}
+              className={cn(
+                "ml-1 flex items-center gap-1 font-medium",
+                isUsernameWrong && "text-red-500"
+              )}
               onClick={(e) => e.preventDefault()}
             >
               Nombre de usuario{" "}
@@ -89,9 +91,10 @@ export default function SignUpForm() {
             </span>
             <input
               type="text"
-              className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed ${
-                isUsernameWrong ? "border-red-500" : ""
-              }`}
+              className={cn(
+                "w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed",
+                isUsernameWrong && "border-red-500"
+              )}
               {...register("name")}
             />
             {isUsernameWrong && (
@@ -109,18 +112,17 @@ export default function SignUpForm() {
         <div className="flex flex-col gap-2 group-disabled:opacity-50">
           <label className="flex flex-col group-disabled:cursor-not-allowed">
             <span
-              className={`ml-1 font-medium ${
-                isEmailWrong ? "text-red-500" : ""
-              }`}
+              className={cn("ml-1 font-medium", isEmailWrong && "text-red-500")}
               onClick={(e) => e.preventDefault()}
             >
               Email
             </span>
             <input
               type="text"
-              className={`w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed ${
-                isEmailWrong ? "border-red-500" : ""
-              }`}
+              className={cn(
+                "w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed",
+                isEmailWrong && "border-red-500"
+              )}
               {...register("email")}
             />
             {isEmailWrong && (
