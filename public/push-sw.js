@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-self.addEventListener('push', event => {
+// @ts-nocheck
+self.addEventListener("push", (event) => {
   if (!event.target) return "error";
-  const data = event.target.data.json();
-  console.log('New notification', data);
-  // @ts-ignore
+  const data = event.data.json();
+  console.log("New notification", data);
   self.registration.showNotification(data.title, {
     body: data.body,
-    icon: "./favicon.ico"
-    });
+    icon: "./favicon.ico",
   });
+});
