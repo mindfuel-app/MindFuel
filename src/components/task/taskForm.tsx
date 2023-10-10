@@ -12,6 +12,8 @@ import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
 import { useUser } from "~/lib/UserContext";
 import { Calendar } from "../ui/calendar";
+import { cn } from "~/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 type Task = {
   id: string;
@@ -85,6 +87,10 @@ export default function TaskForm({
     }, 1000);
   }
 
+  const setDeadline = (date: Date | undefined) => {
+    if (date) setTask({ ...task, deadline: date });
+  };
+
   if (isCalendarOpen) {
     return (
       <CalendarForm
@@ -147,22 +153,36 @@ export default function TaskForm({
               className="flex flex-col gap-2"
             >
               Fecha de vencimiento
-              <div className="flex items-center gap-3">
-                <div className="flex w-[150px] items-center justify-between gap-4 rounded-lg border-2 border-gray-500 p-2 pl-3">
-                  {task.deadline
-                    ? task.deadline.toLocaleDateString()
-                    : "--/--/--"}
-                  <div
-                    onClick={() => {
-                      setIsCalendarOpen(true);
-                    }}
-                    className="no-highlight cursor-pointer rounded-full"
-                  >
-                    <CalendarDaysIcon className="h-6 w-6" />
-                  </div>
-                </div>
+              <div className="relative flex items-center gap-3">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "no-highlight flex w-[160px] items-center justify-between gap-4 rounded-lg border-2 border-gray-500 p-2 pl-3 text-base text-black",
+                        !task.deadline && "text-muted-foreground"
+                      )}
+                    >
+                      <span>
+                        {task.deadline
+                          ? task.deadline.toLocaleDateString()
+                          : "Elegir fecha"}
+                      </span>
+                      <CalendarDaysIcon className="h-6 w-6" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="absolute -left-20 w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={task.deadline || undefined}
+                      onSelect={setDeadline}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
                 <Button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     setTask({ ...task, deadline: null });
                   }}
                   className="no-highlight p-2"
