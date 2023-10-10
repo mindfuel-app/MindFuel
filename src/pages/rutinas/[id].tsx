@@ -161,7 +161,11 @@ export default function Routine() {
             </div>
           </>
         )}
-        {routineProgress == tasks.length && <SuccessMessage />}
+        {routineProgress == tasks.length && (
+          <div className="pb-20">
+            <SuccessMessage />
+          </div>
+        )}
       </div>
     </RoutineLayout>
   );
@@ -172,7 +176,7 @@ function SuccessMessage() {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative mb-20 flex w-[300px] flex-col items-center gap-1 rounded-xl border-2 border-teal bg-white p-5 py-16 shadow-xl md:w-[600px] md:pb-8 md:pt-4"
+      className="relative flex w-[300px] flex-col items-center gap-1 rounded-xl border-2 border-teal bg-white p-5 py-16 shadow-xl md:w-[600px] md:pb-12 md:pt-4"
     >
       <Image
         className="mb-5"
