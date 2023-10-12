@@ -2,7 +2,6 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import Modal from "./ui/modal";
-import { useSearchParams, useRouter } from "next/navigation";
 import {
   ArrowLeftOnRectangleIcon,
   ChevronDownIcon,
@@ -11,22 +10,23 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import ClickAwayListener from "react-click-away-listener";
 import { TopNavigation } from "./navigation";
+import TaskForm from "./task/taskForm";
+import AddModal from "./addModal";
+import RoutineForm from "./routine/routineForm";
+import { api } from "~/utils/api";
+import { useUser } from "~/lib/UserContext";
 
 export default function Header() {
-  const router = useRouter();
+  const user = useUser();
   const [showLogout, setShowLogout] = useState(false);
   const { data: sessionData } = useSession();
-  const searchParams = useSearchParams();
-
-  const tabParam =
-    searchParams.get("tab") == "tareas" || searchParams.get("tab") == "rutinas"
-      ? (searchParams.get("tab") as string)
-      : "tareas";
-  const isModalOpen = searchParams.get("add") == "true";
-  const setIsModalOpen = (open: boolean) => {
-    const queryString = open ? `?tab=${tabParam}&add=true` : `?tab=${tabParam}`;
-    router.push(queryString);
-  };
+  const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
+    user_id: user.id,
+  });
+  const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
+    user_id: user.id,
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!sessionData)
     return (
@@ -100,6 +100,27 @@ export default function Header() {
           </svg>
           Crear
         </Modal.Button>
+        <Modal.Content>
+          <AddModal
+            TaskModal={
+              <TaskForm
+                mode="create"
+                afterSave={() => {
+                  void refetchTasks();
+                  setIsModalOpen(false);
+                }}
+              />
+            }
+            RoutineModal={
+              <RoutineForm
+                afterSave={() => {
+                  void refetchRoutines();
+                  setIsModalOpen(false);
+                }}
+              />
+            }
+          />
+        </Modal.Content>
       </Modal>
     </div>
   );
