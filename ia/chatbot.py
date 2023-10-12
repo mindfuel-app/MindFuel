@@ -10,7 +10,7 @@ load_dotenv()
 openai.api_type = "azure"
 openai.api_base = "https://mindfuel.openai.azure.com/"
 openai.api_version = "2023-07-01-preview"
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 app = FastAPI()
 app.add_middleware(
