@@ -70,10 +70,16 @@ export default function TaskCard({
                 isTaskDone && "line-through opacity-50"
               )}
             >
-              {name}
+              {name.split(" ").some((word) => word.length > 26)
+                ? `${name.substring(0, 24)}...`
+                : name}
             </span>
             {description && (
-              <span className="mb-1 text-sm text-gray-500">{description}</span>
+              <span className="mb-1 text-sm text-gray-500">
+                {description.length <= 33
+                  ? description
+                  : `${description.substring(0, 30)}...`}
+              </span>
             )}
             {deadlineDate && (
               <div className="flex gap-1">
