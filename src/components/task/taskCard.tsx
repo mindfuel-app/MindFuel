@@ -50,6 +50,7 @@ export default function TaskCard({
     ? `${deadline.getDate()}/${deadline.getMonth() + 1}`
     : null;
 
+  const maxNameCharacters = 21;
   const maxDescriptionCharacters = 27;
 
   return (
@@ -72,8 +73,8 @@ export default function TaskCard({
                 isTaskDone && "line-through opacity-50"
               )}
             >
-              {name.split(" ").some((word) => word.length > 26)
-                ? `${name.substring(0, 24)}...`
+              {name.split(" ").some((word) => word.length > maxNameCharacters)
+                ? `${name.substring(0, maxNameCharacters - 3)}...`
                 : name}
             </span>
             {description && (
