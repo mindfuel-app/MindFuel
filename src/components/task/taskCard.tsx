@@ -50,6 +50,8 @@ export default function TaskCard({
     ? `${deadline.getDate()}/${deadline.getMonth() + 1}`
     : null;
 
+  const maxDescriptionCharacters = 27;
+
   return (
     <AnimatePresence>
       {(!isTaskDone || showCompletedTasks) && isForToday !== false && (
@@ -76,9 +78,12 @@ export default function TaskCard({
             </span>
             {description && (
               <span className="mb-1 text-sm text-gray-500">
-                {description.length <= 33
+                {description.length <= maxDescriptionCharacters
                   ? description
-                  : `${description.substring(0, 30)}...`}
+                  : `${description.substring(
+                      0,
+                      maxDescriptionCharacters - 3
+                    )}...`}
               </span>
             )}
             {deadlineDate && (
