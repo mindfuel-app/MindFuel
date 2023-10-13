@@ -1,4 +1,4 @@
-import { CheckIcon, ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { CircularProgress } from "@mui/material";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
@@ -15,7 +15,7 @@ import { Command, CommandGroup, CommandItem } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Checkbox } from "../ui/checkbox";
 import Tooltip from "../auth/tooltip";
-import ClickAwayListener from "react-click-away-listener";
+import TimeForm from "../timeForm";
 
 const categories = [
   {
@@ -109,10 +109,6 @@ export default function RoutineForm({
   const [isClockOpen, setIsClockOpen] = useState(false);
   const [isComboboxOpen, setIsComboboxOpen] = useState(false);
   const [activeTaskIndex, setActiveTaskIndex] = useState<number>(0);
-  const initialTime = routine.tasks[activeTaskIndex]?.estimatedTime || 0;
-  const [hours, setHours] = useState(Math.floor(initialTime / 3600));
-  const [minutes, setMinutes] = useState(Math.floor((initialTime % 3600) / 60));
-  const [seconds, setSeconds] = useState(Math.floor((initialTime % 3600) % 60));
 
   const addEmptyTask = () => {
     setRoutine({
@@ -456,136 +452,7 @@ export default function RoutineForm({
                           handleTaskChange(index, e.target.value)
                         }
                       />
-                      <Popover>
-                        <PopoverTrigger>
-                          <div
-                            onClick={() => {
-                              console.log("index", index);
-                              setActiveTaskIndex(index);
-                              console.log("activeTaskIndex", activeTaskIndex);
-                            }}
-                            className="no-highlight cursor-pointer rounded-full"
-                          >
-                            <ClockIcon className="no-highlight h-6 w-6" />
-                          </div>
-                        </PopoverTrigger>
-                        <PopoverContent className="absolute -left-36 w-auto p-0">
-                          <ClickAwayListener
-                            onClickAway={() => {
-                              const totalTime =
-                                hours * 3600 + minutes * 60 + seconds;
-                              localStorage.setItem(
-                                `${activeTaskIndex}`,
-                                totalTime.toString()
-                              );
-                              const time = localStorage.getItem(
-                                `${activeTaskIndex}`
-                              );
-                              if (time) {
-                                setRoutine((prev) => {
-                                  const updatedTasks = [...prev.tasks];
-                                  updatedTasks[activeTaskIndex] = {
-                                    ...updatedTasks[activeTaskIndex],
-                                    estimatedTime: Number(time),
-                                  } as Task;
-                                  return {
-                                    ...prev,
-                                    tasks: updatedTasks,
-                                  };
-                                });
-                              }
-                              localStorage.removeItem(`${activeTaskIndex}`);
-                            }}
-                          >
-                            <div className="flex flex-col items-center gap-3 p-2">
-                              <div className="flex gap-5">
-                                <label className="flex flex-col items-center gap-2">
-                                  Horas
-                                  <input
-                                    type="number"
-                                    max={24}
-                                    className="w-12 border border-gray-400 outline-none"
-                                    defaultValue={hours}
-                                    onChange={(e) => {
-                                      if (Number(e.target.value) > 24)
-                                        e.target.value = e.target.value.slice(
-                                          0,
-                                          e.target.value.length - 1
-                                        );
-                                      setHours(Number(e.target.value));
-                                    }}
-                                  />
-                                </label>
-                                <label className="flex flex-col items-center gap-2">
-                                  Minutos
-                                  <input
-                                    type="number"
-                                    max={60}
-                                    className="w-12 border border-gray-400 outline-none"
-                                    defaultValue={minutes}
-                                    onChange={(e) => {
-                                      if (Number(e.target.value) > 60)
-                                        e.target.value = e.target.value.slice(
-                                          0,
-                                          e.target.value.length - 1
-                                        );
-                                      setMinutes(Number(e.target.value));
-                                    }}
-                                  />
-                                </label>
-                                <label className="flex flex-col items-center gap-2">
-                                  Segundos
-                                  <input
-                                    type="number"
-                                    max={60}
-                                    className="w-12 border border-gray-400 outline-none"
-                                    defaultValue={seconds}
-                                    onChange={(e) => {
-                                      if (Number(e.target.value) > 60)
-                                        e.target.value = e.target.value.slice(
-                                          0,
-                                          e.target.value.length - 1
-                                        );
-                                      setSeconds(Number(e.target.value));
-                                    }}
-                                  />
-                                </label>
-                              </div>
-                              {/* <Button
-                              onClick={() => {
-                                const totalTime =
-                                  hours * 3600 + minutes * 60 + seconds;
-                                localStorage.setItem(
-                                  `${activeTaskIndex}`,
-                                  totalTime.toString()
-                                );
-                                const time = localStorage.getItem(
-                                  `${activeTaskIndex}`
-                                );
-                                if (time) {
-                                  setRoutine((prev) => {
-                                    const updatedTasks = [...prev.tasks];
-                                    updatedTasks[activeTaskIndex] = {
-                                      ...updatedTasks[activeTaskIndex],
-                                      estimatedTime: Number(time),
-                                    } as Task;
-                                    return {
-                                      ...prev,
-                                      tasks: updatedTasks,
-                                    };
-                                  });
-                                }
-                                localStorage.removeItem(`${activeTaskIndex}`);
-                              }}
-                              className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"
-                            >
-                              <CheckIcon className="h-16 w-16" />
-                            </Button> */}
-                            </div>
-                          </ClickAwayListener>
-                        </PopoverContent>
-                      </Popover>
-                      {/* <div
+                      <div
                         onClick={() => {
                           setActiveTaskIndex(index);
                           setIsClockOpen(true);
@@ -593,7 +460,7 @@ export default function RoutineForm({
                         className="no-highlight cursor-pointer rounded-full"
                       >
                         <ClockIcon className="h-6 w-6" />
-                      </div> */}
+                      </div>
                       <div className="flex items-center">
                         <Checkbox
                           defaultChecked={task.usesAI}
@@ -659,90 +526,6 @@ export default function RoutineForm({
           </div>
         </fieldset>
       </form>
-    </div>
-  );
-}
-function TimeForm({
-  taskIndex,
-  initialValue,
-  afterSave,
-}: {
-  taskIndex: number;
-  taskName?: string;
-  initialValue?: number | null;
-  afterSave: () => void;
-}) {
-  const initialTime = initialValue || 0;
-
-  const [hours, setHours] = useState(Math.floor(initialTime / 3600));
-  const [minutes, setMinutes] = useState(Math.floor((initialTime % 3600) / 60));
-  const [seconds, setSeconds] = useState(Math.floor((initialTime % 3600) % 60));
-
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="flex gap-5">
-        <label className="flex flex-col items-center gap-2">
-          Horas
-          <input
-            type="number"
-            max={24}
-            className="w-12 border border-gray-400 outline-none"
-            defaultValue={hours}
-            onChange={(e) => {
-              if (Number(e.target.value) > 24)
-                e.target.value = e.target.value.slice(
-                  0,
-                  e.target.value.length - 1
-                );
-              setHours(Number(e.target.value));
-            }}
-          />
-        </label>
-        <label className="flex flex-col items-center gap-2">
-          Minutos
-          <input
-            type="number"
-            max={60}
-            className="w-12 border border-gray-400 outline-none"
-            defaultValue={minutes}
-            onChange={(e) => {
-              if (Number(e.target.value) > 60)
-                e.target.value = e.target.value.slice(
-                  0,
-                  e.target.value.length - 1
-                );
-              setMinutes(Number(e.target.value));
-            }}
-          />
-        </label>
-        <label className="flex flex-col items-center gap-2">
-          Segundos
-          <input
-            type="number"
-            max={60}
-            className="w-12 border border-gray-400 outline-none"
-            defaultValue={seconds}
-            onChange={(e) => {
-              if (Number(e.target.value) > 60)
-                e.target.value = e.target.value.slice(
-                  0,
-                  e.target.value.length - 1
-                );
-              setSeconds(Number(e.target.value));
-            }}
-          />
-        </label>
-      </div>
-      <Button
-        onClick={() => {
-          const totalTime = hours * 3600 + minutes * 60 + seconds;
-          localStorage.setItem(`${taskIndex}`, totalTime.toString());
-          afterSave();
-        }}
-        className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"
-      >
-        <CheckIcon className="h-16 w-16" />
-      </Button>
     </div>
   );
 }
