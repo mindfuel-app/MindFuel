@@ -104,11 +104,13 @@ export function OptionLayout({
   title: string;
 }) {
   return (
-    <div className="padding-footer-sm flex flex-col items-center gap-6 pt-5">
+    <>
       <TodayDate />
-      <h1 className="text-3xl font-medium">{title}</h1>
-      {children}
-    </div>
+      <div className="padding-footer-sm flex flex-col items-center gap-7 pt-5">
+        <h1 className="text-3xl font-medium">{title}</h1>
+        {children}
+      </div>
+    </>
   );
 }
 
@@ -133,5 +135,5 @@ function TodayDate() {
   const year = today.getFullYear();
   const formattedDate = `Hoy, ${dayOfMonth} de ${monthName} de ${year}`;
 
-  return <h3 className="text-lg">{formattedDate}</h3>;
+  return <h3 className="mt-3 text-lg">{formattedDate}</h3>;
 }

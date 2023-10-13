@@ -22,9 +22,8 @@ export default function DiarioPersonal() {
             src={`/self-care/diario.png`}
           />
         </div>{" "}
-        <p className="max-w-[270px] text-center text-xl">
-          Este es tu lugar seguro, puedes escribir lo que desees. Todo está
-          bien.
+        <p className="max-w-[290px] text-center text-xl">
+          Este es tu lugar seguro, puedes escribir lo que desees.
         </p>
         <textarea
           className="h-36 w-full resize-none rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700"

@@ -25,9 +25,9 @@ export default function TomarAgua() {
             src={`/self-care/tomar-agua.png`}
           />
         </div>
-        <p className="max-w-[270px] text-center text-xl">
-          Es recomendable tomar 8 vasos de agua (2L) al día para mantenerse bien
-          hidratado.
+        <p className="max-w-[290px] text-center text-xl">
+          Es recomendable tomar 8 vasos de agua (2L) al día para mantenerse{" "}
+          <strong>bien hidratado</strong>.
         </p>
         <div className="grid grid-cols-4 gap-4 pb-3 pt-5">
           {Array(8)

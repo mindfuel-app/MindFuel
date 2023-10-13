@@ -22,11 +22,11 @@ export default function Apreciacion() {
             src={`/self-care/apreciacion.png`}
           />
         </div>
-        <p className="max-w-[270px] text-center text-xl">
-          Dí <span className="font-bold">cuatro</span> cosas por las que estés
-          agradecido el día de hoy.
+        <p className="max-w-[290px] text-center text-xl">
+          Dí <strong>cuatro</strong> cosas por las que estés agradecido el día
+          de hoy.
         </p>
-        <div className="-mt-3 flex flex-col gap-3">
+        <div className="-mt-3 flex flex-col gap-4">
           {Array(4)
             .fill(null)
             .map((_, index) => (
