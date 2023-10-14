@@ -5,7 +5,7 @@ export const selfCareRouter = createTRPCRouter({
   clearValues: publicProcedure
     .input(z.object({}))
     .mutation(async ({ ctx }) => {
-      const deleted = await ctx.prisma.selfCare.deleteMany();
+      const deleted = await ctx.prisma.selfCare.deleteMany({});
       return { deleted };
     }),
   getValues: protectedProcedure
