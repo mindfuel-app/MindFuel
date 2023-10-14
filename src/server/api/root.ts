@@ -6,7 +6,7 @@ import { pointsRouter } from "./routers/points";
 import { friendRouter } from "./routers/friends";
 import { notesRouter } from "./routers/notes";
 import { profilePicRouter } from "./routers/profilePic";
-
+import { selfCareRouter } from "./routers/selfCare";
 
 /**
  * This is the primary router for your server.
@@ -21,6 +21,7 @@ export const appRouter = createTRPCRouter({
   friends: friendRouter,
   notes: notesRouter,
   profilePic: profilePicRouter,
+  selfCare: selfCareRouter,
 });
 
 // export type definition of API

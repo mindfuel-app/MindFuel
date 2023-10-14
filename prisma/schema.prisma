@@ -148,3 +148,10 @@ model picture{
     id String @id @default(cuid())
     pictureUrl String @db.Text
 }
+
+model selfCare{
+    id String @id @default(cuid())
+    user_id String
+    water Int? @default(0)
+    greetings String?
+}
