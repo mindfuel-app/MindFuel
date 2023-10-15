@@ -9,9 +9,11 @@ import { FaHandHoldingHeart } from "react-icons/fa";
 export default function SelfCareLayout({
   children,
   sessionData,
+  onClose,
 }: {
   children: React.ReactNode;
   sessionData: Session;
+  onClose?: () => void;
 }) {
   return (
     <>
@@ -24,7 +26,7 @@ export default function SelfCareLayout({
         email={sessionData.user.email || ""}
       >
         <div className="flex h-screen flex-col">
-          <Header />
+          <Header onClose={onClose} />
           <main className="flex h-full flex-col items-center bg-alabaster p-3">
             {children}
           </main>
@@ -35,13 +37,13 @@ export default function SelfCareLayout({
   );
 }
 
-function Header() {
+function Header({ onClose }: { onClose?: () => void }) {
   const isInMenus = !router.pathname.startsWith("/self-care/");
 
   return (
     <div className="relative flex w-full items-center justify-between px-6 py-4">
       {!isInMenus ? (
-        <BackButton href="/self-care" color="teal" />
+        <BackButton handleClick={onClose} href="/self-care" color="teal" />
       ) : (
         <FaHandHoldingHeart className="text-2xl text-teal" />
       )}

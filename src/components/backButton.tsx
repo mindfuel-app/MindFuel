@@ -4,12 +4,18 @@ import { MdArrowBackIosNew } from "react-icons/md";
 export default function BackButton({
   href,
   color,
+  handleClick,
 }: {
   href: string;
   color?: "teal" | "white" | "black";
+  handleClick?: () => void;
 }) {
   return (
-    <Link href={href} className="no-highlight active:scale-95">
+    <Link
+      href={href}
+      onClick={handleClick}
+      className="no-highlight active:scale-95"
+    >
       <MdArrowBackIosNew className={`text-2xl text-${color || "black"}`} />
     </Link>
   );
