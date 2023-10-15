@@ -4,8 +4,11 @@ self.addEventListener("push", (event) => {
   if (!event.target) return "error";
   const data = event.data.json();
   console.log("New notification", data);
-  self.registration.showNotification(data.title, {
-    body: data.body,
-    icon: "./favicon.ico",
-  });
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: "./favicon.ico",
+      Image: "./favicon.ico",
+    })
+  );
 });

@@ -4,7 +4,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { z } from "zod";
-import webpush from "web-push"; // Typescript doesn't recognize web-push as a module, so we need to import it like this
+import webpush from "web-push";
 import { env } from "~/env.mjs";
 
 webpush.setGCMAPIKey(env.GCMAPI_KEY);
