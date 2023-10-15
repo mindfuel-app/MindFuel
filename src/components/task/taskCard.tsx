@@ -46,8 +46,18 @@ export default function TaskCard({
 
   const isForToday = routine?.days.includes(dayOfWeek);
 
+  const today = new Date();
+  const tomorrow = new Date(new Date().setDate(today.getDate() + 1));
+  const yesterday = new Date(new Date().setDate(today.getDate() - 1));
+
   const deadlineDate = deadline
-    ? `${deadline.getDate()}/${deadline.getMonth() + 1}`
+    ? deadline.toDateString() == today.toDateString()
+      ? "Hoy"
+      : deadline.toDateString() == tomorrow.toDateString()
+      ? "Mañana"
+      : deadline.toDateString() == yesterday.toDateString()
+      ? "Ayer"
+      : `${deadline.getDate()}/${deadline.getMonth() + 1}`
     : null;
 
   const maxNameCharacters = 21;
