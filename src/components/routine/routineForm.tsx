@@ -168,13 +168,13 @@ export default function RoutineForm({
     setEmptyTaskError(false);
     setSaving(true);
 
-    if (routine.name == "") {
+    if (routine.name.trim() == "") {
       setNameError(true);
       return setSaving(false);
     }
 
     for (const task of routine.tasks) {
-      if (task.name == "") {
+      if (task.name.trim() == "") {
         setEmptyTaskError(true);
         return setSaving(false);
       }
