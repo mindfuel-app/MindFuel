@@ -66,7 +66,7 @@ export default function TaskForm({
     setEmptyTaskError(false);
     setSaving(true);
 
-    if (task.name == "") {
+    if (task.name.trim() == "") {
       setEmptyTaskError(true);
       return setSaving(false);
     }
