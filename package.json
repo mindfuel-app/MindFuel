@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate --no-engine",
     "lint": "next lint",
     "start": "next start"
   },
@@ -14,7 +14,8 @@
     "@hookform/resolvers": "^3.1.0",
     "@mui/material": "^5.13.4",
     "@next-auth/prisma-adapter": "^1.0.5",
-    "@prisma/client": "^5.1.1",
+    "@prisma/client": "^5.4.2",
+    "@prisma/extension-accelerate": "^0.6.2",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-popover": "^1.0.6",
@@ -72,7 +73,7 @@
     "postcss": "^8.4.21",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
-    "prisma": "^5.1.1",
+    "prisma": "^5.4.2",
     "tailwind-scrollbar": "^3.0.5",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.0.4"
