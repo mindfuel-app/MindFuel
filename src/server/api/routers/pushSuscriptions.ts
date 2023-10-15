@@ -65,7 +65,7 @@ export const pushRouter = createTRPCRouter({
         const payload = JSON.stringify({
           title: input.title,
           //body: input.body,
-          body: `${new Date().getMinutes()}:${new Date().getSeconds()}`,
+          body: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
         });
 
         const ps = JSON.parse(
