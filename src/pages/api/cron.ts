@@ -10,7 +10,11 @@ export const config = {
  
 export default async function handler() {
   try {
-    const deletedValues = await prisma.selfCare.deleteMany({});
+    const deletedValues = await prisma.water.updateMany({
+      data: {
+        water: 0,
+      },
+    });
     return NextResponse.json({ deletedValues });
   } catch (error) {
     console.error(error);
