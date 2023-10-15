@@ -58,6 +58,7 @@ export default function TaskForm({
   });
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => setLoading(false), []);
 
@@ -87,7 +88,12 @@ export default function TaskForm({
   }
 
   const setDeadline = (date: Date | undefined) => {
-    if (date) setTask({ ...task, deadline: date });
+    if (date) {
+      setTask({ ...task, deadline: date });
+      setTimeout(() => {
+        setIsPopoverOpen(false);
+      }, 250);
+    }
   };
 
   return (
@@ -136,7 +142,7 @@ export default function TaskForm({
             >
               Fecha de vencimiento
               <div className="no-highlight relative flex items-center gap-3">
-                <Popover>
+                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                   <PopoverTrigger>
                     <Button
                       variant={"outline"}
