@@ -1,21 +1,47 @@
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import SelfCareLayout from "~/components/layouts/selfCareLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { OptionLayout } from ".";
 import Image from "next/image";
+import { api } from "~/utils/api";
 
 export default function TomarAgua() {
   const { data: sessionData, status } = useSession();
+  const { data } = api.selfCare.getWater.useQuery({
+    user_id: sessionData?.user.id || "",
+  });
+  const [glassesOfWater, setGlassesOfWater] = useState<boolean[] | null>(null);
+  const { mutate: updateWater } = api.selfCare.updateWater.useMutation({});
+
+  useEffect(() => {
+    if (!data) return;
+    setGlassesOfWater(
+      Array(8)
+        .fill(null)
+        .map((_, index) => {
+          if (!data.water) return false;
+          return index < data.water;
+        })
+    );
+  }, [data]);
 
   if (status == "unauthenticated") return void Router.push("/signin");
 
   if (!sessionData) return;
 
+  const handleClose = () => {
+    if (!glassesOfWater) return;
+    updateWater({
+      water: glassesOfWater.filter(Boolean).length,
+      user_id: sessionData.user.id,
+    });
+  };
+
   return (
-    <SelfCareLayout sessionData={sessionData}>
+    <SelfCareLayout sessionData={sessionData} onClose={handleClose}>
       <OptionLayout title="Tomar agua">
         <div className="flex h-[160px] w-[160px] items-center justify-center rounded-full border-2 border-[#75CFF9] bg-white">
           <Image
@@ -29,24 +55,41 @@ export default function TomarAgua() {
           Es recomendable tomar 8 vasos de agua (2L) al día para mantenerse{" "}
           <strong>bien hidratado</strong>.
         </p>
-        <div className="grid grid-cols-4 gap-4 pb-3 pt-5">
-          {Array(8)
-            .fill(null)
-            .map((_, index) => (
-              <Checkbox key={index} />
-            ))}
-        </div>
+        {glassesOfWater && (
+          <div className="grid grid-cols-4 gap-4 pb-3 pt-5">
+            {Array(8)
+              .fill(null)
+              .map((_, index) => (
+                <Checkbox
+                  key={index}
+                  isChecked={glassesOfWater[index] ?? false}
+                  onCheckedChange={() => {
+                    setGlassesOfWater((prev) => {
+                      if (!prev) return prev;
+                      const newGlassesOfWater = [...prev];
+                      newGlassesOfWater[index] = !newGlassesOfWater[index];
+                      return newGlassesOfWater;
+                    });
+                  }}
+                />
+              ))}
+          </div>
+        )}
       </OptionLayout>
     </SelfCareLayout>
   );
 }
 
-function Checkbox() {
-  const [isChecked, setIsChecked] = useState(false);
-
+function Checkbox({
+  isChecked,
+  onCheckedChange,
+}: {
+  isChecked: boolean;
+  onCheckedChange: () => void;
+}) {
   return (
     <div
-      onClick={() => setIsChecked(!isChecked)}
+      onClick={onCheckedChange}
       className={`no-highlight flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#75CFF9] transition-colors ${
         isChecked ? "bg-[#75CFF9]" : "bg-white"
       }`}
