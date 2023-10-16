@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import {
   ClipboardDocumentCheckIcon,
   Cog6ToothIcon,
@@ -11,6 +11,7 @@ import { StarIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import ProfileLayout from "~/components/layouts/profileLayout";
 import { motion } from "framer-motion";
+import NotFoundPage from "~/pages/404";
 
 const userStats = [
   {
@@ -47,25 +48,28 @@ const userStats = [
 
 export default function Profile() {
   const { data: sessionData, status } = useSession();
+  const router = useRouter();
+  const { name } = router.query;
 
-  if (status == "unauthenticated") return void Router.push("/signin");
+  if (status == "unauthenticated") return void router.push("/signin");
 
-  if (!sessionData || !sessionData?.user.name) return;
+  if (!sessionData || !name || sessionData.user.name != name)
+    return <NotFoundPage />;
 
   return (
     <ProfileLayout
-      header={<Header userName={sessionData.user.name} />}
+      header={<Header userName={name} />}
       sessionData={sessionData}
     >
       <div className="relative flex w-full items-center py-3">
         <div className="absolute left-0 top-0 h-1/2 w-full bg-teal">
           <span className="absolute bottom-1 left-1/2 -translate-x-2 text-2xl text-white">
-            {sessionData.user.name}
+            {name}
           </span>
         </div>
         <div className="z-10 ml-8 flex h-[120px] w-[120px] items-center justify-center rounded-full border-[3px] border-teal bg-[#d9d9d9]">
           <span className="text-7xl text-teal">
-            {sessionData.user.name[0]?.toLocaleUpperCase()}
+            {name[0]?.toLocaleUpperCase()}
           </span>
         </div>
       </div>
