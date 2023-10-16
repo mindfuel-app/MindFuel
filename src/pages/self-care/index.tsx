@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import SelfCareLayout from "../../components/layouts/selfCareLayout";
 import { usePreviousPath } from "~/hooks/usePreviousPath";
+import { api } from "~/utils/api";
 
 type Option = {
   title: string;
@@ -55,6 +56,13 @@ const options: Option[] = [
 
 export default function SelfCare() {
   const { data: sessionData, status } = useSession();
+  const { data } = api.selfCare.getWater.useQuery(
+    {
+      user_id: sessionData?.user.id || "",
+    },
+    { cacheTime: 0 }
+  );
+  console.log(data?.water);
   const { onRouteChange } = usePreviousPath();
 
   if (status == "unauthenticated") return void Router.push("/signin");
@@ -72,7 +80,11 @@ export default function SelfCare() {
         {options.map((option) => (
           <Link
             key={option.title}
-            href={`/self-care${option.href}`}
+            href={
+              option.title == "Tomar agua" && data && data.water
+                ? `/self-care${option.href}?water=${data.water}`
+                : `/self-care${option.href}`
+            }
             className="no-highlight flex max-h-[120px] min-h-[100px] w-[300px] gap-2 rounded-md bg-white p-2 transition-transform active:scale-[97%] sm:w-[400px]"
             onClick={() => onRouteChange(`/self-care${option.href}`)}
           >

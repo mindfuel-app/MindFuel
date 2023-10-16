@@ -1,32 +1,30 @@
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 import SelfCareLayout from "~/components/layouts/selfCareLayout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { OptionLayout } from ".";
 import Image from "next/image";
 import { api } from "~/utils/api";
+import { useSearchParams } from "next/navigation";
 
 export default function TomarAgua() {
   const { data: sessionData, status } = useSession();
-  const { data } = api.selfCare.getWater.useQuery({
+  const { refetch: refetchWater } = api.selfCare.getWater.useQuery({
     user_id: sessionData?.user.id || "",
   });
-  const [glassesOfWater, setGlassesOfWater] = useState<boolean[] | null>(null);
+  const searchParams = useSearchParams();
+  const data = Number(searchParams.get("water"));
+  const [glassesOfWater, setGlassesOfWater] = useState(
+    Array(8)
+      .fill(null)
+      .map((_, index) => {
+        if (!data) return false;
+        return index < data;
+      })
+  );
   const { mutate: updateWater } = api.selfCare.updateWater.useMutation({});
-
-  useEffect(() => {
-    if (!data) return;
-    setGlassesOfWater(
-      Array(8)
-        .fill(null)
-        .map((_, index) => {
-          if (!data.water) return false;
-          return index < data.water;
-        })
-    );
-  }, [data]);
 
   if (status == "unauthenticated") return void Router.push("/signin");
 
@@ -38,6 +36,7 @@ export default function TomarAgua() {
       water: glassesOfWater.filter(Boolean).length,
       user_id: sessionData.user.id,
     });
+    void refetchWater();
   };
 
   return (
