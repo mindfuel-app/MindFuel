@@ -30,14 +30,14 @@ async def procesar_tarea(tarea: dict):
     def dividir_tarea_en_pasos(prompt):
         solicitud = [
             {"role": "user", "content": prompt},
-            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, muy cortos, sin explayarte demasiado:"}
+            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, en una oracion, sin explayarte demasiado:"}
         ]
 
         response = openai.ChatCompletion.create(
             engine="mindfuel",
             messages=solicitud,
             temperature=0.7,
-            max_tokens=100,
+            max_tokens=150,
             top_p=0.95,
             frequency_penalty=0,
             presence_penalty=0,
