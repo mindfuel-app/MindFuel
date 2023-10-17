@@ -9,6 +9,7 @@ import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 import { cn } from "~/lib/utils";
 import { usePoints } from "~/hooks/usePoints";
+import { pointsPerTaskCompleted } from "~/lib/points";
 
 export default function TaskCard({
   id,
@@ -150,6 +151,10 @@ export default function TaskCard({
                   setIsTaskDone(false);
                   setTaskUndone({ tasks: [id] });
                 } else {
+                  addPoints({
+                    user_id: user.id,
+                    points: pointsPerTaskCompleted,
+                  });
                   setIsTaskDone(true);
                   setTaskDone({ task_id: id });
                 }

@@ -16,6 +16,8 @@ import ActiveTask from "../../components/task/activeTask";
 import InactiveTask from "../../components/task/inactiveTask";
 import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
 import RoutineLayout from "~/components/layouts/routineLayout";
+import { usePoints } from "~/hooks/usePoints";
+import { pointsPerRoutineCompleted } from "~/lib/points";
 
 function ErrorPage() {
   const [seconds, setSeconds] = useState(0);
@@ -54,6 +56,7 @@ function ErrorPage() {
 }
 
 export default function Routine() {
+  const { addPoints } = usePoints();
   const router = useRouter();
   const { data: sessionData, status } = useSession();
   const { data: routine } = api.routines.getRoutineById.useQuery({
@@ -65,6 +68,17 @@ export default function Routine() {
   const [routineProgress, setRoutineProgress] = useState(0);
   const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
+
+  useEffect(() => {
+    if (!sessionData?.user.id || !tasks) return;
+
+    if (routineProgress === tasks.length) {
+      addPoints({
+        user_id: sessionData.user.id,
+        points: pointsPerRoutineCompleted,
+      });
+    }
+  }, [routineProgress]);
 
   if (status == "unauthenticated") return void router.push("/signin");
 
