@@ -32,14 +32,17 @@ function CountdownTimer({
     }
   }, [secondsLeft, isRunning]);
 
-  const minutes = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft % 60;
+  const hours = Math.floor(secondsLeft / 3600);
+  const minutes = Math.floor((secondsLeft % 3600) / 60);
+  const seconds = Math.floor((secondsLeft % 3600) % 60);
 
   return (
     <>
       <div className="flex">
         <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
-          <span>{`${minutes.toString().padStart(2, "0")}:${seconds
+          <span>{`${
+            hours > 0 ? `${hours.toString().padStart(2, "0")}:` : ""
+          }${minutes.toString().padStart(2, "0")}:${seconds
             .toString()
             .padStart(2, "0")}`}</span>
         </div>
@@ -72,6 +75,13 @@ export default function ActiveTask({
   const [checked, setChecked] = useState<boolean[]>([]);
   const [steps, setSteps] = useState<string[]>();
   const [loadingSteps, setLoadingSteps] = useState(true);
+  const hours = estimatedTime ? Math.floor(estimatedTime / 3600) : null;
+  const minutes = estimatedTime
+    ? Math.floor((estimatedTime % 3600) / 60)
+    : null;
+  const seconds = estimatedTime
+    ? Math.floor((estimatedTime % 3600) % 60)
+    : null;
 
   useEffect(() => {
     if (!usesAI) return;
@@ -98,7 +108,11 @@ export default function ActiveTask({
       <span className="text-sm">Ahora</span>
       <div className="-mt-2">
         {name}
-        {estimatedTime && <span>{` - ${estimatedTime / 60} min`}</span>}
+        {estimatedTime && (
+          <span>{` - ${hours ? `${hours} hs` : ""} ${
+            minutes ? `${minutes} min` : ""
+          } ${seconds ? `${seconds} s` : ""}`}</span>
+        )}
       </div>
       {estimatedTime && (
         <CountdownTimer
