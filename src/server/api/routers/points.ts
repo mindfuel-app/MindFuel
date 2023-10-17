@@ -6,22 +6,26 @@ export const pointsRouter = createTRPCRouter({
   addPoints: protectedProcedure
     .input(z.object({ user_id: z.string(), points: z.number() }))
     .mutation(async ({ ctx, input }) => {
-        const userPoints = await ctx.prisma.user.findUnique({
+      const { user_id, points } = input;
+
+      const user = await ctx.prisma.user.findUnique({
         where: {
-          id: input.user_id,
-        },
-        select: {
-          puntos: true,
+          id: user_id,
         },
       });
-      if (!userPoints) return error("Error: no user found");
-      const puntos = userPoints.puntos += input.points;
+
+      if (!user) {
+        return error("Error: no user found");
+      }
+
       const updatedUser = await ctx.prisma.user.update({
         where: {
-          id: input.user_id,
+          id: user_id,
         },
         data: {
-          puntos: puntos,
+          puntos: {
+            increment: points,
+          },
         },
       });
       return updatedUser;
@@ -39,7 +43,5 @@ export const pointsRouter = createTRPCRouter({
       });
       if (!userPoints) return error("Error: no user found");
       return userPoints;
-    })
+    }),
 });
-
-      

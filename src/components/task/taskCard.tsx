@@ -8,6 +8,7 @@ import TaskForm from "./taskForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 import { cn } from "~/lib/utils";
+import { usePoints } from "~/hooks/usePoints";
 
 export default function TaskCard({
   id,
@@ -35,6 +36,7 @@ export default function TaskCard({
   const { data: routine } = api.routines.getRoutineById.useQuery({
     id: routineId,
   });
+  const { addPoints } = usePoints();
 
   const [isTaskDone, setIsTaskDone] = useState(isChecked || false);
   const [showCheck, setShowCheck] = useState(isChecked || false);
