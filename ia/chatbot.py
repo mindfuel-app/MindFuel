@@ -15,7 +15,7 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://mindfuel-ia.onrender.com","http://localhost:3000"],
+    allow_origins=["https://mindfuel.vercel.app","http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["GET","POST","OPTIONS"],
     allow_headers=["*"]
@@ -30,14 +30,14 @@ async def procesar_tarea(tarea: dict):
     def dividir_tarea_en_pasos(prompt):
         solicitud = [
             {"role": "user", "content": prompt},
-            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, sin explayarte tanto:"}
+            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, en una oracion, sin explayarte demasiado:"}
         ]
 
         response = openai.ChatCompletion.create(
             engine="mindfuel",
             messages=solicitud,
             temperature=0.7,
-            max_tokens=200,
+            max_tokens=150,
             top_p=0.95,
             frequency_penalty=0,
             presence_penalty=0,
