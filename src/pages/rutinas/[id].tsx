@@ -17,7 +17,7 @@ import InactiveTask from "../../components/task/inactiveTask";
 import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
 import RoutineLayout from "~/components/layouts/routineLayout";
 import { usePoints } from "~/hooks/usePoints";
-import { pointsPerRoutineCompleted } from "~/lib/points";
+import { routinePoints, taskPoints } from "~/lib/points";
 
 function ErrorPage() {
   const [seconds, setSeconds] = useState(0);
@@ -68,16 +68,25 @@ export default function Routine() {
   const [routineProgress, setRoutineProgress] = useState(0);
   const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
+  const [rewardPoints, setRewardPoints] = useState(0);
 
   useEffect(() => {
     if (!sessionData?.user.id || !tasks) return;
 
     if (routineProgress === tasks.length) {
+      setRewardPoints(
+        skippedTasks.length == 0
+          ? routinePoints.completed
+          : (routineProgress - skippedTasks.length) *
+              taskPoints.completedAfterDeadline
+      );
+
       addPoints({
         user_id: sessionData.user.id,
-        points: pointsPerRoutineCompleted,
+        points: rewardPoints,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routineProgress]);
 
   if (status == "unauthenticated") return void router.push("/signin");
@@ -177,7 +186,10 @@ export default function Routine() {
         )}
         {routineProgress == tasks.length && (
           <div className="pb-20">
-            <SuccessMessage />
+            <SuccessMessage
+              completedFullRoutine={skippedTasks.length == 0}
+              points={rewardPoints}
+            />
           </div>
         )}
       </div>
@@ -185,22 +197,33 @@ export default function Routine() {
   );
 }
 
-function SuccessMessage() {
+function SuccessMessage({
+  completedFullRoutine,
+  points,
+}: {
+  completedFullRoutine: boolean;
+  points: number;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative flex w-[300px] flex-col items-center gap-1 rounded-xl border-2 border-teal bg-white p-5 py-16 shadow-xl md:w-[600px] md:pb-12 md:pt-4"
+      className="relative flex w-[300px] flex-col items-center gap-1 rounded-xl border-2 border-teal bg-white p-5 pb-10 pt-8 shadow-xl md:w-[600px] md:pb-12 md:pt-4"
     >
+      <strong className="text-lg">¡Gran trabajo!</strong>
+      <span className="text-center">
+        Has completado toda la rutina. Ganaste <strong>{points} puntos</strong>.
+      </span>
       <Image
-        className="mb-5"
+        className="mb-5 mt-2 md:mb-10"
         src="/finished-routine.png"
         width={200}
         height={200}
         alt=""
       />
-      <span className="font-bold">Gran trabajo!</span>
-      <span className="font-medium">Has completado toda la rutina</span>
+      <p className="max-w-[220px] text-center">
+        Sigue adelante para obtener más puntos y alcanzar nuevas metas 🚀
+      </p>
       <Link
         href="/home"
         className="no-highlight absolute -bottom-5 rounded-2xl bg-teal px-12 py-1.5 text-white transition-transform active:scale-95"

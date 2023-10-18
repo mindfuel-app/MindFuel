@@ -9,7 +9,7 @@ import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 import { cn } from "~/lib/utils";
 import { usePoints } from "~/hooks/usePoints";
-import { pointsPerTaskCompleted } from "~/lib/points";
+import { taskPoints } from "~/lib/points";
 
 export default function TaskCard({
   id,
@@ -57,6 +57,17 @@ export default function TaskCard({
   const today = new Date();
   const tomorrow = new Date(new Date().setDate(today.getDate() + 1));
   const yesterday = new Date(new Date().setDate(today.getDate() - 1));
+
+  const startOfDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const rewardPoints =
+    !deadline || deadline.getTime() >= startOfDay.getTime()
+      ? taskPoints.completed
+      : taskPoints.completedAfterDeadline;
 
   const deadlineDate = deadline
     ? deadline.toDateString() == today.toDateString()
@@ -162,7 +173,7 @@ export default function TaskCard({
                 } else {
                   addPoints({
                     user_id: user.id,
-                    points: pointsPerTaskCompleted,
+                    points: rewardPoints,
                   });
                   setShowPointsAnimation(true);
                   setIsTaskDone(true);
@@ -178,7 +189,7 @@ export default function TaskCard({
                 transition={{ duration: 0.6 }}
                 className="absolute -right-7 text-3xl font-medium text-teal"
               >
-                +{pointsPerTaskCompleted}
+                +{rewardPoints}
               </motion.div>
             )}
             {showCheck && (
