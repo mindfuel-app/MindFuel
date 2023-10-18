@@ -80,12 +80,14 @@ export function Footer() {
 }
 
 export function TopNavigation() {
+  const { name } = useUser();
+
   return (
     <div className="absolute left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-14 lg:flex xl:gap-16">
       {navigationItems.map((item) => (
         <Link
           key={item.name}
-          href={item.href}
+          href={item.name == "Perfil" ? `/${name}` : item.href}
           className={cn(
             "no-highlight p-1 transition",
             !router.pathname.startsWith(item.href) && "hover:opacity-70"
@@ -104,7 +106,7 @@ export function TopNavigation() {
             <motion.div
               layoutId="active-underline"
               className="border-2 border-teal"
-            ></motion.div>
+            />
           )}
         </Link>
       ))}
