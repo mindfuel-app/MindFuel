@@ -158,13 +158,13 @@ function Header({
         </div>
         <div className="flex w-full flex-col gap-1">
           <span className="text-white">Tu nivel</span>
-          <div className="relative flex">
+          <div className="flex max-w-[400px] items-center gap-2">
             <Progress
               value={(points / nextLevelPoints) * 100}
               color="black"
-              className=" h-3 w-56 border border-teal bg-white"
+              className="h-3 border border-teal bg-white"
             />
-            <span className="absolute -bottom-2 right-2 text-white">
+            <span className=" text-white">
               {points}/{nextLevelPoints}
             </span>
           </div>
