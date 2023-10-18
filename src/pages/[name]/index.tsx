@@ -12,6 +12,7 @@ import Link from "next/link";
 import ProfileLayout from "~/components/layouts/profileLayout";
 import { motion } from "framer-motion";
 import NotFoundPage from "~/pages/404";
+import { api } from "~/utils/api";
 
 const userStats = [
   {
@@ -50,6 +51,9 @@ export default function Profile() {
   const { data: sessionData, status } = useSession();
   const router = useRouter();
   const { name } = router.query;
+  const { data } = api.points.getPoints.useQuery({
+    user_id: sessionData?.user.id ?? "",
+  });
 
   if (status == "unauthenticated") return void router.push("/signin");
 
@@ -58,7 +62,7 @@ export default function Profile() {
 
   return (
     <ProfileLayout
-      header={<Header userName={name} />}
+      header={<Header userName={name} points={data?.puntos ?? 0} />}
       sessionData={sessionData}
     >
       <div className="relative flex w-full items-center py-3">
@@ -74,7 +78,7 @@ export default function Profile() {
         </div>
       </div>
       <div className="padding-footer-sm flex w-full flex-col items-center gap-4 px-6 pt-2">
-        <Section title="Estadísticas">
+        {/* <Section title="Estadísticas">
           <div className="grid grid-cols-2 gap-6">
             {userStats.map((stat) => (
               <div
@@ -96,7 +100,7 @@ export default function Profile() {
               </div>
             ))}
           </div>
-        </Section>
+        </Section> */}
         <Section title="Logros">Logros</Section>
         <Section title="Resumen semanal">Resumen semanal</Section>
       </div>
@@ -123,9 +127,10 @@ function Section({
   );
 }
 
-function Header({ userName }: { userName: string }) {
+function Header({ userName, points }: { userName: string; points: number }) {
   return (
-    <div className="flex w-full items-center justify-end bg-teal py-3 pr-3">
+    <div className="flex w-full items-center justify-between bg-teal px-3 py-3">
+      <span className="text-xl text-white">Puntos: {points}</span>
       <Link
         href={`/${userName}/configuracion`}
         className="no-highlight rounded-md bg-orange p-1"
