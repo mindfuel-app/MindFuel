@@ -158,7 +158,7 @@ function Header({
     const addProgress = points - progress > 100 ? 100 : 10;
 
     const interval = setInterval(() => {
-      setProgress((progress) => progress + addProgress);
+      setProgress((progress) => Math.round((progress + addProgress) / 10) * 10);
     }, 10);
 
     return () => clearInterval(interval);
