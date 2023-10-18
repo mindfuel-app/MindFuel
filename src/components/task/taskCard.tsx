@@ -1,5 +1,5 @@
 import { useTasks } from "~/hooks/useTasks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckIcon, CalendarIcon } from "@heroicons/react/24/outline";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
@@ -41,8 +41,13 @@ export default function TaskCard({
 
   const [isTaskDone, setIsTaskDone] = useState(isChecked || false);
   const [showCheck, setShowCheck] = useState(isChecked || false);
+  const [showPointsAnimation, setShowPointsAnimation] = useState(false);
   const { setTaskDone, setTaskUndone } = useTasks({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setShowPointsAnimation(false);
+  }, [showPointsAnimation]);
 
   let dayOfWeek = new Date().toLocaleString("es", { weekday: "short" });
   dayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
@@ -66,17 +71,21 @@ export default function TaskCard({
   const maxNameCharacters = 21;
   const maxDescriptionCharacters = 27;
 
+  const isCardVisible =
+    (!isTaskDone || showCompletedTasks || showPointsAnimation) &&
+    isForToday !== false;
+
   return (
     <AnimatePresence>
-      {(!isTaskDone || showCompletedTasks) && isForToday !== false && (
+      {isCardVisible && (
         <motion.div
           initial={{ opacity: isTaskDone ? 0 : 1 }}
           animate={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            x: 20,
+            x: 15,
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.4 }}
           className="relative flex w-72 items-center justify-between rounded-md border-2 border-teal bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-[400px] lg:w-[500px] lg:py-2"
         >
           <div className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px]">
@@ -155,6 +164,7 @@ export default function TaskCard({
                     user_id: user.id,
                     points: pointsPerTaskCompleted,
                   });
+                  setShowPointsAnimation(true);
                   setIsTaskDone(true);
                   setTaskDone({ task_id: id });
                 }
@@ -162,6 +172,15 @@ export default function TaskCard({
             }}
             className="no-highlight group absolute right-1 flex h-8 w-8 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
           >
+            {showPointsAnimation && (
+              <motion.div
+                animate={{ opacity: 0.5, y: -30 }}
+                transition={{ duration: 0.6 }}
+                className="absolute -right-7 text-3xl font-medium text-teal"
+              >
+                +{pointsPerTaskCompleted}
+              </motion.div>
+            )}
             {showCheck && (
               <motion.div
                 initial={{ scale: 0 }}
