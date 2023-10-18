@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import NotFoundPage from "~/pages/404";
 import { api } from "~/utils/api";
 import { Progress } from "~/components/ui/progressBar";
+import { useEffect, useState } from "react";
 
 const userStats = [
   {
@@ -69,7 +70,7 @@ export default function Profile() {
               userName={name as string}
               level={1}
               points={data?.puntos ?? 0}
-              nextLevelPoints={3000}
+              nextLevelPoints={10000}
             />
           }
           sessionData={sessionData}
@@ -149,6 +150,20 @@ function Header({
   points: number;
   nextLevelPoints: number;
 }) {
+  const [progress, setProgress] = useState((points / nextLevelPoints) * 100);
+
+  useEffect(() => {
+    if (progress >= points) return;
+
+    const addProgress = points - progress > 100 ? 100 : 10;
+
+    const interval = setInterval(() => {
+      setProgress((progress) => progress + addProgress);
+    }, 10);
+
+    return () => clearInterval(interval);
+  }, [progress, points]);
+
   return (
     <div className="flex w-full items-center justify-between bg-teal/70 px-3 pb-2 pt-3">
       <div className="flex w-full items-center gap-4">
@@ -160,12 +175,12 @@ function Header({
           <span className="text-white">Tu nivel</span>
           <div className="flex max-w-[400px] items-center gap-2">
             <Progress
-              value={(points / nextLevelPoints) * 100}
+              value={(progress / nextLevelPoints) * 100}
               color="black"
               className="h-3 border border-teal bg-white"
             />
             <span className=" text-white">
-              {points}/{nextLevelPoints}
+              {progress}/{nextLevelPoints}
             </span>
           </div>
         </div>
