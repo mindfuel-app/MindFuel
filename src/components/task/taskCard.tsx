@@ -185,7 +185,7 @@ export default function TaskCard({
           >
             {showPointsAnimation && (
               <motion.div
-                animate={{ opacity: 0.5, y: -30 }}
+                animate={{ opacity: 0.5, y: -30, x: -20 }}
                 transition={{ duration: 0.6 }}
                 className="absolute -right-7 text-3xl font-medium text-teal"
               >
