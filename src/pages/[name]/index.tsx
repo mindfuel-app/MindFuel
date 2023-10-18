@@ -13,6 +13,7 @@ import ProfileLayout from "~/components/layouts/profileLayout";
 import { motion } from "framer-motion";
 import NotFoundPage from "~/pages/404";
 import { api } from "~/utils/api";
+import { Progress } from "~/components/ui/progressBar";
 
 const userStats = [
   {
@@ -57,28 +58,36 @@ export default function Profile() {
 
   if (status == "unauthenticated") return void router.push("/signin");
 
-  if (!sessionData || !name || sessionData.user.name != name)
-    return <NotFoundPage />;
+  if (sessionData?.user.name !== name && sessionData) return <NotFoundPage />;
 
   return (
-    <ProfileLayout
-      header={<Header userName={name} points={data?.puntos ?? 0} />}
-      sessionData={sessionData}
-    >
-      <div className="relative flex w-full items-center py-3">
-        <div className="absolute left-0 top-0 h-1/2 w-full bg-teal">
-          <span className="absolute bottom-1 left-1/2 -translate-x-2 text-2xl text-white">
-            {name}
-          </span>
-        </div>
-        <div className="z-10 ml-8 flex h-[120px] w-[120px] items-center justify-center rounded-full border-[3px] border-teal bg-[#d9d9d9]">
-          <span className="text-7xl text-teal">
-            {name[0]?.toLocaleUpperCase()}
-          </span>
-        </div>
-      </div>
-      <div className="padding-footer-sm flex w-full flex-col items-center gap-4 px-6 pt-2">
-        {/* <Section title="Estadísticas">
+    <>
+      {sessionData && name && (
+        <ProfileLayout
+          header={
+            <Header
+              userName={name as string}
+              level={1}
+              points={data?.puntos ?? 0}
+              nextLevelPoints={3000}
+            />
+          }
+          sessionData={sessionData}
+        >
+          <div className="relative flex w-full items-center py-3">
+            <div className="absolute left-0 top-0 h-1/2 w-full bg-teal/70">
+              <span className="absolute bottom-1 left-1/2 -translate-x-2 text-2xl text-white">
+                {name}
+              </span>
+            </div>
+            <div className="z-10 ml-8 flex h-[120px] w-[120px] items-center justify-center rounded-full border-[3px] border-teal bg-[#d9d9d9]">
+              <span className="text-7xl text-teal">
+                {name[0]?.toLocaleUpperCase()}
+              </span>
+            </div>
+          </div>
+          <div className="padding-footer-sm flex w-full flex-col items-center gap-4 px-6 pt-2">
+            {/* <Section title="Estadísticas">
           <div className="grid grid-cols-2 gap-6">
             {userStats.map((stat) => (
               <div
@@ -101,10 +110,12 @@ export default function Profile() {
             ))}
           </div>
         </Section> */}
-        <Section title="Logros">Logros</Section>
-        <Section title="Resumen semanal">Resumen semanal</Section>
-      </div>
-    </ProfileLayout>
+            <Section title="Logros">Logros</Section>
+            <Section title="Resumen semanal">Resumen semanal</Section>
+          </div>
+        </ProfileLayout>
+      )}
+    </>
   );
 }
 
@@ -127,16 +138,44 @@ function Section({
   );
 }
 
-function Header({ userName, points }: { userName: string; points: number }) {
+function Header({
+  userName,
+  level,
+  points,
+  nextLevelPoints,
+}: {
+  userName: string;
+  level: number;
+  points: number;
+  nextLevelPoints: number;
+}) {
   return (
-    <div className="flex w-full items-center justify-between bg-teal px-3 py-3">
-      <span className="text-xl text-white">Puntos: {points}</span>
-      <Link
+    <div className="flex w-full items-center justify-between bg-teal/70 px-3 pb-2 pt-3">
+      <div className="flex w-full items-center gap-4">
+        <div className="relative flex h-10 w-12 items-center justify-center rounded-full bg-teal text-lg text-white">
+          <span className="z-20">{level}</span>
+          <div className="absolute left-1/2 top-1/2 z-10 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange"></div>
+        </div>
+        <div className="flex w-full flex-col gap-1">
+          <span className="text-white">Tu nivel</span>
+          <div className="relative flex">
+            <Progress
+              value={(points / nextLevelPoints) * 100}
+              color="black"
+              className=" h-3 w-56 border border-teal bg-white"
+            />
+            <span className="absolute -bottom-2 right-2 text-white">
+              {points}/{nextLevelPoints}
+            </span>
+          </div>
+        </div>
+      </div>
+      {/* <Link
         href={`/${userName}/configuracion`}
         className="no-highlight rounded-md bg-orange p-1"
       >
         <Cog6ToothIcon className="h-6 w-6 text-white" />
-      </Link>
+      </Link> */}
     </div>
   );
 }
