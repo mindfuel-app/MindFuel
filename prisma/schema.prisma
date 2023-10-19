@@ -55,8 +55,20 @@ model User {
     image         String?
     puntos        Int       @default(0)
     createdAt     DateTime  @default(now())
+    level         Level     @relation(fields: [levelNumber], references: [number], onUpdate: Cascade)
+    levelNumber   Int       @default(1)
     accounts      Account[]
     sessions      Session[]
+
+    @@index([levelNumber])
+}
+
+model Level {
+    number Int @id
+    points Int
+    users User[]
+
+    @@index([points])
 }
 
 model VerificationToken {
