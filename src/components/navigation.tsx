@@ -49,11 +49,11 @@ const navigationItems = [
     icon: <FaHandHoldingHeart className="text-3xl" />,
     name: "Self-care",
   },
-  {
-    href: "/amigos",
-    icon: <FaUserFriends className="text-3xl" />,
-    name: "Amigos",
-  },
+  // {
+  //   href: "/amigos",
+  //   icon: <FaUserFriends className="text-3xl" />,
+  //   name: "Amigos",
+  // },
   {
     href: "/perfil",
     icon: <BsPersonCircle className="text-3xl" />,
