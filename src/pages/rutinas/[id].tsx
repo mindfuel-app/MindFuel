@@ -86,8 +86,14 @@ export default function Routine() {
         points: rewardPoints,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [routineProgress]);
+  }, [
+    addPoints,
+    rewardPoints,
+    routineProgress,
+    sessionData?.user.id,
+    skippedTasks.length,
+    tasks,
+  ]);
 
   if (status == "unauthenticated") return void router.push("/signin");
 
