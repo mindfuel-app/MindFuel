@@ -1,13 +1,11 @@
-import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient().$extends(withAccelerate())
- 
+const prisma = new PrismaClient();
 export const config = {
-  runtime: 'edge',
+  runtime: "edge",
 };
- 
+
 export default async function handler() {
   try {
     const deletedValues = await prisma.water.updateMany({
@@ -18,9 +16,6 @@ export default async function handler() {
     return NextResponse.json({ deletedValues });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: error},
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
