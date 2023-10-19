@@ -7,24 +7,30 @@ import { motion } from "framer-motion";
 import { OptionLayout } from ".";
 import Image from "next/image";
 import { api } from "~/utils/api";
-import { useSearchParams } from "next/navigation";
 
 export default function TomarAgua() {
   const { data: sessionData, status } = useSession();
   const { refetch: refetchWater } = api.selfCare.getWater.useQuery({
     user_id: sessionData?.user.id || "",
   });
-  const searchParams = useSearchParams();
-  const data = Number(searchParams.get("water"));
+  const { data } = api.selfCare.getWater.useQuery({
+    user_id: sessionData?.user.id || "",
+  });
   const [glassesOfWater, setGlassesOfWater] = useState(
     Array(8)
       .fill(null)
       .map((_, index) => {
-        if (!data) return false;
-        return index < data;
+        if (!data || !data.water) return false;
+        return index < data.water;
       })
   );
-  const { mutate: updateWater } = api.selfCare.updateWater.useMutation({});
+  const utils = api.useContext();
+
+  const { mutate: updateWater } = api.selfCare.updateWater.useMutation({
+    onSuccess: () => {
+      void utils.selfCare.getWater.invalidate();
+    },
+  });
 
   if (status == "unauthenticated") return void Router.push("/signin");
 

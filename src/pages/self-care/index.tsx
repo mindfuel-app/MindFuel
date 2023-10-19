@@ -62,13 +62,12 @@ export default function SelfCare() {
     },
     { cacheTime: 0 }
   );
-  console.log(data?.water);
+
   const { onRouteChange } = usePreviousPath();
 
   if (status == "unauthenticated") return void Router.push("/signin");
 
   if (!sessionData) return;
-
   return (
     <SelfCareLayout sessionData={sessionData}>
       <motion.div
@@ -80,11 +79,7 @@ export default function SelfCare() {
         {options.map((option) => (
           <Link
             key={option.title}
-            href={
-              option.title == "Tomar agua" && data && data.water
-                ? `/self-care${option.href}?water=${data.water}`
-                : `/self-care${option.href}`
-            }
+            href={`/self-care${option.href}`}
             className="no-highlight flex max-h-[120px] min-h-[100px] w-[300px] gap-2 rounded-md bg-white p-2 transition-transform active:scale-[97%] sm:w-[400px]"
             onClick={() => onRouteChange(`/self-care${option.href}`)}
           >
