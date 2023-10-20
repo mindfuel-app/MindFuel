@@ -1,5 +1,5 @@
-import Logo from "./logo";
-import Title from "./title";
+import Logo from "../auth/logo";
+import Title from "../auth/title";
 
 export default function authPageLayout({
   children,
@@ -9,9 +9,9 @@ export default function authPageLayout({
   authMethod: "Inicio sesión" | "Registrarse";
 }) {
   return (
-    <div className="flex h-screen overflow-y-hidden bg-teal">
-      <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
-      <main className="flex min-h-screen w-full flex-col bg-alabaster py-10 min-[1440px]:shadow-2xl">
+    <div className="flex min-h-screen bg-teal">
+      <div className="h-full w-0 min-[1440px]:w-1/6" />
+      <main className="flex min-h-screen w-full flex-col bg-alabaster py-10">
         <div className="flex flex-col items-center">
           <Logo />
           <div className="flex flex-col items-center p-5">
@@ -20,7 +20,7 @@ export default function authPageLayout({
           </div>
         </div>
       </main>
-      <div className="h-screen w-0 min-[1440px]:w-1/6"></div>
+      <div className="h-full w-0 min-[1440px]:w-1/6" />
     </div>
   );
 }
