@@ -169,8 +169,8 @@ function Header({
               color="black"
               className="h-3 border border-teal bg-white"
             />
-            <span className=" text-white">
-              {progress}/{nextLevelPoints}
+            <span className="text-white">
+              {progress > 0 ? progress : 0}/{nextLevelPoints}
             </span>
           </div>
         </div>
