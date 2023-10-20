@@ -165,12 +165,14 @@ function Header({
           <span className="text-white">Tu nivel</span>
           <div className="flex max-w-[400px] items-center gap-2">
             <Progress
-              value={(progress / nextLevelPoints) * 100}
+              value={
+                ((progress > 0 ? progress : points) / nextLevelPoints) * 100
+              }
               color="black"
               className="h-3 border border-teal bg-white"
             />
             <span className="text-white">
-              {progress > 0 ? progress : 0}/{nextLevelPoints}
+              {progress > 0 ? progress : points}/{nextLevelPoints}
             </span>
           </div>
         </div>
