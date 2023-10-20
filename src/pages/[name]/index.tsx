@@ -1,14 +1,5 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import {
-  ClipboardDocumentCheckIcon,
-  Cog6ToothIcon,
-  DocumentCheckIcon,
-  FaceSmileIcon,
-  TrophyIcon,
-} from "@heroicons/react/24/outline";
-import { StarIcon, UserGroupIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import ProfileLayout from "~/components/layouts/profileLayout";
 import { motion } from "framer-motion";
 import NotFoundPage from "~/pages/404";
@@ -16,44 +7,44 @@ import { api } from "~/utils/api";
 import { Progress } from "~/components/ui/progressBar";
 import { useEffect, useState } from "react";
 
-const userStats = [
-  {
-    icon: <UserGroupIcon className="h-9 w-9" />,
-    number: 7,
-    label: "Amigos",
-  },
-  {
-    icon: <StarIcon className="h-9 w-9" />,
-    number: 575,
-    label: "Puntos",
-  },
-  {
-    icon: <TrophyIcon className="h-9 w-9" />,
-    number: 3,
-    label: "Logros",
-  },
-  {
-    icon: <DocumentCheckIcon className="h-9 w-9" />,
-    number: 90,
-    label: "Tareas realizadas",
-  },
-  {
-    icon: <FaceSmileIcon className="h-9 w-9" />,
-    number: 20,
-    label: "Reacciones recibidas",
-  },
-  {
-    icon: <ClipboardDocumentCheckIcon className="h-9 w-9" />,
-    number: 6,
-    label: "Rutinas cargadas",
-  },
-];
+// const userStats = [
+//   {
+//     icon: <UserGroupIcon className="h-9 w-9" />,
+//     number: 7,
+//     label: "Amigos",
+//   },
+//   {
+//     icon: <StarIcon className="h-9 w-9" />,
+//     number: 575,
+//     label: "Puntos",
+//   },
+//   {
+//     icon: <TrophyIcon className="h-9 w-9" />,
+//     number: 3,
+//     label: "Logros",
+//   },
+//   {
+//     icon: <DocumentCheckIcon className="h-9 w-9" />,
+//     number: 90,
+//     label: "Tareas realizadas",
+//   },
+//   {
+//     icon: <FaceSmileIcon className="h-9 w-9" />,
+//     number: 20,
+//     label: "Reacciones recibidas",
+//   },
+//   {
+//     icon: <ClipboardDocumentCheckIcon className="h-9 w-9" />,
+//     number: 6,
+//     label: "Rutinas cargadas",
+//   },
+// ];
 
 export default function Profile() {
   const { data: sessionData, status } = useSession();
   const router = useRouter();
   const { name } = router.query;
-  const { data } = api.points.getPoints.useQuery({
+  const { data: pointsData } = api.points.getPoints.useQuery({
     user_id: sessionData?.user.id ?? "",
   });
 
@@ -67,10 +58,11 @@ export default function Profile() {
         <ProfileLayout
           header={
             <Header
-              userName={name as string}
-              level={1}
-              points={data?.puntos ?? 0}
-              nextLevelPoints={10000}
+              level={pointsData?.levelNumber ?? 0}
+              points={pointsData?.puntos ?? 0}
+              nextLevelPoints={
+                pointsData?.nextLevelPoints ?? pointsData?.puntos ?? 0
+              }
             />
           }
           sessionData={sessionData}
@@ -140,12 +132,10 @@ function Section({
 }
 
 function Header({
-  userName,
   level,
   points,
   nextLevelPoints,
 }: {
-  userName: string;
   level: number;
   points: number;
   nextLevelPoints: number;

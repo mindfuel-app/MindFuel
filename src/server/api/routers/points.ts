@@ -39,9 +39,70 @@ export const pointsRouter = createTRPCRouter({
         },
         select: {
           puntos: true,
+          levelNumber: true,
         },
       });
+
       if (!userPoints) return error("Error: no user found");
-      return userPoints;
+
+      let prevLevel = await ctx.prisma.level.findUnique({
+        where: {
+          number: userPoints.levelNumber - 1,
+        },
+        select: {
+          number: true,
+          points: true,
+        },
+      });
+
+      while (prevLevel && userPoints.puntos > prevLevel.points) {
+        userPoints.levelNumber = prevLevel.number - 1;
+        prevLevel = await ctx.prisma.level.findUnique({
+          where: {
+            number: userPoints.levelNumber - 1,
+          },
+          select: {
+            number: true,
+            points: true,
+          },
+        });
+      }
+
+      let nextLevel = await ctx.prisma.level.findUnique({
+        where: {
+          number: userPoints.levelNumber + 1,
+        },
+        select: {
+          number: true,
+          points: true,
+        },
+      });
+
+      while (nextLevel && userPoints.puntos >= nextLevel.points) {
+        userPoints.levelNumber = nextLevel.number;
+        nextLevel = await ctx.prisma.level.findUnique({
+          where: {
+            number: userPoints.levelNumber + 1,
+          },
+          select: {
+            number: true,
+            points: true,
+          },
+        });
+      }
+
+      await ctx.prisma.user.update({
+        where: {
+          id: input.user_id,
+        },
+        data: {
+          levelNumber: userPoints.levelNumber,
+        },
+      });
+
+      return {
+        ...userPoints,
+        nextLevelPoints: nextLevel?.points,
+      };
     }),
 });
