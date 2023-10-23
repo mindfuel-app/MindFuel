@@ -7,9 +7,13 @@ const routinePoints = {
   completed: 100,
 };
 
+const selfCarePoints = {
+  completedWater: 80,
+};
+
 const bonusPoints = {
   completedAllPendingTasks: 300,
   completedAllRoutinesForXDay: 300,
 };
 
-export { taskPoints, routinePoints, bonusPoints };
+export { taskPoints, routinePoints, selfCarePoints, bonusPoints };
