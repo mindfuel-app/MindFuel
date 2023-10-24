@@ -8,7 +8,7 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
-    NODE_ENV: z.enum(["development", "test", "production"]),
+    NODE_ENV: z.enum(["development", "notifications", "production"]),
     NEXTAUTH_SECRET:
       process.env.NODE_ENV === "production"
         ? z.string().min(1)
@@ -23,7 +23,10 @@ export const env = createEnv({
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
-    JWT_SECRET: z.string()
+    JWT_SECRET: z.string(),
+    PUBLIC_VAPID: z.string(),
+    PRIVATE_VAPID: z.string(),
+    GCMAPI_KEY: z.string(),
   },
 
   /**
@@ -46,7 +49,10 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
+    PUBLIC_VAPID: process.env.PUBLIC_VAPID,
+    PRIVATE_VAPID: process.env.PRIVATE_VAPID,
+    GCMAPI_KEY: process.env.GCMAPI_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
