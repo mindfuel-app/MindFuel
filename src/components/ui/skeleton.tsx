@@ -2,9 +2,9 @@ import { cn } from "~/lib/utils";
 
 function TaskSkeleton() {
   return (
-    <div className="flex w-full flex-col items-center gap-5 p-10">
+    <div className="flex w-full flex-col items-center gap-5 pt-16">
       <div className="flex gap-2">
-        <Rectangle className="w-52" />
+        <Rectangle className="w-60" />
         <Circle />
       </div>
       <Rectangle />
@@ -37,7 +37,7 @@ function Rectangle({ className }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "h-10 w-64 animate-pulse rounded-md bg-gray-300",
+        "h-12 w-72 animate-pulse rounded-md bg-gray-300",
         className
       )}
     ></div>

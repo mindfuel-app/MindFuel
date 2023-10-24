@@ -2,10 +2,6 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import Modal from "./ui/modal";
-import RoutineForm from "./routine/routineForm";
-import AddModal from "./addModal";
-import TaskForm from "./task/taskForm";
-import { useSearchParams, useRouter } from "next/navigation";
 import {
   ArrowLeftOnRectangleIcon,
   ChevronDownIcon,
@@ -14,22 +10,23 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import ClickAwayListener from "react-click-away-listener";
 import { TopNavigation } from "./navigation";
+import TaskForm from "./task/taskForm";
+import AddModal from "./addModal";
+import RoutineForm from "./routine/routineForm";
+import { api } from "~/utils/api";
+import { useUser } from "~/lib/UserContext";
 
 export default function Header() {
-  const router = useRouter();
+  const user = useUser();
   const [showLogout, setShowLogout] = useState(false);
   const { data: sessionData } = useSession();
-  const searchParams = useSearchParams();
-
-  const tabParam =
-    searchParams.get("tab") == "tareas" || searchParams.get("tab") == "rutinas"
-      ? (searchParams.get("tab") as string)
-      : "tareas";
-  const isModalOpen = searchParams.get("add") == "true";
-  const setIsModalOpen = (open: boolean) => {
-    const queryString = open ? `?tab=${tabParam}&add=true` : `?tab=${tabParam}`;
-    router.push(queryString);
-  };
+  const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
+    user_id: user.id,
+  });
+  const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
+    user_id: user.id,
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!sessionData)
     return (
@@ -86,16 +83,41 @@ export default function Header() {
       </div>
       <TopNavigation />
       <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <Modal.Button className="no-highlight fixed right-7 hidden rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:block">
-          Crear rutina
+        <Modal.Button className="no-highlight absolute right-7 hidden items-center gap-2 rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:flex">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="white"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Crear
         </Modal.Button>
         <Modal.Content>
           <AddModal
             TaskModal={
-              <TaskForm mode="create" afterSave={() => setIsModalOpen(false)} />
+              <TaskForm
+                mode="create"
+                afterSave={() => {
+                  void refetchTasks();
+                  setIsModalOpen(false);
+                }}
+              />
             }
             RoutineModal={
-              <RoutineForm afterSave={() => setIsModalOpen(false)} />
+              <RoutineForm
+                afterSave={() => {
+                  void refetchRoutines();
+                  setIsModalOpen(false);
+                }}
+              />
             }
           />
         </Modal.Content>

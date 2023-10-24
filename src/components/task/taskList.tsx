@@ -17,7 +17,7 @@ export default function TaskList() {
   } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
-  const [completedTasksButton, setCompletedTasksButton] = useState(false);
+  const [showSubMenu, setShowSubMenu] = useState(false);
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
 
   if (isLoading) return <TaskSkeleton />;
@@ -40,24 +40,26 @@ export default function TaskList() {
     <motion.div
       initial={{ x: 10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="relative flex h-full flex-col items-center pb-16 text-lg font-medium"
+      className="padding-footer-xl relative flex flex-col items-center text-lg font-medium"
     >
       <div
-        onClick={() => setCompletedTasksButton(!completedTasksButton)}
+        onClick={() => {
+          setShowSubMenu((showSubMenu) => !showSubMenu);
+        }}
         className="no-highlight absolute right-2 top-6 cursor-pointer rounded-md p-[2px] transition-colors active:bg-black/10 lg:hover:bg-black/10"
       >
         <EllipsisHorizontalIcon className="h-6 w-6" />
       </div>
-      {completedTasksButton && (
-        <ClickAwayListener onClickAway={() => setCompletedTasksButton(false)}>
+      {showSubMenu && (
+        <ClickAwayListener onClickAway={() => setShowSubMenu(false)}>
           <div
-            onClick={() => {
-              void refetchTasks();
-              setShowCompletedTasks(!showCompletedTasks);
-            }}
-            className="no-highlight absolute right-0 top-12 z-20 cursor-pointer rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
+            onClick={() => void refetchTasks()}
+            className="no-highlight absolute right-0 top-12 z-20 flex cursor-pointer flex-col gap-1 rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
           >
-            <div className="flex items-center gap-1">
+            <div
+              onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+              className="flex items-center gap-1"
+            >
               {showCompletedTasks ? (
                 <>
                   <NoSymbolIcon className="h-6 w-6" />
@@ -83,7 +85,7 @@ export default function TaskList() {
               ? "Tareas pendientes"
               : "No hay tareas pendientes"}
           </h2>
-          <ul className="flex w-72 flex-col gap-3 sm:w-80 lg:w-96">
+          <ul className="flex flex-col gap-3">
             {pendingTasks.map((task) => (
               <TaskCard
                 key={task.id}
@@ -91,6 +93,7 @@ export default function TaskList() {
                 name={task.name}
                 deadline={task.deadline}
                 description={task.description}
+                routineId={task.routine_id || ""}
                 isChecked={task.done}
                 isPartOfRoutine={task.routine_id != null}
                 showCompletedTasks={showCompletedTasks}

@@ -2,8 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #edece7;
+  font-family: Rubik;
+}
+
+:root {
+  --footer-height: 62px;
+}
+
 ::selection {
   background: #d1d5db;
+}
+
+@layer utilities {
+  .no-highlight {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .no-hightlight:focus {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .padding-footer-sm {
+    padding-bottom: calc(var(--footer-height) + 20px);
+  }
+
+  .padding-footer-md {
+    padding-bottom: calc(var(--footer-height) + 50px);
+  }
+
+  .padding-footer-lg {
+    padding-bottom: calc(var(--footer-height) + 80px);
+  }
+
+  .padding-footer-xl {
+    padding-bottom: calc(var(--footer-height) + 100px);
+  }
+
+  .border-red-500 {
+    --tw-border-opacity: 1;
+    border-color: rgb(239 68 68 / var(--tw-border-opacity));
+  }
 }
 
 @keyframes dialog-content-show {
@@ -43,21 +83,6 @@
   }
   to {
     opacity: 0;
-  }
-}
-
-@layer utilities {
-  .no-highlight {
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .no-hightlight:focus {
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .border-red-500 {
-    --tw-border-opacity: 1;
-    border-color: rgb(239 68 68 / var(--tw-border-opacity));
   }
 }
 
@@ -137,9 +162,4 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-}
-
-body {
-  background-color: #edece7;
-  font-family: Rubik;
 }

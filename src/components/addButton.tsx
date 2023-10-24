@@ -4,24 +4,13 @@ import AddModal from "./addModal";
 import TaskForm from "./task/taskForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
-import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export default function AddButton() {
   const user = useUser();
-  const routerNav = useRouter();
-  const searchParams = useSearchParams();
-  const tabParam =
-    searchParams.get("tab") === "tareas" ||
-    searchParams.get("tab") === "rutinas"
-      ? (searchParams.get("tab") as string)
-      : "tareas";
-  const isModalOpen = searchParams.get("add") == "true";
 
-  const setIsModalOpen = (open: boolean) => {
-    const queryString = open ? `?tab=${tabParam}&add=true` : `?tab=${tabParam}`;
-    routerNav.push(queryString);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });

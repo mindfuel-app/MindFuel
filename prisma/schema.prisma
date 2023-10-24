@@ -55,8 +55,20 @@ model User {
     image         String?
     puntos        Int       @default(0)
     createdAt     DateTime  @default(now())
+    level         Level     @relation(fields: [levelNumber], references: [number], onUpdate: Cascade)
+    levelNumber   Int       @default(1)
     accounts      Account[]
     sessions      Session[]
+
+    @@index([levelNumber])
+}
+
+model Level {
+    number Int @id
+    points Int
+    users User[]
+
+    @@index([points])
 }
 
 model VerificationToken {
@@ -134,4 +146,30 @@ model pushSubscription {
     suscription String @db.Text
     user_id   String
     createdAt DateTime @default(now())
+
+}
+
+model note{
+    id String @id @default(cuid())
+    note String @db.Text
+    user_id String
+    createdAt DateTime @default(now())
+
+}
+
+model picture{
+    id String @id @default(cuid())
+    pictureUrl String @db.Text
+}
+
+model water{
+    id String @id @default(cuid())
+    user_id String @unique
+    water Int? @default(0)
+}
+
+model greeting{
+    id String @id @default(cuid())
+    user_id String
+    greeting String @db.Text
 }

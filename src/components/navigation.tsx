@@ -5,6 +5,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import router from "next/router";
 import { motion } from "framer-motion";
 import { useUser } from "~/lib/UserContext";
+import { cn } from "~/lib/utils";
 
 function NavigationItem({
   href,
@@ -28,12 +29,11 @@ function NavigationItem({
         router.pathname.startsWith(href) ||
         (name == "Perfil" && routerName == userName)
           ? "text-teal"
-          : ""
+          : "text-gray-700"
       } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
     >
       {icon}
-      <span className="text-xs font-medium min-[375px]:text-sm">{name}</span>
     </Link>
   );
 }
@@ -49,11 +49,11 @@ const navigationItems = [
     icon: <FaHandHoldingHeart className="text-3xl" />,
     name: "Self-care",
   },
-  {
-    href: "/amigos",
-    icon: <FaUserFriends className="text-3xl" />,
-    name: "Amigos",
-  },
+  // {
+  //   href: "/amigos",
+  //   icon: <FaUserFriends className="text-3xl" />,
+  //   name: "Amigos",
+  // },
   {
     href: "/perfil",
     icon: <BsPersonCircle className="text-3xl" />,
@@ -61,11 +61,11 @@ const navigationItems = [
   },
 ];
 
-export function BottomNavigation() {
+export function Footer() {
   const { name } = useUser();
 
   return (
-    <div className="no-highlight sticky bottom-0 flex w-full justify-evenly bg-white py-3 lg:hidden">
+    <footer className="no-highlight fixed bottom-0 z-20 flex w-full justify-evenly border-t border-gray-200 bg-white py-3 lg:hidden">
       {navigationItems.map((item) => (
         <NavigationItem
           key={item.href}
@@ -75,20 +75,23 @@ export function BottomNavigation() {
           userName={name}
         />
       ))}
-    </div>
+    </footer>
   );
 }
 
 export function TopNavigation() {
+  const { name } = useUser();
+
   return (
-    <div className="fixed left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-10 lg:flex xl:gap-16">
+    <div className="absolute left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-14 lg:flex xl:gap-16">
       {navigationItems.map((item) => (
         <Link
           key={item.name}
-          href={item.href}
-          className={`no-highlight px-3 py-1.5 transition ${
-            !router.pathname.startsWith(item.href) ? "hover:opacity-70" : ""
-          }`}
+          href={item.name == "Perfil" ? `/${name}` : item.href}
+          className={cn(
+            "no-highlight p-1 transition",
+            !router.pathname.startsWith(item.href) && "hover:opacity-70"
+          )}
         >
           <span
             className={`${
@@ -103,7 +106,7 @@ export function TopNavigation() {
             <motion.div
               layoutId="active-underline"
               className="border-2 border-teal"
-            ></motion.div>
+            />
           )}
         </Link>
       ))}

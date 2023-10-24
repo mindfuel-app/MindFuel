@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import Title from "~/components/auth/title";
 import usePasswordToggle from "~/hooks/usePasswordToggle";
+import { cn } from "~/lib/utils";
 
 export default function ReestablecerContraseña() {
   const router = useRouter();
@@ -149,17 +150,19 @@ export default function ReestablecerContraseña() {
                   <div className="flex flex-col gap-2 group-disabled:opacity-50">
                     <label className="flex flex-col group-disabled:cursor-not-allowed">
                       <span
-                        className={`ml-1 font-medium ${
-                          !isPasswordMatch ? "text-red-500" : ""
-                        }`}
+                        className={cn(
+                          "ml-1 font-medium",
+                          !isPasswordMatch && "text-red-500"
+                        )}
                         onClick={(e) => e.preventDefault()}
                       >
                         Confirmar contraseña
                       </span>
                       <div
-                        className={`flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1 ${
-                          !isPasswordMatch ? "border-red-500" : ""
-                        }`}
+                        className={cn(
+                          "flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1",
+                          !isPasswordMatch && "border-red-500"
+                        )}
                       >
                         <input
                           type={

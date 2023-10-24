@@ -3,33 +3,41 @@ import os
 from dotenv import load_dotenv
 import re
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
 openai.api_type = "azure"
 openai.api_base = "https://mindfuel.openai.azure.com/"
 openai.api_version = "2023-07-01-preview"
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://mindfuel.vercel.app","http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["GET","POST","OPTIONS"],
+    allow_headers=["*"]
+)
 
 @app.get("/home")
-def home():
+async def home():
     return {"message": "Hello, World!"}
 
 @app.post('/dividir_tarea')
-def procesar_tarea(tarea: dict):
+async def procesar_tarea(tarea: dict):
     def dividir_tarea_en_pasos(prompt):
         solicitud = [
             {"role": "user", "content": prompt},
-            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, sin explayarte tanto:"}
+            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, en una oracion, sin explayarte demasiado:"}
         ]
 
         response = openai.ChatCompletion.create(
             engine="mindfuel",
             messages=solicitud,
             temperature=0.7,
-            max_tokens=200,
+            max_tokens=150,
             top_p=0.95,
             frequency_penalty=0,
             presence_penalty=0,
@@ -50,3 +58,7 @@ def procesar_tarea(tarea: dict):
     else:
         respuesta = dividir_tarea_en_pasos(tarea_texto)
         return respuesta
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=10000)

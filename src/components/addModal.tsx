@@ -54,7 +54,7 @@ export default function AddModal({
             <div className="absolute bottom-[2px] w-[50%] rounded-full border-[2px] border-teal"></div>
           )}
         </Button>
-        <div className="absolute bottom-0 w-full border-[1px] border-gray-100"></div>
+        <div className="absolute bottom-0 w-full border border-gray-100"></div>
       </div>
       {selectedTab == "tareas" ? (
         <div {...swipeLeftHandler}>{TaskModal}</div>
@@ -64,3 +64,4 @@ export default function AddModal({
     </>
   );
 }
+//&sfdgfad

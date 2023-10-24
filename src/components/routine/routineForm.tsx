@@ -9,13 +9,13 @@ import toast from "react-hot-toast";
 import { dayOptions, orderDays } from "~/lib/days";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useRoutines } from "~/hooks/useRoutines";
-import TimeForm from "../timeForm";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Command, CommandGroup, CommandItem } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Checkbox } from "../ui/checkbox";
 import Tooltip from "../auth/tooltip";
+import TimeForm from "../timeForm";
 
 const categories = [
   {
@@ -108,7 +108,7 @@ export default function RoutineForm({
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [isClockOpen, setIsClockOpen] = useState(false);
   const [isComboboxOpen, setIsComboboxOpen] = useState(false);
-  const [activeTaskIndex, setActiveTaskIndex] = useState<number>();
+  const [activeTaskIndex, setActiveTaskIndex] = useState<number>(0);
 
   const addEmptyTask = () => {
     setRoutine({
@@ -168,13 +168,13 @@ export default function RoutineForm({
     setEmptyTaskError(false);
     setSaving(true);
 
-    if (routine.name == "") {
+    if (routine.name.trim() == "") {
       setNameError(true);
       return setSaving(false);
     }
 
     for (const task of routine.tasks) {
-      if (task.name == "") {
+      if (task.name.trim() == "") {
         setEmptyTaskError(true);
         return setSaving(false);
       }
@@ -248,15 +248,16 @@ export default function RoutineForm({
   }
 
   return (
-    <motion.div
-      initial={{ scale: 0.98 }}
-      animate={{ scale: 1 }}
-      className="p-5"
-    >
+    <div className="p-5">
       {mode == "edit" && <h2 className="mb-5 text-xl">Editar rutina</h2>}
       <form onSubmit={handleSubmit}>
         <fieldset disabled={saving} className="group">
-          <div className="flex flex-col gap-4 group-disabled:opacity-50">
+          <motion.div
+            initial={{ x: mode != "edit" ? -10 : 0, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col gap-4 group-disabled:opacity-50"
+          >
             <span className="-mt-3">
               {orderDays(routine.days).length == 33
                 ? "Todos los dias"
@@ -268,11 +269,10 @@ export default function RoutineForm({
               {dayOptions.map((day) => (
                 <button
                   key={day.value}
-                  className={`no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100 ${
-                    routine.days.includes(day.value)
-                      ? "border-[1px] border-teal"
-                      : ""
-                  }`}
+                  className={cn(
+                    "no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100",
+                    routine.days.includes(day.value) && "border border-teal"
+                  )}
                   onClick={(e) => {
                     e.preventDefault();
                     if (!routine.days.includes(day.value)) {
@@ -341,54 +341,56 @@ export default function RoutineForm({
               onClick={(e) => e.preventDefault()}
             >
               <span>Categoría</span>
-              <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={isComboboxOpen}
-                    className="no-highlight w-[200px] justify-between border-gray-400"
-                  >
-                    {routine.category
-                      ? categories.find(
-                          (category) => category.value === routine.category
-                        )?.label || "Seleccionar categoría"
-                      : "Seleccionar categoría"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandGroup>
-                      {categories.map((category) => (
-                        <CommandItem
-                          key={category.value}
-                          onSelect={(currentValue) => {
-                            setRoutine({
-                              ...routine,
-                              category:
-                                currentValue == routine.category
-                                  ? ""
-                                  : currentValue,
-                            });
-                            setIsComboboxOpen(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              routine.category === category.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {category.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              <div className="no-highlight">
+                <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
+                  <PopoverTrigger>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={isComboboxOpen}
+                      className="no-highlight w-[200px] justify-between border-gray-400"
+                    >
+                      {routine.category
+                        ? categories.find(
+                            (category) => category.value === routine.category
+                          )?.label || "Seleccionar categoría"
+                        : "Seleccionar categoría"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandGroup>
+                        {categories.map((category) => (
+                          <CommandItem
+                            key={category.value}
+                            onSelect={(currentValue) => {
+                              setRoutine({
+                                ...routine,
+                                category:
+                                  currentValue == routine.category
+                                    ? ""
+                                    : currentValue,
+                              });
+                              setIsComboboxOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                routine.category === category.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {category.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
             </label>
             <label
               className="flex flex-col gap-3"
@@ -428,7 +430,7 @@ export default function RoutineForm({
                   {routine.tasks.map((task, index) => (
                     <motion.div
                       initial={{
-                        y: task.name == "" ? -3 : 0,
+                        y: task.name == "" && index != 0 ? -3 : 0,
                         x: 0,
                         opacity: task.name == "" ? 0.5 : 1,
                       }}
@@ -479,9 +481,10 @@ export default function RoutineForm({
                         />
                       </div>
                       <XMarkIcon
-                        className={`no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600 ${
-                          index == 0 ? "cursor-auto opacity-0" : ""
-                        }`}
+                        className={cn(
+                          "no-highlight h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-600",
+                          index == 0 && "cursor-auto opacity-0"
+                        )}
                         onClick={() => {
                           if (index != 0) removeTask(index);
                         }}
@@ -491,7 +494,7 @@ export default function RoutineForm({
                 </AnimatePresence>
               </div>
             </label>
-          </div>
+          </motion.div>
           <div
             className={`flex pt-8 ${
               mode == "edit" ? "justify-between" : "justify-end"
@@ -502,7 +505,7 @@ export default function RoutineForm({
                 onClick={() => {
                   deleteRoutine({ id });
                 }}
-                className="no-highlight flex cursor-pointer items-center rounded-md border-[1px] border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
+                className="no-highlight flex cursor-pointer items-center rounded-md border border-red-500 p-2 text-red-500 transition-colors active:bg-red-500 active:text-white lg:hover:bg-red-500 lg:hover:text-white"
               >
                 <TrashIcon className="h-5 w-5" />
               </div>
@@ -523,6 +526,6 @@ export default function RoutineForm({
           </div>
         </fieldset>
       </form>
-    </motion.div>
+    </div>
   );
 }

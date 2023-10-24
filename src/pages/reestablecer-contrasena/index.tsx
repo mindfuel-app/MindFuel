@@ -10,6 +10,7 @@ import Logo from "~/components/auth/logo";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
 import Title from "~/components/auth/title";
+import { cn } from "~/lib/utils";
 
 export default function ReestablecerContraseña() {
   const [isFormDisabled, setIsFormDisabled] = useState(false);
@@ -94,18 +95,20 @@ export default function ReestablecerContraseña() {
                   <div className="flex flex-col gap-2 group-disabled:opacity-50">
                     <label className="flex flex-col group-disabled:cursor-not-allowed">
                       <span
-                        className={`ml-1 font-medium ${
-                          isEmailWrong ? "text-red-500" : ""
-                        }`}
+                        className={cn(
+                          "ml-1 font-medium",
+                          isEmailWrong && "text-red-500"
+                        )}
                         onClick={(e) => e.preventDefault()}
                       >
                         Email
                       </span>
                       <input
                         type="text"
-                        className={`w-full min-w-[280px] rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed ${
-                          isEmailWrong ? "border-red-500" : ""
-                        }`}
+                        className={cn(
+                          "w-full min-w-[280px] rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed",
+                          isEmailWrong && "border-red-500"
+                        )}
                         {...register("email")}
                       />
                       {isEmailWrong && (
