@@ -4,7 +4,7 @@ import ProfileLayout from "~/components/layouts/profileLayout";
 import { motion } from "framer-motion";
 import NotFoundPage from "~/pages/404";
 import { api } from "~/utils/api";
-import { Progress } from "~/components/ui/progressBar";
+import { ProgressLevel } from "~/components/ui/progressBar";
 import { useEffect, useState } from "react";
 
 // const userStats = [
@@ -59,7 +59,8 @@ export default function Profile() {
           header={
             <Header
               level={pointsData?.levelNumber ?? 0}
-              points={pointsData?.puntos ?? 0}
+              userPoints={pointsData?.puntos ?? 0}
+              currentLevelPoints={pointsData?.currentLevelPoints ?? 0}
               nextLevelPoints={
                 pointsData?.nextLevelPoints ?? pointsData?.puntos ?? 0
               }
@@ -68,7 +69,7 @@ export default function Profile() {
           sessionData={sessionData}
         >
           <div className="relative flex w-full items-center py-3">
-            <div className="absolute left-0 top-0 h-1/2 w-full bg-teal/70">
+            <div className="absolute left-0 top-0 h-1/2 w-full bg-teal/90">
               <span className="absolute bottom-1 left-1/2 -translate-x-2 text-2xl text-white">
                 {name}
               </span>
@@ -133,46 +134,50 @@ function Section({
 
 function Header({
   level,
-  points,
+  userPoints,
+  currentLevelPoints,
   nextLevelPoints,
 }: {
   level: number;
-  points: number;
+  userPoints: number;
+  currentLevelPoints: number;
   nextLevelPoints: number;
 }) {
-  const [progress, setProgress] = useState((points / nextLevelPoints) * 100);
+  const levelPoints = userPoints - currentLevelPoints;
+  const targetPoints = nextLevelPoints - currentLevelPoints;
+
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (progress >= points) return;
+    if (progress >= levelPoints) return;
 
-    const addProgress = points - progress > 100 ? 100 : 10;
+    const addProgress = levelPoints - progress > 100 ? 100 : 10;
 
     const interval = setInterval(() => {
       setProgress((progress) => Math.round((progress + addProgress) / 10) * 10);
     }, 10);
 
     return () => clearInterval(interval);
-  }, [progress, points]);
+  }, [levelPoints, progress]);
 
   return (
-    <div className="flex w-full items-center justify-between bg-teal/70 px-3 pb-2 pt-3">
-      <div className="flex w-full items-center gap-4">
-        <div className="relative flex h-10 w-12 items-center justify-center rounded-full bg-teal text-lg text-white">
-          <span className="z-20">{level}</span>
-          <div className="absolute left-1/2 top-1/2 z-10 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange"></div>
+    <div className="flex w-full items-center justify-between bg-teal/90 px-3 pb-2 pt-3">
+      <div className="flex w-full items-center gap-3">
+        <div className="flex h-10 w-12 items-center justify-center rounded-full bg-[#52c4c4] text-lg text-white">
+          <span className="text-2xl">{level}</span>
         </div>
-        <div className="flex w-full flex-col gap-1">
+        <div className="flex w-full flex-col">
           <span className="text-white">Tu nivel</span>
           <div className="flex max-w-[400px] items-center gap-2">
-            <Progress
+            <ProgressLevel
               value={
-                ((progress > 0 ? progress : points) / nextLevelPoints) * 100
+                ((progress >= 0 ? progress : levelPoints) / targetPoints) * 100
               }
               color="black"
-              className="h-3 border border-teal bg-white"
+              className="h-3 bg-white"
             />
             <span className="text-white">
-              {progress > 0 ? progress : points}/{nextLevelPoints}
+              {userPoints}/{nextLevelPoints}
             </span>
           </div>
         </div>

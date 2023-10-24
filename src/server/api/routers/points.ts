@@ -91,6 +91,15 @@ export const pointsRouter = createTRPCRouter({
         });
       }
 
+      const currentLevelPoints = await ctx.prisma.level.findUnique({
+        where: {
+          number: userPoints.levelNumber,
+        },
+        select: {
+          points: true,
+        },
+      });
+
       await ctx.prisma.user.update({
         where: {
           id: input.user_id,
@@ -102,6 +111,7 @@ export const pointsRouter = createTRPCRouter({
 
       return {
         ...userPoints,
+        currentLevelPoints: currentLevelPoints?.points,
         nextLevelPoints: nextLevel?.points,
       };
     }),
