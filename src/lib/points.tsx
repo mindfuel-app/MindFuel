@@ -9,6 +9,7 @@ const routinePoints = {
 
 const selfCarePoints = {
   completedWater: 80,
+  completedGreetings: 80,
 };
 
 const bonusPoints = {
