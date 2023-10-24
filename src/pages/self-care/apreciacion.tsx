@@ -27,12 +27,11 @@ export default function Apreciacion() {
   const [hasPreviousGreeting, setHasPreviousGreeting] = useState(
     previousGreetings &&
       previousGreetings.filter((greeting) => {
-        return false;
-        // return (
-        //   greeting.createdAt == today.getDate() &&
-        //   greeting.createdAt == today.getMonth() &&
-        //   greeting.createdAt == today.getFullYear()
-        // );
+        return (
+          greeting.createdAt.getDate() == today.getDate() &&
+          greeting.createdAt.getMonth() == today.getMonth() &&
+          greeting.createdAt.getFullYear() == today.getFullYear()
+        );
       }).length > 0
   );
 
