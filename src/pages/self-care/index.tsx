@@ -16,8 +16,8 @@ type Option = {
 
 const options: Option[] = [
   {
-    title: "Mindfulness",
-    href: "/mindfulness",
+    title: "Respiración consciente",
+    href: "/respiracion-consciente",
     description: "Disfruta el hoy y mantente en el presente.",
     image: "/mindfulness.png",
   },
