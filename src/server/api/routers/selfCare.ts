@@ -61,7 +61,7 @@ export const selfCareRouter = createTRPCRouter({
           user_id: input.user_id,
         },
       });
-      return { values };
+      return values;
     }),
 
   updateWater: protectedProcedure

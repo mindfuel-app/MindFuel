@@ -171,4 +171,5 @@ model greeting{
     id String @id @default(cuid())
     user_id String
     greeting String @db.Text
+    createdAt DateTime @default(now())
 }
