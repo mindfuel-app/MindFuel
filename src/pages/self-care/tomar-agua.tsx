@@ -25,6 +25,8 @@ export default function TomarAgua() {
         return index < data.water;
       })
   );
+  const [finalMessage, setFinalMessage] = useState(false);
+  const [hasCompletedWater, setHasCompletedWater] = useState(data?.water == 8);
   const utils = api.useContext();
 
   const { mutate: updateWater } = api.selfCare.updateWater.useMutation({
@@ -56,12 +58,26 @@ export default function TomarAgua() {
             src={`/self-care/tomar-agua.png`}
           />
         </div>
-        {!glassesOfWater ? (
+        {hasCompletedWater ? (
           <p className="max-w-[300px] pt-16 text-center text-lg">
-            Ya has cumplido con tu meta diaria de tomar 8 vasos de agua. Hazlo
-            de nuevo mañana y no olvides de mantenerte siempre bien hidratado
+            Hoy ya has cumplido con tu meta diaria de tomar 8 vasos de agua. Si
+            quieres puedes{" "}
+            <span
+              onClick={() => {
+                updateWater({
+                  water: 0,
+                  user_id: sessionData.user.id,
+                });
+                setGlassesOfWater(Array(8).fill(false));
+                setHasCompletedWater(false);
+              }}
+              className="text-sky-500 active:underline"
+            >
+              hacerlo de vuelta
+            </span>{" "}
+            y sino vuelve mañana!
           </p>
-        ) : glassesOfWater.filter(Boolean).length < 8 ? (
+        ) : !finalMessage ? (
           <>
             <p className="max-w-[290px] text-center text-xl">
               Es recomendable tomar 8 vasos de agua (2L) al día para mantenerse{" "}
@@ -105,6 +121,7 @@ export default function TomarAgua() {
                           user_id: sessionData.user.id,
                           points: selfCarePoints.completedWater,
                         });
+                        setFinalMessage(true);
                       }
                     }}
                   />
