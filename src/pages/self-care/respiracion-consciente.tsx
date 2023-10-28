@@ -105,7 +105,7 @@ function StepCard({
     <motion.div
       initial={{ opacity: 0.5, x: 10 }}
       animate={{ opacity: 1, x: 0 }}
-      className="mt-7 flex w-[85%] max-w-sm flex-col items-center gap-8 rounded-xl bg-cornflower-blue py-5 text-center"
+      className="mt-4 flex w-[85%] max-w-sm flex-col items-center gap-8 rounded-xl bg-cornflower-blue py-5 text-center"
     >
       <div className="flex h-16 w-16 items-center justify-center rounded-full border-8 border-white bg-transparent text-3xl font-medium text-white">
         {progress}
