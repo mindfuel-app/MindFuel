@@ -17,7 +17,11 @@ export default function RespiracionConsciente() {
   return (
     <SelfCareLayout sessionData={sessionData}>
       {progress == 0 ? (
-        <div className="flex max-w-sm flex-col items-center gap-4 px-[18px] pt-8 text-center">
+        <motion.div
+          initial={{ opacity: 0.5, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex max-w-sm flex-col items-center gap-4 px-[18px] pt-8 text-center"
+        >
           <p>
             La <strong>respiración consciente</strong> consiste en desviar la
             atención hacia diferentes puntos para fijarnos en las veces que
@@ -46,7 +50,7 @@ export default function RespiracionConsciente() {
           >
             Empezar
           </Button>
-        </div>
+        </motion.div>
       ) : (
         <StepCard
           progress={progress}
@@ -99,7 +103,7 @@ function StepCard({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0.5, x: -10 }}
+      initial={{ opacity: 0.5, x: 10 }}
       animate={{ opacity: 1, x: 0 }}
       className="mt-7 flex w-[85%] max-w-sm flex-col items-center gap-8 rounded-xl bg-cornflower-blue py-5 text-center"
     >
