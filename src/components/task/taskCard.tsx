@@ -42,7 +42,7 @@ export default function TaskCard({
   const [isTaskDone, setIsTaskDone] = useState(isChecked || false);
   const [showCheck, setShowCheck] = useState(isChecked || false);
   const [showPointsAnimation, setShowPointsAnimation] = useState(false);
-  const { setTaskDone, setTaskUndone } = useTasks({});
+  const { setTaskDone } = useTasks({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -165,20 +165,16 @@ export default function TaskCard({
           )}
           <div
             onClick={() => {
-              setShowCheck(!showCheck);
+              if (showCheck) return;
+              setShowCheck(true);
               setTimeout(() => {
-                if (showCheck) {
-                  setIsTaskDone(false);
-                  setTaskUndone({ tasks: [id] });
-                } else {
-                  addPoints({
-                    user_id: user.id,
-                    points: rewardPoints,
-                  });
-                  setShowPointsAnimation(true);
-                  setIsTaskDone(true);
-                  setTaskDone({ task_id: id });
-                }
+                addPoints({
+                  user_id: user.id,
+                  points: rewardPoints,
+                });
+                setShowPointsAnimation(true);
+                setIsTaskDone(true);
+                setTaskDone({ task_id: id });
               }, 250);
             }}
             className="no-highlight group absolute right-1 flex h-8 w-8 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
