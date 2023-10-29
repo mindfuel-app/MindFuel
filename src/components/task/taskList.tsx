@@ -7,6 +7,8 @@ import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { NoSymbolIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
+import { useTasks } from "~/hooks/useTasks";
+import { cn } from "~/lib/utils";
 
 export default function TaskList() {
   const user = useUser();
@@ -17,6 +19,8 @@ export default function TaskList() {
   } = api.tasks.getTasks.useQuery({
     user_id: user.id,
   });
+  const { deleteCompletedTasks } = useTasks({});
+
   const [showSubMenu, setShowSubMenu] = useState(false);
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
 
@@ -36,11 +40,19 @@ export default function TaskList() {
     ? userTasks
     : userTasks.filter((task) => task.done == false);
 
+  const areCompletedTasks =
+    pendingTasks.filter((task) => task.done == true).length > 0;
+
   return (
     <motion.div
       initial={{ x: 10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="padding-footer-xl relative flex flex-col items-center text-lg font-medium"
+      className={cn(
+        "relative flex flex-col items-center text-lg font-medium",
+        areCompletedTasks && showCompletedTasks
+          ? "padding-footer-lg"
+          : "padding-footer-xl"
+      )}
     >
       <div
         onClick={() => {
@@ -100,6 +112,17 @@ export default function TaskList() {
               />
             ))}
           </ul>
+          {showCompletedTasks && areCompletedTasks && (
+            <span
+              onClick={() => {
+                deleteCompletedTasks({ user_id: user.id });
+                void refetchTasks();
+              }}
+              className="flex w-full items-center justify-start pl-6 pt-2 text-base text-gray-800 transition-colors active:text-sky-500"
+            >
+              Borrar tareas completadas
+            </span>
+          )}
         </>
       )}
     </motion.div>
