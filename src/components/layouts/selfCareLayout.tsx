@@ -27,7 +27,7 @@ export default function SelfCareLayout({
       >
         <div className="flex h-screen flex-col">
           <Header onClose={onClose} />
-          <main className="flex h-full flex-col items-center bg-alabaster p-3">
+          <main className="flex h-full flex-col items-center p-3">
             {children}
           </main>
           <Footer />

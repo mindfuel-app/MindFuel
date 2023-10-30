@@ -30,7 +30,7 @@ export default function Header() {
 
   if (!sessionData)
     return (
-      <div className="flex items-center justify-between bg-alabaster p-3">
+      <div className="flex items-center justify-between p-3">
         <span>No ha iniciado sesión</span>
         <Link href="/signin" className="hidden min-[360px]:flex">
           Ir a inicio sesión
@@ -39,7 +39,7 @@ export default function Header() {
     );
 
   return (
-    <div className="flex items-center justify-between bg-alabaster p-3 pt-5 font-medium">
+    <div className="flex items-center justify-between p-3 pt-5 font-medium">
       <div className="relative flex items-center gap-1">
         <span>Bienvenido, </span>
         <ClickAwayListener onClickAway={() => setShowLogout(false)}>

@@ -105,7 +105,7 @@ export default function Routine() {
 
   return (
     <RoutineLayout title={routine.name}>
-      <div className="flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
+      <div className="flex h-full flex-col items-center gap-6 px-6 pt-8">
         <Progress
           className="max-w-lg"
           value={(100 / tasks.length) * routineProgress}
