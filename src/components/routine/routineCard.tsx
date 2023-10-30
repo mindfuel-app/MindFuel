@@ -96,7 +96,7 @@ export default function RoutineCard({
       {isCardOpened && tasks.length > 0 && (
         <Link
           href={`/rutinas/${id}`}
-          className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-teal px-4 py-[6px]"
+          className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-2xl bg-teal px-3 py-1.5"
         >
           <span className="text-base">Empezar rutina</span>
         </Link>
