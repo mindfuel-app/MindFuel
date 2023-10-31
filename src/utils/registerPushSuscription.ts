@@ -1,6 +1,6 @@
 export function registerServiceWorker() {
   return navigator.serviceWorker
-    .register("public\push-sw.js")
+    .register("publicpush-sw.js")
     .then(function (registration) {
       return registration;
     })
@@ -22,12 +22,12 @@ export function askPermission(userId: string) {
     if (permissionResult !== "granted") {
       throw new Error("We weren't granted permission.");
     } else if (permissionResult === "granted") {
-      subscribeUserToPush(userId);
+      subscribeUserToPush();
     }
   });
 }
 
-export function subscribeUserToPush(userId: string) {
+export function subscribeUserToPush() {
   void navigator.serviceWorker
     .register("./push-sw.js")
     .then(function (registration) {
@@ -39,7 +39,7 @@ export function subscribeUserToPush(userId: string) {
 
       return registration.pushManager.subscribe(subscribeOptions);
     })
-    .then(function (pushSubscription) {
+    .then((pushSubscription) => {
       return pushSubscription;
     });
 }
