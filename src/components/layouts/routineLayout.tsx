@@ -1,15 +1,23 @@
 import Head from "next/head";
 import BackButton from "../backButton";
+import { UserProvider } from "~/lib/UserContext";
+import { type Session } from "next-auth";
 
 export default function RoutineLayout({
   title,
   children,
+  sessionData,
 }: {
   title: string;
   children: React.ReactNode;
+  sessionData: Session;
 }) {
   return (
-    <>
+    <UserProvider
+      id={sessionData.user.id}
+      name={sessionData.user.name || ""}
+      email={sessionData.user.email || ""}
+    >
       <Head>
         <title>{title}</title>
       </Head>
@@ -19,6 +27,6 @@ export default function RoutineLayout({
         </div>
         {children}
       </div>
-    </>
+    </UserProvider>
   );
 }

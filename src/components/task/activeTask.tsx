@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Checkbox } from "~/components/ui/checkbox";
 import { CircularProgress } from "@mui/material";
+import { api } from "~/utils/api";
+import { useUser } from "~/lib/UserContext";
 
 function LoadingSteps() {
   return (
@@ -16,13 +18,32 @@ function LoadingSteps() {
 function CountdownTimer({
   initialSeconds,
   isRunning,
+  taskName,
 }: {
   initialSeconds: number;
   isRunning: boolean;
+  taskName: string;
 }) {
+  const { id } = useUser();
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
+  const { mutate: sendNotification } =
+    api.pushSuscriptions.sendPushToOne.useMutation({
+      onSuccess: () => {
+        console.log("Notification sent");
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
 
   useEffect(() => {
+    if (secondsLeft == 0) {
+      return sendNotification({
+        user_id: id,
+        title: "¿Sigues ahí?",
+        body: `¡Se acabó el tiempo para ${taskName}!`,
+      });
+    }
     if (secondsLeft > 0 && isRunning) {
       const interval = setInterval(() => {
         setSecondsLeft((prevSeconds) => prevSeconds - 1);
@@ -116,6 +137,7 @@ export default function ActiveTask({
       </div>
       {estimatedTime && (
         <CountdownTimer
+          taskName={name}
           initialSeconds={estimatedTime}
           isRunning={isTimerRunning}
         />

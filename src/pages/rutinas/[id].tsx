@@ -18,8 +18,9 @@ import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
 import RoutineLayout from "~/components/layouts/routineLayout";
 import { usePoints } from "~/hooks/usePoints";
 import { routinePoints, taskPoints } from "~/lib/points";
+import { type Session } from "next-auth";
 
-function ErrorPage() {
+function ErrorPage({ sessionData }: { sessionData: Session }) {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ function ErrorPage() {
   });
 
   return (
-    <RoutineLayout title="Mindfuel">
+    <RoutineLayout title="Mindfuel" sessionData={sessionData}>
       {seconds < 5 ? (
         <SingleRoutineSkeleton />
       ) : (
@@ -100,11 +101,11 @@ export default function Routine() {
   if (!sessionData) return;
 
   if (!tasks || !routine) {
-    return <ErrorPage />;
+    return <ErrorPage sessionData={sessionData} />;
   }
 
   return (
-    <RoutineLayout title={routine.name}>
+    <RoutineLayout title={routine.name} sessionData={sessionData}>
       <div className="flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
         <Progress
           className="max-w-lg"
