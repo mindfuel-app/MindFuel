@@ -50,7 +50,7 @@ export const pushRouter = createTRPCRouter({
 
   sendPushToOne: publicProcedure
     .input(
-      z.object({ user_id: z.string(), title: z.string(), body: z.string() })
+      z.object({ user_id: z.string(), title: z.string(), body: z.string(), url: z.string()})
     )
     .mutation(async ({ ctx, input }) => {
       const pushSubscriptions = await ctx.prisma.pushSubscription.findMany({
@@ -62,7 +62,7 @@ export const pushRouter = createTRPCRouter({
         const payload = JSON.stringify({
           title: input.title,
           body: input.body,
-          //body: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+          url: input.url,
         });
 
         const ps = JSON.parse(

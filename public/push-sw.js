@@ -3,7 +3,6 @@
 self.addEventListener("push", (event) => {
   if (!event.target) return "error";
   const data = event.data.json();
-  console.log("New notification", data);
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
@@ -13,6 +12,8 @@ self.addEventListener("push", (event) => {
   );
 });
 self.addEventListener('notificationclick', (event) => {
-  event.waitUntil(self.clients.openWindow('/'));
+  const data = event.data.json();
+  const url = data.url;
+  event.waitUntil(self.clients.openWindow(url));
   event.notification.close();
 });

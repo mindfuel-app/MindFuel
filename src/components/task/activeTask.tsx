@@ -42,6 +42,7 @@ function CountdownTimer({
         user_id: id,
         title: "¿Sigues ahí?",
         body: `¡Se acabó el tiempo para ${taskName}!`,
+        url : "/home?tab=rutinas",
       });
     }
     if (secondsLeft > 0 && isRunning) {
