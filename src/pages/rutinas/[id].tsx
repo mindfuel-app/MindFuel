@@ -219,7 +219,10 @@ function SuccessMessage({
     >
       <strong className="text-lg">¡Gran trabajo!</strong>
       <span className="text-center">
-        Has completado toda la rutina. Ganaste <strong>{points} puntos</strong>.
+        {completedFullRoutine
+          ? "Has completado toda la rutina."
+          : "Has completado casi toda la rutina."}{" "}
+        Ganaste <strong>{points} puntos</strong>.
       </span>
       <Image
         className="mb-5 mt-2 md:mb-10"

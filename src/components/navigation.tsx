@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaUserFriends, FaHandHoldingHeart } from "react-icons/fa";
+import { FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import router from "next/router";
@@ -85,6 +85,7 @@ export function Footer() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

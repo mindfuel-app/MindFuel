@@ -8,7 +8,6 @@ import { useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { NoSymbolIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useTasks } from "~/hooks/useTasks";
-import { cn } from "~/lib/utils";
 
 export default function TaskList() {
   const user = useUser();

@@ -51,6 +51,7 @@ function CountdownTimer({
 
       return () => clearInterval(interval);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secondsLeft, isRunning]);
 
   const hours = Math.floor(secondsLeft / 3600);

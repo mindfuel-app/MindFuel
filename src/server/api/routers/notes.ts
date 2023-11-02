@@ -1,9 +1,8 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { error } from "console";
 
 export const notesRouter = createTRPCRouter({
-    getNotes: protectedProcedure
+  getNotes: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
       const notes = await ctx.prisma.note.findMany({
@@ -15,7 +14,7 @@ export const notesRouter = createTRPCRouter({
       return notes;
     }),
 
-    createNote: protectedProcedure
+  createNote: protectedProcedure
     .input(z.object({ userId: z.string(), note: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const note = await ctx.prisma.note.create({
@@ -28,7 +27,7 @@ export const notesRouter = createTRPCRouter({
       return note;
     }),
 
-    deleteNote: protectedProcedure
+  deleteNote: protectedProcedure
     .input(z.object({ noteId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const note = await ctx.prisma.note.delete({
