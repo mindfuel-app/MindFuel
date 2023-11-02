@@ -29,6 +29,7 @@ function NavigationItem({
       href={href}
       className={`${
         router.pathname.startsWith(href) ||
+        (router.pathname.startsWith("/rutinas") && href == "/home") ||
         (name == "Perfil" && routerName == userName)
           ? "text-teal"
           : "text-gray-700"

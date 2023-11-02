@@ -1,13 +1,6 @@
-import { CheckIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import {
-  PlayIcon,
-  ChevronDoubleRightIcon,
-  PauseIcon,
-} from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { Progress } from "~/components/ui/progressBar";
 import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { motion } from "framer-motion";
@@ -19,6 +12,8 @@ import RoutineLayout from "~/components/layouts/routineLayout";
 import { usePoints } from "~/hooks/usePoints";
 import { routinePoints, taskPoints } from "~/lib/points";
 import { type Session } from "next-auth";
+import { Footer } from "~/components/navigation";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 function ErrorPage({ sessionData }: { sessionData: Session }) {
   const [seconds, setSeconds] = useState(0);
@@ -68,7 +63,6 @@ export default function Routine() {
   });
   const [routineProgress, setRoutineProgress] = useState(0);
   const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
-  const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [rewardPoints, setRewardPoints] = useState(0);
 
   useEffect(() => {
@@ -107,7 +101,24 @@ export default function Routine() {
   return (
     <RoutineLayout title={routine.name} sessionData={sessionData}>
       <div className="flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
-        <Progress
+        <div className="absolute top-0 flex w-full flex-col bg-teal p-4 font-medium text-white">
+          {" "}
+          <Link href={`/home?tab=rutinas`}>
+            <XMarkIcon className="absolute right-5 top-5 h-6 w-6" />
+          </Link>
+          <h2 className="text-xl">{routine.name}</h2>
+          <span className="text-[#93DADA]">{`${tasks.length} ${
+            tasks.length == 1 ? "tarea" : "tareas"
+          }`}</span>
+          <span className="font-normal">
+            {routine.days.length == 33
+              ? "Todos los dias de la semana"
+              : routine.days.length == 0
+              ? "Nunca"
+              : routine.days}
+          </span>
+        </div>
+        {/* <Progress
           className="max-w-lg"
           value={(100 / tasks.length) * routineProgress}
         />
@@ -117,10 +128,10 @@ export default function Routine() {
             tasks.length == 1 ? "tarea" : "tareas"
           }`}</span>
           <span className="text-sm">{routine.days}</span>
-        </div>
+        </div> */}
         {routineProgress < tasks.length && (
           <>
-            <div className="flex w-full flex-col pb-[110px] text-left font-medium">
+            <div className="flex w-full flex-col pb-[110px] pt-24 text-left font-medium">
               <div className="jutify-start flex w-full">Tareas</div>
               <ul className="flex max-w-xl flex-col gap-3 py-3">
                 {tasks.map((task, index) => {
@@ -130,7 +141,14 @@ export default function Routine() {
                         name={task.name}
                         usesAI={task.usesAI}
                         estimatedTime={task.estimated_time || null}
-                        isTimerRunning={isTimerRunning}
+                        increaseRoutineProgress={() =>
+                          setRoutineProgress(
+                            (routineProgress) => routineProgress + 1
+                          )
+                        }
+                        increaseSkippedTasks={() =>
+                          setSkippedTasks((prev) => [...prev, routineProgress])
+                        }
                         key={task.id}
                       />
                     );
@@ -149,50 +167,11 @@ export default function Routine() {
                 })}
               </ul>
             </div>
-            <div className="no-highlight fixed bottom-0 w-full border-t border-gray-300 bg-white py-3">
-              <div
-                onClick={() => {
-                  if (routineProgress < tasks.length)
-                    setRoutineProgress(routineProgress + 1);
-                }}
-                className="absolute -top-8 left-1/2 flex h-14 w-14 -translate-x-1/2 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-16 min-[425px]:w-16"
-              >
-                <CheckIcon className="h-8 w-8 text-white" />
-              </div>
-              <div className="flex w-full justify-around">
-                <button
-                  onClick={() => setIsTimerRunning(!isTimerRunning)}
-                  className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
-                >
-                  {isTimerRunning ? (
-                    <PauseIcon className="h-6 w-6" />
-                  ) : (
-                    <PlayIcon className="h-6 w-6" />
-                  )}
-                  <span className="text-xs font-medium min-[375px]:text-sm">
-                    {isTimerRunning ? "Pausar" : "Reanudar"}
-                  </span>
-                </button>
-                <button
-                  onClick={() => {
-                    if (routineProgress < tasks.length) {
-                      setSkippedTasks((prev) => [...prev, routineProgress]);
-                      setRoutineProgress(routineProgress + 1);
-                    }
-                  }}
-                  className={`flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
-                >
-                  <ChevronDoubleRightIcon className="h-5 w-5" />
-                  <span className="text-xs font-medium min-[375px]:text-sm">
-                    Saltear
-                  </span>
-                </button>
-              </div>
-            </div>
+            <Footer />
           </>
         )}
         {routineProgress == tasks.length && (
-          <div className="pb-20">
+          <div className="pb-20 pt-36">
             <FinalMessage
               completionStatus={
                 skippedTasks.length == 0

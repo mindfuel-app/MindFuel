@@ -21,12 +21,7 @@ export default function RoutineLayout({
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="flex h-screen flex-col">
-        <div className="flex w-full items-center justify-start pl-5 pt-5">
-          <BackButton href={`/home?tab=rutinas`} />
-        </div>
-        {children}
-      </div>
+      <div className="flex h-screen flex-col">{children}</div>
     </UserProvider>
   );
 }

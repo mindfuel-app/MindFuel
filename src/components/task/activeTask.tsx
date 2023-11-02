@@ -5,6 +5,14 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { CircularProgress } from "@mui/material";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
+import * as Dialog from "@radix-ui/react-dialog";
+import { CheckIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDoubleRightIcon,
+  PauseCircleIcon,
+  PlayCircleIcon,
+} from "@heroicons/react/24/solid";
+import { cn } from "~/lib/utils";
 
 function LoadingSteps() {
   return (
@@ -18,34 +26,23 @@ function LoadingSteps() {
 function CountdownTimer({
   initialSeconds,
   isRunning,
-  taskName,
+  onComplete,
 }: {
   initialSeconds: number;
   isRunning: boolean;
-  taskName: string;
+  onComplete: () => void;
 }) {
-  const { id } = useUser();
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
-  const { mutate: sendNotification } =
-    api.pushSuscriptions.sendPushToOne.useMutation({
-      onSuccess: () => {
-        console.log("Notification sent");
-      },
-      onError: (error) => {
-        console.error(error);
-      },
-    });
+  const [isTimerRunning, setIsTimerRunning] = useState(isRunning);
+
+  useEffect(() => setIsTimerRunning(isRunning), [isRunning]);
 
   useEffect(() => {
     if (secondsLeft == 0) {
-      return sendNotification({
-        user_id: id,
-        title: "¿Sigues ahí?",
-        body: `¡Se acabó el tiempo para ${taskName}!`,
-        url: "/home?tab=rutinas",
-      });
+      return onComplete();
     }
-    if (secondsLeft > 0 && isRunning) {
+
+    if (secondsLeft > 0 && isTimerRunning) {
       const interval = setInterval(() => {
         setSecondsLeft((prevSeconds) => prevSeconds - 1);
       }, 1000);
@@ -53,7 +50,7 @@ function CountdownTimer({
       return () => clearInterval(interval);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [secondsLeft, isRunning]);
+  }, [secondsLeft, isTimerRunning]);
 
   const hours = Math.floor(secondsLeft / 3600);
   const minutes = Math.floor((secondsLeft % 3600) / 60);
@@ -70,10 +67,23 @@ function CountdownTimer({
             .padStart(2, "0")}`}</span>
         </div>
         <div
-          onClick={() => setSecondsLeft(initialSeconds)}
+          onClick={() => {
+            setSecondsLeft(initialSeconds);
+            setIsTimerRunning(true);
+          }}
           className="no-highlight flex cursor-pointer items-center rounded-r-md bg-orange px-2 text-white"
         >
           <span>Re-setear</span>
+        </div>
+        <div
+          onClick={() => setIsTimerRunning((prev) => !prev)}
+          className="ml-3 flex h-7 w-7 items-center justify-center rounded-full bg-orange"
+        >
+          {isTimerRunning ? (
+            <PauseCircleIcon className="h-5 w-5 text-white" />
+          ) : (
+            <PlayCircleIcon className="h-5 w-5 text-white" />
+          )}
         </div>
       </div>
       <Progress
@@ -88,16 +98,30 @@ export default function ActiveTask({
   name,
   usesAI,
   estimatedTime,
-  isTimerRunning,
+  increaseRoutineProgress,
+  increaseSkippedTasks,
 }: {
   name: string;
   usesAI: boolean;
   estimatedTime: number | null;
-  isTimerRunning: boolean;
+  increaseRoutineProgress: () => void;
+  increaseSkippedTasks: () => void;
 }) {
+  const { id } = useUser();
   const [checked, setChecked] = useState<boolean[]>([]);
   const [steps, setSteps] = useState<string[]>();
   const [loadingSteps, setLoadingSteps] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const { mutate: sendNotification } =
+    api.pushSuscriptions.sendPushToOne.useMutation({
+      onSuccess: () => {
+        console.log("Notification sent");
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
+
   const hours = estimatedTime ? Math.floor(estimatedTime / 3600) : null;
   const minutes = estimatedTime
     ? Math.floor((estimatedTime % 3600) / 60)
@@ -137,7 +161,7 @@ export default function ActiveTask({
   }, [usesAI, name]);
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border-2 border-teal bg-teal/20 p-3">
+    <div className="flex flex-col gap-4 rounded-lg border-2 border-teal bg-teal/20 p-3">
       <span className="text-sm">Ahora</span>
       <div className="-mt-2">
         {name}
@@ -149,9 +173,17 @@ export default function ActiveTask({
       </div>
       {estimatedTime && (
         <CountdownTimer
-          taskName={name}
           initialSeconds={estimatedTime}
-          isRunning={isTimerRunning && !loadingSteps}
+          isRunning={!loadingSteps}
+          onComplete={() => {
+            setShowModal(true);
+            sendNotification({
+              user_id: id,
+              title: "¿Sigues ahí?",
+              body: `¡Se acabó el tiempo para ${name}!`,
+              url: "/home?tab=rutinas",
+            });
+          }}
         />
       )}
       {usesAI &&
@@ -183,6 +215,87 @@ export default function ActiveTask({
             No se pudo cargar el desglose de tarea
           </span>
         ))}
+      {(!usesAI || !loadingSteps) && (
+        <div
+          className={cn(
+            "no-highlight flex items-center justify-end gap-3",
+            !usesAI && "-mt-8"
+          )}
+        >
+          <div
+            onClick={() => increaseRoutineProgress()}
+            className="flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-12 min-[425px]:w-12"
+          >
+            <CheckIcon className="h-7 w-7 text-white" />
+          </div>
+          <div
+            onClick={() => {
+              increaseSkippedTasks();
+              increaseRoutineProgress();
+            }}
+            className="flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-12 min-[425px]:w-12"
+          >
+            <ChevronDoubleRightIcon className="h-7 w-7 text-white" />
+          </div>
+        </div>
+      )}
+      <CompletedTimerModal
+        show={showModal}
+        completeTask={() => {
+          increaseRoutineProgress();
+          setShowModal(false);
+        }}
+        skipTask={() => {
+          increaseSkippedTasks();
+          increaseRoutineProgress();
+          setShowModal(false);
+        }}
+      />
     </div>
+  );
+}
+
+function CompletedTimerModal({
+  show,
+  completeTask,
+  skipTask,
+}: {
+  show: boolean;
+  completeTask: () => void;
+  skipTask: () => void;
+}) {
+  return (
+    <Dialog.Root open={show}>
+      <Dialog.Overlay className="fixed inset-0 z-30 bg-[#d9d9d9]/80 data-[state=closed]:animate-[dialog-overlay-hide_200ms] data-[state=open]:animate-[dialog-overlay-show_200ms]" />
+      <Dialog.Content className="fixed left-1/2 top-1/2 z-40 w-full max-w-[75%] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-orange bg-white shadow transition-transform data-[state=closed]:animate-[dialog-content-hide_200ms] data-[state=open]:animate-[dialog-content-show_200ms] min-[500px]:max-w-sm">
+        <div className="flex flex-col items-center gap-5 pt-5 text-center">
+          <p className="px-7 ">
+            El tiempo ha acabado. ¿Deseas continuar con el mismo hábito o
+            saltear al próximo?
+          </p>
+          <div className="no-highlight flex w-full border-t-2 border-orange text-lg text-orange">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                completeTask();
+              }}
+              className="w-1/2 py-2"
+            >
+              Continuar
+            </button>
+            <div className="border border-orange" />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                skipTask();
+              }}
+              className="w-1/2 py-2"
+            >
+              Saltear
+            </button>
+          </div>
+        </div>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }
