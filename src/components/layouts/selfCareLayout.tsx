@@ -5,6 +5,7 @@ import { Footer, TopNavigation } from "~/components/navigation";
 import { UserProvider } from "~/lib/UserContext";
 import BackButton from "../backButton";
 import { FaHandHoldingHeart } from "react-icons/fa";
+import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function SelfCareLayout({
   children,
@@ -15,6 +16,8 @@ export default function SelfCareLayout({
   sessionData: Session;
   onClose?: () => void;
 }) {
+  const windowWidth = useWindowWidth();
+
   return (
     <>
       <Head>
@@ -26,18 +29,24 @@ export default function SelfCareLayout({
         email={sessionData.user.email || ""}
       >
         <div className="flex h-screen flex-col">
-          <Header onClose={onClose} />
+          <Header onClose={onClose} showNavigation={windowWidth >= 1024} />
           <main className="flex h-full flex-col items-center p-3">
             {children}
           </main>
-          <Footer />
+          {windowWidth < 1024 && <Footer />}
         </div>
       </UserProvider>
     </>
   );
 }
 
-function Header({ onClose }: { onClose?: () => void }) {
+function Header({
+  onClose,
+  showNavigation,
+}: {
+  onClose?: () => void;
+  showNavigation: boolean;
+}) {
   const isInMenus = !router.pathname.startsWith("/self-care/");
 
   return (
@@ -47,9 +56,12 @@ function Header({ onClose }: { onClose?: () => void }) {
       ) : (
         <FaHandHoldingHeart className="text-2xl text-teal" />
       )}
-      <TopNavigation />
+      {showNavigation ? (
+        <TopNavigation />
+      ) : (
+        <div className="absolute bottom-0 left-0 w-full border-[3px] border-teal lg:hidden" />
+      )}
       <span className="text-lg font-medium text-teal">Self-care</span>
-      <div className="absolute bottom-0 left-0 w-full border-[3px] border-teal lg:hidden" />
     </div>
   );
 }
