@@ -14,6 +14,6 @@ self.addEventListener("push", (event) => {
 self.addEventListener('notificationclick', (event) => {
   const data = event.data.json();
   const url = data.url;
-  event.waitUntil(self.clients.openWindow(url));
+  event.waitUntil(self.clients.openWindow("/home?tab=rutinas"));
   event.notification.close();
 });
