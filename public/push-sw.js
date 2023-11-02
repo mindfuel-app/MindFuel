@@ -12,3 +12,7 @@ self.addEventListener("push", (event) => {
     })
   );
 });
+self.addEventListener('notificationclick', (event) => {
+  event.waitUntil(self.clients.openWindow('/'));
+  event.notification.close();
+});
