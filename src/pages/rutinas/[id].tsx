@@ -193,8 +193,14 @@ export default function Routine() {
         )}
         {routineProgress == tasks.length && (
           <div className="pb-20">
-            <SuccessMessage
-              completedFullRoutine={skippedTasks.length == 0}
+            <FinalMessage
+              completionStatus={
+                skippedTasks.length == 0
+                  ? "completed"
+                  : skippedTasks.length < tasks.length
+                  ? "partial"
+                  : "none"
+              }
               points={rewardPoints}
             />
           </div>
@@ -204,25 +210,43 @@ export default function Routine() {
   );
 }
 
-function SuccessMessage({
-  completedFullRoutine,
+function FinalMessage({
+  completionStatus,
   points,
 }: {
-  completedFullRoutine: boolean;
+  completionStatus: "completed" | "partial" | "none";
   points: number;
 }) {
+  let message;
+  switch (completionStatus) {
+    case "completed":
+      message = "Has completado toda la rutina. ";
+      break;
+    case "partial":
+      message = "Has completado casi toda la rutina. ";
+      break;
+    case "none":
+      message =
+        "No has completado ninguna tarea de la rutina. Vuelve a intentarlo más tarde.";
+      break;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       className="relative flex w-[300px] flex-col items-center gap-1 rounded-xl border-2 border-teal bg-white p-5 pb-10 pt-8 shadow-xl md:w-[600px] md:pb-12 md:pt-4"
     >
-      <strong className="text-lg">¡Gran trabajo!</strong>
+      <strong className="text-lg">
+        {completionStatus != "none" ? "¡Gran trabajo!" : "¡Sigue intentandolo!"}
+      </strong>
       <span className="text-center">
-        {completedFullRoutine
-          ? "Has completado toda la rutina."
-          : "Has completado casi toda la rutina."}{" "}
-        Ganaste <strong>{points} puntos</strong>.
+        {message}
+        {points > 0 && (
+          <>
+            Ganaste <strong>{points} puntos</strong>.
+          </>
+        )}
       </span>
       <Image
         className="mb-5 mt-2 md:mb-10"
