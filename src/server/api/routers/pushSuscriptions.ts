@@ -36,7 +36,6 @@ export const pushRouter = createTRPCRouter({
         },
       });
       if (isAlreadySubscribed.length !== 0) {
-        console.log(isAlreadySubscribed);
         return "user already Subscribed";
       } else {
         const pushSubscription = await ctx.prisma.pushSubscription.create({
@@ -45,7 +44,6 @@ export const pushRouter = createTRPCRouter({
             suscription: PushSubscription,
           },
         });
-        console.log(pushSubscription);
         return pushSubscription;
       }
     }),
@@ -60,12 +58,11 @@ export const pushRouter = createTRPCRouter({
           user_id: input.user_id,
         },
       });
-      console.log(pushSubscriptions);
       pushSubscriptions.forEach((pushSubscription) => {
         const payload = JSON.stringify({
           title: input.title,
-          //body: input.body,
-          body: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+          body: input.body,
+          //body: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
         });
 
         const ps = JSON.parse(
