@@ -107,15 +107,23 @@ export default function ActiveTask({
 
   useEffect(() => {
     if (!usesAI) return;
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
     fetch("https://mindfuel-ia.onrender.com/dividir_tarea", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      signal,
       body: JSON.stringify({ tareas: name }),
     })
       .then((res) => res.json())
       .then((data: string[]) => {
+        clearTimeout(timeout);
         setSteps(data);
         setLoadingSteps(false);
       })
@@ -123,6 +131,11 @@ export default function ActiveTask({
         console.error(error);
         setLoadingSteps(false);
       });
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
   }, [usesAI, name]);
 
   return (
@@ -140,7 +153,7 @@ export default function ActiveTask({
         <CountdownTimer
           taskName={name}
           initialSeconds={estimatedTime}
-          isRunning={isTimerRunning}
+          isRunning={isTimerRunning && !loadingSteps}
         />
       )}
       {usesAI &&
