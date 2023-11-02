@@ -101,7 +101,7 @@ export default function Routine() {
   return (
     <RoutineLayout title={routine.name} sessionData={sessionData}>
       <div className="flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
-        <div className="absolute top-0 flex w-full flex-col bg-teal p-4 font-medium text-white">
+        <div className="absolute top-0 flex w-full flex-col bg-teal p-4 font-medium text-white shadow-xl">
           {" "}
           <Link href={`/home?tab=rutinas`}>
             <XMarkIcon className="absolute right-5 top-5 h-6 w-6" />
