@@ -6,6 +6,8 @@ import router from "next/router";
 import { motion } from "framer-motion";
 import { useUser } from "~/lib/UserContext";
 import { cn } from "~/lib/utils";
+import { useEffect, useState } from "react";
+import AddButton from "./addButton";
 
 function NavigationItem({
   href,
@@ -63,19 +65,58 @@ const navigationItems = [
 
 export function Footer() {
   const { name } = useUser();
+  const [show, setShow] = useState(true);
+  const scrollThreshold = 50;
+  const isInHome = router.pathname == "/home";
+
+  useEffect(() => {
+    if (!isInHome) return;
+    let lastScrollTop = 0;
+
+    function handleScroll() {
+      const st = window.scrollY || document.documentElement.scrollTop;
+      const scrollDirection = st > lastScrollTop ? 1 : -1;
+
+      if (Math.abs(st - lastScrollTop) > scrollThreshold) {
+        setShow(scrollDirection === -1);
+        lastScrollTop = st <= 0 ? 0 : st;
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <footer className="no-highlight fixed bottom-0 z-20 flex w-full justify-evenly border-t border-gray-200 bg-white py-3 lg:hidden">
-      {navigationItems.map((item) => (
-        <NavigationItem
-          key={item.href}
-          href={item.name == "Perfil" ? `/${name}` : item.href}
-          icon={item.icon}
-          name={item.name}
-          userName={name}
-        />
-      ))}
-    </footer>
+    <>
+      <motion.footer
+        animate={{ y: show ? "0%" : "100%" }}
+        transition={{ duration: 0.15 }}
+        className="no-highlight fixed bottom-0 z-20 flex w-full justify-evenly border-t border-gray-200 bg-white py-3 lg:hidden"
+      >
+        {navigationItems.map((item) => (
+          <NavigationItem
+            key={item.href}
+            href={item.name == "Perfil" ? `/${name}` : item.href}
+            icon={item.icon}
+            name={item.name}
+            userName={name}
+          />
+        ))}
+      </motion.footer>
+      {isInHome && (
+        <motion.div
+          animate={{
+            bottom: show ? "100px" : "35px",
+            right: show ? "80px" : "50px",
+          }}
+          transition={{ duration: 0.1 }}
+          className="fixed origin-top-left lg:hidden"
+        >
+          <AddButton showLabel={show} />
+        </motion.div>
+      )}
+    </>
   );
 }
 

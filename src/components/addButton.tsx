@@ -6,8 +6,9 @@ import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { cn } from "~/lib/utils";
 
-export default function AddButton() {
+export default function AddButton({ showLabel }: { showLabel: boolean }) {
   const user = useUser();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +27,12 @@ export default function AddButton() {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center justify-center"
         >
-          <div className="no-highlight absolute flex transform items-center gap-3 rounded-2xl border-2 border-teal bg-white px-4 py-3 shadow-lg transition-all active:scale-[98%] ">
+          <div
+            className={cn(
+              "no-highlight absolute flex transform items-center rounded-2xl border-2 border-teal bg-white py-3 shadow-lg transition-all active:scale-[98%]",
+              showLabel ? "gap-3 px-4" : "px-3"
+            )}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -41,7 +47,14 @@ export default function AddButton() {
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-            <span className="text-lg font-medium text-teal">Crear</span>
+            <motion.span
+              initial={{ maxWidth: 0, overflow: "hidden" }}
+              animate={{ maxWidth: showLabel ? 120 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-lg font-medium text-teal"
+            >
+              {showLabel && "Crear"}
+            </motion.span>
           </div>
         </motion.div>
       </Modal.Button>

@@ -8,7 +8,6 @@ import Router from "next/router";
 import useSwipe from "~/hooks/useSwipe";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import AddButton from "~/components/addButton";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -61,7 +60,7 @@ export default function Home() {
                       duration: 0.3,
                     }}
                     className="absolute left-0 top-0 z-10 h-full w-full rounded-sm bg-teal"
-                  ></motion.div>
+                  />
                 )}
               </Link>
             ))}
@@ -70,9 +69,6 @@ export default function Home() {
         {selectedTab == "tareas" && <TaskList />}
         {selectedTab == "rutinas" && <RoutineList />}
       </Tabs>
-      <div className="fixed bottom-[100px] right-[80px] lg:hidden">
-        <AddButton />
-      </div>
     </Layout>
   );
 }
