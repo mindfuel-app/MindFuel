@@ -92,7 +92,7 @@ export function Footer() {
       <motion.footer
         animate={{ y: show ? "0%" : "100%" }}
         transition={{ duration: 0.15 }}
-        className="no-highlight fixed bottom-0 z-20 flex w-full justify-evenly border-t border-gray-200 bg-white py-3 lg:hidden"
+        className="no-highlight fixed bottom-0 z-20 flex w-full justify-evenly border-t border-gray-200 bg-white py-3"
       >
         {navigationItems.map((item) => (
           <NavigationItem
@@ -111,7 +111,7 @@ export function Footer() {
             right: show ? "80px" : "50px",
           }}
           transition={{ duration: 0.1 }}
-          className="fixed origin-top-left lg:hidden"
+          className="fixed"
         >
           <AddButton showLabel={show} />
         </motion.div>
@@ -124,7 +124,7 @@ export function TopNavigation() {
   const { name } = useUser();
 
   return (
-    <div className="absolute left-1/2 z-10 mt-2 hidden -translate-x-1/2 gap-14 lg:flex xl:gap-16">
+    <div className="absolute left-1/2 z-10 mt-2 flex -translate-x-1/2 gap-16 xl:gap-20">
       {navigationItems.map((item) => (
         <Link
           key={item.name}

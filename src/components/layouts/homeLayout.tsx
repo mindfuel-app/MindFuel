@@ -3,6 +3,7 @@ import Header from "../header";
 import { UserProvider } from "~/lib/UserContext";
 import { type Session } from "next-auth";
 import Head from "next/head";
+import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function HomeLayout({
   children,
@@ -11,6 +12,8 @@ export default function HomeLayout({
   children: React.ReactNode;
   sessionData: Session;
 }) {
+  const windowWidth = useWindowWidth();
+
   return (
     <>
       <Head>
@@ -22,11 +25,11 @@ export default function HomeLayout({
         email={sessionData.user.email || ""}
       >
         <div className="flex h-screen flex-col">
-          <Header />
+          <Header showNavigation={windowWidth >= 1024} />
           <main className="flex h-full flex-col items-center p-3">
             {children}
           </main>
-          <Footer />
+          {windowWidth < 1024 && <Footer />}
         </div>
       </UserProvider>
     </>

@@ -16,7 +16,11 @@ import RoutineForm from "./routine/routineForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 
-export default function Header() {
+export default function Header({
+  showNavigation,
+}: {
+  showNavigation: boolean;
+}) {
   const user = useUser();
   const [showLogout, setShowLogout] = useState(false);
   const { data: sessionData } = useSession();
@@ -81,47 +85,51 @@ export default function Header() {
           )}
         </AnimatePresence>
       </div>
-      <TopNavigation />
-      <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <Modal.Button className="no-highlight absolute right-7 hidden items-center gap-2 rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:flex">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="white"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
-          Crear
-        </Modal.Button>
-        <Modal.Content>
-          <AddModal
-            TaskModal={
-              <TaskForm
-                mode="create"
-                afterSave={() => {
-                  void refetchTasks();
-                  setIsModalOpen(false);
-                }}
+      {showNavigation && (
+        <>
+          <TopNavigation />
+          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <Modal.Button className="no-highlight absolute right-7 hidden items-center gap-2 rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="white"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+              Crear
+            </Modal.Button>
+            <Modal.Content>
+              <AddModal
+                TaskModal={
+                  <TaskForm
+                    mode="create"
+                    afterSave={() => {
+                      void refetchTasks();
+                      setIsModalOpen(false);
+                    }}
+                  />
+                }
+                RoutineModal={
+                  <RoutineForm
+                    afterSave={() => {
+                      void refetchRoutines();
+                      setIsModalOpen(false);
+                    }}
+                  />
+                }
               />
-            }
-            RoutineModal={
-              <RoutineForm
-                afterSave={() => {
-                  void refetchRoutines();
-                  setIsModalOpen(false);
-                }}
-              />
-            }
-          />
-        </Modal.Content>
-      </Modal>
+            </Modal.Content>
+          </Modal>
+        </>
+      )}
     </div>
   );
 }
