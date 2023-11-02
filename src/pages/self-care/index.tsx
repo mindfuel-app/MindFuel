@@ -33,13 +33,13 @@ const options: Option[] = [
     description: "Es importante mantenerse hidratado.",
     image: "/tomar-agua.png",
   },
-  {
-    title: "Técnica Pomodoro",
-    href: "/pomodoro",
-    description:
-      "Haz tus tareas usando este método para mejorar la administración del tiempo.",
-    image: "/manzana.png",
-  },
+  // {
+  //   title: "Técnica Pomodoro",
+  //   href: "/pomodoro",
+  //   description:
+  //     "Haz tus tareas usando este método para mejorar la administración del tiempo.",
+  //   image: "/manzana.png",
+  // },
   {
     title: "Diario personal",
     href: "/diario-personal",
@@ -47,10 +47,10 @@ const options: Option[] = [
     image: "/diario.png",
   },
   // {
-  //   title: "Respiración",
-  //   href: "/respiracion",
-  //   description: "Tomate un tiempo para relajar y recuperar la atención.",
-  //   image: "/respiracion.png",
+  //   title: "Must/should/want",
+  //   href: "/must-should-want",
+  //   description: "Aprende como priorizar tus tareas y alcanzar tus objetivos.",
+  //   image: "",
   // },
 ];
 
