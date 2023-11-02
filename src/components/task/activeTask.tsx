@@ -42,7 +42,7 @@ function CountdownTimer({
         user_id: id,
         title: "¿Sigues ahí?",
         body: `¡Se acabó el tiempo para ${taskName}!`,
-        url : "/home?tab=rutinas",
+        url: "/home?tab=rutinas",
       });
     }
     if (secondsLeft > 0 && isRunning) {
@@ -133,10 +133,7 @@ export default function ActiveTask({
         setLoadingSteps(false);
       });
 
-    return () => {
-      clearTimeout(timeout);
-      controller.abort();
-    };
+    return () => clearTimeout(timeout);
   }, [usesAI, name]);
 
   return (
