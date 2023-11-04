@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
+var data;
 self.addEventListener("push", (event) => {
   if (!event.target) return "error";
-  const data = event.data.json();
+  data = event.data.json();
+  console.log(data);
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
@@ -12,8 +14,8 @@ self.addEventListener("push", (event) => {
   );
 });
 self.addEventListener('notificationclick', (event) => {
-  const data = event.data.json();
-  const url = data.url;
-  event.waitUntil(self.clients.openWindow("/"));
+  const url=data.url;
+  console.log(url);
+  event.waitUntil(self.clients.openWindow(""+url));
   event.notification.close();
 });
