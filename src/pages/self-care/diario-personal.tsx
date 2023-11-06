@@ -141,7 +141,7 @@ export default function DiarioPersonal({ sessionData }: PageProps) {
                 setNote("");
                 setIsSaving(false);
                 toast.success("Nota guardada con éxito");
-              }, 1000);
+              }, 600);
             }}
             className={cn(
               "no-highlight flex h-10 w-24 items-center justify-center rounded-3xl bg-[#b17c54] px-4 py-2 text-white transition-colors active:bg-[#b17c54]/80",

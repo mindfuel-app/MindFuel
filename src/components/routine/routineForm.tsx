@@ -214,7 +214,7 @@ export default function RoutineForm({
       }
 
       afterSave();
-    }, 1000);
+    }, 600);
   }
 
   if (isClockOpen && activeTaskIndex !== undefined) {

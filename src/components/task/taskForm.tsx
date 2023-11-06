@@ -84,7 +84,7 @@ export default function TaskForm({
       }
 
       afterSave();
-    }, 1000);
+    }, 600);
   }
 
   const setDeadline = (date: Date | undefined) => {
