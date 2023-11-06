@@ -107,15 +107,17 @@ export default function TaskList() {
             ))}
           </ul>
           {showCompletedTasks && areCompletedTasks && (
-            <span
-              onClick={() => {
-                deleteCompletedTasks({ user_id: user.id });
-                void refetchTasks();
-              }}
-              className="flex w-full items-center justify-start pl-6 pt-2 text-base text-gray-800 transition-colors active:text-sky-500"
-            >
-              Borrar tareas completadas
-            </span>
+            <div className="flex w-full items-center justify-start pl-5 pt-2">
+              <span
+                onClick={() => {
+                  deleteCompletedTasks({ user_id: user.id });
+                  void refetchTasks();
+                }}
+                className="rounded-md px-1 py-0.5 text-base text-gray-800 transition-colors active:bg-black/10"
+              >
+                Borrar tareas completadas
+              </span>
+            </div>
           )}
         </>
       )}
