@@ -1,15 +1,38 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
-import { useSession } from "next-auth/react";
-import Router from "next/router";
 import BackButton from "~/components/backButton";
 import ProfileLayout from "~/components/layouts/profileLayout";
+import type { GetServerSideProps } from "next";
+import type { Session } from "next-auth";
+import { getSession } from "next-auth/react";
+import NotFoundPage from "../404";
 
-export default function Configuracion() {
-  const { data: sessionData, status } = useSession();
+interface PageProps {
+  sessionData: Session;
+}
 
-  if (status == "unauthenticated") return void Router.push("/signin");
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
 
-  if (!sessionData || !sessionData?.user.name) return;
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
+
+export default function Configuracion({ sessionData }: PageProps) {
+  if (!sessionData.user.name) return <NotFoundPage />;
 
   return (
     <ProfileLayout

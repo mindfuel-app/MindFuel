@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -11,9 +10,36 @@ import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
 import RoutineLayout from "~/components/layouts/routineLayout";
 import { usePoints } from "~/hooks/usePoints";
 import { routinePoints, taskPoints } from "~/lib/points";
-import { type Session } from "next-auth";
 import { Footer } from "~/components/navigation";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import type { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
+
+interface PageProps {
+  sessionData: Session;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
+
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
 
 function ErrorPage({ sessionData }: { sessionData: Session }) {
   const [seconds, setSeconds] = useState(0);
@@ -51,10 +77,9 @@ function ErrorPage({ sessionData }: { sessionData: Session }) {
   );
 }
 
-export default function Routine() {
+export default function Routine({ sessionData }: PageProps) {
   const { addPoints } = usePoints();
   const router = useRouter();
-  const { data: sessionData, status } = useSession();
   const { data: routine } = api.routines.getRoutineById.useQuery({
     id: typeof router.query.id == "string" ? router.query.id : "",
   });
@@ -66,7 +91,7 @@ export default function Routine() {
   const [rewardPoints, setRewardPoints] = useState(0);
 
   useEffect(() => {
-    if (!sessionData?.user.id || !tasks) return;
+    if (!tasks) return;
 
     if (routineProgress === tasks.length) {
       setRewardPoints(
@@ -89,10 +114,6 @@ export default function Routine() {
     skippedTasks.length,
     tasks,
   ]);
-
-  if (status == "unauthenticated") return void router.push("/signin");
-
-  if (!sessionData) return;
 
   if (!tasks || !routine) {
     return <ErrorPage sessionData={sessionData} />;

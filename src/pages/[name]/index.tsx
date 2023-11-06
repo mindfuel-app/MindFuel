@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import ProfileLayout from "~/components/layouts/profileLayout";
 import { motion } from "framer-motion";
@@ -6,55 +5,47 @@ import NotFoundPage from "~/pages/404";
 import { api } from "~/utils/api";
 import { ProgressLevel } from "~/components/ui/progressBar";
 import { useEffect, useState } from "react";
+import type { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
 
-// const userStats = [
-//   {
-//     icon: <UserGroupIcon className="h-9 w-9" />,
-//     number: 7,
-//     label: "Amigos",
-//   },
-//   {
-//     icon: <StarIcon className="h-9 w-9" />,
-//     number: 575,
-//     label: "Puntos",
-//   },
-//   {
-//     icon: <TrophyIcon className="h-9 w-9" />,
-//     number: 3,
-//     label: "Logros",
-//   },
-//   {
-//     icon: <DocumentCheckIcon className="h-9 w-9" />,
-//     number: 90,
-//     label: "Tareas realizadas",
-//   },
-//   {
-//     icon: <FaceSmileIcon className="h-9 w-9" />,
-//     number: 20,
-//     label: "Reacciones recibidas",
-//   },
-//   {
-//     icon: <ClipboardDocumentCheckIcon className="h-9 w-9" />,
-//     number: 6,
-//     label: "Rutinas cargadas",
-//   },
-// ];
+interface PageProps {
+  sessionData: Session;
+}
 
-export default function Profile() {
-  const { data: sessionData, status } = useSession();
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
+
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
+
+export default function Profile({ sessionData }: PageProps) {
   const router = useRouter();
   const { name } = router.query;
   const { data: pointsData } = api.points.getPoints.useQuery({
-    user_id: sessionData?.user.id ?? "",
+    user_id: sessionData.user.id ?? "",
   });
 
-  if (status == "unauthenticated") return void router.push("/signin");
-
-  if (sessionData?.user.name !== name && sessionData) return <NotFoundPage />;
+  if (sessionData.user.name !== name) return <NotFoundPage />;
 
   return (
     <>
-      {sessionData && name && (
+      {name && (
         <ProfileLayout
           header={
             <Header
@@ -124,7 +115,7 @@ function Section({
     <motion.div
       initial={{ opacity: 0, y: -5 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex w-full flex-col gap-1"
+      className="flex w-full max-w-lg flex-col gap-1"
     >
       <h3 className="ml-1 text-lg font-medium">{title}</h3>
       <div className="rounded-xl bg-[#d9d9d9] p-4">{children}</div>

@@ -1,5 +1,3 @@
-import { useSession } from "next-auth/react";
-import Router from "next/router";
 import SelfCareLayout from "~/components/layouts/selfCareLayout";
 import { OptionLayout } from ".";
 import Image from "next/image";
@@ -8,12 +6,39 @@ import { api } from "~/utils/api";
 import { useState } from "react";
 import { selfCarePoints } from "~/lib/points";
 import { motion } from "framer-motion";
+import type { GetServerSideProps } from "next";
+import type { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
-export default function Apreciacion() {
-  const { data: sessionData, status } = useSession();
+interface PageProps {
+  sessionData: Session;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
+
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
+
+export default function Apreciacion({ sessionData }: PageProps) {
   const { addPoints } = usePoints();
   const { data: previousGreetings } = api.selfCare.getGreetings.useQuery({
-    user_id: sessionData?.user.id || "",
+    user_id: sessionData.user.id,
   });
   const { mutate: createGreetins } = api.selfCare.createGreetings.useMutation({
     onSuccess: () => {
@@ -34,10 +59,6 @@ export default function Apreciacion() {
         );
       }).length > 0
   );
-
-  if (status == "unauthenticated") return void Router.push("/signin");
-
-  if (!sessionData) return;
 
   const handleSubmit = () => {
     createGreetins({

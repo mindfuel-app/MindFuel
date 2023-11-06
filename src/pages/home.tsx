@@ -3,21 +3,47 @@ import { Tabs, TabsList } from "../components/ui/tabs";
 import { motion } from "framer-motion";
 import TaskList from "../components/task/taskList";
 import RoutineList from "../components/routine/routineList";
-import { useSession } from "next-auth/react";
-import Router from "next/router";
 import useSwipe from "~/hooks/useSwipe";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useNotifications } from "~/hooks/useNotifications";
 import { useEffect } from "react";
 import { api } from "~/utils/api";
+import type { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
+
+interface PageProps {
+  sessionData: Session;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
+
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
   { value: "rutinas", label: "Rutinas" },
 ];
 
-export default function Home() {
+export default function Home({ sessionData }: PageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedTab =
@@ -25,7 +51,6 @@ export default function Home() {
       ? searchParams.get("tab")
       : "tareas";
 
-  const { data: sessionData, status } = useSession();
   const permission = useNotifications();
   const { mutate: addPushSubscription } =
     api.pushSuscriptions.addPush.useMutation({
@@ -50,7 +75,7 @@ export default function Home() {
       throw new Error("Push manager not found");
     }
 
-    if (permission == "granted" && sessionData?.user.id) {
+    if (permission == "granted") {
       void navigator.serviceWorker
         .register("./push-sw.js")
         .then((registration) => {
@@ -71,11 +96,7 @@ export default function Home() {
           });
         });
     }
-  }, [addPushSubscription, permission, sessionData?.user.id]);
-
-  if (status == "unauthenticated") return void Router.push("/signin");
-
-  if (!sessionData) return;
+  }, [addPushSubscription, permission, sessionData.user.id]);
 
   return (
     <Layout sessionData={sessionData}>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import { useUser } from "~/lib/UserContext";
 import { cn } from "~/lib/utils";
@@ -22,6 +22,7 @@ function NavigationItem({
   userName: string;
   handleClick?: () => void;
 }) {
+  const router = useRouter();
   const { name: routerName } = router.query;
 
   return (
@@ -65,6 +66,7 @@ const navigationItems = [
 ];
 
 export function Footer() {
+  const router = useRouter();
   const { name } = useUser();
   const [show, setShow] = useState(true);
   const scrollThreshold = 50;
@@ -124,6 +126,7 @@ export function Footer() {
 
 export function TopNavigation() {
   const { name } = useUser();
+  const router = useRouter();
 
   return (
     <div className="absolute left-1/2 z-10 mt-2 flex -translate-x-1/2 gap-16 xl:gap-20">

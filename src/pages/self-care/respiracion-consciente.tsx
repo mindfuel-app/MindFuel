@@ -1,18 +1,40 @@
-import { useSession } from "next-auth/react";
 import SelfCareLayout from "../../components/layouts/selfCareLayout";
-import Router from "next/router";
 import { Button } from "~/components/ui/button";
 import { useState } from "react";
 import { ArrowRightIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
+import type { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
+import { useRouter } from "next/router";
 
-export default function RespiracionConsciente() {
-  const { data: sessionData, status } = useSession();
+interface PageProps {
+  sessionData: Session;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
+
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
+
+export default function RespiracionConsciente({ sessionData }: PageProps) {
   const [progress, setProgress] = useState(0);
-
-  if (status == "unauthenticated") return void Router.push("/signin");
-
-  if (!sessionData) return;
 
   return (
     <SelfCareLayout sessionData={sessionData}>
@@ -101,6 +123,8 @@ function StepCard({
   progress: number;
   incrementProgress: () => void;
 }) {
+  const router = useRouter();
+
   return (
     <motion.div
       initial={{ opacity: 0.5, x: 10 }}
@@ -123,7 +147,7 @@ function StepCard({
           </Button>
         ) : (
           <Button
-            onClick={() => void Router.push("/self-care")}
+            onClick={() => void router.push("/self-care")}
             className="no-highlight h-16 w-16 rounded-full bg-white"
           >
             <CheckIcon className="text-cornflower-blue" />

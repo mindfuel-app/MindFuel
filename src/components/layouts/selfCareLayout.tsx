@@ -1,4 +1,4 @@
-import router from "next/router";
+import { useRouter } from "next/router";
 import { type Session } from "next-auth";
 import Head from "next/head";
 import { Footer, TopNavigation } from "~/components/navigation";
@@ -47,6 +47,7 @@ function Header({
   onClose?: () => void;
   showNavigation: boolean;
 }) {
+  const router = useRouter();
   const isInMenus = !router.pathname.startsWith("/self-care/");
 
   return (

@@ -1,5 +1,3 @@
-import Router from "next/router";
-import { useSession } from "next-auth/react";
 import SelfCareLayout from "~/components/layouts/selfCareLayout";
 import { useState } from "react";
 import { CheckIcon } from "@heroicons/react/24/outline";
@@ -9,12 +7,45 @@ import Image from "next/image";
 import { api } from "~/utils/api";
 import { selfCarePoints } from "~/lib/points";
 import { usePoints } from "~/hooks/usePoints";
+import type { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
 
-export default function TomarAgua() {
+interface PageProps {
+  sessionData: Session;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
+
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
+
+export default function TomarAgua({ sessionData }: PageProps) {
   const { addPoints } = usePoints();
-  const { data: sessionData, status } = useSession();
+  const utils = api.useContext();
+  const { mutate: updateWater } = api.selfCare.updateWater.useMutation({
+    onSuccess: () => {
+      void utils.selfCare.getWater.invalidate({ user_id: sessionData.user.id });
+    },
+  });
   const { data } = api.selfCare.getWater.useQuery({
-    user_id: sessionData?.user.id || "",
+    user_id: sessionData.user.id,
   });
 
   const [glassesOfWater, setGlassesOfWater] = useState(
@@ -27,17 +58,6 @@ export default function TomarAgua() {
   );
   const [finalMessage, setFinalMessage] = useState(false);
   const [hasCompletedWater, setHasCompletedWater] = useState(data?.water == 8);
-  const utils = api.useContext();
-
-  const { mutate: updateWater } = api.selfCare.updateWater.useMutation({
-    onSuccess: () => {
-      void utils.selfCare.getWater.invalidate();
-    },
-  });
-
-  if (status == "unauthenticated") return void Router.push("/signin");
-
-  if (!sessionData) return;
 
   const handleClose = () => {
     if (!glassesOfWater) return;

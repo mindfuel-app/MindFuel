@@ -1,11 +1,37 @@
-import { useSession } from "next-auth/react";
-import Router from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import SelfCareLayout from "../../components/layouts/selfCareLayout";
 import { usePreviousPath } from "~/hooks/usePreviousPath";
 import { api } from "~/utils/api";
+import type { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
+
+interface PageProps {
+  sessionData: Session;
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
+
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
 
 type Option = {
   title: string;
@@ -54,20 +80,13 @@ const options: Option[] = [
   // },
 ];
 
-export default function SelfCare() {
-  const { data: sessionData, status } = useSession();
-  const { data } = api.selfCare.getWater.useQuery(
-    {
-      user_id: sessionData?.user.id || "",
-    },
-    { cacheTime: 0 }
-  );
+export default function SelfCare({ sessionData }: PageProps) {
+  const { data } = api.selfCare.getWater.useQuery({
+    user_id: sessionData.user.id,
+  });
 
   const { onRouteChange } = usePreviousPath();
 
-  if (status == "unauthenticated") return void Router.push("/signin");
-
-  if (!sessionData) return;
   return (
     <SelfCareLayout sessionData={sessionData}>
       <motion.div

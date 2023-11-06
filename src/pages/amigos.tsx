@@ -1,15 +1,35 @@
 import Head from "next/head";
 import Layout from "~/components/layouts/homeLayout";
-import { useSession } from "next-auth/react";
-import Router from "next/router";
+import type { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import type { Session } from "next-auth";
 
-export default function SelfCare() {
-  const { data: sessionData, status } = useSession();
+interface PageProps {
+  sessionData: Session;
+}
 
-  if (status == "unauthenticated") return void Router.push("/signin");
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context
+) => {
+  const sessionData = await getSession(context);
 
-  if (!sessionData) return;
+  if (!sessionData) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
 
+  return {
+    props: {
+      sessionData,
+    },
+  };
+};
+
+export default function Amigos({ sessionData }: PageProps) {
   return (
     <>
       <Head>
