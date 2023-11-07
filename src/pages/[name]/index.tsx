@@ -8,6 +8,10 @@ import { useEffect, useState } from "react";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import type { Session } from "next-auth";
+import Link from "next/link";
+import { Cog6ToothIcon } from "@heroicons/react/24/outline";
+import { type ThemeColor, useTheme } from "~/lib/ThemeContext";
+import { cn } from "~/lib/utils";
 
 interface PageProps {
   sessionData: Session;
@@ -38,8 +42,9 @@ export default function Profile({ sessionData }: PageProps) {
   const router = useRouter();
   const { name } = router.query;
   const { data: pointsData } = api.points.getPoints.useQuery({
-    user_id: sessionData.user.id ?? "",
+    user_id: sessionData.user.id,
   });
+  const { themeColor } = useTheme();
 
   if (sessionData.user.name !== name) return <NotFoundPage />;
 
@@ -55,19 +60,28 @@ export default function Profile({ sessionData }: PageProps) {
               nextLevelPoints={
                 pointsData?.nextLevelPoints ?? pointsData?.puntos ?? 0
               }
+              themeColor={themeColor}
             />
           }
           sessionData={sessionData}
         >
           <div className="relative flex w-full items-center py-3">
-            <div className="absolute left-0 top-0 h-1/2 w-full bg-teal/90">
-              <span className="absolute bottom-1 left-1/2 -translate-x-2 text-2xl text-white">
-                {name}
-              </span>
-            </div>
-            <div className="z-10 ml-8 flex h-[120px] w-[120px] items-center justify-center rounded-full border-[3px] border-teal bg-[#d9d9d9]">
-              <span className="text-7xl text-teal">
+            <div
+              className={`absolute left-0 top-0 h-1/2 w-full bg-${themeColor}/90`}
+            />
+            <div
+              className={`relative z-10 ml-6 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] border-${themeColor} bg-[#d9d9d9]`}
+            >
+              <span className={`text-6xl text-${themeColor}`}>
                 {name[0]?.toLocaleUpperCase()}
+              </span>
+              <span className="absolute -right-40 top-[8px] text-2xl text-white">
+                {name}
+                <div className="absolute -right-12 top-0">
+                  {sessionData.user.name && (
+                    <ConfigurationButton userName={sessionData.user.name} />
+                  )}
+                </div>
               </span>
             </div>
           </div>
@@ -128,11 +142,13 @@ function Header({
   userPoints,
   currentLevelPoints,
   nextLevelPoints,
+  themeColor,
 }: {
   level: number;
   userPoints: number;
   currentLevelPoints: number;
   nextLevelPoints: number;
+  themeColor: ThemeColor;
 }) {
   const levelPoints = userPoints - currentLevelPoints;
   const targetPoints = nextLevelPoints - currentLevelPoints;
@@ -152,9 +168,16 @@ function Header({
   }, [levelPoints, progress]);
 
   return (
-    <div className="flex w-full items-center justify-between bg-teal/90 px-3 pb-2 pt-3">
+    <div
+      className={`flex w-full items-center justify-between bg-${themeColor}/90 px-3 pb-2 pt-3`}
+    >
       <div className="flex w-full items-center gap-3">
-        <div className="flex h-10 w-12 items-center justify-center rounded-full bg-[#52c4c4] text-lg text-white">
+        <div
+          className={cn(
+            "flex h-10 w-12 items-center justify-center rounded-full text-lg text-white",
+            themeColor == "teal" ? "bg-[#52c4c4]" : "bg-orange-red"
+          )}
+        >
           <span className="text-2xl">{level}</span>
         </div>
         <div className="flex w-full flex-col">
@@ -173,12 +196,17 @@ function Header({
           </div>
         </div>
       </div>
-      {/* <Link
-        href={`/${userName}/configuracion`}
-        className="no-highlight rounded-md bg-orange p-1"
-      >
-        <Cog6ToothIcon className="h-6 w-6 text-white" />
-      </Link> */}
     </div>
+  );
+}
+
+function ConfigurationButton({ userName }: { userName: string }) {
+  return (
+    <Link
+      href={`/${userName}/configuracion`}
+      className="no-highlight flex w-8 rounded-md bg-orange p-1"
+    >
+      <Cog6ToothIcon className="h-6 w-6 text-white" />
+    </Link>
   );
 }

@@ -8,6 +8,7 @@ import { useUser } from "~/lib/UserContext";
 import { cn } from "~/lib/utils";
 import { useEffect, useState } from "react";
 import AddButton from "./addButton";
+import { useTheme } from "~/lib/ThemeContext";
 
 function NavigationItem({
   href,
@@ -24,6 +25,7 @@ function NavigationItem({
 }) {
   const router = useRouter();
   const { name: routerName } = router.query;
+  const { themeColor } = useTheme();
 
   return (
     <Link
@@ -32,7 +34,7 @@ function NavigationItem({
         router.pathname.startsWith(href) ||
         (router.pathname.startsWith("/rutinas") && href == "/home") ||
         (name == "Perfil" && routerName == userName)
-          ? "text-teal"
+          ? `text-${themeColor}`
           : "text-gray-700"
       } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
@@ -127,6 +129,7 @@ export function Footer() {
 export function TopNavigation() {
   const { name } = useUser();
   const router = useRouter();
+  const { themeColor } = useTheme();
 
   return (
     <div className="absolute left-1/2 z-10 mt-2 flex -translate-x-1/2 gap-16 xl:gap-20">
@@ -151,7 +154,7 @@ export function TopNavigation() {
           {router.pathname.startsWith(item.href) && (
             <motion.div
               layoutId="active-underline"
-              className="border-2 border-teal"
+              className={`border-2 border-${themeColor}`}
             />
           )}
         </Link>

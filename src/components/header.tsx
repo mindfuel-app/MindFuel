@@ -15,12 +15,14 @@ import AddModal from "./addModal";
 import RoutineForm from "./routine/routineForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
+import { useTheme } from "~/lib/ThemeContext";
 
 export default function Header({
   showNavigation,
 }: {
   showNavigation: boolean;
 }) {
+  const { themeColor } = useTheme();
   const user = useUser();
   const [showLogout, setShowLogout] = useState(false);
   const { data: sessionData } = useSession();
@@ -89,7 +91,9 @@ export default function Header({
         <>
           <TopNavigation />
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <Modal.Button className="no-highlight absolute right-7 hidden items-center gap-2 rounded-lg bg-teal px-3 py-2 text-white transition-all active:bg-teal/80 lg:flex">
+            <Modal.Button
+              className={`no-highlight absolute right-7 hidden items-center gap-2 rounded-lg bg-${themeColor} px-3 py-2 text-white transition-all active:bg-${themeColor}/80 lg:flex`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
