@@ -41,7 +41,12 @@ export default function RoutineCard({
         themeColor == "teal" ? "bg-teal" : "bg-orange-red"
       )}
     >
-      <div className="z-0 flex w-full items-center justify-between p-1 shadow-lg">
+      <div
+        className={cn(
+          "z-0 flex w-full items-center justify-between p-1",
+          isCardOpened && "shadow-lg"
+        )}
+      >
         <div
           className="flex w-full flex-col"
           onClick={() => setIsCardOpened(!isCardOpened)}
