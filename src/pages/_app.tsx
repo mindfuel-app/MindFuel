@@ -14,9 +14,17 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const [theme, setTheme] = useState<ThemeColor>("teal");
-  const setThemeColor: SetThemeColor = (value?: ThemeColor) =>
-    setTheme(value || theme == "teal" ? "orange-red" : "teal");
+  const [theme, setTheme] = useState<ThemeColor>(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("theme") as ThemeColor) ?? "teal";
+    }
+    return "teal";
+  });
+  const setThemeColor: SetThemeColor = (value?: ThemeColor) => {
+    const newValue = value || theme == "teal" ? "orange-red" : "teal";
+    setTheme(newValue);
+    localStorage.setItem("theme", newValue);
+  };
 
   return (
     <SessionProvider session={session}>

@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useUser } from "~/lib/UserContext";
 import { api } from "~/utils/api";
 import RoutineTaskCard from "../task/routineTaskCard";
+import { cn } from "~/lib/utils";
+import { useTheme } from "~/lib/ThemeContext";
 
 export default function RoutineCard({
   id,
@@ -21,6 +23,7 @@ export default function RoutineCard({
   category: string;
   tasks: Task[];
 }) {
+  const { themeColor } = useTheme();
   const user = useUser();
   const { refetch: refetchRoutines } = api.routines.getRoutines.useQuery({
     user_id: user.id,
@@ -32,7 +35,12 @@ export default function RoutineCard({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="no-highlight relative flex w-[300px] cursor-pointer flex-col rounded-md bg-teal p-1 text-white">
+    <div
+      className={cn(
+        "no-highlight relative flex w-[300px] cursor-pointer flex-col rounded-md p-1 text-white",
+        themeColor == "teal" ? "bg-teal" : "bg-orange-red"
+      )}
+    >
       <div className="z-0 flex w-full items-center justify-between p-1 shadow-lg">
         <div
           className="flex w-full flex-col"
@@ -87,6 +95,7 @@ export default function RoutineCard({
               <RoutineTaskCard
                 number={index + 1}
                 name={task.name}
+                themeColor={themeColor}
                 key={task.name}
               />
             ))
@@ -96,7 +105,10 @@ export default function RoutineCard({
       {isCardOpened && tasks.length > 0 && (
         <Link
           href={`/rutinas/${id}`}
-          className="absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-2xl bg-teal px-3 py-1.5"
+          className={cn(
+            "absolute -bottom-5 left-1/2 -translate-x-1/2 rounded-2xl px-3 py-1.5",
+            themeColor == "teal" ? "bg-teal" : "bg-orange-red"
+          )}
         >
           <span className="text-base">Empezar rutina</span>
         </Link>

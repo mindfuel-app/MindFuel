@@ -67,12 +67,23 @@ export default function Profile({ sessionData }: PageProps) {
         >
           <div className="relative flex w-full items-center py-3">
             <div
-              className={`absolute left-0 top-0 h-1/2 w-full bg-${themeColor}/90`}
+              className={cn(
+                "absolute left-0 top-0 h-1/2 w-full",
+                themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/90"
+              )}
             />
             <div
-              className={`relative z-10 ml-6 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] border-${themeColor} bg-[#d9d9d9]`}
+              className={cn(
+                "relative z-10 ml-6 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] bg-[#d9d9d9]",
+                themeColor == "teal" ? "border-teal" : "border-orange-red"
+              )}
             >
-              <span className={`text-6xl text-${themeColor}`}>
+              <span
+                className={cn(
+                  "text-6xl",
+                  themeColor == "teal" ? "text-teal" : "text-orange-red"
+                )}
+              >
                 {name[0]?.toLocaleUpperCase()}
               </span>
               <span className="absolute -right-40 top-[8px] text-2xl text-white">
@@ -169,7 +180,10 @@ function Header({
 
   return (
     <div
-      className={`flex w-full items-center justify-between bg-${themeColor}/90 px-3 pb-2 pt-3`}
+      className={cn(
+        "flex w-full items-center justify-between px-3 pb-2 pt-3",
+        themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/90"
+      )}
     >
       <div className="flex w-full items-center gap-3">
         <div

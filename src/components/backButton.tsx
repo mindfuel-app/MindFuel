@@ -7,7 +7,7 @@ export default function BackButton({
   handleClick,
 }: {
   href: string;
-  color?: "teal" | "white" | "black";
+  color?: "teal" | "white" | "black" | "orange-red";
   handleClick?: () => void;
 }) {
   return (

@@ -12,6 +12,7 @@ import {
   type ThemeColor,
   useTheme,
 } from "~/lib/ThemeContext";
+import { cn } from "~/lib/utils";
 
 interface PageProps {
   sessionData: Session;
@@ -52,14 +53,27 @@ export default function Configuracion({ sessionData }: PageProps) {
     >
       <div className="flex w-full flex-col items-center gap-3 pt-7">
         <div
-          className={`flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] border-${themeColor} bg-[#d9d9d9]`}
+          className={cn(
+            "flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] bg-[#d9d9d9] transition-colors",
+            themeColor == "teal" ? "border-teal" : "border-orange-red"
+          )}
         >
-          <span className={`text-6xl text-${themeColor}`}>
+          <span
+            className={cn(
+              "text-6xl transition-colors",
+              themeColor == "teal" ? "text-teal" : "text-orange-red"
+            )}
+          >
             {sessionData.user.name[0]?.toLocaleUpperCase()}
           </span>
         </div>
         <div className="flex w-full items-center justify-center">
-          <span className={`relative text-2xl text-${themeColor}`}>
+          <span
+            className={cn(
+              "relative text-2xl transition-colors",
+              themeColor == "teal" ? "text-teal" : "text-orange-red"
+            )}
+          >
             {sessionData.user.name}
             <PencilIcon className="absolute -right-8 bottom-1 h-6 w-6 text-orange" />
           </span>
@@ -93,7 +107,10 @@ function ThemeToggleButton({
           setIsToggled(!isToggled);
           setThemeColor();
         }}
-        className={`no-highlight flex w-20 items-center rounded-full bg-${themeColor}/90 p-2 py-1.5`}
+        className={cn(
+          "no-highlight flex w-20 items-center rounded-full p-2 py-1.5 transition-colors",
+          themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/90"
+        )}
       >
         <motion.div
           animate={{ x: isToggled ? "130%" : "0%" }}
@@ -114,7 +131,10 @@ function Header({
 }) {
   return (
     <div
-      className={`relative flex w-full items-center justify-start bg-${themeColor} px-4 py-3`}
+      className={cn(
+        "relative flex w-full items-center justify-start px-4 py-3 transition-colors",
+        themeColor == "teal" ? "bg-teal" : "bg-orange-red"
+      )}
     >
       <BackButton href={`/${userName}`} color="white" />
       <h1 className="absolute left-1/2 -translate-x-1/2 text-xl font-medium text-white">

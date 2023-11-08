@@ -12,6 +12,8 @@ import { api } from "~/utils/api";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import type { Session } from "next-auth";
+import { cn } from "~/lib/utils";
+import { useTheme } from "~/lib/ThemeContext";
 
 interface PageProps {
   sessionData: Session;
@@ -44,6 +46,7 @@ const tabOptions = [
 ];
 
 export default function Home({ sessionData }: PageProps) {
+  const { themeColor } = useTheme();
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedTab =
@@ -96,7 +99,8 @@ export default function Home({ sessionData }: PageProps) {
           });
         });
     }
-  }, [addPushSubscription, permission, sessionData.user.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [permission]);
 
   return (
     <Layout sessionData={sessionData}>
@@ -124,7 +128,10 @@ export default function Home({ sessionData }: PageProps) {
                       bounce: 0,
                       duration: 0.3,
                     }}
-                    className="absolute left-0 top-0 z-10 h-full w-full rounded-sm bg-teal"
+                    className={cn(
+                      "absolute left-0 top-0 z-10 h-full w-full rounded-sm",
+                      themeColor == "teal" ? "bg-teal" : "bg-orange-red"
+                    )}
                   />
                 )}
               </Link>

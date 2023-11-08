@@ -36,7 +36,7 @@ function NavigationItem({
         (name == "Perfil" && routerName == userName)
           ? `text-${themeColor}`
           : "text-gray-700"
-      } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center active:bg-gray-100 min-[375px]:w-[71px]`}
+      } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center transition-colors active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
     >
       {icon}
@@ -154,7 +154,10 @@ export function TopNavigation() {
           {router.pathname.startsWith(item.href) && (
             <motion.div
               layoutId="active-underline"
-              className={`border-2 border-${themeColor}`}
+              className={cn(
+                "border-2",
+                themeColor == "teal" ? "border-teal" : "border-orange-red"
+              )}
             />
           )}
         </Link>

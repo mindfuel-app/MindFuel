@@ -6,6 +6,8 @@ import { UserProvider } from "~/lib/UserContext";
 import BackButton from "../backButton";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import useWindowWidth from "~/hooks/useWindowWidth";
+import { useTheme } from "~/lib/ThemeContext";
+import { cn } from "~/lib/utils";
 
 export default function SelfCareLayout({
   children,
@@ -49,20 +51,42 @@ function Header({
 }) {
   const router = useRouter();
   const isInMenus = !router.pathname.startsWith("/self-care/");
+  const { themeColor } = useTheme();
 
   return (
     <div className="relative flex w-full items-center justify-between px-6 py-4">
       {!isInMenus ? (
-        <BackButton handleClick={onClose} href="/self-care" color="teal" />
+        <BackButton
+          handleClick={onClose}
+          href="/self-care"
+          color={themeColor}
+        />
       ) : (
-        <FaHandHoldingHeart className="text-2xl text-teal" />
+        <FaHandHoldingHeart
+          className={cn(
+            "text-2xl",
+            themeColor == "teal" ? "text-teal" : "text-orange-red"
+          )}
+        />
       )}
       {showNavigation ? (
         <TopNavigation />
       ) : (
-        <div className="absolute bottom-0 left-0 w-full border-[3px] border-teal lg:hidden" />
+        <div
+          className={cn(
+            "absolute bottom-0 left-0 w-full border-[3px] lg:hidden",
+            themeColor == "teal" ? "border-teal" : "border-orange-red"
+          )}
+        />
       )}
-      <span className="text-lg font-medium text-teal">Self-care</span>
+      <span
+        className={cn(
+          "text-lg font-medium",
+          themeColor == "teal" ? "text-teal" : "text-orange-red"
+        )}
+      >
+        Self-care
+      </span>
     </div>
   );
 }

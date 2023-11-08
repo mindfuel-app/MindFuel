@@ -10,6 +10,7 @@ import { useUser } from "~/lib/UserContext";
 import { cn } from "~/lib/utils";
 import { usePoints } from "~/hooks/usePoints";
 import { taskPoints } from "~/lib/points";
+import { useTheme } from "~/lib/ThemeContext";
 
 export default function TaskCard({
   id,
@@ -30,6 +31,7 @@ export default function TaskCard({
   isPartOfRoutine: boolean;
   showCompletedTasks: boolean;
 }) {
+  const { themeColor } = useTheme();
   const user = useUser();
   const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
     user_id: user.id,
@@ -97,7 +99,10 @@ export default function TaskCard({
             x: 15,
           }}
           transition={{ duration: 0.4 }}
-          className="relative flex w-72 items-center justify-between rounded-md border-2 border-teal bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-[400px] lg:w-[500px] lg:py-2"
+          className={cn(
+            "relative flex w-72 items-center justify-between rounded-md border-2 bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-[400px] lg:w-[500px] lg:py-2",
+            themeColor == "teal" ? "border-teal" : "border-orange-red"
+          )}
         >
           <div className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px]">
             <span
@@ -177,13 +182,19 @@ export default function TaskCard({
                 setTaskDone({ task_id: id });
               }, 250);
             }}
-            className="no-highlight group absolute right-1 flex h-8 w-8 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-2 border-teal bg-white"
+            className={cn(
+              "no-highlight group absolute right-1 flex h-8 w-8 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-2 bg-white",
+              themeColor == "teal" ? "border-teal" : "border-orange-red"
+            )}
           >
             {showPointsAnimation && (
               <motion.div
                 animate={{ opacity: 0.5, y: -30, x: -20 }}
                 transition={{ duration: 0.6 }}
-                className="absolute -right-7 text-3xl font-medium text-teal"
+                className={cn(
+                  "absolute -right-7 text-3xl font-medium",
+                  themeColor == "teal" ? "text-teal" : "text-orange-red"
+                )}
               >
                 +{rewardPoints}
               </motion.div>
@@ -198,7 +209,12 @@ export default function TaskCard({
                   damping: 20,
                 }}
               >
-                <CheckIcon className="h-5 w-5 text-teal" />
+                <CheckIcon
+                  className={cn(
+                    "h-5 w-5",
+                    themeColor == "teal" ? "text-teal" : "text-orange-red"
+                  )}
+                />
               </motion.div>
             )}
           </div>
