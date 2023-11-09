@@ -56,6 +56,7 @@ model User {
     createdAt     DateTime  @default(now())
     level         Level     @relation(fields: [levelNumber], references: [number], onUpdate: Cascade)
     levelNumber   Int       @default(1)
+    theme         String    @default("teal")
     accounts      Account[]
     sessions      Session[]
 

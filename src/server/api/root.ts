@@ -9,7 +9,7 @@ import { pushRouter } from "./routers/pushSuscriptions";
 import { notesRouter } from "./routers/notes";
 import { profilePicRouter } from "./routers/profilePic";
 import { selfCareRouter } from "./routers/selfCare";
-
+import { userRouter } from "./routers/user";
 
 /**
  * This is the primary router for your server.
@@ -26,6 +26,7 @@ export const appRouter = createTRPCRouter({
   notes: notesRouter,
   profilePic: profilePicRouter,
   selfCare: selfCareRouter,
+  user: userRouter,
 });
 
 // export type definition of API

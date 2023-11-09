@@ -14,16 +14,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const [theme, setTheme] = useState<ThemeColor>(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("theme") as ThemeColor) ?? "teal";
-    }
-    return "teal";
+  const { data: initialTheme } = api.user.getTheme.useQuery({
+    user_id: session?.user?.id ?? "",
   });
+  const { mutate: updateTheme } = api.user.updateTheme.useMutation();
+  const [theme, setTheme] = useState<ThemeColor>("teal");
   const setThemeColor: SetThemeColor = (value?: ThemeColor) => {
     const newValue = value || theme == "teal" ? "orange-red" : "teal";
     setTheme(newValue);
-    localStorage.setItem("theme", newValue);
+    updateTheme({ user_id: session?.user?.id ?? "", theme: newValue });
   };
 
   return (
