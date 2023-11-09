@@ -97,7 +97,7 @@ function ThemeToggleButton({
   themeColor: ThemeColor;
   setThemeColor: SetThemeColor;
 }) {
-  const [isToggled, setIsToggled] = useState(false);
+  const [isToggled, setIsToggled] = useState(themeColor == "orange-red");
 
   return (
     <div className="flex items-center justify-center gap-3">
@@ -113,6 +113,7 @@ function ThemeToggleButton({
         )}
       >
         <motion.div
+          initial={false}
           animate={{ x: isToggled ? "130%" : "0%" }}
           className="h-7 w-7 rounded-full bg-white"
         />
