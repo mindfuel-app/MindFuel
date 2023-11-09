@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import useSwipe from "~/hooks/useSwipe";
+import { useTheme } from "~/lib/ThemeContext";
+import { cn } from "~/lib/utils";
 
 export default function AddModal({
   TaskModal,
@@ -12,6 +14,7 @@ export default function AddModal({
   const [selectedTab, setSelectedTab] = useState<"tareas" | "rutinas">(
     "tareas"
   );
+  const { themeColor } = useTheme();
 
   const swipeLeftHandler = useSwipe({
     onSwipedLeft: () => {
@@ -38,7 +41,12 @@ export default function AddModal({
         >
           Tareas
           {selectedTab == "tareas" && (
-            <div className="absolute bottom-[2px] w-[50%] rounded-full border-[2px] border-teal"></div>
+            <div
+              className={cn(
+                "absolute bottom-[2px] w-[50%] rounded-full border-[2px]",
+                themeColor == "teal" ? "border-teal" : "border-orange-red"
+              )}
+            />
           )}
         </Button>
         <Button
@@ -51,7 +59,12 @@ export default function AddModal({
         >
           Rutinas
           {selectedTab == "rutinas" && (
-            <div className="absolute bottom-[2px] w-[50%] rounded-full border-[2px] border-teal"></div>
+            <div
+              className={cn(
+                "absolute bottom-[2px] w-[50%] rounded-full border-[2px]",
+                themeColor == "teal" ? "border-teal" : "border-orange-red"
+              )}
+            />
           )}
         </Button>
         <div className="absolute bottom-0 w-full border border-gray-100"></div>
@@ -64,4 +77,3 @@ export default function AddModal({
     </>
   );
 }
-//&sfdgfad

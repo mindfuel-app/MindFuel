@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Checkbox } from "../ui/checkbox";
 import Tooltip from "../auth/tooltip";
 import TimeForm from "../timeForm";
+import { useTheme } from "~/lib/ThemeContext";
 
 const categories = [
   {
@@ -109,6 +110,7 @@ export default function RoutineForm({
   const [isClockOpen, setIsClockOpen] = useState(false);
   const [isComboboxOpen, setIsComboboxOpen] = useState(false);
   const [activeTaskIndex, setActiveTaskIndex] = useState<number>(0);
+  const { themeColor } = useTheme();
 
   const addEmptyTask = () => {
     setRoutine({
@@ -271,7 +273,10 @@ export default function RoutineForm({
                   key={day.value}
                   className={cn(
                     "no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100",
-                    routine.days.includes(day.value) && "border border-teal"
+                    routine.days.includes(day.value) &&
+                      (themeColor == "teal"
+                        ? "border border-teal"
+                        : "border border-orange-red")
                   )}
                   onClick={(e) => {
                     e.preventDefault();
@@ -302,7 +307,7 @@ export default function RoutineForm({
                   <span
                     className={`${
                       routine.days.includes(day.value)
-                        ? "text-teal"
+                        ? `text-${themeColor}`
                         : "text-gray-600"
                     }`}
                   >
@@ -399,7 +404,10 @@ export default function RoutineForm({
               <div className="relative flex items-center">
                 <span>Tareas</span>
                 <Button
-                  className="no-highlight h-6 w-10 text-xl text-teal"
+                  className={cn(
+                    "no-highlight h-6 w-10 text-xl",
+                    themeColor == "teal" ? "text-teal" : "text-orange-red"
+                  )}
                   onClick={() => {
                     addEmptyTask();
                   }}
@@ -511,10 +519,22 @@ export default function RoutineForm({
               </div>
             )}
             <div className="no-highlight space-x-1 text-right">
-              <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
+              <Modal.Close
+                className={cn(
+                  "rounded-md bg-transparent px-4 py-2 text-base",
+                  themeColor == "teal" ? "text-teal" : "text-orange-red"
+                )}
+              >
                 Cancelar
               </Modal.Close>
-              <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80">
+              <Button
+                className={cn(
+                  "rounded-md px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none",
+                  themeColor == "teal"
+                    ? "bg-teal active:bg-teal/80"
+                    : "bg-orange-red active:bg-orange-red/80"
+                )}
+              >
                 <CircularProgress
                   color="inherit"
                   size={20}

@@ -29,7 +29,7 @@ Progress.displayName = ProgressPrimitive.Root.displayName;
 const ProgressLevel = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
->(({ className, value, ...props }, ref) => (
+>(({ className, value, color = "#52c4c4", ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
@@ -39,7 +39,10 @@ const ProgressLevel = React.forwardRef<
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-[#52c4c4] transition-all"
+      className={cn(
+        "h-full w-full flex-1 transition-all",
+        color == "#52c4c4" ? "bg-[#52c4c4]" : "bg-orange-red"
+      )}
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>

@@ -69,7 +69,7 @@ export default function Profile({ sessionData }: PageProps) {
             <div
               className={cn(
                 "absolute left-0 top-0 h-1/2 w-full",
-                themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/90"
+                themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/80"
               )}
             />
             <div
@@ -182,7 +182,7 @@ function Header({
     <div
       className={cn(
         "flex w-full items-center justify-between px-3 pb-2 pt-3",
-        themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/90"
+        themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/80"
       )}
     >
       <div className="flex w-full items-center gap-3">
@@ -201,7 +201,7 @@ function Header({
               value={
                 ((progress >= 0 ? progress : levelPoints) / targetPoints) * 100
               }
-              color="black"
+              color={themeColor == "teal" ? "#52c4c4" : "#ff6f6f"}
               className="h-3 bg-white"
             />
             <span className="text-white">

@@ -14,6 +14,7 @@ import { useUser } from "~/lib/UserContext";
 import { Calendar } from "../ui/calendar";
 import { cn } from "~/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useTheme } from "~/lib/ThemeContext";
 
 type Task = {
   id: string;
@@ -59,6 +60,7 @@ export default function TaskForm({
   const [emptyTaskError, setEmptyTaskError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const { themeColor } = useTheme();
 
   useEffect(() => setLoading(false), []);
 
@@ -212,10 +214,22 @@ export default function TaskForm({
               </div>
             )}
             <div className="no-highlight space-x-1 text-right">
-              <Modal.Close className="text rounded-md bg-transparent px-4 py-2 text-base text-teal">
+              <Modal.Close
+                className={cn(
+                  "rounded-md bg-transparent px-4 py-2 text-base",
+                  themeColor == "teal" ? "text-teal" : "text-orange-red"
+                )}
+              >
                 Cancelar
               </Modal.Close>
-              <Button className="rounded-md bg-teal px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none active:bg-teal/80">
+              <Button
+                className={cn(
+                  "rounded-md px-4 py-2 text-base font-medium text-white group-disabled:pointer-events-none",
+                  themeColor == "teal"
+                    ? "bg-teal active:bg-teal/80"
+                    : "bg-orange-red active:bg-orange-red/80"
+                )}
+              >
                 <CircularProgress
                   color="inherit"
                   size={20}
