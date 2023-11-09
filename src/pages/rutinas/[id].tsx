@@ -15,6 +15,8 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import type { Session } from "next-auth";
+import { useTheme } from "~/lib/ThemeContext";
+import { cn } from "~/lib/utils";
 
 interface PageProps {
   sessionData: Session;
@@ -89,6 +91,7 @@ export default function Routine({ sessionData }: PageProps) {
   const [routineProgress, setRoutineProgress] = useState(0);
   const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
   const [rewardPoints, setRewardPoints] = useState(0);
+  const { themeColor } = useTheme();
 
   useEffect(() => {
     if (!tasks) return;
@@ -122,15 +125,21 @@ export default function Routine({ sessionData }: PageProps) {
   return (
     <RoutineLayout title={routine.name} sessionData={sessionData}>
       <div className="flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
-        <div className="absolute top-0 flex w-full flex-col bg-teal p-4 font-medium text-white shadow-xl">
-          {" "}
+        <div
+          className={cn(
+            "absolute top-0 flex w-full flex-col p-4 font-medium text-white shadow-xl",
+            themeColor == "teal" ? "bg-teal" : "bg-orange-red"
+          )}
+        >
           <Link href={`/home?tab=rutinas`}>
             <XMarkIcon className="absolute right-5 top-5 h-6 w-6" />
           </Link>
           <h2 className="text-xl">{routine.name}</h2>
-          <span className="text-[#93DADA]">{`${tasks.length} ${
-            tasks.length == 1 ? "tarea" : "tareas"
-          }`}</span>
+          <span
+            className={
+              themeColor == "teal" ? "text-[#93DADA]" : "text-gray-700"
+            }
+          >{`${tasks.length} ${tasks.length == 1 ? "tarea" : "tareas"}`}</span>
           <span className="font-normal">
             {routine.days.length == 33
               ? "Todos los dias de la semana"
@@ -217,6 +226,8 @@ function FinalMessage({
   completionStatus: "completed" | "partial" | "none";
   points: number;
 }) {
+  const { themeColor } = useTheme();
+
   let message;
   switch (completionStatus) {
     case "completed":
@@ -235,7 +246,10 @@ function FinalMessage({
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative flex w-[300px] flex-col items-center gap-1 rounded-xl border-2 border-teal bg-white p-5 pb-10 pt-8 shadow-xl md:w-[600px] md:pb-12 md:pt-4"
+      className={cn(
+        "relative flex w-[300px] flex-col items-center gap-1 rounded-xl border-2 bg-white p-5 pb-10 pt-8 shadow-xl md:w-[600px] md:pb-12 md:pt-4",
+        themeColor == "teal" ? "border-teal" : "border-orange-red"
+      )}
     >
       <strong className="text-lg">
         {completionStatus != "none" ? "¡Gran trabajo!" : "¡Sigue intentandolo!"}
@@ -260,7 +274,10 @@ function FinalMessage({
       </p>
       <Link
         href="/home"
-        className="no-highlight absolute -bottom-5 rounded-2xl bg-teal px-12 py-1.5 text-white transition-transform active:scale-95"
+        className={cn(
+          "no-highlight absolute -bottom-5 rounded-2xl px-12 py-1.5 text-white transition-transform active:scale-95",
+          themeColor == "teal" ? "bg-teal" : "bg-orange-red"
+        )}
       >
         <span className="text-lg">Listo</span>
       </Link>

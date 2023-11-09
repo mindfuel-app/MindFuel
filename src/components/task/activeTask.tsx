@@ -13,6 +13,7 @@ import {
   PlayCircleIcon,
 } from "@heroicons/react/24/solid";
 import { cn } from "~/lib/utils";
+import { useTheme } from "~/lib/ThemeContext";
 
 function LoadingSteps() {
   return (
@@ -34,6 +35,7 @@ function CountdownTimer({
 }) {
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
   const [isTimerRunning, setIsTimerRunning] = useState(isRunning);
+  const { themeColor } = useTheme();
 
   useEffect(() => setIsTimerRunning(isRunning), [isRunning]);
 
@@ -88,6 +90,7 @@ function CountdownTimer({
       </div>
       <Progress
         className="my-2"
+        color={themeColor}
         value={(100 / initialSeconds) * (initialSeconds - secondsLeft)}
       />
     </>
@@ -107,6 +110,7 @@ export default function ActiveTask({
   increaseRoutineProgress: () => void;
   increaseSkippedTasks: () => void;
 }) {
+  const { themeColor } = useTheme();
   const { id } = useUser();
   const [checked, setChecked] = useState<boolean[]>([]);
   const [steps, setSteps] = useState<string[]>();
@@ -161,7 +165,14 @@ export default function ActiveTask({
   }, [usesAI, name]);
 
   return (
-    <div className="flex flex-col gap-4 rounded-lg border-2 border-teal bg-teal/20 p-3">
+    <div
+      className={cn(
+        "flex flex-col gap-4 rounded-lg border-2 p-3",
+        themeColor == "teal"
+          ? "border-teal bg-teal/20"
+          : "border-orange-red bg-orange-red/20"
+      )}
+    >
       <span className="text-sm">Ahora</span>
       <div className="-mt-2">
         {name}
@@ -224,18 +235,34 @@ export default function ActiveTask({
         >
           <div
             onClick={() => increaseRoutineProgress()}
-            className="flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-12 min-[425px]:w-12"
+            className={cn(
+              "flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full transition-all active:scale-95 min-[425px]:h-12 min-[425px]:w-12",
+              themeColor == "teal" ? "bg-cornflower-blue" : "bg-white"
+            )}
           >
-            <CheckIcon className="h-7 w-7 text-white" />
+            <CheckIcon
+              className={cn(
+                "h-7 w-7",
+                themeColor == "teal" ? "text-white" : "text-black"
+              )}
+            />
           </div>
           <div
             onClick={() => {
               increaseSkippedTasks();
               increaseRoutineProgress();
             }}
-            className="flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full bg-cornflower-blue transition-all active:scale-95 min-[425px]:h-12 min-[425px]:w-12"
+            className={cn(
+              "flex h-10 w-10 transform cursor-pointer items-center justify-center rounded-full transition-all active:scale-95 min-[425px]:h-12 min-[425px]:w-12",
+              themeColor == "teal" ? "bg-cornflower-blue" : "bg-white"
+            )}
           >
-            <ChevronDoubleRightIcon className="h-7 w-7 text-white" />
+            <ChevronDoubleRightIcon
+              className={cn(
+                "h-7 w-7 text-white",
+                themeColor == "teal" ? "text-white" : "text-black"
+              )}
+            />
           </div>
         </div>
       )}

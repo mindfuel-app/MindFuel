@@ -1,4 +1,5 @@
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
 
 export default function InactiveTask({
@@ -8,11 +9,18 @@ export default function InactiveTask({
   name: string;
   isDone: boolean;
 }) {
+  const { themeColor } = useTheme();
   return (
     <div
       className={cn(
         "rounded-lg p-2",
-        isDone ? "bg-teal" : "border-2 border-teal bg-white"
+        isDone
+          ? themeColor == "teal"
+            ? "bg-teal"
+            : "bg-orange-red"
+          : themeColor == "teal"
+          ? "border-2 border-teal bg-white"
+          : "border-2 border-orange-red bg-white"
       )}
     >
       <div
