@@ -5,11 +5,14 @@ import type { GetServerSideProps } from "next";
 import type { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import NotFoundPage from "../404";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { type ThemeColor, useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
 import { useUser } from "~/lib/UserContext";
+import { CheckIcon } from "@heroicons/react/24/outline";
+import { api } from "~/utils/api";
+import toast, { Toaster } from "react-hot-toast";
 
 interface PageProps {
   sessionData: Session;
@@ -38,8 +41,34 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 
 export default function Configuracion({ sessionData }: PageProps) {
   const { themeColor } = useTheme();
+  const { mutate: updateUsername } = api.user.editUsername.useMutation({
+    onSuccess: () => toast.success("Nombre de usuario actualizado"),
+    onError: (error) => toast.error(error.message),
+  });
+  const [username, setUsername] = useState(sessionData.user.name as string);
+  const [editUsername, setEditUsername] = useState(false);
+  const [usernameWidth, setUsernameWidth] = useState(0);
+  const elementRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (elementRef.current) {
+      setUsernameWidth(elementRef.current.offsetWidth);
+    }
+  }, [elementRef.current?.offsetWidth]);
 
   if (!sessionData.user.name) return <NotFoundPage />;
+
+  function submitData(value: string) {
+    if (value.length < 3 || value.length > 30)
+      return alert("El nombre de usuario debe tener entre 3 y 30 caracteres");
+    if (value == sessionData.user.name) return setEditUsername(false);
+
+    updateUsername({
+      user_id: sessionData.user.id,
+      username: value,
+    });
+    setEditUsername(false);
+  }
 
   return (
     <ProfileLayout
@@ -48,7 +77,7 @@ export default function Configuracion({ sessionData }: PageProps) {
       }
       sessionData={sessionData}
     >
-      <div className="flex w-full flex-col items-center gap-3 pt-7">
+      <div className="flex w-full flex-col items-center gap-4 pt-7">
         <div
           className={cn(
             "flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] bg-[#d9d9d9] transition-colors",
@@ -65,16 +94,49 @@ export default function Configuracion({ sessionData }: PageProps) {
           </span>
         </div>
         <div className="flex w-full items-center justify-center">
-          <span
-            className={cn(
-              "relative text-2xl transition-colors",
-              themeColor == "teal" ? "text-teal" : "text-orange-red"
-            )}
-          >
-            {sessionData.user.name}
-            <PencilIcon className="absolute -right-8 bottom-1 h-6 w-6 text-orange" />
-          </span>
+          {editUsername ? (
+            <div className="ml-[36px] flex items-center gap-2">
+              <input
+                type="text"
+                defaultValue={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className={cn(
+                  "rounded-md border px-1 text-2xl outline-none",
+                  themeColor == "teal"
+                    ? "border-teal text-teal"
+                    : "border-orange-red text-orange-red"
+                )}
+                style={{ width: `${usernameWidth + 10}px` }}
+              />
+              <button
+                className="no-highlight active:scale-95"
+                onClick={() => submitData(username)}
+              >
+                <CheckIcon
+                  className={cn(
+                    "h-7 w-7",
+                    themeColor == "teal" ? "text-teal" : "text-orange-red"
+                  )}
+                />
+              </button>
+            </div>
+          ) : (
+            <span
+              ref={elementRef}
+              className={cn(
+                "relative text-2xl transition-colors",
+                themeColor == "teal" ? "text-teal" : "text-orange-red"
+              )}
+            >
+              {username}
+              <PencilIcon
+                onClick={() => setEditUsername(true)}
+                className="absolute -right-8 bottom-1 h-6 w-6 text-orange"
+              />
+            </span>
+          )}
         </div>
+        <Toaster />
       </div>
       <div className="flex flex-col items-center gap-6 py-10">
         <span className="text-xl font-medium">Tu tema</span>
