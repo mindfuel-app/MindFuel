@@ -1,14 +1,17 @@
 import { createContext, useContext } from "react";
 
 export type ThemeColor = "teal" | "orange-red";
-export type SetThemeColor = (themeColor?: ThemeColor) => void;
-
+export type SetThemeColor = (userId: string, themeColor?: ThemeColor) => void;
 export type ThemeContextType = {
   themeColor: ThemeColor;
   setThemeColor: SetThemeColor;
 };
-
+export const defaultThemeValue: ThemeColor = "teal";
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export function isThemeColor(value: string): value is ThemeColor {
+  return value == "teal" || value == "orange-red";
+}
 
 export function useTheme() {
   const context = useContext(ThemeContext);

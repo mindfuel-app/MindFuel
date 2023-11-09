@@ -7,6 +7,7 @@ import {
   type ThemeColor,
   type SetThemeColor,
   ThemeContextProvider,
+  defaultThemeValue,
 } from "~/lib/ThemeContext";
 import { useState } from "react";
 
@@ -14,15 +15,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  const { data: initialTheme } = api.user.getTheme.useQuery({
-    user_id: session?.user?.id ?? "",
-  });
   const { mutate: updateTheme } = api.user.updateTheme.useMutation();
-  const [theme, setTheme] = useState<ThemeColor>("teal");
-  const setThemeColor: SetThemeColor = (value?: ThemeColor) => {
+  const [theme, setTheme] = useState<ThemeColor>(defaultThemeValue);
+  const setThemeColor: SetThemeColor = (userId: string, value?: ThemeColor) => {
     const newValue = value || theme == "teal" ? "orange-red" : "teal";
     setTheme(newValue);
-    updateTheme({ user_id: session?.user?.id ?? "", theme: newValue });
+    updateTheme({ user_id: userId, theme: newValue });
   };
 
   return (

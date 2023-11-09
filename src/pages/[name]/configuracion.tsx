@@ -7,12 +7,9 @@ import { getSession } from "next-auth/react";
 import NotFoundPage from "../404";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  type SetThemeColor,
-  type ThemeColor,
-  useTheme,
-} from "~/lib/ThemeContext";
+import { type ThemeColor, useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
+import { useUser } from "~/lib/UserContext";
 
 interface PageProps {
   sessionData: Session;
@@ -40,7 +37,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 };
 
 export default function Configuracion({ sessionData }: PageProps) {
-  const { themeColor, setThemeColor } = useTheme();
+  const { themeColor } = useTheme();
 
   if (!sessionData.user.name) return <NotFoundPage />;
 
@@ -81,22 +78,15 @@ export default function Configuracion({ sessionData }: PageProps) {
       </div>
       <div className="flex flex-col items-center gap-6 py-10">
         <span className="text-xl font-medium">Tu tema</span>
-        <ThemeToggleButton
-          themeColor={themeColor}
-          setThemeColor={setThemeColor}
-        />
+        <ThemeToggleButton />
       </div>
     </ProfileLayout>
   );
 }
 
-function ThemeToggleButton({
-  themeColor,
-  setThemeColor,
-}: {
-  themeColor: ThemeColor;
-  setThemeColor: SetThemeColor;
-}) {
+function ThemeToggleButton() {
+  const { themeColor, setThemeColor } = useTheme();
+  const { id } = useUser();
   const [isToggled, setIsToggled] = useState(themeColor == "orange-red");
 
   return (
@@ -105,7 +95,7 @@ function ThemeToggleButton({
       <button
         onClick={() => {
           setIsToggled(!isToggled);
-          setThemeColor();
+          setThemeColor(id);
         }}
         className={cn(
           "no-highlight flex w-20 items-center rounded-full p-2 py-1.5 transition-colors",

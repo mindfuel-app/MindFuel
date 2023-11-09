@@ -22,7 +22,7 @@ export default function Rutinas() {
         </span>
         <button
           className="no-highlight rounded-md bg-white p-2"
-          onClick={() => setThemeColor()}
+          onClick={() => setThemeColor(sessionData.user.id)}
         >
           Cambiar tema
         </button>
