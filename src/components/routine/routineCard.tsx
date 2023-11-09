@@ -38,7 +38,8 @@ export default function RoutineCard({
     <div
       className={cn(
         "no-highlight relative flex w-[300px] cursor-pointer flex-col rounded-md p-1 text-white",
-        themeColor == "teal" ? "bg-teal" : "bg-orange-red"
+        themeColor == "teal" ? "bg-teal" : "bg-orange-red/90",
+        !isCardOpened && "shadow-lg"
       )}
     >
       <div
