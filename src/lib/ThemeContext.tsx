@@ -9,10 +9,6 @@ export type ThemeContextType = {
 export const defaultThemeValue: ThemeColor = "teal";
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function isThemeColor(value: string): value is ThemeColor {
-  return value == "teal" || value == "orange-red";
-}
-
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
