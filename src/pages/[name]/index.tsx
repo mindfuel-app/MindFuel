@@ -10,8 +10,10 @@ import { getSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
-import { type ThemeColor, useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
+import { TrophyIcon } from "@heroicons/react/24/solid";
+import { isString } from "~/lib/checkTypes";
 
 interface PageProps {
   sessionData: Session;
@@ -44,127 +46,68 @@ export default function Profile({ sessionData }: PageProps) {
   const { data: pointsData } = api.points.getPoints.useQuery({
     user_id: sessionData.user.id,
   });
-  const { themeColor } = useTheme();
 
-  if (sessionData.user.name !== name) return <NotFoundPage />;
+  if (
+    !isString(sessionData.user.name) ||
+    !isString(name) ||
+    sessionData.user.name != name
+  )
+    return <NotFoundPage />;
 
   return (
     <>
-      {name && (
-        <ProfileLayout
-          header={
-            <Header
-              level={pointsData?.levelNumber ?? 0}
-              userPoints={pointsData?.puntos ?? 0}
-              currentLevelPoints={pointsData?.currentLevelPoints ?? 0}
-              nextLevelPoints={
-                pointsData?.nextLevelPoints ?? pointsData?.puntos ?? 0
-              }
-              themeColor={themeColor}
-            />
-          }
-          sessionData={sessionData}
-        >
-          <div className="relative flex w-full items-center py-3">
-            <div
-              className={cn(
-                "absolute left-0 top-0 h-1/2 w-full",
-                themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/80"
-              )}
-            />
-            <div
-              className={cn(
-                "relative z-10 ml-6 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] bg-[#d9d9d9]",
-                themeColor == "teal" ? "border-teal" : "border-orange-red"
-              )}
-            >
-              <span
-                className={cn(
-                  "text-6xl",
-                  themeColor == "teal" ? "text-teal" : "text-orange-red"
-                )}
-              >
-                {name[0]?.toLocaleUpperCase()}
-              </span>
-              <span className="absolute -right-40 top-[8px] text-2xl text-white">
-                {name}
-                <div className="absolute -right-12 top-0">
-                  {sessionData.user.name && (
-                    <ConfigurationButton userName={sessionData.user.name} />
-                  )}
-                </div>
-              </span>
+      <ProfileLayout
+        header={
+          <Header
+            username={sessionData.user.name}
+            level={pointsData?.levelNumber ?? 0}
+            points={pointsData?.puntos ?? 0}
+            currentLevelBasePoints={pointsData?.currentLevelPoints ?? 0}
+            nextLevelPoints={
+              pointsData?.nextLevelPoints ?? pointsData?.puntos ?? 0
+            }
+          />
+        }
+        sessionData={sessionData}
+      >
+        <div className="padding-footer-sm flex w-full flex-col items-center gap-4 px-6 pt-20">
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex w-full max-w-lg flex-col gap-1"
+          >
+            <div className="flex items-center gap-2">
+              <h3 className="ml-1 text-lg font-medium">Logros</h3>
+              <TrophyIcon className="h-5 w-5 text-[#d4af37]" />
             </div>
-          </div>
-          <div className="padding-footer-sm flex w-full flex-col items-center gap-4 px-6 pt-2">
-            {/* <Section title="Estadísticas">
-          <div className="grid grid-cols-2 gap-6">
-            {userStats.map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center text-center"
-              >
-                {stat.icon}
-                <span className="text-lg font-medium text-orange">
-                  {stat.number}
-                </span>
-                <span className="-mt-2 text-lg font-medium">
-                  {stat.label.split(" ")[0]}
-                </span>
-                {stat.label.split(" ").length > 1 && (
-                  <span className="-mt-2 font-medium">
-                    {stat.label.split(" ")[1]}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </Section> */}
-            <Section title="Logros">Logros</Section>
-            <Section title="Resumen semanal">Resumen semanal</Section>
-          </div>
-        </ProfileLayout>
-      )}
+            <div className="rounded-xl bg-[#d9d9d9] p-4">
+              Todavía no hay nada aquí
+            </div>
+          </motion.div>
+        </div>
+      </ProfileLayout>
     </>
   );
 }
 
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -5 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex w-full max-w-lg flex-col gap-1"
-    >
-      <h3 className="ml-1 text-lg font-medium">{title}</h3>
-      <div className="rounded-xl bg-[#d9d9d9] p-4">{children}</div>
-    </motion.div>
-  );
-}
-
 function Header({
+  username,
   level,
-  userPoints,
-  currentLevelPoints,
+  points,
+  currentLevelBasePoints,
   nextLevelPoints,
-  themeColor,
 }: {
+  username: string;
   level: number;
-  userPoints: number;
-  currentLevelPoints: number;
+  points: number;
+  currentLevelBasePoints: number;
   nextLevelPoints: number;
-  themeColor: ThemeColor;
 }) {
-  const levelPoints = userPoints - currentLevelPoints;
-  const targetPoints = nextLevelPoints - currentLevelPoints;
-
+  const { themeColor } = useTheme();
   const [progress, setProgress] = useState(0);
+
+  const levelPoints = points - currentLevelBasePoints;
+  const targetPoints = nextLevelPoints - currentLevelBasePoints;
 
   useEffect(() => {
     if (progress >= levelPoints) return;
@@ -179,38 +122,58 @@ function Header({
   }, [levelPoints, progress]);
 
   return (
-    <div
+    <header
       className={cn(
-        "flex w-full items-center justify-between px-3 pb-2 pt-3",
-        themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/80"
+        "text-white",
+        themeColor == "teal" ? "bg-teal/90" : "bg-orange-red"
       )}
     >
-      <div className="flex w-full items-center gap-3">
+      <div className="flex items-center gap-3 px-3 pb-2 pt-3">
         <div
           className={cn(
-            "flex h-10 w-12 items-center justify-center rounded-full text-lg text-white",
-            themeColor == "teal" ? "bg-[#52c4c4]" : "bg-orange-red"
+            "flex h-10 w-12 items-center justify-center rounded-full text-lg",
+            themeColor == "teal" ? "bg-[#52c4c4]" : "bg-[#FF8F8F]"
           )}
         >
           <span className="text-2xl">{level}</span>
         </div>
         <div className="flex w-full flex-col">
-          <span className="text-white">Tu nivel</span>
+          Tu nivel
           <div className="flex max-w-[400px] items-center gap-2">
             <ProgressLevel
               value={
                 ((progress >= 0 ? progress : levelPoints) / targetPoints) * 100
               }
-              color={themeColor == "teal" ? "#52c4c4" : "#ff6f6f"}
+              color={themeColor == "teal" ? "#52c4c4" : "#FF8F8F"}
               className="h-3 bg-white"
             />
             <span className="text-white">
-              {userPoints}/{nextLevelPoints}
+              {points}/{nextLevelPoints}
             </span>
           </div>
         </div>
       </div>
-    </div>
+      <div className="relative flex flex-wrap items-center gap-3 pb-2 pl-[135px] pt-6">
+        <div
+          className={cn(
+            "absolute left-5 top-3 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] bg-[#d9d9d9] text-6xl",
+            themeColor == "teal"
+              ? "border-teal/90 text-teal/90"
+              : "border-orange-red text-orange-red"
+          )}
+        >
+          {username[0]?.toUpperCase()}
+        </div>
+        <span
+          className={
+            username.length >= 13 ? "text-xl min-[375px]:text-2xl" : "text-2xl"
+          }
+        >
+          {username}
+        </span>
+        <ConfigurationButton userName={username} />
+      </div>
+    </header>
   );
 }
 
@@ -218,7 +181,7 @@ function ConfigurationButton({ userName }: { userName: string }) {
   return (
     <Link
       href={`/${userName}/configuracion`}
-      className="no-highlight flex w-8 rounded-md bg-orange p-1"
+      className="no-highlight flex h-8 w-8 rounded-md bg-orange p-1"
     >
       <Cog6ToothIcon className="h-6 w-6 text-white" />
     </Link>
