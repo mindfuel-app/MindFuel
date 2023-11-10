@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import {
@@ -126,6 +127,14 @@ export const authOptions: NextAuthOptions = {
       if (!token.sub) return Promise.reject("No sub in token");
       session.user.id = token.sub;
       return Promise.resolve(session);
+    },
+    jwt: ({ token, trigger, session }) => {
+      if (trigger == "update" && session) {
+        if (session.name) {
+          token.name = session.name as string;
+        }
+      }
+      return token;
     },
   },
   secret: env.JWT_SECRET,

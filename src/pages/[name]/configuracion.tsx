@@ -1,9 +1,7 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
 import BackButton from "~/components/backButton";
 import ProfileLayout from "~/components/layouts/profileLayout";
-import type { GetServerSideProps } from "next";
-import type { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import NotFoundPage from "../404";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -13,39 +11,23 @@ import { useUser } from "~/lib/UserContext";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/router";
 
-interface PageProps {
-  sessionData: Session;
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  context
-) => {
-  const sessionData = await getSession(context);
-
-  if (!sessionData) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      sessionData,
-    },
-  };
-};
-
-export default function Configuracion({ sessionData }: PageProps) {
+export default function Configuracion() {
+  const { data: sessionData, update: updateSessionData, status } = useSession();
+  const router = useRouter();
   const { themeColor } = useTheme();
   const { mutate: updateUsername } = api.user.editUsername.useMutation({
-    onSuccess: () => toast.success("Nombre de usuario actualizado"),
-    onError: (error) => toast.error(error.message),
+    onSuccess: async () => {
+      await updateSessionData({ name: username });
+      toast.success("Nombre de usuario actualizado");
+    },
+    onError: (error) => {
+      setUsername(sessionData?.user.name as string);
+      toast.error(error.message);
+    },
   });
-  const [username, setUsername] = useState(sessionData.user.name as string);
+  const [username, setUsername] = useState(sessionData?.user.name as string);
   const [editUsername, setEditUsername] = useState(false);
   const [usernameWidth, setUsernameWidth] = useState(0);
   const elementRef = useRef<HTMLElement | null>(null);
@@ -56,15 +38,19 @@ export default function Configuracion({ sessionData }: PageProps) {
     }
   }, [elementRef.current?.offsetWidth]);
 
-  if (!sessionData.user.name) return <NotFoundPage />;
+  if (status == "unauthenticated") return void router.push("/signin");
 
-  function submitData(value: string) {
-    if (value.length < 3 || value.length > 30)
-      return alert("El nombre de usuario debe tener entre 3 y 30 caracteres");
-    if (value == sessionData.user.name) return setEditUsername(false);
+  if (!sessionData?.user.name) return <NotFoundPage />;
+
+  function submitData(userId: string, value: string) {
+    if (value.length < 3 || value.length > 20)
+      return toast.error(
+        "El nombre de usuario debe tener entre 3 y 20 caracteres"
+      );
+    if (value == sessionData?.user.name) return setEditUsername(false);
 
     updateUsername({
-      user_id: sessionData.user.id,
+      user_id: userId,
       username: value,
     });
     setEditUsername(false);
@@ -99,6 +85,10 @@ export default function Configuracion({ sessionData }: PageProps) {
               <input
                 type="text"
                 defaultValue={username}
+                onKeyDown={(e) => {
+                  if (e.key == "Enter")
+                    submitData(sessionData.user.id, username);
+                }}
                 onChange={(e) => setUsername(e.target.value)}
                 className={cn(
                   "rounded-md border px-1 text-2xl outline-none",
@@ -110,7 +100,7 @@ export default function Configuracion({ sessionData }: PageProps) {
               />
               <button
                 className="no-highlight active:scale-95"
-                onClick={() => submitData(username)}
+                onClick={() => submitData(sessionData.user.id, username)}
               >
                 <CheckIcon
                   className={cn(
