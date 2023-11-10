@@ -26,7 +26,7 @@ export default function SignUpForm() {
   };
 
   const formSchema: ZodType<FormData> = z.object({
-    name: z.string().min(3).max(30),
+    name: z.string().min(3).max(20),
     email: z.string().email(),
     password: z.string().min(6).max(30),
   });
@@ -104,7 +104,7 @@ export default function SignUpForm() {
             )}
             {!isUsernameWrong && errors.name && (
               <span className="absolute mt-16 text-xs text-red-500">
-                Nombre de usuario: 3-30 caracteres
+                Nombre de usuario: 3-20 caracteres
               </span>
             )}
           </label>
