@@ -33,7 +33,12 @@ export default function InactiveTask({
         </span>
         {isDone && (
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-            <CheckIcon className="h-6 w-6 text-teal" />
+            <CheckIcon
+              className={cn(
+                "h-6 w-6",
+                themeColor == "teal" ? "text-teal" : "text-orange-red"
+              )}
+            />
           </div>
         )}
       </div>
