@@ -24,7 +24,11 @@ export default function Configuracion() {
     },
     onError: (error) => {
       setUsername(sessionData?.user.name as string);
-      toast.error(error.message);
+      toast.error(
+        error.message == "Username already exists"
+          ? "El nombre de usuario ya existe"
+          : "Error al actualizar el nombre de usuario"
+      );
     },
   });
   const [username, setUsername] = useState(sessionData?.user.name as string);
