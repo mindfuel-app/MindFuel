@@ -12,36 +12,11 @@ import { usePoints } from "~/hooks/usePoints";
 import { routinePoints, taskPoints } from "~/lib/points";
 import { Footer } from "~/components/navigation";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
-
-interface PageProps {
-  sessionData: Session;
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  context
-) => {
-  const sessionData = await getSession(context);
-
-  if (!sessionData) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      sessionData,
-    },
-  };
-};
+import { isString } from "~/lib/checkTypes";
 
 function ErrorPage({ sessionData }: { sessionData: Session }) {
   const [seconds, setSeconds] = useState(0);
@@ -79,14 +54,15 @@ function ErrorPage({ sessionData }: { sessionData: Session }) {
   );
 }
 
-export default function Routine({ sessionData }: PageProps) {
+export default function Routine() {
+  const { data: sessionData, status } = useSession();
   const { addPoints } = usePoints();
   const router = useRouter();
   const { data: routine } = api.routines.getRoutineById.useQuery({
-    id: typeof router.query.id == "string" ? router.query.id : "",
+    id: isString(router.query.id) ? router.query.id : "",
   });
   const { data: tasks } = api.tasks.getTasksbyRoutine.useQuery({
-    routine_id: typeof router.query.id == "string" ? router.query.id : "",
+    routine_id: isString(router.query.id) ? router.query.id : "",
   });
   const [routineProgress, setRoutineProgress] = useState(0);
   const [skippedTasks, setSkippedTasks] = useState<number[]>([]);
@@ -94,7 +70,7 @@ export default function Routine({ sessionData }: PageProps) {
   const { themeColor } = useTheme();
 
   useEffect(() => {
-    if (!tasks) return;
+    if (!sessionData?.user.id || !tasks) return;
 
     if (routineProgress === tasks.length) {
       setRewardPoints(
@@ -117,6 +93,10 @@ export default function Routine({ sessionData }: PageProps) {
     skippedTasks.length,
     tasks,
   ]);
+
+  if (status == "unauthenticated") return void router.push("/signin");
+
+  if (!sessionData) return;
 
   if (!tasks || !routine) {
     return <ErrorPage sessionData={sessionData} />;

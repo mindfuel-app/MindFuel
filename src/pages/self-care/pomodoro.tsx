@@ -2,37 +2,17 @@ import SelfCareLayout from "~/components/layouts/selfCareLayout";
 import { OptionLayout } from ".";
 import Image from "next/image";
 import { useState } from "react";
-import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
-import type { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
-interface PageProps {
-  sessionData: Session;
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  context
-) => {
-  const sessionData = await getSession(context);
-
-  if (!sessionData) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      sessionData,
-    },
-  };
-};
-
-export default function Pomodoro({ sessionData }: PageProps) {
+export default function Pomodoro() {
+  const router = useRouter();
+  const { data: sessionData, status } = useSession();
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+  if (status == "unauthenticated") return void router.push("/signin");
+
+  if (!sessionData) return;
 
   return (
     <SelfCareLayout sessionData={sessionData}>

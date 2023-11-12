@@ -5,9 +5,7 @@ import NotFoundPage from "~/pages/404";
 import { api } from "~/utils/api";
 import { ProgressLevel } from "~/components/ui/progressBar";
 import { useEffect, useState } from "react";
-import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
-import type { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "~/lib/ThemeContext";
@@ -15,42 +13,22 @@ import { cn } from "~/lib/utils";
 import { TrophyIcon } from "@heroicons/react/24/solid";
 import { isString } from "~/lib/checkTypes";
 
-interface PageProps {
-  sessionData: Session;
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  context
-) => {
-  const sessionData = await getSession(context);
-
-  if (!sessionData) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      sessionData,
-    },
-  };
-};
-
-export default function Profile({ sessionData }: PageProps) {
+export default function Profile() {
   const router = useRouter();
+  const { data: sessionData, status } = useSession();
   const { name } = router.query;
   const { data: pointsData } = api.points.getPoints.useQuery({
-    user_id: sessionData.user.id,
+    user_id: sessionData?.user.id ?? "",
   });
 
+  if (status == "unauthenticated") return void router.push("/signin");
+
+  if (!sessionData) return;
+
   if (
-    !isString(sessionData.user.name) ||
+    !isString(sessionData?.user.name) ||
     !isString(name) ||
-    sessionData.user.name != name
+    sessionData?.user.name != name
   )
     return <NotFoundPage />;
 

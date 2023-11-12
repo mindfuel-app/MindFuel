@@ -7,44 +7,24 @@ import { CircularProgress } from "@mui/material";
 import toast, { Toaster } from "react-hot-toast";
 import { cn } from "~/lib/utils";
 import { motion } from "framer-motion";
-import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
-import type { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
-interface PageProps {
-  sessionData: Session;
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  context
-) => {
-  const sessionData = await getSession(context);
-
-  if (!sessionData) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      sessionData,
-    },
-  };
-};
-
-export default function DiarioPersonal({ sessionData }: PageProps) {
+export default function DiarioPersonal() {
+  const router = useRouter();
+  const { data: sessionData, status } = useSession();
   const { data: previousNotes, refetch: refetchNotes } =
     api.selfCare.getNotes.useQuery({
-      user_id: sessionData.user.id,
+      user_id: sessionData?.user.id ?? "",
     });
   const [note, setNote] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showOldNotes, setShowOldNotes] = useState(false);
   const { mutate: createNote } = api.selfCare.createNote.useMutation();
+
+  if (status == "unauthenticated") return void router.push("/signin");
+
+  if (!sessionData) return;
 
   return (
     <SelfCareLayout sessionData={sessionData}>

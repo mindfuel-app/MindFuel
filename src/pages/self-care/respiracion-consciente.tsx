@@ -3,41 +3,20 @@ import { Button } from "~/components/ui/button";
 import { useState } from "react";
 import { ArrowRightIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
-import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
-import type { Session } from "next-auth";
 import { useRouter } from "next/router";
 import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
+import { useSession } from "next-auth/react";
 
-interface PageProps {
-  sessionData: Session;
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  context
-) => {
-  const sessionData = await getSession(context);
-
-  if (!sessionData) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      sessionData,
-    },
-  };
-};
-
-export default function RespiracionConsciente({ sessionData }: PageProps) {
+export default function RespiracionConsciente() {
+  const router = useRouter();
+  const { data: sessionData, status } = useSession();
   const [progress, setProgress] = useState(0);
   const { themeColor } = useTheme();
+
+  if (status == "unauthenticated") return void router.push("/signin");
+
+  if (!sessionData) return;
 
   return (
     <SelfCareLayout sessionData={sessionData}>
