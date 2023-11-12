@@ -9,43 +9,17 @@ import Link from "next/link";
 import { useNotifications } from "~/hooks/useNotifications";
 import { useEffect } from "react";
 import { api } from "~/utils/api";
-import type { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
-import type { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import { cn } from "~/lib/utils";
 import { useTheme } from "~/lib/ThemeContext";
-
-interface PageProps {
-  sessionData: Session;
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  context
-) => {
-  const sessionData = await getSession(context);
-
-  if (!sessionData) {
-    return {
-      redirect: {
-        destination: "/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      sessionData,
-    },
-  };
-};
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
   { value: "rutinas", label: "Rutinas" },
 ];
 
-export default function Home({ sessionData }: PageProps) {
+export default function Home() {
+  const { data: sessionData, status } = useSession();
   const { themeColor } = useTheme();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -78,7 +52,7 @@ export default function Home({ sessionData }: PageProps) {
       throw new Error("Push manager not found");
     }
 
-    if (permission == "granted") {
+    if (permission == "granted" && sessionData?.user.id) {
       void navigator.serviceWorker
         .register("./push-sw.js")
         .then((registration) => {
@@ -101,6 +75,10 @@ export default function Home({ sessionData }: PageProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [permission]);
+
+  if (status == "unauthenticated") return void router.push("/signin");
+
+  if (!sessionData) return;
 
   return (
     <Layout sessionData={sessionData}>
