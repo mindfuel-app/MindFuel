@@ -7,6 +7,8 @@ import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import { useRouter } from "next/router";
+import { useTheme } from "~/lib/ThemeContext";
+import { cn } from "~/lib/utils";
 
 interface PageProps {
   sessionData: Session;
@@ -35,6 +37,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
 
 export default function RespiracionConsciente({ sessionData }: PageProps) {
   const [progress, setProgress] = useState(0);
+  const { themeColor } = useTheme();
 
   return (
     <SelfCareLayout sessionData={sessionData}>
@@ -68,7 +71,10 @@ export default function RespiracionConsciente({ sessionData }: PageProps) {
           </p>
           <Button
             onClick={() => setProgress(1)}
-            className="no-highlight mt-3 flex rounded-full bg-cornflower-blue px-4 font-medium "
+            className={cn(
+              "no-highlight mt-3 flex rounded-full px-4 font-medium",
+              themeColor == "teal" ? "bg-cornflower-blue" : "bg-orange-red"
+            )}
           >
             Empezar
           </Button>
@@ -124,12 +130,16 @@ function StepCard({
   incrementProgress: () => void;
 }) {
   const router = useRouter();
+  const { themeColor } = useTheme();
 
   return (
     <motion.div
       initial={{ opacity: 0.5, x: 10 }}
       animate={{ opacity: 1, x: 0 }}
-      className="mt-4 flex w-[85%] max-w-sm flex-col items-center gap-8 rounded-xl bg-cornflower-blue py-5 text-center"
+      className={cn(
+        "mt-4 flex w-[85%] max-w-sm flex-col items-center gap-8 rounded-xl py-5 text-center",
+        themeColor == "teal" ? "bg-cornflower-blue" : "bg-orange-red"
+      )}
     >
       <div className="flex h-16 w-16 items-center justify-center rounded-full border-8 border-white bg-transparent text-3xl font-medium text-white">
         {progress}
@@ -143,14 +153,26 @@ function StepCard({
             onClick={incrementProgress}
             className="no-highlight h-[60px] w-[60px] rounded-full bg-white"
           >
-            <ArrowRightIcon className="text-cornflower-blue" />
+            <ArrowRightIcon
+              className={
+                themeColor == "teal"
+                  ? "text-cornflower-blue"
+                  : "text-orange-red"
+              }
+            />
           </Button>
         ) : (
           <Button
             onClick={() => void router.push("/self-care")}
             className="no-highlight h-16 w-16 rounded-full bg-white"
           >
-            <CheckIcon className="text-cornflower-blue" />
+            <CheckIcon
+              className={
+                themeColor == "teal"
+                  ? "text-cornflower-blue"
+                  : "text-orange-red"
+              }
+            />
           </Button>
         )}
       </div>
