@@ -17,7 +17,6 @@ export default function TaskCard({
   name,
   deadline,
   description,
-  routineId,
   isChecked,
   isPartOfRoutine,
   showCompletedTasks,
@@ -26,7 +25,6 @@ export default function TaskCard({
   name: string;
   deadline: Date | null;
   description: string | null;
-  routineId: string;
   isChecked?: boolean;
   isPartOfRoutine: boolean;
   showCompletedTasks: boolean;
@@ -35,9 +33,6 @@ export default function TaskCard({
   const user = useUser();
   const { refetch: refetchTasks } = api.tasks.getTasks.useQuery({
     user_id: user.id,
-  });
-  const { data: routine } = api.routines.getRoutineById.useQuery({
-    id: routineId,
   });
   const { addPoints } = usePoints();
 
@@ -51,11 +46,6 @@ export default function TaskCard({
   useEffect(() => {
     setShowPointsAnimation(false);
   }, [showPointsAnimation]);
-
-  let dayOfWeek = new Date().toLocaleString("es", { weekday: "short" });
-  dayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
-
-  const isForToday = routine?.days.includes(dayOfWeek);
 
   const today = new Date();
   const tomorrow = new Date(new Date().setDate(today.getDate() + 1));
@@ -86,8 +76,7 @@ export default function TaskCard({
   const maxDescriptionCharacters = 27;
 
   const isCardVisible =
-    (!isTaskDone || showCompletedTasks || showPointsAnimation) &&
-    isForToday !== false;
+    !isTaskDone || showCompletedTasks || showPointsAnimation;
 
   return (
     <AnimatePresence>
@@ -197,7 +186,7 @@ export default function TaskCard({
           >
             {showPointsAnimation && (
               <motion.div
-                animate={{ opacity: 0.5, y: -30, x: -20 }}
+                animate={{ opacity: 0.5, y: -30, x: -30 }}
                 transition={{ duration: 0.6 }}
                 className={cn(
                   "absolute -right-7 text-3xl font-medium",

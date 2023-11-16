@@ -99,7 +99,6 @@ export default function TaskList() {
                 name={task.name}
                 deadline={task.deadline}
                 description={task.description}
-                routineId={task.routine_id || ""}
                 isChecked={task.done}
                 isPartOfRoutine={task.routine_id != null}
                 showCompletedTasks={showCompletedTasks}

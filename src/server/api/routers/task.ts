@@ -49,9 +49,22 @@ export const taskRouter = createTRPCRouter({
   getTasks: protectedProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async ({ ctx, input }) => {
+      let dayOfWeek = new Date().toLocaleString("es", { weekday: "short" });
+      dayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+
       const tasks = await ctx.prisma.task.findMany({
         where: {
           user_id: input.user_id,
+          OR: [
+            { routine_id: null },
+            {
+              routine: {
+                days: {
+                  contains: dayOfWeek,
+                },
+              },
+            },
+          ],
         },
         select: {
           id: true,
