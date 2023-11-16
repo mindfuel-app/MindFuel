@@ -46,6 +46,7 @@ export default function TaskCard({
   const [showPointsAnimation, setShowPointsAnimation] = useState(false);
   const { setTaskDone } = useTasks({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showCompleteDescription, setShowCompleteDescription] = useState(false);
 
   useEffect(() => {
     setShowPointsAnimation(false);
@@ -98,6 +99,7 @@ export default function TaskCard({
             opacity: 0,
             x: 15,
           }}
+          onClick={() => setShowCompleteDescription(!showCompleteDescription)}
           transition={{ duration: 0.4 }}
           className={cn(
             "relative flex w-72 items-center justify-between rounded-md border-2 bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-[400px] lg:w-[500px] lg:py-2",
@@ -117,12 +119,18 @@ export default function TaskCard({
             </span>
             {description && (
               <span className="mb-1 text-sm text-gray-500">
-                {description.length <= maxDescriptionCharacters
-                  ? description
-                  : `${description.substring(
-                      0,
-                      maxDescriptionCharacters - 3
-                    )}...`}
+                {showCompleteDescription ? (
+                  description
+                ) : (
+                  <>
+                    {description.length <= maxDescriptionCharacters
+                      ? description
+                      : `${description.substring(
+                          0,
+                          maxDescriptionCharacters - 3
+                        )}...`}
+                  </>
+                )}
               </span>
             )}
             {deadlineDate && (
