@@ -4,13 +4,13 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-import mysql.connector as sql
+# import mysql.connector as sql
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-load_dotenv()
+# load_dotenv()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://mindfuel.vercel.app","http://localhost:3000"],
@@ -24,20 +24,20 @@ def home():
     return "Hello, World"
 
 @app.post("/recomendar")
-async def recomendar(title: str):
-    conn = sql.connect(
-        host=os.getenv("DB_HOST"),
-        user=os.getenv("DB_USERNAME"),
-        passwd=os.getenv("DB_PASSWORD"),
-        db=os.getenv("DB_NAME")
-    )
+async def recomendar(title_: str):
+    # conn = sql.connect(
+    #     host=os.getenv("DB_HOST"),
+    #     user=os.getenv("DB_USERNAME"),
+    #     passwd=os.getenv("DB_PASSWORD"),
+    #     db=os.getenv("DB_NAME")
+    # )
 
-    cursor = conn.cursor()
+    # cursor = conn.cursor()
 
-    cursor.execute("SELECT name, description, estimated_time, id  FROM task")
-    result = cursor.fetchall()
-    print(result);
-    cursor.close()
+    # cursor.execute("SELECT name, description, estimated_time, id  FROM task")
+    # result = cursor.fetchall()
+    # print(result)
+    # cursor.close()
 
     # Guardar los resultados en un archivo CSV
     # with open('tareas.csv', 'w', newline='', encoding='utf-8') as csvfile:
@@ -47,11 +47,14 @@ async def recomendar(title: str):
     #     for row in result:
     #         writer.writerow({'Tareas': row[0], 'Descripcion': row[1], 'Duracion': row[2], 'Id': row[3]})
 
+    title = title_.get('title','')
+    print(title)
     tareas = pd.read_csv('./input/tareas.csv')
     ratings = pd.read_csv('./input/puntuacion.csv')
 
     def clean_title(title):
         return re.sub("[^a-zA-Z0-9 ]", "", title)
+
 
     tareas["clean_title"] = tareas["Tareas"].apply(clean_title)
 
