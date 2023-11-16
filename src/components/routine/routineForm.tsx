@@ -414,6 +414,53 @@ export default function RoutineForm({
                 >
                   +
                 </Button>
+                {routine.name.length > 0 && (
+                  <Button
+                    onClick={() => {
+                      const controller = new AbortController();
+                      const signal = controller.signal;
+
+                      const timeout = setTimeout(
+                        () => controller.abort(),
+                        50000000000
+                      );
+                      fetch("https://mindfuel-alg.onrender.com/recomendar", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        //signal,
+                        body: JSON.stringify({ title: routine.name }),
+                      })
+                        .then((res) => res.json())
+                        .then((data: string[]) => {
+                          console.log(data);
+                          clearTimeout(timeout);
+                          setRoutine((prev) => {
+                            if (!data || data.length == 0) return prev;
+                            const newTaks = data.map((task, index) => {
+                              return {
+                                name: task,
+                                estimatedTime: null,
+                                usesAI: false,
+                                routineOrder: index + 1,
+                              } as Task;
+                            });
+                            return {
+                              ...prev,
+                              tasks: newTaks,
+                            };
+                          });
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }}
+                    className="no-highlight text-gray-800"
+                  >
+                    Recomendar
+                  </Button>
+                )}
                 {emptyTaskError && (
                   <motion.span
                     initial={{ opacity: 0.7 }}
