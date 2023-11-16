@@ -88,14 +88,16 @@ export default function TaskCard({
             opacity: 0,
             x: 15,
           }}
-          onClick={() => setShowCompleteDescription(!showCompleteDescription)}
           transition={{ duration: 0.4 }}
           className={cn(
             "relative flex w-72 items-center justify-between rounded-md border-2 bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-[400px] lg:w-[500px] lg:py-2",
             themeColor == "teal" ? "border-teal" : "border-orange-red"
           )}
         >
-          <div className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px]">
+          <div
+            onClick={() => setShowCompleteDescription(!showCompleteDescription)}
+            className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px]"
+          >
             <span
               className={cn(
                 "text-black",
