@@ -1,7 +1,8 @@
-import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { Label } from "./ui/label";
 
 export default function TimeForm({
   taskIndex,
@@ -42,13 +43,15 @@ export default function TimeForm({
         </div>
       </div>
       <div className="flex flex-col items-center gap-5 pb-2 pt-6">
+        {" "}
         <div className="flex gap-5">
-          <label className="flex flex-col items-center gap-2">
-            Horas
+          <div className="space-y-2">
+            <Label htmlFor="hours">Horas</Label>
             <input
+              id="hours"
               type="number"
               max={24}
-              className="w-12 border border-gray-400 outline-none"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               defaultValue={hours}
               onChange={(e) => {
                 if (Number(e.target.value) > 24)
@@ -59,13 +62,14 @@ export default function TimeForm({
                 setHours(Number(e.target.value));
               }}
             />
-          </label>
-          <label className="flex flex-col items-center gap-2">
-            Minutos
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="minutes">Minutos</Label>
             <input
+              id="minutes"
               type="number"
               max={60}
-              className="w-12 border border-gray-400 outline-none"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               defaultValue={minutes}
               onChange={(e) => {
                 if (Number(e.target.value) > 60)
@@ -76,13 +80,14 @@ export default function TimeForm({
                 setMinutes(Number(e.target.value));
               }}
             />
-          </label>
-          <label className="flex flex-col items-center gap-2">
-            Segundos
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="seconds">Segundos</Label>
             <input
+              id="seconds"
               type="number"
               max={60}
-              className="w-12 border border-gray-400 outline-none"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               defaultValue={seconds}
               onChange={(e) => {
                 if (Number(e.target.value) > 60)
@@ -93,7 +98,7 @@ export default function TimeForm({
                 setSeconds(Number(e.target.value));
               }}
             />
-          </label>
+          </div>
         </div>
         <Button
           onClick={() => {
@@ -101,9 +106,9 @@ export default function TimeForm({
             localStorage.setItem(`${taskIndex}`, totalTime.toString());
             afterSave();
           }}
-          className="no-highlight h-10 w-10 rounded-full bg-[#5c7aff] p-2"
+          className="no-highlight -mb-2 ml-auto mt-4 bg-[#5c7aff]"
         >
-          <CheckIcon className="h-16 w-16" />
+          Confirmar
         </Button>
       </div>
     </motion.div>
