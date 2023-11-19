@@ -185,7 +185,7 @@ export default function ActiveTask({
       {estimatedTime && (
         <CountdownTimer
           initialSeconds={estimatedTime}
-          isRunning={!loadingSteps}
+          isRunning={usesAI ? !loadingSteps : true}
           onComplete={() => {
             setShowModal(true);
             sendNotification({
@@ -230,7 +230,7 @@ export default function ActiveTask({
         <div
           className={cn(
             "no-highlight flex items-center justify-end gap-3",
-            !usesAI && "-mt-8"
+            !usesAI && !estimatedTime && "-mt-8"
           )}
         >
           <div
