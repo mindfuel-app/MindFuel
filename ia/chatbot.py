@@ -37,13 +37,12 @@ async def procesar_tarea(tarea: dict):
             messages=solicitud,
             temperature=0.7,
             max_tokens=150,
-            top_p=0.95,
-            frequency_penalty=0,
-            presence_penalty=0,
+            top_p=0.9,
             stop=None
         )
 
         respuesta = response['choices'][0]['message']['content']
+        print(respuesta)
         respuesta = respuesta.replace('\n', '')
         pasos = re.split(r'\d+\.\s*', respuesta)
         # Filtra los elementos vacíos en la lista de pasos
