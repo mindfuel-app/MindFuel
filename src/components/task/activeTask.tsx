@@ -140,7 +140,7 @@ export default function ActiveTask({
     const controller = new AbortController();
     const signal = controller.signal;
 
-    const timeout = setTimeout(() => controller.abort(), 5000);
+    const timeout = setTimeout(() => controller.abort(), 20000);
 
     fetch("https://mindfuel-ia.onrender.com/dividir_tarea", {
       method: "POST",
