@@ -32,7 +32,7 @@ async def procesar_tarea(tarea: dict):
             {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, en una oracion, sin explayarte demasiado:"}
         ]
 
-        response = client.chat.completions.create(
+        response = client.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=solicitud,
             temperature=0.7,
@@ -43,7 +43,7 @@ async def procesar_tarea(tarea: dict):
             stop=None
         )
 
-        respuesta = response['choices'][0].get('message', {}).get('content', '')
+        respuesta = response['choices'][0]['message']['content']
         respuesta = respuesta.replace('\n', '')
         pasos = re.split(r'\d+\.\s*', respuesta)
         # Filtra los elementos vacíos en la lista de pasos
