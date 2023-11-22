@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import os
 from dotenv import load_dotenv
 import re
@@ -7,9 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
-openai.api_type = "azure"
-openai.api_base = "https://mindfuel.openai.azure.com/"
-openai.api_version = "2023-07-01-preview"
+openai = OpenAI()
+
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 app = FastAPI()
@@ -35,6 +34,7 @@ async def procesar_tarea(tarea: dict):
 
         response = openai.ChatCompletion.create(
             engine="mindfuel",
+            model="gpt-3.5-turbo",
             messages=solicitud,
             temperature=0.7,
             max_tokens=150,
