@@ -59,7 +59,7 @@ async def recomendar(title_: dict):
         rec_percentages["score"] = rec_percentages["similar"] / rec_percentages["all"]
 
         rec_percentages = rec_percentages.sort_values("score", ascending=False)
-        rec_percentages = rec_percentages.head(10).merge(tareas, left_index=True, right_on="Id")[["Tareas", "Area"]]
+        rec_percentages = rec_percentages.head(5).merge(tareas, left_index=True, right_on="Id")[["Tareas", "Area"]]
         return rec_percentages
 
     # Obtener la recomendación
