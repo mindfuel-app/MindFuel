@@ -1,4 +1,4 @@
-from openai import OpenAI
+import openai
 import os
 from dotenv import load_dotenv
 import re
@@ -7,9 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY")
-)
+openai.api_key=os.environ.get("OPENAI_API_KEY")
 
 app = FastAPI()
 app.add_middleware(
@@ -32,7 +30,7 @@ async def procesar_tarea(tarea: dict):
             {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, en una oracion, sin explayarte demasiado."}
         ]
 
-        response = client.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=solicitud,
             temperature=0.7,
