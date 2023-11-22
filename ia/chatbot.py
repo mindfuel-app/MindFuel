@@ -42,11 +42,11 @@ async def procesar_tarea(tarea: dict):
         )
 
         respuesta = response['choices'][0]['message']['content']
-        print(respuesta)
         respuesta = respuesta.replace('\n', '')
         pasos = re.split(r'\d+\.\s*', respuesta)
         # Filtra los elementos vacíos en la lista de pasos
         pasos = list(filter(None, pasos))
+        print(pasos)
         return pasos
 
     tarea_texto = tarea.get('tareas', '')
