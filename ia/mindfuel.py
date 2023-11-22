@@ -24,7 +24,7 @@ def home():
     return "Hello, World"
 
 @app.post("/recomendar")
-async def recomendar(title_: str):
+async def recomendar(title_: dict):
     # conn = sql.connect(
     #     host=os.getenv("DB_HOST"),
     #     user=os.getenv("DB_USERNAME"),
@@ -47,8 +47,9 @@ async def recomendar(title_: str):
     #     for row in result:
     #         writer.writerow({'Tareas': row[0], 'Descripcion': row[1], 'Duracion': row[2], 'Id': row[3]})
 
-    title = title_.get('title','')
-    print(title)
+    # title = title_.get('title','')
+    # print(title)
+    title = "desayunar"
     tareas = pd.read_csv('./input/tareas.csv')
     ratings = pd.read_csv('./input/puntuacion.csv')
 
@@ -92,6 +93,7 @@ async def recomendar(title_: str):
         results = search(title)
         tarea_id = results.iloc[0]["Id"]
         recomendacion = find_similar_tarea(tarea_id)
+        print(recomendacion)
     else:
         recomendacion = pd.DataFrame()
         warning = "Ingrese por lo menos 5 caracteres."
