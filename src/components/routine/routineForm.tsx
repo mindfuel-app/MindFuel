@@ -422,25 +422,24 @@ export default function RoutineForm({
 
                       const timeout = setTimeout(
                         () => controller.abort(),
-                        50000000000
+                        3000
                       );
                       fetch("https://mindfuel-alg.onrender.com/recomendar", {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json",
                         },
-                        //signal,
+                        signal,
                         body: JSON.stringify({ title: routine.name }),
                       })
                         .then((res) => res.json())
-                        .then((data: string[]) => {
-                          console.log(data);
+                        .then((data: { Tareas: string; Area: string }[]) => {
                           clearTimeout(timeout);
                           setRoutine((prev) => {
                             if (!data || data.length == 0) return prev;
                             const newTaks = data.map((task, index) => {
                               return {
-                                name: task,
+                                name: task.Tareas,
                                 estimatedTime: null,
                                 usesAI: false,
                                 routineOrder: index + 1,
