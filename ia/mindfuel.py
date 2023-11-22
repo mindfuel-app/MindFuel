@@ -23,7 +23,7 @@ app.add_middleware(
 def home():
     return "Hello, World"
 
-@app.post("/recomendar")
+@app.get("/recomendar")
 async def recomendar(title_: dict):
     # conn = sql.connect(
     #     host=os.getenv("DB_HOST"),
