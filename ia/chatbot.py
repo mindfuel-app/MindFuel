@@ -28,13 +28,13 @@ async def home():
 async def procesar_tarea(tarea: dict):
     def dividir_tarea_en_pasos(prompt):
         solicitud = [
-            {"role": "user", "content": prompt},
-            {"role": "assistant", "content": "Divide la tarea en 4 pasos más simples y cortos, en una oracion, sin explayarte demasiado."}
+            {"role": "user", "content": "Divide la tarea en 4 pasos más simples y cortos, en una oracion, sin explayarte demasiado:" +prompt}
         ]
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=solicitud
+            messages=solicitud,
+            total_tokens = 150
         )
 
         respuesta = response['choices'][0]['message']['content']
