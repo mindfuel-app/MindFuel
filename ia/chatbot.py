@@ -34,7 +34,6 @@ async def procesar_tarea(tarea: dict):
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=solicitud,
-            total_tokens = 150
         )
 
         respuesta = response['choices'][0]['message']['content']
