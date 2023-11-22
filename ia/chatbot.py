@@ -41,7 +41,7 @@ async def procesar_tarea(tarea: dict):
             stop=None
         )
 
-        respuesta = response['choices'][0]['message']['content']
+        respuesta = response['choices'][0].message.content
         print(respuesta)
         respuesta = respuesta.replace('\n', '')
         pasos = re.split(r'\d+\.\s*', respuesta)
