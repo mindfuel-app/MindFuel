@@ -33,7 +33,7 @@ async def procesar_tarea(tarea: dict):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=solicitud,
-            temperature=0.7,
+            temperature=0,
             max_tokens=150,
             top_p=0.95,
             frequency_penalty=0,
