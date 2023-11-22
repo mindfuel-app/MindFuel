@@ -4,67 +4,41 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-# import mysql.connector as sql
-import os
-# from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-# load_dotenv()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://mindfuel.vercel.app","http://localhost:3000"],
+    allow_origins=["https://mindfuel.vercel.app", "http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["GET","POST","OPTIONS"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"]
 )
 
 @app.get("/")
 def home():
-    return "Hello, World"
+    return "Bienvenido a la aplicación de recomendación de tareas."
 
-@app.get("/recomendar")
+@app.post("/recomendar")
 async def recomendar(title_: dict):
-    # conn = sql.connect(
-    #     host=os.getenv("DB_HOST"),
-    #     user=os.getenv("DB_USERNAME"),
-    #     passwd=os.getenv("DB_PASSWORD"),
-    #     db=os.getenv("DB_NAME")
-    # )
+    # Validar la entrada
+    title = title_.get('title', '')
+    if len(title) < 5:
+        raise HTTPException(status_code=400, detail="El título debe tener al menos 5 caracteres.")
 
-    # cursor = conn.cursor()
-
-    # cursor.execute("SELECT name, description, estimated_time, id  FROM task")
-    # result = cursor.fetchall()
-    # print(result)
-    # cursor.close()
-
-    # Guardar los resultados en un archivo CSV
-    # with open('tareas.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    #     fieldnames = ['Tareas', 'Descripcion', 'Duracion', 'Id']
-    #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    #     writer.writeheader()
-    #     for row in result:
-    #         writer.writerow({'Tareas': row[0], 'Descripcion': row[1], 'Duracion': row[2], 'Id': row[3]})
-
-    # title = title_.get('title','')
-    # print(title)
-    title = "desayunar"
+    # Leer los datos de tareas y puntuaciones
     tareas = pd.read_csv('./input/tareas.csv')
     ratings = pd.read_csv('./input/puntuacion.csv')
 
-    def clean_title(title):
-        return re.sub("[^a-zA-Z0-9 ]", "", title)
+    # Preprocesar los datos
+    tareas["clean_title"] = tareas["Tareas"].apply(lambda x: re.sub("[^a-zA-Z0-9 ]", "", x))
 
-
-    tareas["clean_title"] = tareas["Tareas"].apply(clean_title)
-
+    # Vectorizar y calcular similitud
     vectorizer = TfidfVectorizer(ngram_range=(1, 2))
-
     tfidf = vectorizer.fit_transform(tareas["clean_title"])
 
     def search(title):
-        title = clean_title(title)
+        title = re.sub("[^a-zA-Z0-9 ]", "", title)
         query_vec = vectorizer.transform([title])
         similarity = cosine_similarity(query_vec, tfidf).flatten()
         indices = np.argpartition(similarity, -5)[-5:]
@@ -88,16 +62,10 @@ async def recomendar(title_: dict):
         rec_percentages = rec_percentages.head(10).merge(tareas, left_index=True, right_on="Id")[["Tareas", "Area"]]
         return rec_percentages
 
-    # Mostrar la tabla de tareas
-    if len(title) > 5:
-        results = search(title)
-        tarea_id = results.iloc[0]["Id"]
-        recomendacion = find_similar_tarea(tarea_id)
-        print(recomendacion)
-    else:
-        recomendacion = pd.DataFrame()
-        warning = "Ingrese por lo menos 5 caracteres."
-        raise HTTPException(status_code=400, detail=warning)
+    # Obtener la recomendación
+    results = search(title)
+    tarea_id = results.iloc[0]["Id"]
+    recomendacion = find_similar_tarea(tarea_id)
 
     return recomendacion.to_dict(orient='records')
 
