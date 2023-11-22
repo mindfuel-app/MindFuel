@@ -7,9 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
-openai = OpenAI()
-
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+openai = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY")
+)
 
 app = FastAPI()
 app.add_middleware(
@@ -33,7 +33,6 @@ async def procesar_tarea(tarea: dict):
         ]
 
         response = openai.ChatCompletion.create(
-            engine="mindfuel",
             model="gpt-3.5-turbo",
             messages=solicitud,
             temperature=0.7,
