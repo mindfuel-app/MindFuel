@@ -109,7 +109,7 @@ function Header({
       <div className="flex items-center gap-3 px-3 pb-2 pt-3">
         <div
           className={cn(
-            "flex h-10 w-12 items-center justify-center rounded-full text-lg",
+            "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-lg",
             themeColor == "teal" ? "bg-[#52c4c4]" : "bg-[#FF8F8F]"
           )}
         >
