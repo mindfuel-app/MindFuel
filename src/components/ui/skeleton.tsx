@@ -33,6 +33,10 @@ function SingleRoutineSkeleton() {
   );
 }
 
+function JoinedDateSkeleton() {
+  return <Rectangle className="ml-1 h-8 w-60 bg-gray-200" />;
+}
+
 function Rectangle({ className }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
@@ -55,4 +59,9 @@ function Circle({ className }: React.HTMLAttributes<HTMLDivElement>) {
   );
 }
 
-export { TaskSkeleton, RoutineSkeleton, SingleRoutineSkeleton };
+export {
+  TaskSkeleton,
+  RoutineSkeleton,
+  SingleRoutineSkeleton,
+  JoinedDateSkeleton,
+};

@@ -23,6 +23,37 @@ export const userRouter = createTRPCRouter({
       });
       return user;
     }),
+  getJoinedDate: protectedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          id: input.user_id,
+        },
+        select: {
+          createdAt: true,
+        },
+      });
+
+      const month = user?.createdAt.toLocaleString("default", {
+        month: "long",
+      });
+      const year = user?.createdAt.getFullYear();
+
+      return { month, year };
+    }),
+  getCompletedTasks: protectedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const count = await ctx.prisma.task.count({
+        where: {
+          user_id: input.user_id,
+          done: true,
+        },
+      });
+
+      return count;
+    }),
   getTheme: protectedProcedure
     .input(z.object({ user_id: z.string() }))
     .query(async ({ ctx, input }) => {

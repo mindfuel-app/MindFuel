@@ -2,6 +2,7 @@ import { type Session } from "next-auth";
 import Head from "next/head";
 import { UserProvider } from "~/lib/UserContext";
 import { Footer } from "../navigation";
+import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function ProfileLayout({
   header,
@@ -12,6 +13,8 @@ export default function ProfileLayout({
   children: React.ReactNode;
   sessionData: Session;
 }) {
+  const windowWidth = useWindowWidth();
+
   return (
     <>
       <Head>
@@ -25,7 +28,7 @@ export default function ProfileLayout({
         <div className="flex h-screen flex-col">
           {header}
           <main className="flex h-full flex-col items-center">{children}</main>
-          <Footer />
+          {windowWidth < 1024 && <Footer />}
         </div>
       </UserProvider>
     </>

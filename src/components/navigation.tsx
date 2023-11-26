@@ -129,7 +129,9 @@ export function Footer() {
 export function TopNavigation() {
   const { name } = useUser();
   const router = useRouter();
+  const paramName = router.query.name;
   const { themeColor } = useTheme();
+  const isInProfilePage = paramName == name;
 
   return (
     <div className="absolute left-1/2 z-10 mt-2 flex -translate-x-1/2 gap-16 xl:gap-20">
@@ -143,20 +145,25 @@ export function TopNavigation() {
           )}
         >
           <span
-            className={`${
+            className={cn(
+              isInProfilePage && "text-white",
               router.pathname.startsWith(item.href)
                 ? "font-medium"
                 : "font-normal"
-            }`}
+            )}
           >
             {item.name}
           </span>
-          {router.pathname.startsWith(item.href) && (
-            <motion.div
-              layoutId="active-underline"
+          {(router.pathname.startsWith(item.href) ||
+            (isInProfilePage && item.name == "Perfil")) && (
+            <div
               className={cn(
                 "border-2",
-                themeColor == "teal" ? "border-teal" : "border-orange-red"
+                isInProfilePage
+                  ? "border-white"
+                  : themeColor == "teal"
+                  ? "border-teal"
+                  : "border-orange-red"
               )}
             />
           )}

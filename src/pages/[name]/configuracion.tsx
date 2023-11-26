@@ -12,6 +12,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
+import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function Configuracion() {
   const { data: sessionData, update: updateSessionData, status } = useSession();
@@ -118,7 +119,7 @@ export default function Configuracion() {
             <span
               ref={elementRef}
               className={cn(
-                "relative text-2xl transition-colors",
+                "relative cursor-pointer text-2xl transition-colors",
                 themeColor == "teal" ? "text-teal" : "text-orange-red"
               )}
             >
@@ -137,6 +138,36 @@ export default function Configuracion() {
         <ThemeToggleButton />
       </div>
     </ProfileLayout>
+  );
+}
+
+function Header({
+  userName,
+  themeColor,
+}: {
+  userName: string;
+  themeColor: ThemeColor;
+}) {
+  const windowWidth = useWindowWidth();
+
+  return (
+    <header
+      className={cn(
+        "relative flex w-full items-center justify-start  px-4 py-3 transition-colors",
+        themeColor == "teal"
+          ? windowWidth < 1024
+            ? "bg-teal"
+            : "bg-gradient-to-r from-teal to-green-700"
+          : windowWidth < 1024
+          ? "bg-orange-red"
+          : "bg-gradient-to-r from-orange-red to-[#FF7373]"
+      )}
+    >
+      <BackButton href={`/${userName}`} color="white" />
+      <h1 className="absolute left-1/2 -translate-x-1/2 text-xl font-medium text-white">
+        Configuración
+      </h1>
+    </header>
   );
 }
 
@@ -165,28 +196,6 @@ function ThemeToggleButton() {
         />
       </button>
       <span className="text-xl font-medium text-orange-red">Orange-red</span>
-    </div>
-  );
-}
-
-function Header({
-  userName,
-  themeColor,
-}: {
-  userName: string;
-  themeColor: ThemeColor;
-}) {
-  return (
-    <div
-      className={cn(
-        "relative flex w-full items-center justify-start px-4 py-3 transition-colors",
-        themeColor == "teal" ? "bg-teal" : "bg-orange-red"
-      )}
-    >
-      <BackButton href={`/${userName}`} color="white" />
-      <h1 className="absolute left-1/2 -translate-x-1/2 text-xl font-medium text-white">
-        Configuración
-      </h1>
     </div>
   );
 }
