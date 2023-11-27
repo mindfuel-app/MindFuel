@@ -158,7 +158,7 @@ function Checkbox({
   return (
     <div
       onClick={onCheckedChange}
-      className={`no-highlight flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#75CFF9] transition-colors ${
+      className={`no-highlight flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-2 border-[#75CFF9] transition-colors ${
         isChecked ? "bg-[#75CFF9]" : "bg-white"
       }`}
     >
