@@ -90,7 +90,11 @@ export default function Profile() {
       }
       sessionData={sessionData}
     >
-      <div className="padding-footer-sm flex h-full w-full flex-col gap-6 bg-white px-40">
+      <motion.div
+        initial={{ opacity: 0, y: -5 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="padding-footer-sm flex h-full w-full flex-col gap-6 bg-white px-40"
+      >
         <div className="flex w-full justify-between">
           <div className="flex flex-col gap-4 pt-28">
             <span className="text-3xl font-normal text-gray-800">
@@ -150,7 +154,7 @@ export default function Profile() {
             Todavía no hay nada aquí
           </div>
         </div>
-      </div>
+      </motion.div>
     </ProfileLayout>
   );
 }
@@ -199,13 +203,16 @@ function DesktopHeader({
           height={75}
           priority={true}
         />
-        <Link href={`/${username}/configuracion`}>
-          <Button className="no-highlight mt-3 border">Configuración</Button>
+        <Link
+          className="no-highlight mt-3 h-10"
+          href={`/${username}/configuracion`}
+        >
+          <Button className="border">Configuración</Button>
         </Link>
       </div>
       <div
         className={cn(
-          "absolute -bottom-[60px] left-[150px] flex h-[130px] w-[130px] items-center justify-center rounded-full border-[4px] bg-white text-7xl shadow-xl",
+          "absolute -bottom-[60px] left-[150px] z-10 flex h-[130px] w-[130px] items-center justify-center rounded-full border-[4px] bg-white text-7xl shadow-xl",
           themeColor == "teal"
             ? "border-teal/90 text-teal/90"
             : "border-orange-red text-orange-red"
