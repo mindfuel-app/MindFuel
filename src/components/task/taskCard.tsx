@@ -90,17 +90,17 @@ export default function TaskCard({
           }}
           transition={{ duration: 0.4 }}
           className={cn(
-            "relative flex w-72 items-center justify-between rounded-md border-2 bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-[400px] lg:w-[500px] lg:py-2",
+            "relative flex w-72 items-center justify-between rounded-md border-2 bg-white py-1 pl-3 min-[360px]:w-[300px] sm:w-[500px] lg:w-[700px] lg:py-3",
             themeColor == "teal" ? "border-teal" : "border-orange-red"
           )}
         >
           <div
             onClick={() => setShowCompleteDescription(!showCompleteDescription)}
-            className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px]"
+            className="flex max-w-[210px] flex-col py-1 sm:max-w-[235px] lg:max-w-[280px] lg:gap-1"
           >
             <span
               className={cn(
-                "text-black",
+                "text-black lg:text-xl",
                 isTaskDone && "line-through opacity-50"
               )}
             >
@@ -147,7 +147,7 @@ export default function TaskCard({
                 onClick={() => setIsModalOpen(true)}
               >
                 <div className="flex h-full items-center">
-                  <PencilSquareIcon className="absolute right-7 h-7 w-7 text-gray-600 group-active:text-gray-800 lg:group-hover:text-gray-800" />
+                  <PencilSquareIcon className="absolute right-7 h-7 w-7 text-gray-600 group-active:text-gray-800 lg:right-10 lg:h-8 lg:w-8 lg:group-hover:text-gray-800" />
                 </div>
               </motion.button>
               <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -182,7 +182,7 @@ export default function TaskCard({
               }, 250);
             }}
             className={cn(
-              "no-highlight group absolute right-1 flex h-8 w-8 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-2 bg-white",
+              "no-highlight group absolute right-1 flex h-8 w-8 translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-2 bg-white lg:h-9 lg:w-9",
               themeColor == "teal" ? "border-teal" : "border-orange-red"
             )}
           >

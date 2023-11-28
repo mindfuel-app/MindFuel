@@ -37,25 +37,25 @@ export default function RoutineCard({
   return (
     <div
       className={cn(
-        "no-highlight relative flex w-[300px] cursor-pointer flex-col rounded-md p-1 text-white",
+        "no-highlight relative flex w-[300px] cursor-pointer flex-col rounded-md p-1 text-white sm:w-[350px] lg:w-[400px]",
         themeColor == "teal" ? "bg-teal" : "bg-orange-red/90",
         !isCardOpened && "shadow-lg"
       )}
     >
       <div
         className={cn(
-          "z-0 flex w-full items-center justify-between p-1",
+          "z-0 flex w-full items-center justify-between p-1 lg:p-2",
           isCardOpened && "shadow-lg"
         )}
       >
         <div
-          className="flex w-full flex-col"
+          className="flex w-full flex-col lg:gap-0.5"
           onClick={() => setIsCardOpened(!isCardOpened)}
         >
-          <h1 className="text-lg">{name}</h1>
-          <span className="text-sm text-black">{`${tasks.length} ${
-            tasks.length == 1 ? "tarea" : "tareas"
-          }`}</span>
+          <h1 className="lg:text-xl">{name}</h1>
+          <span className="text-sm text-gray-900 lg:text-base">{`${
+            tasks.length
+          } ${tasks.length == 1 ? "tarea" : "tareas"}`}</span>
           <span className="text-sm">
             {days.length == 33
               ? "Todos los dias"

@@ -29,7 +29,7 @@ export default function RoutineList() {
     <motion.div
       initial={{ x: -10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="padding-footer-xl relative flex flex-col items-center text-lg font-medium"
+      className="max-lg:padding-footer-xl lg:padding-footer-sm relative flex flex-col items-center text-lg font-medium"
     >
       {userRoutines.length == 0 && (
         <h2 className="my-5">No hay rutinas cargadas</h2>
