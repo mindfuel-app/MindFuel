@@ -414,7 +414,7 @@ export default function RoutineForm({
                 >
                   +
                 </Button>
-                {routine.name.length > 0 && (
+                {/* {routine.name.length > 0 && (
                   <Button
                     onClick={() => {
                       const controller = new AbortController();
@@ -459,7 +459,7 @@ export default function RoutineForm({
                   >
                     Recomendar
                   </Button>
-                )}
+                )} */}
                 {emptyTaskError && (
                   <motion.span
                     initial={{ opacity: 0.7 }}
