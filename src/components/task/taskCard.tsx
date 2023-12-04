@@ -43,9 +43,7 @@ export default function TaskCard({
   const { setTaskDone } = useTasks({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const windowWidth = useWindowWidth();
-  const [showCompleteDescription, setShowCompleteDescription] = useState(
-    !(windowWidth < 640)
-  );
+  const [showCompleteDescription, setShowCompleteDescription] = useState(false);
 
   useEffect(() => {
     setShowPointsAnimation(false);
@@ -77,7 +75,7 @@ export default function TaskCard({
     : null;
 
   const maxNameCharacters = 21;
-  const maxDescriptionCharacters = 27;
+  const maxDescriptionCharacters = windowWidth < 640 ? 27 : 100;
 
   const isCardVisible =
     !isTaskDone || showCompletedTasks || showPointsAnimation;
