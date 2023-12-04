@@ -35,7 +35,7 @@ export const userRouter = createTRPCRouter({
         },
       });
 
-      const month = user?.createdAt.toLocaleString("default", {
+      const month = user?.createdAt.toLocaleString("es-ES", {
         month: "long",
       });
       const year = user?.createdAt.getFullYear();

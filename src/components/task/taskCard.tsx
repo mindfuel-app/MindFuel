@@ -11,6 +11,7 @@ import { cn } from "~/lib/utils";
 import { usePoints } from "~/hooks/usePoints";
 import { taskPoints } from "~/lib/points";
 import { useTheme } from "~/lib/ThemeContext";
+import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function TaskCard({
   id,
@@ -41,7 +42,10 @@ export default function TaskCard({
   const [showPointsAnimation, setShowPointsAnimation] = useState(false);
   const { setTaskDone } = useTasks({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showCompleteDescription, setShowCompleteDescription] = useState(false);
+  const windowWidth = useWindowWidth();
+  const [showCompleteDescription, setShowCompleteDescription] = useState(
+    !(windowWidth < 640)
+  );
 
   useEffect(() => {
     setShowPointsAnimation(false);
