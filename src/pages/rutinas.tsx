@@ -1,5 +1,4 @@
 import Layout from "~/components/layouts/homeLayout";
-import Recommend from "~/components/ia";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import { useTheme } from "~/lib/ThemeContext";

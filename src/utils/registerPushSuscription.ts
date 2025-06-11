@@ -9,7 +9,7 @@ export function registerServiceWorker() {
     });
 }
 
-export function askPermission(userId: string) {
+export function askPermission() {
   return new Promise(function (resolve, reject) {
     const permissionResult = Notification.requestPermission(function (result) {
       resolve(result);

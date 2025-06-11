@@ -57,6 +57,7 @@ const options: Option[] = [
 export default function SelfCare() {
   const router = useRouter();
   const { data: sessionData, status } = useSession();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = api.selfCare.getWater.useQuery({
     user_id: sessionData?.user.id ?? "",
   });
