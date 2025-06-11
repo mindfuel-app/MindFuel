@@ -1,4 +1,4 @@
-import { type ZodType, z } from "zod";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Divider } from "@mui/material";
@@ -25,7 +25,7 @@ export default function SignUpForm() {
     password: string;
   };
 
-  const formSchema: ZodType<FormData> = z.object({
+  const formSchema = z.object({
     name: z.string().min(3).max(20),
     email: z.string().email(),
     password: z.string().min(6).max(30),
