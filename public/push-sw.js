@@ -1,21 +1,30 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
-var data;
 self.addEventListener("push", (event) => {
-  if (!event.target) return "error";
-  data = event.data.json();
-  console.log(data);
+  if (!event.data) return;
+
+  const data = event.data.json();
+  console.log("Push recibido:", data);
+
+  const notificationOptions = {
+    body: data.body,
+    icon: "./favicon.ico",
+    image: "./favicon.ico",
+    data: {
+      url: data.url || "/",
+    },
+  };
+
   event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: "./favicon.ico",
-      Image: "./favicon.ico",
-    })
+    self.registration.showNotification(data.title || "MindFuel", notificationOptions)
   );
 });
-self.addEventListener('notificationclick', (event) => {
-  const url=data.url;
-  console.log(url);
-  event.waitUntil(self.clients.openWindow(""+url));
+
+self.addEventListener("notificationclick", (event) => {
+  const url = event.notification?.data?.url || "/";
+  console.log("Redirigiendo a:", url);
+
   event.notification.close();
+  event.waitUntil(
+    self.clients.openWindow(url)
+  );
 });
