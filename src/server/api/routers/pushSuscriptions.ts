@@ -4,23 +4,18 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { z } from "zod";
-import webpush from "web-push";
+import webpush, { PushSubscription } from "web-push";
 import { env } from "~/env.mjs";
 
+// Configuración VAPID
 webpush.setGCMAPIKey(env.GCMAPI_KEY);
-
-const vapidKeys = {
-  publicKey: env.PUBLIC_VAPID,
-  privateKey: env.PRIVATE_VAPID,
-};
-
 webpush.setVapidDetails(
   "mailto:proyectotdahort@gmail.com",
-  vapidKeys.publicKey,
-  vapidKeys.privateKey
+  env.PUBLIC_VAPID,
+  env.PRIVATE_VAPID
 );
 
-// Tipo de la suscripción para validación
+// Interfaz esperada para una suscripción válida
 interface PushSubscriptionObject {
   endpoint: string;
   keys: {
@@ -29,14 +24,16 @@ interface PushSubscriptionObject {
   };
 }
 
-// Validador para confirmar que es una suscripción válida
-function isValidSubscription(obj: any): obj is PushSubscriptionObject {
+// Validación de estructura
+function isValidSubscription(obj: unknown): obj is PushSubscriptionObject {
+  if (typeof obj !== "object" || obj === null) return false;
+
+  const sub = obj as PushSubscriptionObject;
   return (
-    obj &&
-    typeof obj.endpoint === "string" &&
-    obj.keys &&
-    typeof obj.keys.p256dh === "string" &&
-    typeof obj.keys.auth === "string"
+    typeof sub.endpoint === "string" &&
+    sub.keys !== undefined &&
+    typeof sub.keys.p256dh === "string" &&
+    typeof sub.keys.auth === "string"
   );
 }
 
@@ -45,31 +42,27 @@ export const pushRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        PushSubscription: z.any(),
+        PushSubscription: z.any(), // Puedes refinarlo si querés con z.object({...})
       })
     )
     .mutation(async ({ ctx, input }) => {
       const { userId, PushSubscription } = input;
 
-      const alreadyExists = await ctx.prisma.pushSubscription.findMany({
+      const exists = await ctx.prisma.pushSubscription.findFirst({
         where: {
           user_id: userId,
           suscription: JSON.stringify(PushSubscription),
         },
       });
 
-      if (alreadyExists.length > 0) {
-        return "user already Subscribed";
-      }
+      if (exists) return "user already Subscribed";
 
-      const pushSubscription = await ctx.prisma.pushSubscription.create({
+      return await ctx.prisma.pushSubscription.create({
         data: {
           user_id: userId,
           suscription: JSON.stringify(PushSubscription),
         },
       });
-
-      return pushSubscription;
     }),
 
   sendPushToOne: publicProcedure
@@ -82,10 +75,8 @@ export const pushRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const pushSubscriptions = await ctx.prisma.pushSubscription.findMany({
-        where: {
-          user_id: input.user_id,
-        },
+      const subscriptions = await ctx.prisma.pushSubscription.findMany({
+        where: { user_id: input.user_id },
       });
 
       const payload = JSON.stringify({
@@ -94,27 +85,30 @@ export const pushRouter = createTRPCRouter({
         url: input.url,
       });
 
-      for (const push of pushSubscriptions) {
+      for (const push of subscriptions) {
         try {
-          let raw = push.suscription;
-          if (typeof raw === "string") raw = JSON.parse(raw);
-          if (typeof raw === "string") raw = JSON.parse(raw);
+          let parsed: unknown = push.suscription;
 
-          if (!isValidSubscription(raw)) {
-            console.warn("❗ Suscripción inválida (estructura incorrecta):", raw);
+          if (typeof parsed === "string") parsed = JSON.parse(parsed);
+          if (typeof parsed === "string") parsed = JSON.parse(parsed); // doble parse si fue serializado dos veces
+
+          if (!isValidSubscription(parsed)) {
+            console.warn("❗ Suscripción inválida:", parsed);
             continue;
           }
 
-          await webpush.sendNotification(raw, payload);
-        } catch (error: any) {
+          await webpush.sendNotification(parsed, payload);
+        } catch (err) {
+          const error = err as { statusCode?: number };
+
           console.error("❌ Error al enviar notificación:", error);
 
-          if (error.statusCode === 410 || error.statusCode === 404) {
-            console.log("🗑️ Eliminando suscripción expirada");
+          if (error?.statusCode === 410 || error?.statusCode === 404) {
             try {
               await ctx.prisma.pushSubscription.delete({
                 where: { id: push.id },
               });
+              console.log("🗑️ Suscripción eliminada por estar expirada");
             } catch (deleteErr) {
               console.warn("⚠️ No se pudo eliminar la suscripción:", deleteErr);
             }
