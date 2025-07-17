@@ -73,7 +73,7 @@ export default function SelfCare() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="padding-footer-sm flex flex-col gap-3 px-4 pt-2"
+        className="flex flex-col gap-3 px-4 pt-2"
       >
         <h3 className="text-lg">Opciones</h3>
         {options.map((option) => (
@@ -113,7 +113,7 @@ export function OptionLayout({
   return (
     <>
       <TodayDate />
-      <div className="padding-footer-sm flex flex-col items-center gap-7 pt-5">
+      <div className="flex flex-col items-center gap-7 pt-5">
         <h1 className="text-3xl font-medium">{title}</h1>
         {children}
       </div>
