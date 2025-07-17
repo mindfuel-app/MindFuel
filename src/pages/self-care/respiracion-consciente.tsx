@@ -20,39 +20,41 @@ export default function RespiracionConsciente() {
 
   return (
     <SelfCareLayout sessionData={sessionData}>
-      <motion.div
-        initial={{ opacity: 0.5, x: 10 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="flex h-full justify-between max-w-sm flex-col items-center gap-4 p-[18px] text-justify"
-      >
-        {started ? (
-          <>
-            <p>
-              La <strong>respiración consciente</strong> consiste en desviar la
-              atención hacia la respiracion, como una manera de concentrarte
-              en lo que esta mas cercano a este momento, <strong> al presente</strong>.
-            </p>
-            <p>
-              Practicarla permite{" "}
-              <strong>
-                calmar la mente, reducir los niveles de estrés, la ansiedad y las
-                emociones negativas
-              </strong>{" "}
-              y agudizar las habilidades de concentración.
-            </p>
-            <p>
-              Bastan <strong>5 minutos diarios </strong>
-              para ponerla en práctica, centrar la atención y conseguir sus
-              beneficios.{" "}
-            </p>
-            <p>
-              Solo busca un espacio cómodo y tranquilo, un lugar para sentarte y
-              punto de enfoque. <strong>Pruébalo</strong>.
-            </p>
-          </>
-        ) : (
-          <RespirationGuide size={150} theme={themeColor == "teal" ? "teal" : "orange-red"} />
-        )}
+      <div className="flex h-full flex-col items-center justify-between pb-5">
+        <motion.div
+          initial={{ opacity: 0.5, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex justify-between max-w-sm flex-col items-center gap-4 p-[18px] text-justify"
+        >
+          {started ? (
+            <>
+              <p>
+                La <strong>respiración consciente</strong> consiste en desviar la
+                atención hacia la respiracion, como una manera de concentrarte
+                en lo que esta mas cercano a este momento, <strong> al presente</strong>.
+              </p>
+              <p>
+                Practicarla permite{" "}
+                <strong>
+                  calmar la mente, reducir los niveles de estrés, la ansiedad y las
+                  emociones negativas
+                </strong>{" "}
+                y agudizar las habilidades de concentración.
+              </p>
+              <p>
+                Bastan <strong>5 minutos diarios </strong>
+                para ponerla en práctica, centrar la atención y conseguir sus
+                beneficios.{" "}
+              </p>
+              <p>
+                Solo busca un espacio cómodo y tranquilo, un lugar para sentarte y
+                punto de enfoque. <strong>Pruébalo</strong>.
+              </p>
+            </>
+          ) : (
+            <RespirationGuide size={150} theme={themeColor == "teal" ? "teal" : "orange-red"} />
+          )}
+        </motion.div>
         <Button
           onClick={() => setStarted(!started)}
           className={cn(
@@ -62,7 +64,7 @@ export default function RespiracionConsciente() {
         >
           {started ? "Comenzar" : "Ya estoy mejor"}
         </Button>
-      </motion.div>
+      </div>
     </SelfCareLayout>
   );
 }

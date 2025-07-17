@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import BreathingControls from './breathing-controls';
-import BreathingGuide from './breathing-circle';
+import BreathingCircle from './breathing-circle';
 
 interface RespirationGuideProps {
   size?: number;
@@ -38,15 +38,16 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
   const circumference = radius * 2 * Math.PI;
 
   const [timeLeft, setTimeLeft] = useState(InhaleDuration);
-  const [phase, setPhase] = useState<'Inhala' | 'Mantene' | 'Exhala'>('Inhala');
+  const [phase, setPhase] = useState<'Inhala' | 'Mantene' | 'Exhala' | 'Pausa'>('Inhala');
   const [progress, setProgress] = useState(0);
 
-  const totalDuration = InhaleDuration + holdDuration + ExhaleDuration;
+  const totalDuration = InhaleDuration + holdDuration + ExhaleDuration + holdDuration;
 
   const vibrationPatterns = {
     Inhala: [100, 50, 100],
     Mantene: [200],
     Exhala: [150, 100, 150],
+    Pausa: [200],
   };
 
   const triggerVibration = (pattern: number[]) => {
@@ -61,7 +62,7 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
     setProgress(0);
 
     const startTime = Date.now();
-    let currentPhase: 'Inhala' | 'Mantene' | 'Exhala' = 'Inhala';
+    let currentPhase: 'Inhala' | 'Mantene' | 'Exhala' | 'Pausa' = 'Inhala';
 
     if (enableVibrationRef.current) {
       triggerVibration(vibrationPatterns['Inhala']);
@@ -72,7 +73,7 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
       const totalElapsed = (now - startTime) / 1000;
       const cycleTime = totalElapsed % totalDuration;
 
-      let newPhase: 'Inhala' | 'Mantene' | 'Exhala';
+      let newPhase: 'Inhala' | 'Mantene' | 'Exhala' | 'Pausa';
       let phaseProgress: number;
       let timeRemaining: number;
 
@@ -84,10 +85,19 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
         newPhase = 'Mantene';
         phaseProgress = 1;
         timeRemaining = Math.ceil(InhaleDuration + holdDuration - cycleTime);
-      } else {
+      } else if (cycleTime < InhaleDuration + holdDuration + ExhaleDuration) {
         newPhase = 'Exhala';
         const ExhaleProgress = (cycleTime - InhaleDuration - holdDuration) / ExhaleDuration;
         phaseProgress = 1 - ExhaleProgress;
+        timeRemaining = Math.ceil(InhaleDuration + holdDuration + ExhaleDuration - cycleTime);
+      } else if (cycleTime < InhaleDuration + holdDuration + ExhaleDuration + holdDuration) {
+        newPhase = 'Pausa';
+        phaseProgress = 0;
+        timeRemaining = Math.ceil(InhaleDuration + holdDuration + ExhaleDuration + holdDuration - cycleTime);
+      } else {
+        // This shouldn't happen due to modulo, but just in case
+        newPhase = 'Pausa';
+        phaseProgress = 0;
         timeRemaining = Math.ceil(totalDuration - cycleTime);
       }
 
@@ -111,7 +121,7 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
   return (
     <div className="flex h-full flex-col items-center gap-4">
       <div className="flex flex-col items-center gap-4 mb-6">
-        <BreathingGuide
+        <BreathingCircle
           size={size}
           strokeWidth={strokeWidth}
           radius={radius}
@@ -141,7 +151,7 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
             Podés cerrar los ojos y dejar que la vibración te guíe
           </p>
         )}
-        <p className="text-xs mt-4 text-gray-600 w-6/7 text-justify justify-center mx-auto">
+        <p className="text-sm mt-4 text-gray-600 w-6/7 text-justify justify-center mx-auto">
           Inhalá lentamente mientras el círculo se llena, mantené el aire cuando se detiene y
           exhalá despacio mientras se vacía. Repetí este ciclo varias veces para relajar tu mente y tu cuerpo.
         </p>

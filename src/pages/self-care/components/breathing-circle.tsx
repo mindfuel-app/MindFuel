@@ -9,7 +9,7 @@ interface BreathingCircleProps {
   backgroundColor: string;
   className?: string;
   timeLeft: number;
-  phase: 'Inhala' | 'Mantene' | 'Exhala';
+  phase: 'Inhala' | 'Mantene' | 'Exhala' | 'Pausa';
   theme?: 'teal' | 'orange-red';
 }
 
@@ -68,7 +68,7 @@ const BreathingCircle: React.FC<BreathingCircleProps> = ({
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           style={{
-            transition: 'stroke-dashoffset 50ms linear'
+            transition: phase === 'Mantene' || phase === 'Pausa' ? 'none' : 'stroke-dashoffset 50ms linear'
           }}
         />
       </svg>
@@ -80,8 +80,8 @@ const BreathingCircle: React.FC<BreathingCircleProps> = ({
         <div className="font-bold text-slate-700" style={{ fontSize: size * 0.12 }}>
           {timeLeft}
         </div>
-        <div className="text-slate-500 font-medium capitalize" style={{ fontSize: size * 0.06 }}>
-          {phase}
+        <div className="text-slate-500 font-medium" style={{ fontSize: size * 0.06 }}>
+          {phase === 'Pausa' ? 'Pausa' : phase}
         </div>
       </div>
     </div>

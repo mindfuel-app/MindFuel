@@ -54,7 +54,9 @@ const BreathingControls: React.FC<BreathingControlsProps> = ({
             onChange={(e) => setEnableVibration(!enableVibration)}
             className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
-          <span className="text-sm text-slate-600">Vibración habilitada</span>
+          {enableVibration
+            ? <span className="text-sm text-slate-600">Vibración habilitada</span>
+            : <span className="text-sm text-slate-600">Habilitar vibracion</span>}
         </label>
       </div>
     </div>
