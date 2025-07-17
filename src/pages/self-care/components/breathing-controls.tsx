@@ -51,7 +51,7 @@ const BreathingControls: React.FC<BreathingControlsProps> = ({
           <input
             type="checkbox"
             checked={enableVibration}
-            onChange={(e) => setEnableVibration(e.target.checked)}
+            onChange={(e) => setEnableVibration(!enableVibration)}
             className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
           />
           <span className="text-sm text-slate-600">Vibración habilitada</span>
