@@ -151,3 +151,10 @@ model greeting{
     greeting String @db.Text
     createdAt DateTime @default(now())
 }
+
+model calorie{
+    id String @id @default(cuid())
+    user_id String
+    calories Int
+    createdAt DateTime @default(now())
+}
