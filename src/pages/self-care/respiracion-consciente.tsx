@@ -23,14 +23,14 @@ export default function RespiracionConsciente() {
       <motion.div
         initial={{ opacity: 0.5, x: 10 }}
         animate={{ opacity: 1, x: 0 }}
-        className="flex h-full justify-between max-w-sm flex-col items-center gap-4 p-[18px] py-10 text-center"
+        className="flex h-full justify-between max-w-sm flex-col items-center gap-4 p-[18px] py-10 text-justify"
       >
         {started ? (
           <>
             <p>
               La <strong>respiración consciente</strong> consiste en desviar la
-              atención hacia diferentes puntos para fijarnos en las veces que
-              inhalamos y exhalamos.
+              atención hacia la respiracion, como una manera de concentrarte
+              en lo que esta mas cercano a este momento, <strong> al presente</strong>.
             </p>
             <p>
               Practicarla permite{" "}
