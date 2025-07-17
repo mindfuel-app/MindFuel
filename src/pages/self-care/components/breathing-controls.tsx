@@ -22,7 +22,7 @@ const BreathingControls: React.FC<BreathingControlsProps> = ({
   setEnableVibration,
 }) => {
   return (
-    <div>
+    <div className='m-0'>
       <div className="grid grid-cols-3 gap-4">
         {[
           { label: 'Inhalar', value: inhale, onChange: setInhale },

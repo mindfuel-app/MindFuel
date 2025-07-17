@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import BreathingControls from './breathing-controls';
-import BreathingCircle from './breathing-circle';
+import BreathingGuide from './breathing-circle';
 
-interface RespirationCircleProps {
+interface RespirationGuideProps {
   size?: number;
   strokeWidth?: number;
   theme?: 'teal' | 'orange-red';
@@ -14,7 +14,7 @@ interface RespirationCircleProps {
   enableVibration?: boolean;
 }
 
-const RespirationCircle: React.FC<RespirationCircleProps> = ({
+const RespirationGuide: React.FC<RespirationGuideProps> = ({
   size = 200,
   strokeWidth = 15,
   theme = 'teal',
@@ -104,8 +104,10 @@ const RespirationCircle: React.FC<RespirationCircleProps> = ({
   const strokeDashoffset = circumference * (1 - progress);
 
   return (
-    <div className="flex flex-col items-center gap-4 space-y-6">
-      <BreathingCircle
+    <div className="flex h-full flex-col items-center gap-4">
+      <div className='flex flex-col items-center gap-4 mb-6'>
+
+      <BreathingGuide
         size={size}
         strokeWidth={strokeWidth}
         radius={radius}
@@ -127,6 +129,7 @@ const RespirationCircle: React.FC<RespirationCircleProps> = ({
         enableVibration={enableVibration}
         setEnableVibration={setEnableVibration}
       />
+      </div>
       <div>
         <p className='text-xl font-semibold'>
           Segui el ritmo del circulo
@@ -148,4 +151,4 @@ const RespirationCircle: React.FC<RespirationCircleProps> = ({
   );
 };
 
-export default RespirationCircle;
+export default RespirationGuide;

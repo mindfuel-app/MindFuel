@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
 import { useSession } from "next-auth/react";
-import RespirationCircle from "./components/respiration-guide";
+import RespirationGuide from "./components/respiration-guide";
 
 export default function RespiracionConsciente() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function RespiracionConsciente() {
       <motion.div
         initial={{ opacity: 0.5, x: 10 }}
         animate={{ opacity: 1, x: 0 }}
-        className="flex h-full justify-between max-w-sm flex-col items-center gap-4 p-[18px] py-10 text-justify"
+        className="flex h-full justify-between max-w-sm flex-col items-center gap-4 p-[18px] text-justify"
       >
         {started ? (
           <>
@@ -51,7 +51,7 @@ export default function RespiracionConsciente() {
             </p>
           </>
         ) : (
-          <RespirationCircle size={150} theme={themeColor == "teal" ? "teal" : "orange-red"} />
+          <RespirationGuide size={150} theme={themeColor == "teal" ? "teal" : "orange-red"} />
         )}
         <Button
           onClick={() => setStarted(!started)}
