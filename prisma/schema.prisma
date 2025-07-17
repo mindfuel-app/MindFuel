@@ -75,18 +75,6 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model friend {
-    id        String  @id @default(cuid())
-    id_first  String
-    id_second String
-    accepted  Boolean
-}
 
 model task {
     id              String   @id @default(cuid())
@@ -142,7 +130,6 @@ model pushSubscription {
     suscription String @db.Text
     user_id   String
     createdAt DateTime @default(now())
-
 }
 
 model note{
