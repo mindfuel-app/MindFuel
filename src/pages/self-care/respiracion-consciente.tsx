@@ -26,7 +26,7 @@ export default function RespiracionConsciente() {
           animate={{ opacity: 1, x: 0 }}
           className="flex justify-between max-w-sm flex-col items-center gap-4 p-[18px] text-justify"
         >
-          {started ? (
+          {!started ? (
             <>
               <p>
                 La <strong>respiración consciente</strong> consiste en desviar la
@@ -62,7 +62,7 @@ export default function RespiracionConsciente() {
             themeColor == "teal" ? "bg-cornflower-blue" : "bg-orange-red"
           )}
         >
-          {started ? "Comenzar" : "Ya estoy mejor"}
+          {!started ? "Comenzar" : "Ya estoy mejor"}
         </Button>
       </div>
     </SelfCareLayout>
