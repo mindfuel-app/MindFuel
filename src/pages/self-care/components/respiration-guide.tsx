@@ -47,7 +47,7 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
 
   // Function to trigger vibration
   const triggerVibration = (pattern: number[]) => {
-    if (enableVibration && 'vibrate' in navigator) {
+    if ('vibrate' in navigator) {
       navigator.vibrate(pattern);
     }
   };
@@ -60,8 +60,9 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
     let currentPhase: 'Inhala' | 'Mantene' | 'Exhala' = 'Inhala';
 
     // Initial vibration for starting phase
-    triggerVibration(vibrationPatterns['Inhala']);
-
+    if (enableVibration) {
+      triggerVibration(vibrationPatterns['Inhala']);
+    }
     const interval = setInterval(() => {
       const now = Date.now();
       const totalElapsed = (now - startTime) / 1000;
@@ -107,28 +108,28 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
     <div className="flex h-full flex-col items-center gap-4">
       <div className='flex flex-col items-center gap-4 mb-6'>
 
-      <BreathingGuide
-        size={size}
-        strokeWidth={strokeWidth}
-        radius={radius}
-        circumference={circumference}
-        strokeDashoffset={strokeDashoffset}
-        backgroundColor={backgroundColor}
-        timeLeft={timeLeft}
-        phase={phase}
-        className={className}
-        theme={theme}
-      />
-      <BreathingControls
-        inhale={InhaleDuration}
-        hold={holdDuration}
-        exhale={ExhaleDuration}
-        setInhale={setInhaleDuration}
-        setHold={setHoldDuration}
-        setExhale={setExhaleDuration}
-        enableVibration={enableVibration}
-        setEnableVibration={setEnableVibration}
-      />
+        <BreathingGuide
+          size={size}
+          strokeWidth={strokeWidth}
+          radius={radius}
+          circumference={circumference}
+          strokeDashoffset={strokeDashoffset}
+          backgroundColor={backgroundColor}
+          timeLeft={timeLeft}
+          phase={phase}
+          className={className}
+          theme={theme}
+        />
+        <BreathingControls
+          inhale={InhaleDuration}
+          hold={holdDuration}
+          exhale={ExhaleDuration}
+          setInhale={setInhaleDuration}
+          setHold={setHoldDuration}
+          setExhale={setExhaleDuration}
+          enableVibration={enableVibration}
+          setEnableVibration={setEnableVibration}
+        />
       </div>
       <div>
         <p className='text-md font-semibold'>
