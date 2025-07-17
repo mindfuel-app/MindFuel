@@ -28,40 +28,16 @@ const options: Option[] = [
     image: "/apreciacion.png",
   },
   {
-    title: "Tomar agua",
-    href: "/tomar-agua",
-    description: "Es importante mantenerse hidratado.",
-    image: "/tomar-agua.png",
-  },
-  // {
-  //   title: "Técnica Pomodoro",
-  //   href: "/pomodoro",
-  //   description:
-  //     "Haz tus tareas usando este método para mejorar la administración del tiempo.",
-  //   image: "/manzana.png",
-  // },
-  {
     title: "Diario personal",
     href: "/diario-personal",
     description: "Escribe sobre lo que quieras aquí. Sé libre y exprésate.",
     image: "/diario.png",
   },
-  // {
-  //   title: "Must/should/want",
-  //   href: "/must-should-want",
-  //   description: "Aprende como priorizar tus tareas y alcanzar tus objetivos.",
-  //   image: "",
-  // },
 ];
 
 export default function SelfCare() {
   const router = useRouter();
   const { data: sessionData, status } = useSession();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data } = api.selfCare.getWater.useQuery({
-    user_id: sessionData?.user.id ?? "",
-  });
-
   const { onRouteChange } = usePreviousPath();
 
   if (status == "unauthenticated") return void router.push("/signin");
