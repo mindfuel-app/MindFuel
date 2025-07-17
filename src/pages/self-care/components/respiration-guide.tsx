@@ -131,7 +131,7 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
       />
       </div>
       <div>
-        <p className='text-xl font-semibold'>
+        <p className='text-md font-semibold'>
           Segui el ritmo del circulo
         </p>
         {enableVibration && (
@@ -139,7 +139,7 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
             Podes cerrar los ojos y dejar que la vibracion te guie
           </p>
         )}
-        <p className='text-sm mt-4 text-gray-600 w-6/7 text-justify justify-center mx-auto '>
+        <p className='text-xs mt-4 text-gray-600 w-6/7 text-justify justify-center mx-auto '>
           Inhalá lentamente mientras el círculo se llena,
           mantené el aire cuando se detiene y exhalá despacio
           mientras se vacía. Repetí este ciclo varias veces para
