@@ -32,7 +32,7 @@ export default function SelfCareLayout({
       >
         <div className="flex h-screen flex-col">
           <Header onClose={onClose} showNavigation={windowWidth >= 1024} />
-          <main className="flex h-full flex-col items-center p-3">
+          <main className="flex h-full flex-col items-center p-3 pb-16">
             {children}
           </main>
           {windowWidth < 1024 && <Footer />}
