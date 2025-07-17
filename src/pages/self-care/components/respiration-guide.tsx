@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BreathingControls from './breathing-controls';
 import BreathingGuide from './breathing-circle';
 
@@ -28,6 +28,11 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
   const [holdDuration, setHoldDuration] = useState(initialHold);
   const [ExhaleDuration, setExhaleDuration] = useState(initialExhale);
   const [enableVibration, setEnableVibration] = useState(true);
+  const enableVibrationRef = useRef(enableVibration);
+
+  useEffect(() => {
+    enableVibrationRef.current = enableVibration;
+  }, [enableVibration]);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
@@ -38,19 +43,18 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
 
   const totalDuration = InhaleDuration + holdDuration + ExhaleDuration;
 
-  // Vibration patterns for different phases
   const vibrationPatterns = {
-    Inhala: [100, 50, 100], // Short pulses during inhale
-    Mantene: [200], // Single longer pulse for hold
-    Exhala: [150, 100, 150] // Medium pulses during exhale
+    Inhala: [100, 50, 100],
+    Mantene: [200],
+    Exhala: [150, 100, 150],
   };
 
-  // Function to trigger vibration
   const triggerVibration = (pattern: number[]) => {
     if ('vibrate' in navigator) {
       navigator.vibrate(pattern);
     }
   };
+
   useEffect(() => {
     setTimeLeft(InhaleDuration);
     setPhase('Inhala');
@@ -59,10 +63,10 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
     const startTime = Date.now();
     let currentPhase: 'Inhala' | 'Mantene' | 'Exhala' = 'Inhala';
 
-    // Initial vibration for starting phase
-    if (enableVibration) {
+    if (enableVibrationRef.current) {
       triggerVibration(vibrationPatterns['Inhala']);
     }
+
     const interval = setInterval(() => {
       const now = Date.now();
       const totalElapsed = (now - startTime) / 1000;
@@ -89,25 +93,24 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
 
       if (newPhase !== currentPhase) {
         currentPhase = newPhase;
-        // Trigger vibration when phase changes
-        triggerVibration(vibrationPatterns[newPhase]);
+        if (enableVibrationRef.current) {
+          triggerVibration(vibrationPatterns[newPhase]);
+        }
       }
 
       setPhase(newPhase);
       setProgress(phaseProgress);
       setTimeLeft(timeRemaining);
-    }, 50); // Update more frequently for smoother animation
+    }, 50);
 
     return () => clearInterval(interval);
   }, [InhaleDuration, holdDuration, ExhaleDuration, totalDuration]);
 
-  // Calculate stroke-dashoffset based on progress
   const strokeDashoffset = circumference * (1 - progress);
 
   return (
     <div className="flex h-full flex-col items-center gap-4">
-      <div className='flex flex-col items-center gap-4 mb-6'>
-
+      <div className="flex flex-col items-center gap-4 mb-6">
         <BreathingGuide
           size={size}
           strokeWidth={strokeWidth}
@@ -132,22 +135,17 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
         />
       </div>
       <div>
-        <p className='text-md font-semibold'>
-          Segui el ritmo del circulo
-        </p>
+        <p className="text-md font-semibold">Seguí el ritmo del círculo</p>
         {enableVibration && (
-          <p className='text-sm'>
-            Podes cerrar los ojos y dejar que la vibracion te guie
+          <p className="text-sm">
+            Podés cerrar los ojos y dejar que la vibración te guíe
           </p>
         )}
-        <p className='text-xs mt-4 text-gray-600 w-6/7 text-justify justify-center mx-auto '>
-          Inhalá lentamente mientras el círculo se llena,
-          mantené el aire cuando se detiene y exhalá despacio
-          mientras se vacía. Repetí este ciclo varias veces para
-          relajar tu mente y tu cuerpo.
+        <p className="text-xs mt-4 text-gray-600 w-6/7 text-justify justify-center mx-auto">
+          Inhalá lentamente mientras el círculo se llena, mantené el aire cuando se detiene y
+          exhalá despacio mientras se vacía. Repetí este ciclo varias veces para relajar tu mente y tu cuerpo.
         </p>
       </div>
-
     </div>
   );
 };
