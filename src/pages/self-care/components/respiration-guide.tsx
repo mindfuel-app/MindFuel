@@ -56,7 +56,7 @@ const RespirationCircle: React.FC<RespirationCircleProps> = ({
     setPhase('Inhala');
     setProgress(0);
 
-    let startTime = Date.now();
+    const startTime = Date.now();
     let currentPhase: 'Inhala' | 'Mantene' | 'Exhala' = 'Inhala';
 
     // Initial vibration for starting phase
