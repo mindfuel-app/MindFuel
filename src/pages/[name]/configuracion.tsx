@@ -1,5 +1,4 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
-import BackButton from "~/components/backButton";
 import ProfileLayout from "~/components/layouts/profileLayout";
 import { useSession } from "next-auth/react";
 import NotFoundPage from "../404";
@@ -12,9 +11,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
 import Header from "./components/header";
 import ThemeToggleButton from "./components/themeToggleButton";
+import SelfCareToggleList from "./components/self-care-toggle";
 
 export default function Configuracion() {
   const { data: sessionData, update: updateSessionData, status } = useSession();
+  console.log(sessionData?.user)
   const router = useRouter();
   const { themeColor } = useTheme();
   const { mutate: updateUsername } = api.user.editUsername.useMutation({
@@ -132,9 +133,15 @@ export default function Configuracion() {
         </div>
         <Toaster />
       </div>
-      <div className="flex flex-col w-full p-7">
-        <span className="text-xl font-medium">Tu tema</span>
-        <ThemeToggleButton />
+      <div className="flex flex-col w-full p-7 gap-4 ">
+        <div>
+          <span className="mb-2 text-xl font-medium">Tu tema</span>
+          <ThemeToggleButton />
+        </div>
+        <div>
+          <span className="mb-2 text-xl  font-medium">Tu Self Care</span>
+          <SelfCareToggleList />
+        </div>
       </div>
     </ProfileLayout>
   );
