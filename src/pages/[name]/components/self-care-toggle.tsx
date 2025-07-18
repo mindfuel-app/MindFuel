@@ -1,3 +1,7 @@
+export default function SelfCareToggleList() {
+  return;
+}
+
 // import { useEffect, useState } from "react";
 // import { useSession } from "next-auth/react";
 // import { api } from "~/utils/api";
@@ -9,7 +13,6 @@
 //   calories: "Calorías",
 //   breathing: "Respiración",
 // };
-
 // export default function SelfCareToggleList() {
 //   const { data: sessionData } = useSession();
 //   const userId = sessionData?.user?.id;
