@@ -15,7 +15,6 @@ import SelfCareToggleList from "./components/self-care-toggle";
 
 export default function Configuracion() {
   const { data: sessionData, update: updateSessionData, status } = useSession();
-  console.log(sessionData?.user)
   const router = useRouter();
   const { themeColor } = useTheme();
   const { mutate: updateUsername } = api.user.editUsername.useMutation({

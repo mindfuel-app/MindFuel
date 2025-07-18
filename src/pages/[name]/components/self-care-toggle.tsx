@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
+import toast from "react-hot-toast";
 
 const optionLabels: Record<string, string> = {
   greetings: "Agradecimientos",
@@ -49,13 +50,13 @@ export default function SelfCareToggleList() {
         },
       },
       {
-        onError: (error) => {
-          console.error('Failed to update self-care options:', error);
+        onError: () => {
+          toast.error('Error en actualizar las preferencias de self-care');
           // Revert to previous state
           setOptions((prev) => ({ ...prev, [key]: currentValue }));
         },
-        onSuccess: (data) => {
-          console.log('Successfully updated self-care options:', data);
+        onSuccess: () => {
+          toast.success('Preferencias de self-care actualizadas');
         },
       }
     );
