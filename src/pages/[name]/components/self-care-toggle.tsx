@@ -56,7 +56,6 @@ export default function SelfCareToggleList() {
         },
         onSuccess: (data) => {
           console.log('Successfully updated self-care options:', data);
-          refetch();
         },
       }
     );
