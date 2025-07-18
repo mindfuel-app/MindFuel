@@ -11,7 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
 import Header from "./components/header";
 import ThemeToggleButton from "./components/themeToggleButton";
-import SelfCareToggleList from "./components/self-care-toggle";
+// import SelfCareToggleList from "./components/self-care-toggle";
 
 export default function Configuracion() {
   const { data: sessionData, update: updateSessionData, status } = useSession();
@@ -137,10 +137,10 @@ export default function Configuracion() {
           <span className="mb-2 text-xl font-medium">Tu tema</span>
           <ThemeToggleButton />
         </div>
-        <div>
+        {/* <div>
           <span className="mb-2 text-xl  font-medium">Tu Self Care</span>
           <SelfCareToggleList />
-        </div>
+        </div> */}
       </div>
     </ProfileLayout>
   );
