@@ -264,8 +264,8 @@ export default function RoutineForm({
               {orderDays(routine.days).length == 33
                 ? "Todos los dias"
                 : orderDays(routine.days).length == 0
-                ? "Nunca"
-                : orderDays(routine.days)}
+                  ? "Nunca"
+                  : orderDays(routine.days)}
             </span>
             <div className="-mt-2 flex justify-between md:justify-around">
               {dayOptions.map((day) => (
@@ -274,9 +274,9 @@ export default function RoutineForm({
                   className={cn(
                     "no-highlight flex h-7 w-7 items-center justify-center rounded-full active:bg-gray-100 lg:hover:bg-gray-100",
                     routine.days.includes(day.value) &&
-                      (themeColor == "teal"
-                        ? "border border-teal"
-                        : "border border-orange-red")
+                    (themeColor == "teal"
+                      ? "border border-teal"
+                      : "border border-orange-red")
                   )}
                   onClick={(e) => {
                     e.preventDefault();
@@ -305,11 +305,10 @@ export default function RoutineForm({
                   }}
                 >
                   <span
-                    className={`${
-                      routine.days.includes(day.value)
+                    className={`${routine.days.includes(day.value)
                         ? `text-${themeColor}`
                         : "text-gray-600"
-                    }`}
+                      }`}
                   >
                     {day.label}
                   </span>
@@ -348,7 +347,7 @@ export default function RoutineForm({
               <span>Categoría</span>
               <div className="no-highlight">
                 <Popover open={isComboboxOpen} onOpenChange={setIsComboboxOpen}>
-                  <PopoverTrigger>
+                  <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       role="combobox"
@@ -357,8 +356,8 @@ export default function RoutineForm({
                     >
                       {routine.category
                         ? categories.find(
-                            (category) => category.value === routine.category
-                          )?.label || "Seleccionar categoría"
+                          (category) => category.value === routine.category
+                        )?.label || "Seleccionar categoría"
                         : "Seleccionar categoría"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -550,9 +549,8 @@ export default function RoutineForm({
             </label>
           </motion.div>
           <div
-            className={`flex pt-8 ${
-              mode == "edit" ? "justify-between" : "justify-end"
-            }`}
+            className={`flex pt-8 ${mode == "edit" ? "justify-between" : "justify-end"
+              }`}
           >
             {mode == "edit" && id && (
               <div
