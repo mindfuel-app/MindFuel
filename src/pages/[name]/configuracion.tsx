@@ -4,15 +4,14 @@ import ProfileLayout from "~/components/layouts/profileLayout";
 import { useSession } from "next-auth/react";
 import NotFoundPage from "../404";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { type ThemeColor, useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
-import { useUser } from "~/lib/UserContext";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
-import useWindowWidth from "~/hooks/useWindowWidth";
+import Header from "./components/header";
+import ThemeToggleButton from "./components/themeToggleButton";
 
 export default function Configuracion() {
   const { data: sessionData, update: updateSessionData, status } = useSession();
@@ -133,69 +132,10 @@ export default function Configuracion() {
         </div>
         <Toaster />
       </div>
-      <div className="flex flex-col items-center gap-6 py-10">
+      <div className="flex flex-col w-full p-7">
         <span className="text-xl font-medium">Tu tema</span>
         <ThemeToggleButton />
       </div>
     </ProfileLayout>
-  );
-}
-
-function Header({
-  userName,
-  themeColor,
-}: {
-  userName: string;
-  themeColor: ThemeColor;
-}) {
-  const windowWidth = useWindowWidth();
-
-  return (
-    <header
-      className={cn(
-        "relative flex w-full items-center justify-start  px-4 py-3 transition-colors",
-        themeColor == "teal"
-          ? windowWidth < 1024
-            ? "bg-teal"
-            : "bg-gradient-to-r from-teal to-green-700"
-          : windowWidth < 1024
-          ? "bg-orange-red"
-          : "bg-gradient-to-r from-orange-red to-[#FF7373]"
-      )}
-    >
-      <BackButton href={`/${userName}`} color="white" />
-      <h1 className="absolute left-1/2 -translate-x-1/2 text-xl font-medium text-white">
-        Configuración
-      </h1>
-    </header>
-  );
-}
-
-function ThemeToggleButton() {
-  const { themeColor, setThemeColor } = useTheme();
-  const { id } = useUser();
-  const [isToggled, setIsToggled] = useState(themeColor == "orange-red");
-
-  return (
-    <div className="flex items-center justify-center gap-3">
-      <span className="text-xl font-medium text-teal">Teal</span>
-      <button
-        onClick={() => {
-          setIsToggled(!isToggled);
-          setThemeColor(id);
-        }}
-        className={cn(
-          "no-highlight flex w-20 items-center rounded-full p-2 py-1.5 transition-colors",
-          themeColor == "teal" ? "bg-teal/90" : "bg-orange-red/90"
-        )}
-      >
-        <motion.div
-          initial={false}
-          animate={{ x: isToggled ? "130%" : "0%" }}
-          className="h-7 w-7 rounded-full bg-white"
-        />
-      </button>
-      <span className="text-xl font-medium text-orange-red">Orange-red</span>
-    </div>
   );
 }
