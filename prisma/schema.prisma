@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-    provider     = "postgresql"
+    provider  = "postgresql"
     url       = env("DATABASE_URL")
     directUrl = env("DIRECT_URL")
 }
@@ -42,27 +42,29 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?   @unique
-    email         String?   @unique
-    password      String?
-    emailVerified DateTime?
-    image         String?
-    puntos        Int       @default(0)
-    createdAt     DateTime  @default(now())
-    level         Level     @relation(fields: [levelNumber], references: [number], onUpdate: Cascade)
-    levelNumber   Int       @default(1)
-    theme         String    @default("teal")
-    accounts      Account[]
-    sessions      Session[]
+    id              String    @id @default(cuid())
+    name            String?   @unique
+    email           String?   @unique
+    password        String?
+    emailVerified   DateTime?
+    image           String?
+    puntos          Int       @default(0)
+    createdAt       DateTime  @default(now())
+    level           Level     @relation(fields: [levelNumber], references: [number], onUpdate: Cascade)
+    levelNumber     Int       @default(1)
+    theme           String    @default("teal")
+    calorieMax      Int       @default(2500)
+    selfCareOptions Json?     @default("{\"greetings\":true,\"diarie\":true,\"calories\":true,\"breathing\":true}")
+    accounts Account[]
+    sessions Session[]
 
     @@index([levelNumber])
 }
 
 model Level {
-    number Int @id
+    number Int    @id
     points Int
-    users User[]
+    users  User[]
 
     @@index([points])
 }
@@ -75,22 +77,21 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-
 model task {
-    id              String   @id @default(cuid())
-    name            String
-    description     String?
-    createdAt       DateTime @default(now())
-    usesAI  Boolean @default(false)
-    deadline        DateTime?
-    routine_id      String?
-    routine         routine? @relation(fields: [routine_id], references: [id], onDelete: Cascade)
-    routine_order   Int?
-    event_id        String?
-    event           event?   @relation(fields: [event_id], references: [id])
-    estimated_time  Int?
-    done            Boolean  @default(false)
-    user_id         String
+    id             String    @id @default(cuid())
+    name           String
+    description    String?
+    createdAt      DateTime  @default(now())
+    usesAI         Boolean   @default(false)
+    deadline       DateTime?
+    routine_id     String?
+    routine        routine?  @relation(fields: [routine_id], references: [id], onDelete: Cascade)
+    routine_order  Int?
+    event_id       String?
+    event          event?    @relation(fields: [event_id], references: [id])
+    estimated_time Int?
+    done           Boolean   @default(false)
+    user_id        String
 
     @@index([event_id])
     @@index([routine_id])
@@ -126,35 +127,34 @@ model passwordResetToken {
 }
 
 model pushSubscription {
+    id          String   @id @default(cuid())
+    suscription String   @db.Text
+    user_id     String
+    createdAt   DateTime @default(now())
+}
+
+model note {
     id        String   @id @default(cuid())
-    suscription String @db.Text
+    note      String   @db.Text
     user_id   String
     createdAt DateTime @default(now())
 }
 
-model note{
-    id String @id @default(cuid())
-    note String @db.Text
-    user_id String
-    createdAt DateTime @default(now())
-
-}
-
-model picture{
-    id String @id @default(cuid())
+model picture {
+    id         String @id @default(cuid())
     pictureUrl String @db.Text
 }
 
-model greeting{
-    id String @id @default(cuid())
-    user_id String
-    greeting String @db.Text
+model greeting {
+    id        String   @id @default(cuid())
+    user_id   String
+    greeting  String   @db.Text
     createdAt DateTime @default(now())
 }
 
-model calorie{
-    id String @id @default(cuid())
-    user_id String
-    calories Int
+model calorie {
+    id        String   @id @default(cuid())
+    user_id   String
+    calories  Int
     createdAt DateTime @default(now())
 }
