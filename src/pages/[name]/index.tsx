@@ -3,11 +3,10 @@ import ProfileLayout from "~/components/layouts/profileLayout";
 import { motion } from "framer-motion";
 import NotFoundPage from "~/pages/404";
 import { api } from "~/utils/api";
-import { ProgressLevel } from "~/components/ui/progressBar";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { CalendarIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
 import { TrophyIcon } from "@heroicons/react/24/solid";
@@ -50,7 +49,7 @@ export default function Profile() {
   }
 
   if (status === "unauthenticated") {
-    router.push("/signin");
+    void router.push("/signin");
     return null;
   }
 

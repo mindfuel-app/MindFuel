@@ -26,8 +26,7 @@ export default function Configuracion() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: updateUsername } = api.user.editUsername.useMutation({
-    onSuccess: async (data) => {
-      // Update local state first for immediate UI feedback
+    onSuccess: async () => {
       setUsername(tempUsername);
       setIsUpdating(false);
       setEditUsername(false);

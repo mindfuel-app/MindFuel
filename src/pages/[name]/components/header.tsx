@@ -1,5 +1,4 @@
 import BackButton from "~/components/inputs/backButton";
-import { TopNavigation } from "~/components/inputs/navigation";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { type ThemeColor } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
@@ -11,8 +10,6 @@ export default function Header({
   userName: string;
   themeColor: ThemeColor;
 }) {
-  const windowWidth = useWindowWidth();
-
   return (
     <header
       className={cn(

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Checkbox } from "~/components/ui/checkbox";
 import { CircularProgress } from "@mui/material";
-import { useUser } from "~/lib/UserContext";
 import * as Dialog from "@radix-ui/react-dialog";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import {
