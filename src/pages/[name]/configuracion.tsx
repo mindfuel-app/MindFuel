@@ -10,7 +10,7 @@ import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
 import Header from "./components/header";
-import ThemeToggleButton from "../../components/themeToggleButton";
+import ThemeToggleButton from "../../components/inputs/themeToggleButton";
 
 export default function Configuracion() {
   const { data: sessionData, update: updateSessionData, status } = useSession();

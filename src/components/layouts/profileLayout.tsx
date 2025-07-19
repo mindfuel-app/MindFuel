@@ -1,7 +1,7 @@
 import { type Session } from "next-auth";
 import Head from "next/head";
 import { UserProvider } from "~/lib/UserContext";
-import { Footer } from "../navigation";
+import { Footer } from "../inputs/navigation";
 import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function ProfileLayout({

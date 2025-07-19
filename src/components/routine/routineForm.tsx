@@ -15,7 +15,7 @@ import { Command, CommandGroup, CommandItem } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Checkbox } from "../ui/checkbox";
 import Tooltip from "../auth/tooltip";
-import TimeForm from "../timeForm";
+import TimeForm from "../inputs/timeForm";
 import { useTheme } from "~/lib/ThemeContext";
 
 const categories = [

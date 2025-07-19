@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { type Session } from "next-auth";
 import Head from "next/head";
-import { Footer, TopNavigation } from "~/components/navigation";
+import { Footer, TopNavigation } from "~/components/inputs/navigation";
 import { UserProvider } from "~/lib/UserContext";
-import BackButton from "../backButton";
+import BackButton from "../inputs/backButton";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { useTheme } from "~/lib/ThemeContext";

@@ -10,7 +10,7 @@ import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
 import RoutineLayout from "~/components/layouts/routineLayout";
 import { usePoints } from "~/hooks/usePoints";
 import { routinePoints, taskPoints } from "~/lib/points";
-import { Footer } from "~/components/navigation";
+import { Footer } from "~/components/inputs/navigation";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";

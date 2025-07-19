@@ -1,4 +1,4 @@
-import BackButton from "~/components/backButton";
+import BackButton from "~/components/inputs/backButton";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { type ThemeColor } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
@@ -21,8 +21,8 @@ export default function Header({
             ? "bg-teal"
             : "bg-gradient-to-r from-teal to-green-700"
           : windowWidth < 1024
-          ? "bg-orange-red"
-          : "bg-gradient-to-r from-orange-red to-[#FF7373]"
+            ? "bg-orange-red"
+            : "bg-gradient-to-r from-orange-red to-[#FF7373]"
       )}
     >
       <BackButton href={`/${userName}`} color="white" />

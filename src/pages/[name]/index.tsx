@@ -12,7 +12,7 @@ import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
 import { TrophyIcon } from "@heroicons/react/24/solid";
 import { isString } from "~/lib/checkTypes";
-import { TopNavigation } from "~/components/navigation";
+import { TopNavigation } from "~/components/inputs/navigation";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import { JoinedDateSkeleton } from "~/components/ui/skeleton";
