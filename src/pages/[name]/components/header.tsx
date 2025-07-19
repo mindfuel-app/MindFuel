@@ -1,4 +1,5 @@
 import BackButton from "~/components/inputs/backButton";
+import { TopNavigation } from "~/components/inputs/navigation";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { type ThemeColor } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
@@ -15,14 +16,10 @@ export default function Header({
   return (
     <header
       className={cn(
-        "relative flex w-full items-center justify-start  px-4 py-3 transition-colors",
+        "relative flex w-full items-center bg-gradient-to-r justify-start h-20 px-4 py-3 transition-colors",
         themeColor == "teal"
-          ? windowWidth < 1024
-            ? "bg-teal"
-            : "bg-gradient-to-r from-teal to-green-700"
-          : windowWidth < 1024
-            ? "bg-orange-red"
-            : "bg-gradient-to-r from-orange-red to-[#FF7373]"
+          ? "from-teal to-green-700"
+          : "from-orange-red to-[#FF7373]"
       )}
     >
       <BackButton href={`/${userName}`} color="white" />
