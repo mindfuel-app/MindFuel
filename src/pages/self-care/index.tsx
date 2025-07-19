@@ -3,7 +3,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import SelfCareLayout from "../../components/layouts/selfCareLayout";
 import { usePreviousPath } from "~/hooks/usePreviousPath";
-import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 

@@ -43,13 +43,6 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
 
   const totalDuration = InhaleDuration + holdDuration + ExhaleDuration + holdDuration;
 
-  const vibrationPatterns = {
-    Inhala: [100, 50, 100],
-    Mantene: [200],
-    Exhala: [150, 100, 150],
-    Pausa: [200],
-  };
-
   const triggerVibration = (pattern: number[]) => {
     if ('vibrate' in navigator) {
       navigator.vibrate(pattern);
@@ -63,6 +56,13 @@ const RespirationGuide: React.FC<RespirationGuideProps> = ({
 
     const startTime = Date.now();
     let currentPhase: 'Inhala' | 'Mantene' | 'Exhala' | 'Pausa' = 'Inhala';
+
+    const vibrationPatterns = {
+      Inhala: [100, 50, 100],
+      Mantene: [200],
+      Exhala: [150, 100, 150],
+      Pausa: [200],
+    };
 
     if (enableVibrationRef.current) {
       triggerVibration(vibrationPatterns['Inhala']);

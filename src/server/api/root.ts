@@ -3,7 +3,6 @@ import { resetPwdRouter } from "./routers/resetPwd";
 import { taskRouter } from "./routers/task";
 import { routineRouter } from "./routers/routines";
 import { pointsRouter } from "./routers/points";
-import { pushRouter } from "./routers/pushSuscriptions";
 import { notesRouter } from "./routers/notes";
 import { profilePicRouter } from "./routers/profilePic";
 import { selfCareRouter } from "./routers/selfCare";
@@ -15,7 +14,6 @@ export const appRouter = createTRPCRouter({
   routines: routineRouter,
   resetPwd: resetPwdRouter,
   points: pointsRouter,
-  pushSuscriptions: pushRouter,
   notes: notesRouter,
   profilePic: profilePicRouter,
   selfCare: selfCareRouter,

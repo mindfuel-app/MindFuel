@@ -1,12 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { date, z } from "zod";
-
-interface calorie {
-  id: string;
-  user_id: string;
-  calories: number;
-  date: Date;
-}
+import { z } from "zod";
 
 export const caloriesRouter = createTRPCRouter({
   getTodaysCalories: protectedProcedure

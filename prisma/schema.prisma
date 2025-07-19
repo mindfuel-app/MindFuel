@@ -126,13 +126,6 @@ model passwordResetToken {
     expiresAt DateTime
 }
 
-model pushSubscription {
-    id          String   @id @default(cuid())
-    suscription String   @db.Text
-    user_id     String
-    createdAt   DateTime @default(now())
-}
-
 model note {
     id        String   @id @default(cuid())
     note      String   @db.Text

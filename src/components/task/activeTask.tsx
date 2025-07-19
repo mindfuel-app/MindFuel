@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Checkbox } from "~/components/ui/checkbox";
 import { CircularProgress } from "@mui/material";
-import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 import * as Dialog from "@radix-ui/react-dialog";
 import { CheckIcon } from "@heroicons/react/24/outline";
@@ -62,11 +61,10 @@ function CountdownTimer({
     <>
       <div className="flex">
         <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
-          <span>{`${
-            hours > 0 ? `${hours.toString().padStart(2, "0")}:` : ""
-          }${minutes.toString().padStart(2, "0")}:${seconds
-            .toString()
-            .padStart(2, "0")}`}</span>
+          <span>{`${hours > 0 ? `${hours.toString().padStart(2, "0")}:` : ""
+            }${minutes.toString().padStart(2, "0")}:${seconds
+              .toString()
+              .padStart(2, "0")}`}</span>
         </div>
         <div
           onClick={() => {
@@ -111,20 +109,10 @@ export default function ActiveTask({
   increaseSkippedTasks: () => void;
 }) {
   const { themeColor } = useTheme();
-  const { id } = useUser();
   const [checked, setChecked] = useState<boolean[]>([]);
   const [steps, setSteps] = useState<string[]>();
   const [loadingSteps, setLoadingSteps] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const { mutate: sendNotification } =
-    api.pushSuscriptions.sendPushToOne.useMutation({
-      onSuccess: () => {
-        console.log("Notification sent");
-      },
-      onError: (error) => {
-        console.error(error);
-      },
-    });
 
   const hours = estimatedTime ? Math.floor(estimatedTime / 3600) : null;
   const minutes = estimatedTime
@@ -177,9 +165,8 @@ export default function ActiveTask({
       <div className="-mt-2">
         {name}
         {estimatedTime && (
-          <span>{` - ${hours ? `${hours} hs` : ""} ${
-            minutes ? `${minutes} min` : ""
-          } ${seconds ? `${seconds} s` : ""}`}</span>
+          <span>{` - ${hours ? `${hours} hs` : ""} ${minutes ? `${minutes} min` : ""
+            } ${seconds ? `${seconds} s` : ""}`}</span>
         )}
       </div>
       {estimatedTime && (
@@ -188,12 +175,6 @@ export default function ActiveTask({
           isRunning={usesAI ? !loadingSteps : true}
           onComplete={() => {
             setShowModal(true);
-            sendNotification({
-              user_id: id,
-              title: "¿Sigues ahí?",
-              body: `¡Se acabó el tiempo para ${name}!`,
-              url: "/home?tab=rutinas",
-            });
           }}
         />
       )}
