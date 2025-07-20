@@ -18,7 +18,7 @@ const tabOptions = [
 export default function ClientHome() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedTab = tabOptions.find((t) => t.value === searchParams.get("tab"))?.value ?? "tareas";
+  const selectedTab = tabOptions.find((t) => t.value === searchParams?.get("tab"))?.value ?? "tareas";
   const { themeColor } = useTheme();
 
   const swipeHandler = useSwipe({

@@ -25,18 +25,24 @@
       "~/*": [
         "./src/*"
       ]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "./.eslintrc.cjs",
-    "next-env.d.ts",
-    "**/*.ts",
     "**/**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "public/push-sw.js"
+    "**/*.ts",
+    "./.eslintrc.cjs",
+    "next-env.d.ts",
+    "public/push-sw.js",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
+    "node_modules"
   ]
 }
