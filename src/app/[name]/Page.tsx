@@ -19,7 +19,7 @@ import { JoinedDateSkeleton } from "~/components/ui/skeleton";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { StatsSkeleton } from "./components/skeleton";
 
-export default function Profile({ params }: { params: { name: string } }) {
+export default function Page({ params }: { params: { name: string } }) {
   const { data: sessionData, status } = useSession();
   const { name } = params;
   const { themeColor } = useTheme();
