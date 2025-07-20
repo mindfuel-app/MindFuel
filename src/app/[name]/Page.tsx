@@ -1,3 +1,5 @@
+"use client";
+
 import ProfileLayout from "./components/profileLayout";
 import { motion } from "framer-motion";
 import { notFound } from "next/navigation";
@@ -17,8 +19,7 @@ import { JoinedDateSkeleton } from "~/components/ui/skeleton";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { StatsSkeleton } from "./components/skeleton";
 
-
-export default async function Profile({ params }: { params: { name: string } }) {
+export default function Profile({ params }: { params: { name: string } }) {
   const { data: sessionData, status } = useSession();
   const { name } = params;
   const { themeColor } = useTheme();

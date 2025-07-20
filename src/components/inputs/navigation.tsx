@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
