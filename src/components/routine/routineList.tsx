@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import RoutineCard from "./routineCard";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import { api } from "~/utils/api";
 import { RoutineSkeleton } from "../ui/skeleton";
 

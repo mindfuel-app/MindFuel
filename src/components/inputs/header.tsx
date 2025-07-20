@@ -14,8 +14,8 @@ import TaskForm from "../task/taskForm";
 import AddModal from "./addModal";
 import RoutineForm from "../routine/routineForm";
 import { api } from "~/utils/api";
-import { useUser } from "~/lib/UserContext";
-import { useTheme } from "~/lib/ThemeContext";
+import { useUser } from "~/contexts/UserContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import { cn } from "~/lib/utils";
 
 export default function Header({

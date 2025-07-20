@@ -6,11 +6,11 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Modal from "../ui/modal";
 import TaskForm from "./taskForm";
 import { api } from "~/utils/api";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import { cn } from "~/lib/utils";
 import { usePoints } from "~/hooks/usePoints";
 import { taskPoints } from "~/lib/points";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import useWindowWidth from "~/hooks/useWindowWidth";
 
 export default function TaskCard({
@@ -68,10 +68,10 @@ export default function TaskCard({
     ? deadline.toDateString() == today.toDateString()
       ? "Hoy"
       : deadline.toDateString() == tomorrow.toDateString()
-      ? "Mañana"
-      : deadline.toDateString() == yesterday.toDateString()
-      ? "Ayer"
-      : `${deadline.getDate()}/${deadline.getMonth() + 1}`
+        ? "Mañana"
+        : deadline.toDateString() == yesterday.toDateString()
+          ? "Ayer"
+          : `${deadline.getDate()}/${deadline.getMonth() + 1}`
     : null;
 
   const maxNameCharacters = 21;
@@ -119,9 +119,9 @@ export default function TaskCard({
                     {description.length <= maxDescriptionCharacters
                       ? description
                       : `${description.substring(
-                          0,
-                          maxDescriptionCharacters - 3
-                        )}...`}
+                        0,
+                        maxDescriptionCharacters - 3
+                      )}...`}
                   </>
                 )}
               </span>

@@ -2,14 +2,14 @@ import { type ZodType, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import AuthButton from "~/components/auth/authButton";
+import AuthButton from "~/app/Auth/Components/authButton";
 import { MdArrowBackIosNew } from "react-icons/md";
 import Link from "next/link";
 import Head from "next/head";
-import Logo from "~/components/auth/logo";
+import Logo from "~/app/Auth/Components/logo";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
-import Title from "~/components/auth/title";
+import Title from "~/app/Auth/Components/title";
 import { cn } from "~/lib/utils";
 
 export default function ReestablecerContraseña() {

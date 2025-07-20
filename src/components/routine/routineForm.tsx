@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import Modal from "../ui/modal";
 import { motion, AnimatePresence } from "framer-motion";
 import { type FormEvent, useState, useRef } from "react";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import toast from "react-hot-toast";
 import { dayOptions, orderDays } from "~/lib/days";
 import { TrashIcon } from "@heroicons/react/24/outline";
@@ -14,9 +14,9 @@ import { cn } from "~/lib/utils";
 import { Command, CommandGroup, CommandItem } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Checkbox } from "../ui/checkbox";
-import Tooltip from "../auth/tooltip";
+import Tooltip from "../../app/Auth/Components/tooltip";
 import TimeForm from "../inputs/timeForm";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 const categories = [
   {
@@ -306,8 +306,8 @@ export default function RoutineForm({
                 >
                   <span
                     className={`${routine.days.includes(day.value)
-                        ? `text-${themeColor}`
-                        : "text-gray-600"
+                      ? `text-${themeColor}`
+                      : "text-gray-600"
                       }`}
                   >
                     {day.label}

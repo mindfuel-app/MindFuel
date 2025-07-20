@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { CalendarIcon } from "@heroicons/react/24/outline";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import { cn } from "~/lib/utils";
 import { TrophyIcon } from "@heroicons/react/24/solid";
 import { isString } from "~/lib/checkTypes";

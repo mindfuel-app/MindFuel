@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 import Modal from "../ui/modal";
 import RoutineForm, { type Task } from "./routineForm";
 import Link from "next/link";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import { api } from "~/utils/api";
 import RoutineTaskCard from "../task/routineTaskCard";
 import { cn } from "~/lib/utils";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 export default function RoutineCard({
   id,
@@ -53,15 +53,14 @@ export default function RoutineCard({
           onClick={() => setIsCardOpened(!isCardOpened)}
         >
           <h1 className="lg:text-xl">{name}</h1>
-          <span className="text-sm text-gray-900 lg:text-base">{`${
-            tasks.length
-          } ${tasks.length == 1 ? "tarea" : "tareas"}`}</span>
+          <span className="text-sm text-gray-900 lg:text-base">{`${tasks.length
+            } ${tasks.length == 1 ? "tarea" : "tareas"}`}</span>
           <span className="text-sm">
             {days.length == 33
               ? "Todos los dias"
               : days.length == 0
-              ? "Nunca"
-              : days}
+                ? "Nunca"
+                : days}
           </span>
         </div>
         <div className="flex items-center py-2">

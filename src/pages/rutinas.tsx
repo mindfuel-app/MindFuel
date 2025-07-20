@@ -1,7 +1,7 @@
 import Layout from "~/components/layouts/homeLayout";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 export default function Rutinas() {
   const { data: sessionData, status } = useSession();

@@ -6,7 +6,7 @@ import usePasswordToggle from "~/hooks/usePasswordToggle";
 import GoogleAuthShowcase from "./googleAuthShowcase";
 import { signIn } from "next-auth/react";
 import AuthButton from "./authButton";
-import AlternativeMethodLink from "./alternativeMethodLink";
+import AlternativeMethodLink from "../../app/Auth/Components/alternativeMethodLink";
 import ForgotPasswordButton from "./forgotPasswordButton";
 import router from "next/router";
 import { useState } from "react";
@@ -64,16 +64,16 @@ export default function SignInForm() {
   const emailErrorMessage = isEmailWrong
     ? "No existe una cuenta con este email"
     : !isEmailWrong && errors.email
-    ? "Ingrese un email valido"
-    : isGoogleAccount
-    ? "Esta cuenta esta registrada con Google"
-    : null;
+      ? "Ingrese un email valido"
+      : isGoogleAccount
+        ? "Esta cuenta esta registrada con Google"
+        : null;
 
   const passwordErrorMessage = isPasswordWrong
     ? "Contraseña incorrecta"
     : !isPasswordWrong && errors.password
-    ? "Contraseña: 6-30 caracteres"
-    : null;
+      ? "Contraseña: 6-30 caracteres"
+      : null;
 
   return (
     <form

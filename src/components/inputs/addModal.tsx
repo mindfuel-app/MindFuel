@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import useSwipe from "~/hooks/useSwipe";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import { cn } from "~/lib/utils";
 
 export default function AddModal({
@@ -32,11 +32,10 @@ export default function AddModal({
     <>
       <div className="no-highlight relative flex w-full">
         <Button
-          className={`relative h-14 w-1/2 text-xl active:bg-gray-100 ${
-            selectedTab == "tareas"
+          className={`relative h-14 w-1/2 text-xl active:bg-gray-100 ${selectedTab == "tareas"
               ? "font-medium text-gray-800"
               : "text-gray-500"
-          }`}
+            }`}
           onClick={() => setSelectedTab("tareas")}
         >
           Tareas
@@ -50,11 +49,10 @@ export default function AddModal({
           )}
         </Button>
         <Button
-          className={`relative h-14 w-1/2 text-xl active:bg-gray-100 ${
-            selectedTab == "rutinas"
+          className={`relative h-14 w-1/2 text-xl active:bg-gray-100 ${selectedTab == "rutinas"
               ? "font-medium text-gray-800"
               : "text-gray-500"
-          }`}
+            }`}
           onClick={() => setSelectedTab("rutinas")}
         >
           Rutinas

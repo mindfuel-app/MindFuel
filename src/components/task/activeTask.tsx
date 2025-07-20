@@ -11,7 +11,7 @@ import {
   PlayCircleIcon,
 } from "@heroicons/react/24/solid";
 import { cn } from "~/lib/utils";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 function LoadingSteps() {
   return (

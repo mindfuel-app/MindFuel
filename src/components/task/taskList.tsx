@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
 import { TaskSkeleton } from "../ui/skeleton";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import ClickAwayListener from "react-click-away-listener";

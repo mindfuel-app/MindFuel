@@ -3,7 +3,7 @@ import ProfileLayout from "~/components/layouts/profileLayout";
 import { useSession } from "next-auth/react";
 import NotFoundPage from "../404";
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import { cn } from "~/lib/utils";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { api } from "~/utils/api";
@@ -31,7 +31,7 @@ export default function Configuracion() {
       setIsUpdating(false);
       setEditUsername(false);
       toast.success("Nombre de usuario actualizado");
-      
+
       // Update session data in the background without causing a refresh
       try {
         await updateSessionData({ name: tempUsername });
@@ -104,7 +104,7 @@ export default function Configuracion() {
 
   const handleSubmit = () => {
     if (isUpdating) return;
-    
+
     const error = validateUsername(tempUsername);
     if (error) {
       setValidationError(error);
@@ -183,8 +183,8 @@ export default function Configuracion() {
                 <button
                   className={cn(
                     "no-highlight transition-all duration-200",
-                    isUpdating 
-                      ? "opacity-50 cursor-not-allowed" 
+                    isUpdating
+                      ? "opacity-50 cursor-not-allowed"
                       : "active:scale-95 hover:scale-105"
                   )}
                   onClick={handleSubmit}
@@ -196,10 +196,10 @@ export default function Configuracion() {
                     <CheckIcon
                       className={cn(
                         "h-7 w-7 transition-colors",
-                        validationError 
-                          ? "text-gray-400" 
-                          : themeColor === "teal" 
-                            ? "text-teal" 
+                        validationError
+                          ? "text-gray-400"
+                          : themeColor === "teal"
+                            ? "text-teal"
                             : "text-orange-red"
                       )}
                     />

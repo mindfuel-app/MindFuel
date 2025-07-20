@@ -4,11 +4,11 @@ import { AiFillHome } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import { cn } from "~/lib/utils";
 import { useEffect, useState } from "react";
 import AddButton from "./addButton";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 function NavigationItem({
   href,
@@ -30,13 +30,12 @@ function NavigationItem({
   return (
     <Link
       href={href}
-      className={`${
-        router.pathname.startsWith(href) ||
-        (router.pathname.startsWith("/rutinas") && href == "/home") ||
-        (name == "Perfil" && routerName == userName)
+      className={`${router.pathname.startsWith(href) ||
+          (router.pathname.startsWith("/rutinas") && href == "/home") ||
+          (name == "Perfil" && routerName == userName)
           ? `text-${themeColor}`
           : "text-gray-700"
-      } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center transition-colors active:bg-gray-100 min-[375px]:w-[71px]`}
+        } flex w-[65px] flex-col items-center gap-1 rounded-xl p-1 text-center transition-colors active:bg-gray-100 min-[375px]:w-[71px]`}
       onClick={handleClick}
     >
       {icon}
@@ -156,17 +155,17 @@ export function TopNavigation() {
           </span>
           {(router.pathname.startsWith(item.href) ||
             (isInProfilePage && item.name == "Perfil")) && (
-            <div
-              className={cn(
-                "border-2",
-                isInProfilePage
-                  ? "border-white"
-                  : themeColor == "teal"
-                  ? "border-teal"
-                  : "border-orange-red"
-              )}
-            />
-          )}
+              <div
+                className={cn(
+                  "border-2",
+                  isInProfilePage
+                    ? "border-white"
+                    : themeColor == "teal"
+                      ? "border-teal"
+                      : "border-orange-red"
+                )}
+              />
+            )}
         </Link>
       ))}
     </div>

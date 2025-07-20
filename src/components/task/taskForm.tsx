@@ -10,11 +10,11 @@ import { Button } from "../ui/button";
 import Modal from "../ui/modal";
 import { CircularProgress } from "@mui/material";
 import toast from "react-hot-toast";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import { Calendar } from "../ui/calendar";
 import { cn } from "~/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 type Task = {
   id: string;

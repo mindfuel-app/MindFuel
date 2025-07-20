@@ -1,6 +1,6 @@
 import { type Session } from "next-auth";
 import Head from "next/head";
-import { UserProvider } from "~/lib/UserContext";
+import { UserProvider } from "~/contexts/UserContext";
 import { Footer } from "../inputs/navigation";
 import useWindowWidth from "~/hooks/useWindowWidth";
 

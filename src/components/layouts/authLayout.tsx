@@ -1,5 +1,5 @@
-import Logo from "../auth/logo";
-import Title from "../auth/title";
+import Logo from "../../app/Auth/Components/logo";
+import Title from "../../app/Auth/Components/title";
 
 export default function authPageLayout({
   children,

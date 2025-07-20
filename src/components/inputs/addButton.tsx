@@ -3,11 +3,11 @@ import RoutineForm from "../routine/routineForm";
 import AddModal from "./addModal";
 import TaskForm from "../task/taskForm";
 import { api } from "~/utils/api";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 export default function AddButton({ showLabel }: { showLabel: boolean }) {
   const user = useUser();

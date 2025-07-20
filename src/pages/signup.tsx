@@ -1,6 +1,6 @@
 import Head from "next/head";
 import AuthPageLayout from "~/components/layouts/authLayout";
-import SignUpForm from "~/components/auth/signUpForm";
+import SignUpForm from "~/app/Auth/Components/signUpForm";
 
 export default function SignIn() {
   return (

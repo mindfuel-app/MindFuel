@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Logo from "~/components/auth/logo";
+import Logo from "~/components/logo";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import { Progress } from "../components/ui/progressBar";

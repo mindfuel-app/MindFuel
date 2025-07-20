@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import { cn } from "~/lib/utils";
-import { useUser } from "~/lib/UserContext";
+import { useUser } from "~/contexts/UserContext";
 
 
 export default function ThemeToggleButton() {

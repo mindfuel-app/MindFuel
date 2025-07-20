@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import { cn } from "~/lib/utils";
 import { useSession } from "next-auth/react";
 import RespirationGuide from "./components/respiration-guide";

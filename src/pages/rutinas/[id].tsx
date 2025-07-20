@@ -7,14 +7,14 @@ import Image from "next/image";
 import ActiveTask from "../../components/task/activeTask";
 import InactiveTask from "../../components/task/inactiveTask";
 import { SingleRoutineSkeleton } from "~/components/ui/skeleton";
-import RoutineLayout from "~/components/layouts/routineLayout";
+import RoutineLayout from "~/app/Rutinas/components/routineLayout";
 import { usePoints } from "~/hooks/usePoints";
 import { routinePoints, taskPoints } from "~/lib/points";
 import { Footer } from "~/components/inputs/navigation";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 import { cn } from "~/lib/utils";
 import { isString } from "~/lib/checkTypes";
 
@@ -77,7 +77,7 @@ export default function Routine() {
         skippedTasks.length == 0
           ? routinePoints.completed
           : (routineProgress - skippedTasks.length) *
-              taskPoints.completedAfterDeadline
+          taskPoints.completedAfterDeadline
       );
 
       addPoints({
@@ -124,8 +124,8 @@ export default function Routine() {
             {routine.days.length == 33
               ? "Todos los dias de la semana"
               : routine.days.length == 0
-              ? "Nunca"
-              : routine.days}
+                ? "Nunca"
+                : routine.days}
           </span>
         </div>
         {/* <Progress
@@ -187,8 +187,8 @@ export default function Routine() {
                 skippedTasks.length == 0
                   ? "completed"
                   : skippedTasks.length < tasks.length
-                  ? "partial"
-                  : "none"
+                    ? "partial"
+                    : "none"
               }
               points={rewardPoints}
             />

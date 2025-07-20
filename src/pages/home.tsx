@@ -8,7 +8,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { cn } from "~/lib/utils";
-import { useTheme } from "~/lib/ThemeContext";
+import { useTheme } from "~/contexts/ThemeContext";
 
 const tabOptions = [
   { value: "tareas", label: "Tareas" },
@@ -44,10 +44,9 @@ export default function Home() {
                 href={`?tab=${tab.value}`}
                 key={tab.value}
                 className={`relative inline-flex w-1/2 select-none items-center justify-center whitespace-nowrap rounded-sm px-5 py-1.5 text-lg font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
-                  ${
-                    selectedTab == tab.value
-                      ? "text-foreground text-white shadow-sm"
-                      : ""
+                  ${selectedTab == tab.value
+                    ? "text-foreground text-white shadow-sm"
+                    : ""
                   }
                   `}
               >
