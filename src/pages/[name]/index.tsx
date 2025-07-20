@@ -7,9 +7,9 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useTheme } from "~/lib/ThemeContext";
 import { isString } from "~/lib/checkTypes";
-import Configuracion from "./components/configuracion";
-import Header from "./components/header";
-import UserInfo from "./components/userInfo";
+import Configuracion from "../../components/name/configuracion";
+import Header from "../../components/name/header";
+import UserInfo from "../../components/name/userInfo";
 
 export default function Profile() {
   const router = useRouter();

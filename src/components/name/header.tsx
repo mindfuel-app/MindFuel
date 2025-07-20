@@ -1,5 +1,6 @@
 import { useTheme } from "~/lib/ThemeContext";
-import { Dispatch, useEffect, useState } from "react";
+import type { Dispatch } from "react";
+import { useEffect, useState } from "react";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { TopNavigation } from "~/components/inputs/navigation";
 import Image from "next/image";

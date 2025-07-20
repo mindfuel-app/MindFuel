@@ -1,13 +1,13 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
-import NotFoundPage from "../../404";
+import NotFoundPage from "../../pages/404";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "~/lib/ThemeContext";
 import { cn } from "~/lib/utils";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
-import ThemeToggleButton from "../../../components/inputs/themeToggleButton";
+import ThemeToggleButton from "../inputs/themeToggleButton";
 import Skeleton from "./skeleton";
 
 export default function Configuracion() {
@@ -116,7 +116,7 @@ export default function Configuracion() {
 
     // Optimistically update the UI
     setIsUpdating(true);
-    updateUsername({ user_id: sessionData!.user.id, username: tempUsername });
+    updateUsername({ user_id: sessionData?.user.id??'', username: tempUsername });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
