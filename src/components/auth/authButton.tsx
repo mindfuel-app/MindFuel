@@ -1,4 +1,4 @@
-import { Button } from "../../../components/ui/button";
+import { Button } from "../ui/button";
 import { CircularProgress } from "@mui/material";
 
 export default function AuthButton({
