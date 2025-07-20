@@ -102,7 +102,6 @@ export default function ClientRoutine({ id }: { id: string }) {
   return (
     <RoutineLayout title={routine.name} sessionData={sessionData}>
       <div className="flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
-        <div className="flex h-full flex-col items-center gap-6 bg-alabaster px-6 pt-8">
         <div
           className={cn(
             "absolute top-0 flex w-full flex-col p-4 font-medium text-white shadow-xl",
