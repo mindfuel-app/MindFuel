@@ -37,7 +37,7 @@ const formSchema = z
 export default function ResetPasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams?.get("token");
 
   const { data: userEmail } = api.resetPwd.getEmailByToken.useQuery(
     { token: token ?? "" },
