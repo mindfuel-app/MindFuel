@@ -46,47 +46,49 @@ export default function Header({
     );
 
   return (
-    <div className="glass-surface relative mx-auto mt-3 flex w-[calc(100%-1.5rem)] max-w-6xl items-center justify-between rounded-2xl px-4 py-3 font-medium sm:px-5">
+    <div className="glass-surface relative z-30 mx-auto mt-3 flex w-[calc(100%-1.5rem)] max-w-6xl items-center justify-between rounded-2xl px-4 py-3 font-medium sm:px-5">
       <div className="relative flex items-center gap-1">
         <span>Bienvenido, </span>
         <ClickAwayListener onClickAway={() => setShowLogout(false)}>
-          <div
-            onClick={() => setShowLogout(!showLogout)}
-            className="no-highlight flex cursor-pointer select-none items-center gap-1 rounded-md px-1 transition-colors active:bg-gray-200"
-          >
-            <span className="font-semibold text-orange">
-              {sessionData.user.name}
-            </span>
-            <motion.div
-              initial={{ rotate: 0 }}
-              animate={{ rotate: showLogout ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
+          <div className="relative">
+            <div
+              onClick={() => setShowLogout(!showLogout)}
+              className="no-highlight flex cursor-pointer select-none items-center gap-1 rounded-md px-1 transition-colors active:bg-gray-200"
             >
-              <ChevronDownIcon className="h-4 w-4 text-gray-600 active:text-gray-900" />
-            </motion.div>
+              <span className="font-semibold text-orange">
+                {sessionData.user.name}
+              </span>
+              <motion.div
+                initial={{ rotate: 0 }}
+                animate={{ rotate: showLogout ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ChevronDownIcon className="h-4 w-4 text-gray-600 active:text-gray-900" />
+              </motion.div>
+            </div>
+            <AnimatePresence>
+              {showLogout && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 top-full z-40 mt-2 min-w-[10rem] rounded-xl border border-gray-200 bg-white px-2 py-1 text-gray-800 shadow-lg"
+                >
+                  <Button
+                    className="no-highlight w-full justify-start p-1 text-base font-normal text-gray-800"
+                    onClick={() => void signOut({ callbackUrl: "/signin" })}
+                  >
+                    <div className="flex items-center gap-2">
+                      <ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-600" />
+                      <span>Cerrar sesión</span>
+                    </div>
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </ClickAwayListener>
-        <AnimatePresence>
-          {showLogout && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="absolute -right-2 top-8 z-20 rounded-xl border border-gray-200 bg-white px-2 py-1 text-gray-800 shadow-lg"
-            >
-              <Button
-                className="no-highlight p-1 text-base font-normal"
-                onClick={() => void signOut({ callbackUrl: "/signin" })}
-              >
-                <div className="flex items-center gap-2">
-                  <ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-600" />
-                  <span>Cerrar sesión</span>
-                </div>
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
       {showNavigation && (
         <>
