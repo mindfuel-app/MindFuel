@@ -3,7 +3,7 @@ import { OptionLayout } from ".";
 import Image from "next/image";
 import { usePoints } from "~/hooks/usePoints";
 import { api } from "~/utils/api";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { selfCarePoints } from "~/lib/points";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
@@ -13,9 +13,7 @@ export default function Apreciacion() {
   const { data: sessionData, status } = useSession();
   const { addPoints } = usePoints();
   const router = useRouter();
-  const { data: previousGreetings } = api.selfCare.getGreetings.useQuery({
-    user_id: sessionData?.user.id ?? "",
-  });
+  const { data: previousGreetings } = api.selfCare.getGreetings.useQuery();
   const { mutate: createGreetins } = api.selfCare.createGreetings.useMutation({
     onSuccess: () => {
       void utils.selfCare.getGreetings.invalidate();
@@ -24,26 +22,35 @@ export default function Apreciacion() {
   const [greetings, setGreetins] = useState<string[]>([]);
   const [finalMessage, setFinalMessage] = useState(false);
   const utils = api.useContext();
-  const today = new Date();
-  const [hasPreviousGreeting, setHasPreviousGreeting] = useState(
-    previousGreetings &&
-      previousGreetings.filter((greeting) => {
+  const [hasPreviousGreeting, setHasPreviousGreeting] = useState(false);
+  const completedGreetings = useMemo(
+    () => greetings.map((item) => item.trim()).filter(Boolean),
+    [greetings]
+  );
+
+  useEffect(() => {
+    const today = new Date();
+    const hasGreetingToday =
+      previousGreetings?.some((greeting) => {
         return (
           greeting.createdAt.getDate() == today.getDate() &&
           greeting.createdAt.getMonth() == today.getMonth() &&
           greeting.createdAt.getFullYear() == today.getFullYear()
         );
-      }).length > 0
-  );
+      }) ?? false;
+
+    setHasPreviousGreeting(hasGreetingToday);
+  }, [previousGreetings]);
 
   if (status == "unauthenticated") return void router.push("/signin");
 
   if (!sessionData) return;
 
   const handleSubmit = () => {
+    if (completedGreetings.length < 4) return;
+
     createGreetins({
-      user_id: sessionData.user.id,
-      greetings: greetings.join("¡!"),
+      greetings: completedGreetings.join("¡!"),
     });
     addPoints({
       user_id: sessionData.user.id,
@@ -59,25 +66,26 @@ export default function Apreciacion() {
           <Image
             width={80}
             height={80}
-            alt="Apreaciacion"
+            alt="Apreciación"
             src={`/self-care/apreciacion.png`}
           />
         </div>
         {hasPreviousGreeting ? (
           <p className="mt-16 max-w-[300px] text-center text-lg">
             Hoy ya has ingresado tus agradecimientos. Si quieres puedes ingresar{" "}
-            <span
+            <button
+              type="button"
               onClick={() => setHasPreviousGreeting(false)}
-              className="text-sky-500 active:underline"
+              className="font-medium text-sky-500 underline-offset-2 hover:underline"
             >
               nuevos agradecimientos
-            </span>{" "}
-            y sino vuelve mañana!
+            </button>{" "}
+            y, si no, vuelve mañana.
           </p>
         ) : !finalMessage ? (
           <>
             <p className="max-w-[290px] text-center text-xl">
-              Dí <strong>cuatro</strong> cosas por las que estés agradecido el
+              Di <strong>cuatro</strong> cosas por las que estés agradecido el
               día de hoy.
             </p>
             <div className="-mt-3 flex flex-col gap-4">
@@ -90,6 +98,8 @@ export default function Apreciacion() {
                   >
                     <input
                       type="text"
+                      aria-label={`Agradecimiento ${index + 1}`}
+                      placeholder={`Agradecimiento ${index + 1}`}
                       onChange={(e) =>
                         setGreetins((prev) => {
                           const updatedGreetings = [...prev];
@@ -107,7 +117,8 @@ export default function Apreciacion() {
             </div>
             <button
               onClick={handleSubmit}
-              className="no-highlight rounded-3xl bg-[#E97B82] px-4 py-2 text-white transition-transform active:scale-95"
+              disabled={completedGreetings.length < 4}
+              className="no-highlight rounded-3xl bg-[#E97B82] px-4 py-2 text-white transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
             >
               <span className="font-medium">Guardar</span>
             </button>

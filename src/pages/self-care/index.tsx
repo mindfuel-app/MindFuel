@@ -23,7 +23,7 @@ const options: Option[] = [
   {
     title: "Apreciacion",
     href: "/apreciacion",
-    description: "Concentrate en pequeñas cosas y aprecialas.",
+    description: "Concéntrate en pequeñas cosas y aprécialas.",
     image: "/apreciacion.png",
   },
   {

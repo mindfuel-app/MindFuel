@@ -5,63 +5,55 @@ export const selfCareRouter = createTRPCRouter({
   createGreetings: protectedProcedure
     .input(
       z.object({
-        user_id: z.string(),
         greetings: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       const values = await ctx.prisma.greeting.create({
         data: {
-          user_id: input.user_id,
+          user_id: ctx.session.user.id,
           greeting: input.greetings,
         },
       });
       return { values };
     }),
-  getGreetings: protectedProcedure
-    .input(
-      z.object({
-        user_id: z.string(),
-      })
-    )
-    .query(async ({ input, ctx }) => {
-      const values = await ctx.prisma.greeting.findMany({
-        where: {
-          user_id: input.user_id,
-        },
-      });
-      return values;
-    }),
+  getGreetings: protectedProcedure.query(async ({ ctx }) => {
+    const values = await ctx.prisma.greeting.findMany({
+      where: {
+        user_id: ctx.session.user.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return values;
+  }),
   createNote: protectedProcedure
     .input(
       z.object({
-        user_id: z.string(),
         note: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       const values = await ctx.prisma.note.create({
         data: {
-          user_id: input.user_id,
+          user_id: ctx.session.user.id,
           note: input.note,
         },
       });
       return values;
     }),
-  getNotes: protectedProcedure
-    .input(
-      z.object({
-        user_id: z.string(),
-      })
-    )
-    .query(async ({ input, ctx }) => {
-      const values = await ctx.prisma.note.findMany({
-        where: {
-          user_id: input.user_id,
-        },
-      });
-      return values;
-    }),
+  getNotes: protectedProcedure.query(async ({ ctx }) => {
+    const values = await ctx.prisma.note.findMany({
+      where: {
+        user_id: ctx.session.user.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return values;
+  }),
   deleteNote: protectedProcedure
     .input(
       z.object({
@@ -69,9 +61,10 @@ export const selfCareRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const values = await ctx.prisma.note.delete({
+      const values = await ctx.prisma.note.deleteMany({
         where: {
           id: input.id,
+          user_id: ctx.session.user.id,
         },
       });
       return values;

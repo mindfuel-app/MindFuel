@@ -14,13 +14,23 @@ export default function DiarioPersonal() {
   const router = useRouter();
   const { data: sessionData, status } = useSession();
   const { data: previousNotes, refetch: refetchNotes } =
-    api.selfCare.getNotes.useQuery({
-      user_id: sessionData?.user.id ?? "",
-    });
+    api.selfCare.getNotes.useQuery();
   const [note, setNote] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showOldNotes, setShowOldNotes] = useState(false);
-  const { mutate: createNote } = api.selfCare.createNote.useMutation();
+  const trimmedNote = note.trim();
+  const { mutate: createNote } = api.selfCare.createNote.useMutation({
+    onSuccess: () => {
+      setNote("");
+      setIsSaving(false);
+      toast.success("Nota guardada con éxito");
+      void refetchNotes();
+    },
+    onError: () => {
+      setIsSaving(false);
+      toast.error("No pudimos guardar la nota. Intenta nuevamente.");
+    },
+  });
 
   if (status == "unauthenticated") return void router.push("/signin");
 
@@ -30,24 +40,26 @@ export default function DiarioPersonal() {
     <SelfCareLayout sessionData={sessionData}>
       <span className="ml-3 mt-1 flex w-full items-center justify-start text-lg">
         {showOldNotes ? (
-          <span
+          <button
+            type="button"
             onClick={() => setShowOldNotes(false)}
-            className="text-sky-500 active:underline"
+            className="font-medium text-sky-500 underline-offset-2 hover:underline"
           >
             Volver
-          </span>
+          </button>
         ) : (
           <>
             Ver&nbsp;
-            <span
+            <button
+              type="button"
               onClick={() => {
                 void refetchNotes();
                 setShowOldNotes(true);
               }}
-              className="text-sky-500 active:underline"
+              className="font-medium text-sky-500 underline-offset-2 hover:underline"
             >
               mis notas
-            </span>
+            </button>
           </>
         )}
       </span>
@@ -60,15 +72,16 @@ export default function DiarioPersonal() {
           {previousNotes.length == 0 ? (
             <div className="mt-10 max-w-[250px] text-center text-xl">
               No tienes ninguna nota.{" "}
-              <span
+              <button
+                type="button"
                 onClick={(e) => {
                   e.preventDefault();
                   setShowOldNotes(false);
                 }}
-                className="text-2xl text-sky-500 active:underline"
+                className="text-2xl font-medium text-sky-500 underline-offset-2 hover:underline"
               >
                 Crea una nueva
-              </span>
+              </button>
             </div>
           ) : (
             <>
@@ -96,8 +109,13 @@ export default function DiarioPersonal() {
           <p className="max-w-[290px] text-center text-xl">
             Este es tu lugar seguro, puedes escribir lo que desees.
           </p>
+          <label htmlFor="journal-note" className="sr-only">
+            Escribe tu nota personal
+          </label>
           <textarea
+            id="journal-note"
             value={note}
+            placeholder="Escribe tu nota aquí..."
             className={cn(
               "h-36 w-full resize-none rounded-lg border-2 border-gray-500 px-2 py-1 outline-none focus:border-gray-700",
               isSaving && "opacity-50"
@@ -111,20 +129,17 @@ export default function DiarioPersonal() {
             aria-disabled={isSaving}
             onClick={(e) => {
               e.preventDefault();
+              if (trimmedNote.length == 0 || isSaving) return;
               setIsSaving(true);
-              setTimeout(() => {
-                createNote({
-                  note,
-                  user_id: sessionData.user.id,
-                });
-                setNote("");
-                setIsSaving(false);
-                toast.success("Nota guardada con éxito");
-              }, 600);
+              createNote({
+                note: trimmedNote,
+              });
             }}
+            disabled={trimmedNote.length == 0 || isSaving}
             className={cn(
               "no-highlight flex h-10 w-24 items-center justify-center rounded-3xl bg-[#b17c54] px-4 py-2 text-white transition-colors active:bg-[#b17c54]/80",
-              isSaving && "opacity-50"
+              (isSaving || trimmedNote.length == 0) &&
+                "cursor-not-allowed opacity-50"
             )}
           >
             {!isSaving ? (
@@ -153,45 +168,57 @@ function Note({
   const [showFullNote, setShowFullNote] = useState(
     content.length <= noteMaxLength
   );
-  const { mutate: deleteNote } = api.selfCare.deleteNote.useMutation();
+  const utils = api.useContext();
+  const { mutate: deleteNote } = api.selfCare.deleteNote.useMutation({
+    onSuccess: async () => {
+      await utils.selfCare.getNotes.invalidate();
+      toast.success("Nota eliminada con éxito");
+    },
+    onError: () => {
+      toast.error("No pudimos borrar la nota. Intenta nuevamente.");
+    },
+  });
 
   return (
     <div className="flex w-[80%] max-w-md flex-col gap-1 overflow-hidden rounded-lg bg-white p-3">
       <div className="flex w-full items-center justify-between">
         <span>Fecha: {date.toLocaleDateString()}</span>
-        <span
+        <button
+          type="button"
           onClick={() => {
             deleteNote({
               id,
             });
           }}
-          className="text-sky-500 active:underline"
+          className="font-medium text-sky-500 underline-offset-2 hover:underline"
         >
           Borrar
-        </span>
+        </button>
       </div>
       <p>
         {showFullNote ? (
           <>
             {content}{" "}
             {content.length > noteMaxLength && (
-              <span
+              <button
+                type="button"
                 onClick={() => setShowFullNote(false)}
-                className="text-sky-500 active:underline"
+                className="font-medium text-sky-500 underline-offset-2 hover:underline"
               >
                 Ver menos
-              </span>
+              </button>
             )}
           </>
         ) : (
           <>
             {content.substring(0, noteMaxLength).concat("...")}{" "}
-            <span
+            <button
+              type="button"
               onClick={() => setShowFullNote(true)}
-              className="text-sky-500 active:underline"
+              className="font-medium text-sky-500 underline-offset-2 hover:underline"
             >
-              Ver mas
-            </span>
+              Ver más
+            </button>
           </>
         )}
       </p>
