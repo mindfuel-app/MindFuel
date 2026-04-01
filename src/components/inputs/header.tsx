@@ -20,8 +20,10 @@ import { cn } from "~/lib/utils";
 
 export default function Header({
   showNavigation,
+  showCreateButton = true,
 }: {
   showNavigation: boolean;
+  showCreateButton?: boolean;
 }) {
   const { themeColor } = useTheme();
   const user = useUser();
@@ -93,53 +95,55 @@ export default function Header({
       {showNavigation && (
         <>
           <TopNavigation />
-          <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <Modal.Button
-              className={cn(
-                "no-highlight absolute right-7 hidden items-center gap-2 rounded-xl px-3 py-2 text-white shadow-md transition-all lg:flex",
-                themeColor == "teal"
-                  ? "bg-teal active:bg-teal/80"
-                  : "bg-orange-red active:bg-orange-red/80"
-              )}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="white"
-                className="h-6 w-6"
+          {showCreateButton && (
+            <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <Modal.Button
+                className={cn(
+                  "no-highlight absolute right-7 hidden items-center gap-2 rounded-xl px-3 py-2 text-white shadow-md transition-all lg:flex",
+                  themeColor == "teal"
+                    ? "bg-teal active:bg-teal/80"
+                    : "bg-orange-red active:bg-orange-red/80"
+                )}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="white"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+                Crear
+              </Modal.Button>
+              <Modal.Content>
+                <AddModal
+                  TaskModal={
+                    <TaskForm
+                      mode="create"
+                      afterSave={() => {
+                        void refetchTasks();
+                        setIsModalOpen(false);
+                      }}
+                    />
+                  }
+                  RoutineModal={
+                    <RoutineForm
+                      afterSave={() => {
+                        void refetchRoutines();
+                        setIsModalOpen(false);
+                      }}
+                    />
+                  }
                 />
-              </svg>
-              Crear
-            </Modal.Button>
-            <Modal.Content>
-              <AddModal
-                TaskModal={
-                  <TaskForm
-                    mode="create"
-                    afterSave={() => {
-                      void refetchTasks();
-                      setIsModalOpen(false);
-                    }}
-                  />
-                }
-                RoutineModal={
-                  <RoutineForm
-                    afterSave={() => {
-                      void refetchRoutines();
-                      setIsModalOpen(false);
-                    }}
-                  />
-                }
-              />
-            </Modal.Content>
-          </Modal>
+              </Modal.Content>
+            </Modal>
+          )}
         </>
       )}
     </div>
