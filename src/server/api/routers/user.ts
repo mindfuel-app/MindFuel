@@ -95,21 +95,7 @@ export const userRouter = createTRPCRouter({
       return theme;
     }),
 
-    updateCalorieMax: protectedProcedure
-    .input(z.object({ user_id: z.string(), calorieMax: z.number() }))
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.update({
-        where: {
-          id: input.user_id,
-        },
-        data: {
-          calorieMax: input.calorieMax,
-        },
-      });
-      return user;
-    }),
-
-    updateSelfCareOptions: protectedProcedure
+  updateSelfCareOptions: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -129,7 +115,8 @@ export const userRouter = createTRPCRouter({
       if (!user) throw new Error("User not found");
 
       // Mezclar opciones existentes con nuevas
-      const currentOptions = (user.selfCareOptions as Record<string, boolean>) || {};
+      const currentOptions =
+        (user.selfCareOptions as Record<string, boolean>) || {};
       const updatedOptions = { ...currentOptions, ...input.updates };
 
       return ctx.prisma.user.update({

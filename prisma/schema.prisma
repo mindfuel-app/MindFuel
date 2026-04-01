@@ -53,7 +53,6 @@ model User {
     level           Level     @relation(fields: [levelNumber], references: [number], onUpdate: Cascade)
     levelNumber     Int       @default(1)
     theme           String    @default("teal")
-    calorieMax      Int       @default(2500)
     selfCareOptions Json?     @default("{\"greetings\":true,\"diarie\":true,\"calories\":true,\"breathing\":true}")
     accounts Account[]
     sessions Session[]
