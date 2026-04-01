@@ -78,7 +78,6 @@ export default function DiarioPersonal() {
                   id={item.id}
                   date={item.createdAt}
                   content={item.note}
-                  refetchNotes={void refetchNotes()}
                 />
               ))}
             </>
@@ -145,12 +144,10 @@ function Note({
   id,
   date,
   content,
-  refetchNotes,
 }: {
   id: string;
   date: Date;
   content: string;
-  refetchNotes: void;
 }) {
   const noteMaxLength = 70;
   const [showFullNote, setShowFullNote] = useState(
@@ -167,7 +164,6 @@ function Note({
             deleteNote({
               id,
             });
-            refetchNotes;
           }}
           className="text-sky-500 active:underline"
         >

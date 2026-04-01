@@ -138,7 +138,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session: async ({ session, token }) => {
-      if (!token.sub) return Promise.reject("No sub in token");
+      if (!token.sub) return Promise.reject(new Error("No sub in token"));
       session.user.id = token.sub;
       return Promise.resolve(session);
     },

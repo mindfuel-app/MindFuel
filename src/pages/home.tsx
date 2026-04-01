@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import Layout from "~/components/layouts/homeLayout";
 import { Tabs, TabsList } from "../components/ui/tabs";
 import { motion } from "framer-motion";

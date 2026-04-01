@@ -6,8 +6,11 @@
     "build": "next build",
     "db:check": "node scripts/check-db-connection.cjs",
     "dev": "next dev",
+    "lint-staged": "lint-staged",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
     "postinstall": "prisma generate",
-    "lint": "next lint",
+    "prepare": "husky",
     "start": "next start"
   },
   "dependencies": {
@@ -54,17 +57,22 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/eslint__eslintrc": "^2.1.2",
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^22.19.15",
     "@types/nodemailer": "^6.4.23",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "@types/uuid": "^11.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
     "autoprefixer": "^10.4.27",
-    "eslint": "^8.57.1",
+    "eslint": "^9.38.0",
     "eslint-config-next": "^15.5.6",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "postcss": "^8.5.8",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
@@ -72,6 +80,11 @@
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,cjs,mjs}": [
+      "eslint --fix --max-warnings=0"
+    ]
   },
   "ct3aMetadata": {
     "initVersion": "7.13.1"

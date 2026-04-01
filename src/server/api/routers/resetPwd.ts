@@ -55,7 +55,7 @@ export const resetPwdRouter = createTRPCRouter({
       try {
         await transporter.sendMail(mailOptions);
         return { success: true };
-      } catch (err) {
+      } catch {
         return { success: false };
       }
     }),
