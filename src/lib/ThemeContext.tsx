@@ -26,12 +26,19 @@ export function ThemeContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession();
   const [theme, setTheme] = useState<ThemeColor>(defaultThemeValue);
   const { mutate: updateTheme } = api.user.updateTheme.useMutation();
-  const { data: themeData } = api.user.getTheme.useQuery({
-    user_id: sessionData?.user.id ?? "",
-  });
+  const userId = sessionData?.user.id;
+
+  const { data: themeData } = api.user.getTheme.useQuery(
+    {
+      user_id: userId ?? "",
+    },
+    {
+      enabled: status === "authenticated" && Boolean(userId),
+    }
+  );
 
   useEffect(() => {
     if (themeData?.theme && isThemeColor(themeData.theme)) {
@@ -39,9 +46,20 @@ export function ThemeContextProvider({
     }
   }, [themeData?.theme]);
 
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      setTheme(defaultThemeValue);
+    }
+  }, [status]);
+
   const setThemeColor: SetThemeColor = (userId: string, value?: ThemeColor) => {
     const newValue = value ?? (theme === "teal" ? "orange-red" : "teal");
     setTheme(newValue);
+
+    if (!userId) {
+      return;
+    }
+
     updateTheme({ user_id: userId, theme: newValue });
   };
 
