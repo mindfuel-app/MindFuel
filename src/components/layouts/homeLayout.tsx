@@ -1,5 +1,5 @@
-import { Footer } from "../navigation";
-import Header from "../header";
+import { Footer } from "../inputs/navigation";
+import Header from "../inputs/header";
 import { UserProvider } from "~/lib/UserContext";
 import { type Session } from "next-auth";
 import Head from "next/head";

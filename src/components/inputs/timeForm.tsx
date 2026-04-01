@@ -1,8 +1,8 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 
 export default function TimeForm({
   taskIndex,

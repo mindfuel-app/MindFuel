@@ -60,11 +60,10 @@ function CountdownTimer({
     <>
       <div className="flex">
         <div className="rounded-l-md border-2 border-orange bg-white pl-1 pr-3 text-orange">
-          <span>{`${
-            hours > 0 ? `${hours.toString().padStart(2, "0")}:` : ""
-          }${minutes.toString().padStart(2, "0")}:${seconds
-            .toString()
-            .padStart(2, "0")}`}</span>
+          <span>{`${hours > 0 ? `${hours.toString().padStart(2, "0")}:` : ""
+            }${minutes.toString().padStart(2, "0")}:${seconds
+              .toString()
+              .padStart(2, "0")}`}</span>
         </div>
         <div
           onClick={() => {
@@ -165,9 +164,8 @@ export default function ActiveTask({
       <div className="-mt-2">
         {name}
         {estimatedTime && (
-          <span>{` - ${hours ? `${hours} hs` : ""} ${
-            minutes ? `${minutes} min` : ""
-          } ${seconds ? `${seconds} s` : ""}`}</span>
+          <span>{` - ${hours ? `${hours} hs` : ""} ${minutes ? `${minutes} min` : ""
+            } ${seconds ? `${seconds} s` : ""}`}</span>
         )}
       </div>
       {estimatedTime && (

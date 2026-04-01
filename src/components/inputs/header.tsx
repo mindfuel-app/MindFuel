@@ -1,18 +1,18 @@
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import Modal from "./ui/modal";
+import Modal from "../ui/modal";
 import {
   ArrowLeftOnRectangleIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import ClickAwayListener from "react-click-away-listener";
 import { TopNavigation } from "./navigation";
-import TaskForm from "./task/taskForm";
+import TaskForm from "../task/taskForm";
 import AddModal from "./addModal";
-import RoutineForm from "./routine/routineForm";
+import RoutineForm from "../routine/routineForm";
 import { api } from "~/utils/api";
 import { useUser } from "~/lib/UserContext";
 import { useTheme } from "~/lib/ThemeContext";

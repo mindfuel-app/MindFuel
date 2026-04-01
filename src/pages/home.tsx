@@ -14,7 +14,7 @@ import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { cn } from "~/lib/utils";
 import { useTheme } from "~/lib/ThemeContext";
-import AddButton from "~/components/addButton";
+import AddButton from "~/components/inputs/addButton";
 import {
   CalendarDaysIcon,
   CheckCircleIcon,
@@ -53,7 +53,6 @@ export default function Home() {
       enabled: Boolean(sessionData?.user.id),
     }
   );
-
   const swipeHandler = useSwipe({
     onSwipedLeft: () => void router.push("?tab=rutinas"),
     onSwipedRight: () => void router.push("?tab=tareas"),
@@ -85,7 +84,6 @@ export default function Home() {
       }),
     []
   );
-
   if (status == "unauthenticated") return void router.push("/signin");
 
   if (!sessionData) return;

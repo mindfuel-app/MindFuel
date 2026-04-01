@@ -145,7 +145,7 @@ export default function TaskForm({
               Fecha de vencimiento
               <div className="no-highlight relative flex items-center gap-3">
                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                  <PopoverTrigger>
+                  <PopoverTrigger asChild>
                     <Button
                       variant={"outline"}
                       className={cn(
@@ -201,9 +201,8 @@ export default function TaskForm({
             </label>
           </motion.div>
           <div
-            className={`flex pt-9 ${
-              mode == "edit" ? "justify-between" : "justify-end"
-            }`}
+            className={`flex pt-9 ${mode == "edit" ? "justify-between" : "justify-end"
+              }`}
           >
             {mode == "edit" && id && (
               <div
