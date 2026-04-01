@@ -9,8 +9,8 @@ export default function ThemeToggleButton() {
   const isToggled = themeColor === "orange-red";
 
   return (
-    <div className="flex items-center gap-3 p-2">
-      <span className="text-xl font-medium text-teal">Teal</span>
+    <div className="flex flex-wrap items-center gap-2 p-1 sm:gap-3 sm:p-2">
+      <span className="text-sm font-medium text-teal sm:text-xl">Teal</span>
       <button
         onClick={() => {
           setThemeColor(id);
@@ -26,7 +26,9 @@ export default function ThemeToggleButton() {
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
         />
       </button>
-      <span className="text-xl font-medium text-orange-red">Orange-red</span>
+      <span className="text-sm font-medium text-orange-red sm:text-xl">
+        Orange-red
+      </span>
     </div>
   );
 }

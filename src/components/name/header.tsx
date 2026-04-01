@@ -41,7 +41,7 @@ export default function Header({
           : "from-orange-red to-[#FF7373]"
       )}
     >
-      {windowWidth > 1024 && <TopNavigation />}
+      {windowWidth >= 1024 && <TopNavigation />}
       <div className="hidden w-full items-start justify-between px-6 pt-2 min-[200px]:flex xl:px-10">
         <Image
           alt="Logo"
