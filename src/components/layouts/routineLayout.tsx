@@ -20,7 +20,9 @@ export default function RoutineLayout({
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="flex h-screen flex-col">{children}</div>
+      <div className="app-ambient relative flex min-h-screen flex-col overflow-hidden">
+        {children}
+      </div>
     </UserProvider>
   );
 }

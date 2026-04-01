@@ -25,9 +25,11 @@ export default function ProfileLayout({
         name={sessionData.user.name || ""}
         email={sessionData.user.email || ""}
       >
-        <div className="flex h-screen flex-col">
+        <div className="app-ambient relative flex min-h-screen flex-col overflow-hidden">
           {header}
-          <main className="flex h-full flex-col items-center">{children}</main>
+          <main className="relative flex h-full flex-col items-center px-3">
+            {children}
+          </main>
           {windowWidth < 1024 && <Footer />}
         </div>
       </UserProvider>

@@ -73,14 +73,16 @@ export default function SelfCare() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="padding-footer-sm flex flex-col gap-3 px-4 pt-2"
+        className="padding-footer-sm mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pt-2"
       >
-        <h3 className="text-lg">Opciones</h3>
+        <h3 className="text-xl font-semibold tracking-tight text-eerie-black">
+          Opciones
+        </h3>
         {options.map((option) => (
           <Link
             key={option.title}
             href={`/self-care${option.href}`}
-            className="no-highlight flex max-h-[120px] min-h-[100px] w-[300px] gap-2 rounded-md bg-white p-2 transition-transform active:scale-[97%] sm:w-[400px]"
+            className="glass-surface no-highlight flex min-h-[108px] w-full gap-2 rounded-2xl p-3 transition-transform active:scale-[98%]"
             onClick={() => onRouteChange(`/self-care${option.href}`)}
           >
             {option.image && (
@@ -89,12 +91,16 @@ export default function SelfCare() {
                 height={100}
                 alt={option.title}
                 src={`/self-care${option.image}`}
-                className="w-1/4 p-1.5"
+                className="w-1/4 rounded-xl bg-white/80 p-1.5"
               />
             )}
             <div className="flex w-3/4 flex-col pt-1">
-              <h2 className="font-semibold sm:text-lg">{option.title}</h2>
-              <h4 className="text-sm sm:text-base">{option.description}</h4>
+              <h2 className="font-semibold text-eerie-black sm:text-lg">
+                {option.title}
+              </h2>
+              <h4 className="text-sm text-gray-600 sm:text-base">
+                {option.description}
+              </h4>
             </div>
           </Link>
         ))}
@@ -114,7 +120,9 @@ export function OptionLayout({
     <>
       <TodayDate />
       <div className="padding-footer-sm flex flex-col items-center gap-7 pt-5">
-        <h1 className="text-3xl font-medium">{title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-eerie-black">
+          {title}
+        </h1>
         {children}
       </div>
     </>
@@ -142,5 +150,5 @@ function TodayDate() {
   const year = today.getFullYear();
   const formattedDate = `Hoy, ${dayOfMonth} de ${monthName} de ${year}`;
 
-  return <h3 className="mt-3 text-lg">{formattedDate}</h3>;
+  return <h3 className="mt-3 text-lg text-gray-700">{formattedDate}</h3>;
 }

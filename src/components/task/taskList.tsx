@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { motion } from "framer-motion";
 import TaskCard from "./taskCard";
 import { api } from "~/utils/api";
@@ -8,6 +11,21 @@ import { useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { NoSymbolIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { useTasks } from "~/hooks/useTasks";
+
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0 },
+};
 
 export default function TaskList() {
   const user = useUser();
@@ -37,16 +55,17 @@ export default function TaskList() {
 
   const pendingTasks = showCompletedTasks
     ? userTasks
-    : userTasks.filter((task) => task.done == false);
+    : userTasks.filter((task: { done: boolean }) => task.done == false);
 
   const areCompletedTasks =
-    pendingTasks.filter((task) => task.done == true).length > 0;
+    pendingTasks.filter((task: { done: boolean }) => task.done == true).length >
+    0;
 
   return (
     <motion.div
       initial={{ x: 10, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="max-lg:padding-footer-lg lg:padding-footer-sm relative flex flex-col items-center text-lg font-medium"
+      className="max-lg:padding-footer-lg lg:padding-footer-sm relative mx-auto flex w-full max-w-[980px] flex-col items-center text-lg font-medium"
     >
       <div
         onClick={() => {
@@ -60,11 +79,11 @@ export default function TaskList() {
         <ClickAwayListener onClickAway={() => setShowSubMenu(false)}>
           <div
             onClick={() => void refetchTasks()}
-            className="no-highlight absolute right-0 top-12 z-20 flex cursor-pointer flex-col gap-1 rounded bg-gray-700 px-2 py-1 text-base font-normal text-gray-200 shadow-2xl"
+            className="no-highlight absolute right-0 top-12 z-20 flex cursor-pointer flex-col gap-1 rounded-xl border border-gray-200 bg-white px-2 py-2 text-base font-normal text-gray-700 shadow-2xl"
           >
             <div
               onClick={() => setShowCompletedTasks(!showCompletedTasks)}
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 rounded-lg px-2 py-1 active:bg-gray-100"
             >
               {showCompletedTasks ? (
                 <>
@@ -82,29 +101,54 @@ export default function TaskList() {
         </ClickAwayListener>
       )}
       {pendingTasks.length == 0 && (
-        <h2 className="my-5">No hay tareas pendientes</h2>
+        <div className="mt-4 w-full max-w-[760px] rounded-2xl border border-dashed border-gray-300 bg-white/70 px-6 py-9 text-center shadow-sm">
+          <h2 className="text-xl font-semibold text-eerie-black">
+            Todo en orden por ahora
+          </h2>
+          <p className="mt-1 text-sm text-gray-600 sm:text-base">
+            No hay tareas pendientes. Puedes crear una nueva para mantener el
+            ritmo.
+          </p>
+        </div>
       )}
       {pendingTasks.length > 0 && (
         <>
-          <h2 className="my-5">
-            {pendingTasks.filter((task) => task.done == false).length > 0
+          <h2 className="my-5 text-xl text-eerie-black">
+            {pendingTasks.filter(
+              (task: { done: boolean }) => task.done == false
+            ).length > 0
               ? "Tareas pendientes"
               : "No hay tareas pendientes"}
           </h2>
-          <ul className="flex flex-col gap-3">
-            {pendingTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                id={task.id}
-                name={task.name}
-                deadline={task.deadline}
-                description={task.description}
-                isChecked={task.done}
-                isPartOfRoutine={task.routine_id != null}
-                showCompletedTasks={showCompletedTasks}
-              />
-            ))}
-          </ul>
+          <motion.ul
+            variants={listVariants}
+            initial="hidden"
+            animate="show"
+            className="flex w-full flex-col items-center gap-3"
+          >
+            {pendingTasks.map(
+              (task: {
+                id: string;
+                name: string;
+                deadline: Date | null;
+                description: string | null;
+                done: boolean;
+                routine_id: string | null;
+              }) => (
+                <motion.li key={task.id} variants={itemVariants}>
+                  <TaskCard
+                    id={task.id}
+                    name={task.name}
+                    deadline={task.deadline}
+                    description={task.description}
+                    isChecked={task.done}
+                    isPartOfRoutine={task.routine_id != null}
+                    showCompletedTasks={showCompletedTasks}
+                  />
+                </motion.li>
+              )
+            )}
+          </motion.ul>
           {showCompletedTasks && areCompletedTasks && (
             <div className="flex w-full items-center justify-start pl-5 pt-2">
               <span

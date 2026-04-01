@@ -30,9 +30,9 @@ export default function SelfCareLayout({
         name={sessionData.user.name || ""}
         email={sessionData.user.email || ""}
       >
-        <div className="flex h-screen flex-col">
+        <div className="app-ambient relative flex min-h-screen flex-col overflow-hidden">
           <Header onClose={onClose} showNavigation={windowWidth >= 1024} />
-          <main className="flex h-full flex-col items-center p-3">
+          <main className="relative mx-auto flex h-full w-full max-w-6xl flex-col items-center p-3">
             {children}
           </main>
           {windowWidth < 1024 && <Footer />}
@@ -54,7 +54,7 @@ function Header({
   const { themeColor } = useTheme();
 
   return (
-    <div className="relative flex w-full items-center justify-between px-6 py-4">
+    <div className="relative mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
       {!isInMenus ? (
         <BackButton
           handleClick={onClose}

@@ -68,7 +68,7 @@ export default function Configuracion() {
       }
       sessionData={sessionData}
     >
-      <div className="flex w-full flex-col items-center gap-4 pt-7">
+      <div className="glass-surface mt-6 flex w-full max-w-2xl flex-col items-center gap-4 rounded-3xl px-6 py-7">
         <div
           className={cn(
             "flex h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] bg-[#d9d9d9] transition-colors",
@@ -133,7 +133,7 @@ export default function Configuracion() {
         </div>
         <Toaster />
       </div>
-      <div className="flex flex-col items-center gap-6 py-10">
+      <div className="glass-surface mt-5 flex w-full max-w-2xl flex-col items-center gap-6 rounded-3xl py-8">
         <span className="text-xl font-medium">Tu tema</span>
         <ThemeToggleButton />
       </div>

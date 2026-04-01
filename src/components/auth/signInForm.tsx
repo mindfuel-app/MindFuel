@@ -77,7 +77,7 @@ export default function SignInForm() {
 
   return (
     <form
-      className="py-3 sm:py-10"
+      className="w-full max-w-md py-2 sm:py-6"
       onSubmit={(event) => {
         event.preventDefault();
         void handleSubmit(submitData)(event);
@@ -98,7 +98,7 @@ export default function SignInForm() {
             <input
               type="text"
               className={cn(
-                "w-full rounded-xl border-2 border-teal px-3 py-1 outline-none group-disabled:cursor-not-allowed",
+                "w-full rounded-2xl border border-gray-300 bg-white px-4 py-2.5 outline-none transition group-disabled:cursor-not-allowed focus:border-cornflower-blue",
                 isEmailWrong && "border-red-500"
               )}
               {...register("email")}
@@ -124,7 +124,7 @@ export default function SignInForm() {
             </span>
             <div
               className={cn(
-                "flex w-full items-center justify-between rounded-xl border-2 border-teal bg-white px-3 py-1",
+                "flex w-full items-center justify-between rounded-2xl border border-gray-300 bg-white px-4 py-2.5 transition focus-within:border-cornflower-blue",
                 isPasswordWrong && "border-red-500"
               )}
             >

@@ -9,7 +9,17 @@ import { useState } from "react";
 import { cn } from "~/lib/utils";
 import { useTheme } from "~/lib/ThemeContext";
 
-export default function AddButton({ showLabel }: { showLabel: boolean }) {
+export default function AddButton({
+  showLabel,
+  initialTab = "tareas",
+  variant = "floating",
+  className,
+}: {
+  showLabel: boolean;
+  initialTab?: "tareas" | "rutinas";
+  variant?: "floating" | "inline";
+  className?: string;
+}) {
   const user = useUser();
   const { themeColor } = useTheme();
 
@@ -25,15 +35,19 @@ export default function AddButton({ showLabel }: { showLabel: boolean }) {
     <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
       <Modal.Button>
         <motion.div
-          initial={{ opacity: 0, x: 10 }}
+          initial={{ opacity: 0, x: variant == "floating" ? 10 : 0 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center justify-center"
         >
           <div
             className={cn(
-              "no-highlight absolute flex transform items-center rounded-2xl border-2 bg-white py-3 shadow-lg transition-all active:scale-[98%]",
+              "no-highlight flex transform items-center rounded-2xl border-2 bg-white py-3 transition-all active:scale-[98%]",
               showLabel ? "gap-3 px-4" : "px-3",
-              themeColor == "teal" ? "border-teal" : "border-orange-red"
+              variant == "floating"
+                ? "absolute shadow-xl shadow-black/10"
+                : "static shadow-md shadow-black/5",
+              themeColor == "teal" ? "border-teal" : "border-orange-red",
+              className
             )}
           >
             <svg
@@ -66,6 +80,7 @@ export default function AddButton({ showLabel }: { showLabel: boolean }) {
       </Modal.Button>
       <Modal.Content>
         <AddModal
+          initialTab={initialTab}
           TaskModal={
             <TaskForm
               mode="create"

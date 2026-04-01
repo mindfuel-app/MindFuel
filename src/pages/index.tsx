@@ -1,13 +1,14 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import Logo from "~/components/auth/logo";
-import { Icon } from "@iconify/react";
-import { useState } from "react";
-import { Progress } from "../components/ui/progressBar";
-import useWindowWidth from "~/hooks/useWindowWidth";
 import { motion } from "framer-motion";
 import type { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import {
+  BellAlertIcon,
+  CheckCircleIcon,
+  SparklesIcon,
+} from "@heroicons/react/24/outline";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const sessionData = await getSession(context);
@@ -27,111 +28,120 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Landing() {
-  const router = useRouter();
-  const [screenTouches, setScreenTouches] = useState(0);
-  const windowWidth = useWindowWidth();
-
-  if (windowWidth > 768) {
-    return void router.push("/signup");
-  }
-
   return (
     <>
       <Head>
         <title>MindFuel</title>
       </Head>
-      <div
-        className="flex h-screen flex-col py-10"
-        onTouchStart={() => setScreenTouches(screenTouches + 1)}
-      >
-        <Logo />
-        {screenTouches == 0 && (
+      <div className="relative min-h-screen overflow-hidden bg-[#f4f6f3] px-5 pb-14 pt-8 sm:px-8 lg:px-12">
+        <div className="bg-teal/15 pointer-events-none absolute -left-20 -top-28 h-72 w-72 rounded-full blur-3xl" />
+        <div className="bg-orange-red/15 pointer-events-none absolute -right-24 top-1/3 h-80 w-80 rounded-full blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-1/3 h-60 w-60 rounded-full bg-cornflower-blue/10 blur-3xl" />
+
+        <main className="relative mx-auto flex w-full max-w-6xl flex-col gap-10 lg:gap-14">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center gap-12 py-24 text-center font-semibold"
+            transition={{ duration: 0.35 }}
+            className="pt-3"
           >
-            <h1 className="max-w-[300px] text-3xl text-teal min-[360px]:text-4xl">
-              Bienvenido a MindFuel
-            </h1>
-            <p className="max-w-[280px] text-lg min-[360px]:text-xl">
-              Toque en cualquier parte de la pantalla para comenzar
-            </p>
-            <Icon icon="carbon:touch-1" className="text-8xl" />
+            <Logo />
           </motion.div>
-        )}
-        {screenTouches > 0 && (
-          <div className="flex flex-col px-6 py-3">
-            <motion.h1
-              initial={{ opacity: 0, x: -10 }}
+
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <motion.section
+              initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-2xl font-semibold italic text-orange sm:text-3xl"
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="bg-white/85 rounded-3xl border border-white/70 p-6 shadow-xl shadow-black/5 backdrop-blur sm:p-8 lg:p-10"
             >
-              Fuel your mind, fuel your life
-            </motion.h1>
-            <div className="flex max-w-[500px] flex-col gap-7 py-8 text-left font-semibold sm:py-12 sm:text-lg">
-              {screenTouches > 1 && (
-                <Message>
-                  <p>
-                    La{" "}
-                    <span className="font-extrabold">
-                      planificación de rutinas
-                    </span>{" "}
-                    es un paso importante que no puede faltar en nuestro día a
-                    día.
-                  </p>
-                </Message>
-              )}
-              {screenTouches > 2 && (
-                <Message>
-                  <p>
-                    Sin una{" "}
-                    <span className="font-extrabold">buena organización</span>{" "}
-                    existe la posibilidad de tener dificultades al completar
-                    tareas, concentrarse, mantener foco en una única cosa a la
-                    vez y vivir en el presente.
-                  </p>
-                </Message>
-              )}
-              {screenTouches > 3 && (
-                <Message>
-                  <p>
-                    Con la ayuda de{" "}
-                    <span className="font-extrabold">MindFuel</span>, mediante
-                    una buena planificación de objetivos alcanzables, la
-                    motivación y la disciplina se generan en el tiempo.
-                  </p>
-                </Message>
-              )}
-              {screenTouches > 4 && (
-                <Message>
-                  <p>
-                    Es un{" "}
-                    <span className="font-extrabold text-orange">proceso</span>,
-                    las pequeñas acciones diarias son la llave secreta para el
-                    éxito.
-                  </p>
-                </Message>
-              )}
-              {screenTouches > 5 && void router.push("/signup")}
-            </div>
-            <div className="flex justify-center">
-              <Progress
-                value={20 * (screenTouches - 1)}
-                className="fixed bottom-7 w-[90%] min-[769px]:hidden"
+              <span className="inline-flex items-center gap-2 rounded-full bg-teal/10 px-3 py-1 text-sm font-medium tracking-wide text-teal">
+                <SparklesIcon className="h-4 w-4" />
+                Organiza tu día en minutos
+              </span>
+              <h1 className="mt-5 max-w-xl text-4xl font-semibold leading-[1.1] tracking-tight text-eerie-black sm:text-5xl lg:text-6xl">
+                Enfócate en lo importante sin fricción.
+              </h1>
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-gray-700 sm:text-lg">
+                Planifica tareas, crea rutinas y recibe recordatorios que te
+                ayudan a mantener constancia todos los días.
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Link
+                  href="/signup"
+                  className="rounded-2xl bg-eerie-black px-6 py-3 text-center text-base font-medium text-white transition hover:bg-eerie-black/90"
+                >
+                  Crear mi primer plan
+                </Link>
+                <Link
+                  href="/signin"
+                  className="rounded-2xl border border-gray-300 bg-white px-6 py-3 text-center text-base font-medium text-gray-800 transition hover:bg-gray-50"
+                >
+                  Ya tengo una cuenta
+                </Link>
+              </div>
+
+              <div className="mt-7 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                <span className="rounded-full bg-gray-100 px-3 py-1">
+                  Privacidad primero
+                </span>
+                <span className="rounded-full bg-gray-100 px-3 py-1">
+                  Notificaciones opcionales
+                </span>
+                <span className="rounded-full bg-gray-100 px-3 py-1">
+                  PWA instalada en segundos
+                </span>
+              </div>
+            </motion.section>
+
+            <motion.aside
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="grid gap-4 lg:gap-5"
+            >
+              <FeatureCard
+                icon={<CheckCircleIcon className="h-6 w-6" />}
+                title="Prioridades claras"
+                description="Visualiza tus tareas activas y completa pendientes con seguimiento simple."
               />
-            </div>
+              <FeatureCard
+                icon={<BellAlertIcon className="h-6 w-6" />}
+                title="Recordatorios útiles"
+                description="Configura avisos para mantener foco sin sobrecargarte durante el día."
+              />
+              <FeatureCard
+                icon={<SparklesIcon className="h-6 w-6" />}
+                title="Rutinas sostenibles"
+                description="Convierte pequeñas acciones en hábitos constantes con pasos alcanzables."
+              />
+            </motion.aside>
           </div>
-        )}
+        </main>
       </div>
     </>
   );
 }
 
-function Message({ children }: { children: React.ReactNode }) {
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      {children}
-    </motion.div>
+    <div className="rounded-2xl border border-white/70 bg-white/90 p-5 shadow-lg shadow-black/5 backdrop-blur">
+      <div className="mb-3 inline-flex rounded-xl bg-gray-100 p-2 text-eerie-black">
+        {icon}
+      </div>
+      <h2 className="text-lg font-semibold text-eerie-black">{title}</h2>
+      <p className="mt-1 text-sm leading-relaxed text-gray-600">
+        {description}
+      </p>
+    </div>
   );
 }

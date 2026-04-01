@@ -56,12 +56,22 @@ export const authOptions: NextAuthOptions = {
       name: "credentials",
       credentials: {},
       async authorize(credentials) {
-        const { name, email, password, method } = credentials as {
-          name: string;
-          email: string;
-          password: string;
-          method: string;
-        };
+        const parsedCredentials = credentials as
+          | Partial<Record<"name" | "email" | "password" | "method", string>>
+          | undefined;
+        const name = parsedCredentials?.name;
+        const email = parsedCredentials?.email;
+        const password = parsedCredentials?.password;
+        const method = parsedCredentials?.method;
+
+        if (
+          typeof email !== "string" ||
+          email.length === 0 ||
+          typeof password !== "string" ||
+          password.length === 0
+        ) {
+          return null;
+        }
 
         const existingUser = await prisma.user.findUnique({
           where: {
@@ -70,6 +80,10 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (method === "signup") {
+          if (typeof name !== "string" || name.length === 0) {
+            throw new Error("Nombre de usuario inválido");
+          }
+
           const existingName = await prisma.user.findUnique({
             where: {
               name,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import useSwipe from "~/hooks/useSwipe";
 import { useTheme } from "~/lib/ThemeContext";
@@ -7,14 +7,20 @@ import { cn } from "~/lib/utils";
 export default function AddModal({
   TaskModal,
   RoutineModal,
+  initialTab = "tareas",
 }: {
   TaskModal: JSX.Element;
   RoutineModal: JSX.Element;
+  initialTab?: "tareas" | "rutinas";
 }) {
   const [selectedTab, setSelectedTab] = useState<"tareas" | "rutinas">(
-    "tareas"
+    initialTab
   );
   const { themeColor } = useTheme();
+
+  useEffect(() => {
+    setSelectedTab(initialTab);
+  }, [initialTab]);
 
   const swipeLeftHandler = useSwipe({
     onSwipedLeft: () => {

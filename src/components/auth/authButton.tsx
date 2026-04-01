@@ -13,7 +13,7 @@ export default function AuthButton({
   return (
     <Button
       type="submit"
-      className="no-highlight w-full rounded-xl bg-teal px-5 py-2 text-center text-lg text-white active:bg-teal/70 "
+      className="no-highlight w-full rounded-2xl bg-eerie-black px-5 py-2.5 text-center text-lg text-white shadow-md shadow-black/20 active:bg-eerie-black/80"
       disabled={isDisabled}
       onClick={onClick}
     >

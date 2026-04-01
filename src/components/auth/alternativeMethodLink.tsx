@@ -12,7 +12,7 @@ export default function AlternativeMethodLink({
           ¿No tienes una cuenta?{" "}
           <Link
             href="/signup"
-            className="no-highlight text-sky-600 underline-offset-2 active:underline"
+            className="no-highlight text-cornflower-blue underline-offset-2 active:underline"
           >
             Regístrate
           </Link>
@@ -26,7 +26,7 @@ export default function AlternativeMethodLink({
         ¿Ya tienes una cuenta?{" "}
         <Link
           href="/signin"
-          className="no-highlight text-sky-600 underline-offset-2 active:underline"
+          className="no-highlight text-cornflower-blue underline-offset-2 active:underline"
         >
           Inicia sesión
         </Link>

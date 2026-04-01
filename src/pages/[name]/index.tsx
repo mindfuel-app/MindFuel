@@ -65,13 +65,13 @@ export default function Profile() {
           <motion.div
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex w-full max-w-lg flex-col gap-1"
+            className="glass-surface flex w-full max-w-lg flex-col gap-2 rounded-2xl p-4"
           >
             <div className="flex items-center gap-2">
               <h3 className="ml-1 text-lg font-medium">Logros</h3>
               <TrophyIcon className="h-5 w-5 text-[#d4af37]" />
             </div>
-            <div className="rounded-xl bg-[#d9d9d9] p-4">
+            <div className="rounded-xl bg-gray-100 p-4 text-gray-700">
               Todavía no hay nada aquí
             </div>
           </motion.div>
@@ -93,9 +93,9 @@ export default function Profile() {
       <motion.div
         initial={{ opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
-        className="padding-footer-sm flex h-full w-full flex-col gap-6 bg-white px-40"
+        className="padding-footer-sm flex h-full w-full max-w-6xl flex-col gap-6 px-6 lg:px-16"
       >
-        <div className="flex w-full justify-between">
+        <div className="glass-surface flex w-full justify-between rounded-3xl p-6">
           <div className="flex flex-col gap-4 pt-28">
             <span className="text-3xl font-normal text-gray-800">
               {sessionData.user.name}{" "}
@@ -144,13 +144,12 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="w-full border border-gray-200" />
-        <div className="flex flex-col gap-3">
+        <div className="glass-surface flex flex-col gap-3 rounded-3xl p-6">
           <div className="flex items-center gap-2">
             <h3 className="ml-1 text-lg font-medium text-gray-800">Logros</h3>
             <TrophyIcon className="h-5 w-5 text-[#d4af37]" />
           </div>
-          <div className="max-w-lg rounded-xl bg-gray-200 p-4">
+          <div className="max-w-lg rounded-xl bg-gray-100 p-4 text-gray-700">
             Todavía no hay nada aquí
           </div>
         </div>

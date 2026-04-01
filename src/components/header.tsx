@@ -46,13 +46,13 @@ export default function Header({
     );
 
   return (
-    <div className="flex items-center justify-between p-3 pt-5 font-medium">
+    <div className="glass-surface relative mx-auto mt-3 flex w-[calc(100%-1.5rem)] max-w-6xl items-center justify-between rounded-2xl px-4 py-3 font-medium sm:px-5">
       <div className="relative flex items-center gap-1">
         <span>Bienvenido, </span>
         <ClickAwayListener onClickAway={() => setShowLogout(false)}>
           <div
             onClick={() => setShowLogout(!showLogout)}
-            className="no-highlight flex cursor-pointer select-none items-center gap-1 rounded-md transition-colors active:bg-gray-300"
+            className="no-highlight flex cursor-pointer select-none items-center gap-1 rounded-md px-1 transition-colors active:bg-gray-200"
           >
             <span className="font-semibold text-orange">
               {sessionData.user.name}
@@ -73,14 +73,14 @@ export default function Header({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute -right-2 top-7 z-20 rounded-lg bg-gray-700 px-2 text-white shadow-lg"
+              className="absolute -right-2 top-8 z-20 rounded-xl border border-gray-200 bg-white px-2 py-1 text-gray-800 shadow-lg"
             >
               <Button
-                className="no-highlight p-0 text-base font-normal"
+                className="no-highlight p-1 text-base font-normal"
                 onClick={() => void signOut({ callbackUrl: "/signin" })}
               >
                 <div className="flex items-center gap-2">
-                  <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+                  <ArrowLeftOnRectangleIcon className="h-5 w-5 text-gray-600" />
                   <span>Cerrar sesión</span>
                 </div>
               </Button>
@@ -94,7 +94,7 @@ export default function Header({
           <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Button
               className={cn(
-                "no-highlight absolute right-7 hidden items-center gap-2 rounded-lg px-3 py-2 text-white transition-all lg:flex",
+                "no-highlight absolute right-7 hidden items-center gap-2 rounded-xl px-3 py-2 text-white shadow-md transition-all lg:flex",
                 themeColor == "teal"
                   ? "bg-teal active:bg-teal/80"
                   : "bg-orange-red active:bg-orange-red/80"

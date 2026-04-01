@@ -98,7 +98,7 @@ export function Footer() {
       <motion.footer
         animate={{ y: show ? "0%" : "100%" }}
         transition={{ duration: 0.15 }}
-        className="no-highlight fixed bottom-0 z-20 flex w-full justify-evenly border-t border-gray-200 bg-white py-3"
+        className="glass-surface no-highlight fixed bottom-0 z-20 mx-auto flex w-full justify-evenly border-t border-gray-200 py-3"
       >
         {navigationItems.map((item) => (
           <NavigationItem
@@ -119,7 +119,7 @@ export function Footer() {
           transition={{ duration: 0.1 }}
           className="fixed"
         >
-          <AddButton showLabel={show} />
+          <AddButton showLabel={show} variant="floating" />
         </motion.div>
       )}
     </>

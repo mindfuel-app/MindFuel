@@ -3,12 +3,18 @@
 @tailwind utilities;
 
 body {
-  background-color: #edece7;
+  background-color: #f4f6f3;
   font-family: Rubik;
 }
 
 :root {
   --footer-height: 62px;
+  --surface-0: #f4f6f3;
+  --surface-1: #ffffff;
+  --surface-2: #f8faf8;
+  --text-strong: #1b2021;
+  --text-muted: #5f6671;
+  --shadow-soft: 0 16px 35px -24px rgba(18, 25, 33, 0.45);
 }
 
 ::selection {
@@ -161,5 +167,33 @@ body {
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .app-ambient {
+    background: radial-gradient(
+        circle at 12% 10%,
+        rgba(0, 128, 128, 0.1),
+        transparent 36%
+      ),
+      radial-gradient(
+        circle at 92% 24%,
+        rgba(255, 83, 83, 0.11),
+        transparent 34%
+      ),
+      radial-gradient(
+        circle at 52% 100%,
+        rgba(92, 122, 255, 0.08),
+        transparent 35%
+      ),
+      var(--surface-0);
+  }
+
+  .glass-surface {
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(10px);
   }
 }

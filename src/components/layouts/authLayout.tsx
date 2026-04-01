@@ -9,16 +9,18 @@ export default function authPageLayout({
   authMethod: "Inicio sesión" | "Registrarse";
 }) {
   return (
-    <div className="flex min-h-screen bg-teal">
-      <div className="h-full w-0 min-[1440px]:w-1/6" />
-      <main className="flex min-h-screen w-full flex-col bg-alabaster pt-10">
-        <Logo />
-        <div className="flex flex-col items-center p-5 lg:p-0">
-          <Title title={authMethod} />
-          {children}
-        </div>
-      </main>
-      <div className="h-full w-0 min-[1440px]:w-1/6" />
+    <div className="app-ambient relative flex min-h-screen overflow-hidden">
+      <div className="pointer-events-none absolute -left-24 -top-28 h-72 w-72 rounded-full bg-teal/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-28 top-24 h-96 w-96 rounded-full bg-orange-red/10 blur-3xl" />
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-5 py-10 sm:px-8">
+        <main className="glass-surface w-full rounded-3xl p-6 sm:p-8 lg:p-10">
+          <Logo />
+          <div className="mt-4 flex flex-col items-center">
+            <Title title={authMethod} />
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

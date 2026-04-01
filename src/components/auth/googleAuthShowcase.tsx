@@ -6,7 +6,7 @@ export default function GoogleAuthShowcase() {
   return (
     <Link
       href=""
-      className="no-highlight flex items-center justify-center space-x-2 rounded-2xl border-2 border-teal  bg-white px-8 py-2 text-lg focus:outline-none active:bg-gray-100 min-[360px]:px-12 sm:px-20"
+      className="no-highlight flex items-center justify-center space-x-2 rounded-2xl border border-gray-300 bg-white px-8 py-2.5 text-lg shadow-sm focus:outline-none active:bg-gray-100 min-[360px]:px-12 sm:px-20"
       onClick={() => void signIn("google", { callbackUrl: "/home" })}
     >
       <FcGoogle className="text-2xl" />
