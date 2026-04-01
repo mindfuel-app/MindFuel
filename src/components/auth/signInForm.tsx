@@ -105,7 +105,7 @@ export default function SignInForm() {
               onChange={() => setIsGoogleAccount(false)}
             />
             {emailErrorMessage && (
-              <span className="absolute mt-16 text-xs text-red-500">
+              <span className="mt-1 block text-xs text-red-500">
                 {emailErrorMessage}
               </span>
             )}
@@ -136,7 +136,7 @@ export default function SignInForm() {
               <span>{ToggleIcon}</span>
             </div>
             {passwordErrorMessage && (
-              <span className="absolute mt-16 text-xs text-red-500">
+              <span className="mt-1 block text-xs text-red-500">
                 {passwordErrorMessage}
               </span>
             )}

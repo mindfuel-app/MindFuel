@@ -98,12 +98,12 @@ export default function SignUpForm() {
               {...register("name")}
             />
             {isUsernameWrong && (
-              <span className="absolute mt-16 text-xs text-red-500">
+              <span className="mt-1 block text-xs text-red-500">
                 Ya existe una cuenta con este nombre de usuario
               </span>
             )}
             {!isUsernameWrong && errors.name && (
-              <span className="absolute mt-16 text-xs text-red-500">
+              <span className="mt-1 block text-xs text-red-500">
                 Nombre de usuario: 3-20 caracteres
               </span>
             )}
@@ -126,12 +126,12 @@ export default function SignUpForm() {
               {...register("email")}
             />
             {isEmailWrong && (
-              <span className="absolute mt-16 text-xs text-red-500">
+              <span className="mt-1 block text-xs text-red-500">
                 Ya existe una cuenta con este email
               </span>
             )}
             {!isEmailWrong && errors.email && (
-              <span className="absolute mt-16 text-xs text-red-500">
+              <span className="mt-1 block text-xs text-red-500">
                 Ingrese un email valido
               </span>
             )}
@@ -155,7 +155,7 @@ export default function SignUpForm() {
             </div>
           </label>
           {errors.password && (
-            <span className="absolute mt-16 text-xs text-red-500">
+            <span className="mt-1 block text-xs text-red-500">
               Contraseña: 6-30 caracteres
             </span>
           )}
