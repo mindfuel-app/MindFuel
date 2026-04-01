@@ -40,7 +40,7 @@ export function ThemeContextProvider({
   }, [themeData?.theme]);
 
   const setThemeColor: SetThemeColor = (userId: string, value?: ThemeColor) => {
-    const newValue = value || theme == "teal" ? "orange-red" : "teal";
+    const newValue = value ?? (theme === "teal" ? "orange-red" : "teal");
     setTheme(newValue);
     updateTheme({ user_id: userId, theme: newValue });
   };

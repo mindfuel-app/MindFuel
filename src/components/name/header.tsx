@@ -1,24 +1,19 @@
 import { useTheme } from "~/lib/ThemeContext";
-import type { Dispatch } from "react";
 import { useEffect, useState } from "react";
 import useWindowWidth from "~/hooks/useWindowWidth";
 import { TopNavigation } from "~/components/inputs/navigation";
 import Image from "next/image";
-import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import ThemeToggleButton from "../inputs/themeToggleButton";
 
 export default function Header({
   username,
   points,
   currentLevelBasePoints,
-  setConfigirationTab,
-  configurationTab,
 }: {
   username: string;
   points: number;
   currentLevelBasePoints: number;
-  setConfigirationTab: Dispatch<React.SetStateAction<boolean>>;
-  configurationTab: boolean;
 }) {
   const { themeColor } = useTheme();
   const [progress, setProgress] = useState(0);
@@ -40,14 +35,14 @@ export default function Header({
   return (
     <header
       className={cn(
-        "relative h-[150px] md:h-[250px] bg-gradient-to-r pt-3",
+        "relative h-[150px] bg-gradient-to-r pt-3 md:h-[250px]",
         themeColor === "teal"
           ? "from-teal to-green-700"
           : "from-orange-red to-[#FF7373]"
       )}
     >
       {windowWidth > 1024 && <TopNavigation />}
-      <div className="hidden w-full justify-between px-8 min-[200px]:flex xl:pr-10 ">
+      <div className="hidden w-full items-start justify-between px-6 pt-2 min-[200px]:flex xl:px-10">
         <Image
           alt="Logo"
           src="/transparent-icon.png"
@@ -55,12 +50,14 @@ export default function Header({
           height={75}
           priority={true}
         />
-        <Button className="border" onClick={() => setConfigirationTab(!configurationTab)}>{!configurationTab ? 'Configuración' : 'Perfil'}</Button>
+        <div className="rounded-2xl bg-white/85 px-4 py-2 shadow-md backdrop-blur">
+          <ThemeToggleButton />
+        </div>
       </div>
       <div
         className={cn(
-          "absolute -bottom-[60px] left-1/2 z-10 flex h-[100px] w-[100px] md:h-[130px] md:w-[130px] items-center justify-center rounded-full border-[4px] bg-white text-6xl md:text-7xl shadow-xl",
-          "transform -translate-x-1/2 md:left-[150px] md:translate-x-0",
+          "absolute -bottom-[60px] left-1/2 z-10 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[4px] bg-white text-6xl shadow-xl md:h-[130px] md:w-[130px] md:text-7xl",
+          "-translate-x-1/2 transform md:left-[150px] md:translate-x-0",
           themeColor === "teal"
             ? "border-teal/90 text-teal/90"
             : "border-orange-red text-orange-red"

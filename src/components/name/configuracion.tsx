@@ -1,5 +1,6 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import NotFoundPage from "../../pages/404";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "~/lib/ThemeContext";
@@ -7,11 +8,11 @@ import { cn } from "~/lib/utils";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { api } from "~/utils/api";
 import toast, { Toaster } from "react-hot-toast";
-import ThemeToggleButton from "../inputs/themeToggleButton";
 import Skeleton from "./skeleton";
 
 export default function Configuracion() {
   const { data: sessionData, update: updateSessionData, status } = useSession();
+  const router = useRouter();
   const { themeColor } = useTheme();
 
   const [username, setUsername] = useState("");
@@ -37,6 +38,8 @@ export default function Configuracion() {
         console.warn("Failed to update session data:", error);
         // Don't show error to user as the username was successfully updated in the database
       }
+
+      await router.replace(`/${tempUsername}`);
     },
     onError: (error) => {
       setTempUsername(username);
@@ -116,7 +119,10 @@ export default function Configuracion() {
 
     // Optimistically update the UI
     setIsUpdating(true);
-    updateUsername({ user_id: sessionData?.user.id??'', username: tempUsername });
+    updateUsername({
+      user_id: sessionData?.user.id ?? "",
+      username: tempUsername,
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -137,10 +143,16 @@ export default function Configuracion() {
 
   return (
     <>
-      <div className="flex w-full flex-col items-center gap-4">
-        <div className="flex w-full flex-col items-center justify-center gap-2">
+      <div className="flex w-full flex-col gap-4 rounded-2xl border border-gray-200 bg-white/80 p-4 shadow-sm backdrop-blur sm:p-5">
+        <div className="flex w-full flex-col gap-1">
+          <h2 className="text-lg font-semibold text-gray-800">Editar perfil</h2>
+          <p className="text-sm text-gray-500">
+            Actualiza tu nombre de usuario
+          </p>
+        </div>
+        <div className="flex w-full flex-col items-start justify-center gap-2">
           {editUsername ? (
-            <div className="flex items-center gap-2">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
               <input
                 ref={inputRef}
                 type="text"
@@ -149,14 +161,14 @@ export default function Configuracion() {
                 onChange={(e) => handleUsernameChange(e.target.value)}
                 disabled={isUpdating}
                 className={cn(
-                  "rounded-md border px-2 py-1 text-2xl outline-none transition-colors",
+                  "w-full rounded-md border px-3 py-2 text-xl outline-none transition-colors sm:w-auto",
                   themeColor === "teal"
                     ? "border-teal text-teal"
                     : "border-orange-red text-orange-red",
                   validationError && "border-red-500",
-                  isUpdating && "opacity-50 cursor-not-allowed"
+                  isUpdating && "cursor-not-allowed opacity-50"
                 )}
-                style={{ width: `${usernameWidth + 20}px` }}
+                style={{ width: `${Math.max(usernameWidth + 28, 220)}px` }}
                 maxLength={20}
               />
               <div className="flex items-center gap-1">
@@ -164,8 +176,8 @@ export default function Configuracion() {
                   className={cn(
                     "no-highlight transition-all duration-200",
                     isUpdating
-                      ? "opacity-50 cursor-not-allowed"
-                      : "active:scale-95 hover:scale-105"
+                      ? "cursor-not-allowed opacity-50"
+                      : "hover:scale-105 active:scale-95"
                   )}
                   onClick={handleSubmit}
                   disabled={isUpdating || !!validationError}
@@ -179,14 +191,14 @@ export default function Configuracion() {
                         validationError
                           ? "text-gray-400"
                           : themeColor === "teal"
-                            ? "text-teal"
-                            : "text-orange-red"
+                          ? "text-teal"
+                          : "text-orange-red"
                       )}
                     />
                   )}
                 </button>
                 <button
-                  className="no-highlight active:scale-95 hover:scale-105 transition-all duration-200"
+                  className="no-highlight transition-all duration-200 hover:scale-105 active:scale-95"
                   onClick={handleCancelEdit}
                   disabled={isUpdating}
                 >
@@ -198,28 +210,22 @@ export default function Configuracion() {
             <span
               ref={elementRef}
               className={cn(
-                "relative cursor-pointer text-3xl font-normal text-gray-800 transition-colors",
+                "relative pr-8 text-2xl font-semibold text-gray-800 transition-colors sm:text-3xl",
                 themeColor === "teal" ? "text-teal" : "text-orange-red"
               )}
             >
               {username}
               <PencilIcon
                 onClick={handleStartEdit}
-                className="absolute -right-8 bottom-1 h-6 w-6 text-orange hover:text-orange-600 transition-colors cursor-pointer"
+                className="hover:text-orange-600 absolute -right-8 bottom-1 h-6 w-6 cursor-pointer text-orange transition-colors"
               />
             </span>
           )}
           {validationError && (
-            <span className="text-sm text-red-500 mt-1">{validationError}</span>
+            <span className="mt-1 text-sm text-red-500">{validationError}</span>
           )}
         </div>
         <Toaster />
-      </div>
-      <div className="flex flex-col w-full p-4 gap-4">
-        <div>
-          <span className="mb-2 text-xl font-medium">Tu tema</span>
-          <ThemeToggleButton />
-        </div>
       </div>
     </>
   );
