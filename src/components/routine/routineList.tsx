@@ -52,7 +52,7 @@ export default function RoutineList() {
             Aun no tienes rutinas
           </h2>
           <p className="mt-1 text-sm text-gray-600 sm:text-base">
-            Crea una rutina para convertir tareas en h\u00e1bitos consistentes.
+            Crea una rutina para convertir tareas en hábitos consistentes.
           </p>
         </div>
       )}
